@@ -14,7 +14,7 @@ public struct ClientConfiguration {
     public var secret: String
     
     
-    public init(secret:String, faunaRoot: NSURL = NSURL(string: "https://rest.faunadb.com")!, timeoutIntervalForRequest: NSTimeInterval = 60) { //NSURL(string: "https://rest.faunadb.com:403")!
+    public init(secret:String, faunaRoot: NSURL = NSURL(string: "https://rest.faunadb.com")!, timeoutIntervalForRequest: NSTimeInterval = 60) {
         self.secret = secret
         self.faunaRoot = faunaRoot
         self.timeoutIntervalForRequest = timeoutIntervalForRequest

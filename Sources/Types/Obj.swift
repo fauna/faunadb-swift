@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-public struct Obj: ExprType, DictionaryLiteralConvertible {
+public struct Obj: ValueType, DictionaryLiteralConvertible {
     private var dictionary = [String: ExprType]()
     
     public init(dictionaryLiteral elements: (String, ExprType)...){
@@ -23,6 +23,34 @@ public struct Obj: ExprType, DictionaryLiteralConvertible {
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
+    
+    public init?(json: JSON){
+        var dictionary = [String:ExprType]()
+        json.forEach({ (key, value) in
+            switch value {
+            case let dicValue as [String: AnyObject]:
+                if dicValue.count == 1 && key == "@ref" {
+                    let ref: Ref = (key <~~ dicValue)!
+                    dictionary[key] = ref
+                }
+                break
+            case let strValue as String:
+                dictionary[key] = strValue
+            case let doubleValue as Double:
+                dictionary[key] = doubleValue
+            case let intValue as Int:
+                dictionary[key] = intValue
+            case let boolValue as Bool:
+                dictionary[key] = boolValue
+            case let arrayValue as [AnyObject]:
+                dictionary[key] = Arr(rawArray: arrayValue)
+            default:
+                break
+            }
+        })
+        self.dictionary = dictionary
+    }
+    
 }
 
 extension Obj: Encodable, FaunaEncodable {
@@ -37,7 +65,7 @@ extension Obj: Encodable, FaunaEncodable {
                 result[keyValue.0] = anyObject
             }
         }
-        return ["data": result]
+        return ["object": result]
     }
     
     public func toAnyObjectJSON() -> AnyObject? {
@@ -45,10 +73,12 @@ extension Obj: Encodable, FaunaEncodable {
     }
 }
 
+extension Obj: Decodable {}
+
 extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
     
     public var description: String{
-        return "ObjectV(\(dictionary.map { "\($0.0): \($0.1)" }.joinWithSeparator(", ")))"
+        return "Obj(\(dictionary.map { "\($0.0): \($0.1)" }.joinWithSeparator(", ")))"
     }
     
     public var debugDescription: String{

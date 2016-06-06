@@ -14,6 +14,7 @@ public struct Ref: ExprType {
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
     public static let classes: Ref = "classes"
+    public static let keys: Ref = "keys"
     
     var ref: String
     

@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-public struct ArrayValue: ValueType, ArrayLiteralConvertible {
+public struct Arr: ValueType, ArrayLiteralConvertible {
     
     private var array = [ExprType]()
     
@@ -20,17 +20,20 @@ public struct ArrayValue: ValueType, ArrayLiteralConvertible {
         elements.forEach { array.append($0) }
         self.array = array
     }
+    
+    init(rawArray: [AnyObject]) {
+        
+    }
 }
 
-extension ArrayValue: FaunaEncodable {
+extension Arr: FaunaEncodable {
     
     public func toAnyObjectJSON() -> AnyObject? {
         return array.map { $0.toAnyObjectJSON()  ?? NSNull() }
     }
 }
 
-
-extension ArrayValue: MutableCollectionType {
+extension Arr: MutableCollectionType {
     
     // MARK: MutableCollectionType
     
@@ -42,7 +45,7 @@ extension ArrayValue: MutableCollectionType {
     }
 }
 
-extension ArrayValue: RangeReplaceableCollectionType {
+extension Arr: RangeReplaceableCollectionType {
     
     // MARK: RangeReplaceableCollectionType
     
@@ -65,7 +68,7 @@ extension ArrayValue: RangeReplaceableCollectionType {
     }
 }
 
-extension ArrayValue: CustomStringConvertible, CustomDebugStringConvertible {
+extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
     
     
     public var description: String{

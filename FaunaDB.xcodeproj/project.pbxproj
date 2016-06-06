@@ -15,12 +15,12 @@
 		28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
 		28DCFF441CFE40B600A813D3 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
 		28DCFF471CFF906200A813D3 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF461CFF906200A813D3 /* Ref.swift */; };
-		28DCFF491CFF907E00A813D3 /* ObjectValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF481CFF907E00A813D3 /* ObjectValue.swift */; };
+		28DCFF491CFF907E00A813D3 /* Obj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF481CFF907E00A813D3 /* Obj.swift */; };
 		28DCFF4B1CFF909100A813D3 /* Scalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4A1CFF909100A813D3 /* Scalars.swift */; };
 		28DCFF501CFF910100A813D3 /* ExprType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* ExprType.swift */; };
 		28DCFF521CFF98C800A813D3 /* ScalarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF511CFF98C800A813D3 /* ScalarType.swift */; };
 		28DCFF541CFFA01900A813D3 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF531CFFA01900A813D3 /* Language.swift */; };
-		28DCFF571D00A86E00A813D3 /* ArrayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* ArrayValue.swift */; };
+		28DCFF571D00A86E00A813D3 /* Arr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* Arr.swift */; };
 		28DCFF5C1D01CBF800A813D3 /* ValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* ValueType.swift */; };
 		28DCFF7A1D01F9B200A813D3 /* FunctionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF791D01F9B200A813D3 /* FunctionType.swift */; };
 		28DCFF7C1D01FA0100A813D3 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF7B1D01FA0100A813D3 /* LanguageType.swift */; };
@@ -138,12 +138,12 @@
 		28DCFF411CFE3B3400A813D3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientObserverType.swift; sourceTree = "<group>"; };
 		28DCFF461CFF906200A813D3 /* Ref.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Ref.swift; path = Types/Ref.swift; sourceTree = "<group>"; };
-		28DCFF481CFF907E00A813D3 /* ObjectValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ObjectValue.swift; path = Types/ObjectValue.swift; sourceTree = "<group>"; };
+		28DCFF481CFF907E00A813D3 /* Obj.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Obj.swift; path = Types/Obj.swift; sourceTree = "<group>"; };
 		28DCFF4A1CFF909100A813D3 /* Scalars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scalars.swift; path = Types/Scalars.swift; sourceTree = "<group>"; };
 		28DCFF4F1CFF910100A813D3 /* ExprType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExprType.swift; path = Query/ExprType.swift; sourceTree = "<group>"; };
 		28DCFF511CFF98C800A813D3 /* ScalarType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScalarType.swift; path = Types/ScalarType.swift; sourceTree = "<group>"; };
 		28DCFF531CFFA01900A813D3 /* Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Language.swift; path = Query/Language.swift; sourceTree = "<group>"; };
-		28DCFF561D00A86E00A813D3 /* ArrayValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ArrayValue.swift; path = Types/ArrayValue.swift; sourceTree = "<group>"; };
+		28DCFF561D00A86E00A813D3 /* Arr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Arr.swift; path = Types/Arr.swift; sourceTree = "<group>"; };
 		28DCFF5B1D01CBF800A813D3 /* ValueType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueType.swift; path = Types/ValueType.swift; sourceTree = "<group>"; };
 		28DCFF791D01F9B200A813D3 /* FunctionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FunctionType.swift; path = Query/FunctionType.swift; sourceTree = "<group>"; };
 		28DCFF7B1D01FA0100A813D3 /* LanguageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanguageType.swift; path = Query/LanguageType.swift; sourceTree = "<group>"; };
@@ -182,8 +182,8 @@
 				28DCFF5B1D01CBF800A813D3 /* ValueType.swift */,
 				28DCFF511CFF98C800A813D3 /* ScalarType.swift */,
 				28DCFF4A1CFF909100A813D3 /* Scalars.swift */,
-				28DCFF561D00A86E00A813D3 /* ArrayValue.swift */,
-				28DCFF481CFF907E00A813D3 /* ObjectValue.swift */,
+				28DCFF561D00A86E00A813D3 /* Arr.swift */,
+				28DCFF481CFF907E00A813D3 /* Obj.swift */,
 				28DCFF461CFF906200A813D3 /* Ref.swift */,
 			);
 			name = Types;
@@ -508,10 +508,10 @@
 				28DCFF391CFE063800A813D3 /* ClientConfiguration.swift in Sources */,
 				28DCFF371CFE050E00A813D3 /* Client.swift in Sources */,
 				28DCFF5C1D01CBF800A813D3 /* ValueType.swift in Sources */,
-				28DCFF491CFF907E00A813D3 /* ObjectValue.swift in Sources */,
+				28DCFF491CFF907E00A813D3 /* Obj.swift in Sources */,
 				28DCFF471CFF906200A813D3 /* Ref.swift in Sources */,
 				28DCFF521CFF98C800A813D3 /* ScalarType.swift in Sources */,
-				28DCFF571D00A86E00A813D3 /* ArrayValue.swift in Sources */,
+				28DCFF571D00A86E00A813D3 /* Arr.swift in Sources */,
 				28DCFF501CFF910100A813D3 /* ExprType.swift in Sources */,
 				28DCFF541CFFA01900A813D3 /* Language.swift in Sources */,
 				28DCFF7C1D01FA0100A813D3 /* LanguageType.swift in Sources */,

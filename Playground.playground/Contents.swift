@@ -15,27 +15,6 @@ import Foundation
 import Gloss
 import Result
 
-//var fun =  { (a: Int, b: String) in
-//    return 4.5 }
-//
-//let mirror = Mirror.init(reflecting: fun)
-//
-//mirror.description
-//
-//mirror.displayStyle
-//
-//mirror.subjectType
-//
-//mirror.children
-//
-//mirror.superclassMirror()
-//
-//mirror.displayStyle
-//
-//
-//mirror.children.count
-
-
 func stringFormat(json: JSON) -> String{
     let jsonData = try! NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
     let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
@@ -61,7 +40,7 @@ let anotherNilValue = Null()
 
 // ArrayValue
 
-var array: ArrayValue = [3, "Hola", 3.34, true, Double(3.34), refValue, anotherRefValue, nilValue, anotherNilValue]
+var array: Arr = [3, "Hola", 3.34, true, Double(3.34), refValue, anotherRefValue, nilValue, anotherNilValue]
 
 let arrayStr = String(array)
 
@@ -73,7 +52,7 @@ let nullArray = array.filter { $0 is Null }
 String(nullArray)
 
 
-let arrayOfArray: ArrayValue = [array, array]
+let arrayOfArray: Arr = [array, array]
 
 String(arrayOfArray)
 
@@ -123,7 +102,6 @@ client.query(exp){ result in
 
 
 client.query(Create(Ref.databases, ["name": "blog_db"])){ result in
-    
     switch result {
     case .Success(let value):
         break
@@ -144,3 +122,23 @@ client.query(Create(Ref.databases, ["name": "blog_db"])){ result in
 
 //let clientConfiguration = ClientConfiguration(
 //var client = Client(configuration: ClientConfiguration
+
+//var fun =  { (a: Int, b: String) in
+//    return 4.5 }
+//
+//let mirror = Mirror.init(reflecting: fun)
+//
+//mirror.description
+//
+//mirror.displayStyle
+//
+//mirror.subjectType
+//
+//mirror.children
+//
+//mirror.superclassMirror()
+//
+//mirror.displayStyle
+//
+//
+//mirror.children.count

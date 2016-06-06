@@ -27,6 +27,15 @@ public struct Logger: ClientObserverType {
         if let error = error {
             print("ERROR ====>: \(error)")
         }
+        if let data = data {
+                let jsonData = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+                print("\nRESPONSE:\n\(jsonData)")
+        }
+        else {
+             print("No RESPONSE DATA")
+        }
+        
+        
     }
     
 }

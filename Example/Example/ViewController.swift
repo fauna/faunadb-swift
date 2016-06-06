@@ -11,8 +11,7 @@ import FaunaDB
 class ViewController: UIViewController {
 
     lazy var client: Client = {
-        let clientConf = ClientConfiguration(secret: "")
-        let client = Client(configuration: clientConf)
+        let client = Client(configuration: ClientConfiguration(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"))
         client.observers = [Logger()]
         return client
     }()
@@ -20,18 +19,28 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
-        client.query(Create(Ref.databases,  ["name": "blog_db"])) { (result) in
-            
+        let db_name = "app_db_\(arc4random())"
+        client.query(Create(Ref.databases,  ["name": db_name])) { [weak self] (result) in
+            switch result {
+            case .Success(let _):
+                self?.client.query(Create(Ref.keys, ["database": Ref("databases/\(db_name)"),
+                    "role": "server"])) { (result) in
+                }
+            case .Failure(let error):
+                break
+            }
         }
+        
+        
+        
+        // use the new key
+        
+//        client.query({ () -> ExprType in
+//            Create(Ref.classes, ["name": "posts"])
+//        }, completionHandler: { (result) in
+//            
+//        })
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 

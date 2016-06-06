@@ -32,7 +32,7 @@ extension Create: Encodable, FaunaEncodable {
     
     public func toJSON() -> JSON? {
         return jsonify(["create" ~~> ref,
-                        "object" ~~> params])
+                        "params" ~~> params])
     }
     
     public func toAnyObjectJSON() -> AnyObject? {
