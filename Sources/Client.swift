@@ -46,13 +46,13 @@ extension Client {
             do {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
-                let jsonData =  try self?.handleQueryErrors(response, data: data)
+                let jsonData =  try mySelf.handleQueryErrors(response, data: data)
                 let result = mySelf.valueTypeForObject(jsonData!)
                 completionHandler?(Result.Success(result))
             }
             catch {
                 guard let faunaError = error as? FaunaDB.Error else {
-                    completionHandler?(.Failure(.UnknownException(response: response, msg: (error as NSError).description)))
+                    completionHandler?(.Failure(FaunaDB.Error.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
                     return
                 }
                 completionHandler?(.Failure(faunaError))
@@ -95,27 +95,38 @@ extension Client {
     
     func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
-        throw FaunaDB.Error.NetworkingException(response: response, msg: error.description, error: error)
+        throw FaunaDB.Error.NetworkingException(response: response, error: error, msg: error.description)
     }
     
     func handleQueryErrors(response: NSURLResponse?, data: NSData?) throws -> AnyObject? {
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            throw FaunaDB.Error.NetworkingException(response: response, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse", error: nil)
+            throw FaunaDB.Error.NetworkingException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
         }
+        
         if httpResponse.statusCode >= 300 {
-            switch httpResponse.statusCode {
-            case 400:
-                throw Error.BadRequestException(response: response, msg: "")
-            case 401:
-                throw Error.UnauthorizedException(response: response, msg: "")
-            case 404:
-                throw Error.NotFoundException(response: response, msg: "")
-            case 500:
-                throw Error.InternalException(response: response, msg: "")
-            case 503:
-                throw Error.UnavailableException(response: response, msg: "")
-            default:
-                throw Error.UnknownException(response: response, msg: "")
+            do {
+                let jsonData: [AnyObject] = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! [AnyObject]
+                let errors = jsonData.map { $0 as! [String: AnyObject] }.map { ErrorResponse(json: $0)! }
+                switch httpResponse.statusCode {
+                case 400:
+                    throw Error.BadRequestException(response: response, errors: errors, msg: nil)
+                case 401:
+                    throw Error.UnauthorizedException(response: response, errors: errors, msg: nil)
+                case 404:
+                    throw Error.NotFoundException(response: response, errors: errors, msg: nil)
+                case 500:
+                    throw Error.InternalException(response: response, errors: errors, msg: nil)
+                case 503:
+                    throw Error.UnavailableException(response: response, errors: errors, msg: nil)
+                default:
+                    throw Error.UnknownException(response: response, errors: errors, msg: nil)
+                }
+            }
+            catch {
+                if httpResponse.statusCode == 503 {
+                    throw Error.UnknownException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
+                }
+                throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
             }
         }
         if let data = data {

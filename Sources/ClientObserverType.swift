@@ -34,12 +34,8 @@ public struct Logger: ClientObserverType {
         else {
              print("No RESPONSE DATA")
         }
-        
-        
     }
-    
 }
-
 
 extension NSURLRequest {
     
@@ -71,11 +67,6 @@ extension NSURLRequest {
                     components.append("-u \(credential.user!):\(credential.password!)")
                 }
             }
-//            else {
-//                if let credential = delegate.credential {
-//                    components.append("-u \(credential.user!):\(credential.password!)")
-//                }
-//            }
         }
         
         if session.configuration.HTTPShouldSetCookies {
@@ -120,9 +111,5 @@ extension NSURLRequest {
         
         return components.joinWithSeparator(" \\\n\t")
     }
-//    
-//    /// The textual representation used when written to an output stream, in the form of a cURL command.
-//    public override var debugDescription: String {
-//        return cURLRepresentation()
-//    }
+
 }

@@ -22,10 +22,10 @@ class ClientConfigurationTests: FaunaDBTests {
     }
     
     func testDefaultValues() {
-        let authToken = "any_auth_token"
-        let clientConfig = ClientConfiguration(authToken: authToken)
-        XCTAssertEqual(clientConfig.authToken , authToken)
-        XCTAssertEqual(clientConfig.faunaRoot, NSURL(string: "https://rest.faunadb.com:403")!)
+        let secret = "any_secret"
+        let clientConfig = ClientConfiguration(secret: secret)
+        XCTAssertEqual(clientConfig.secret , secret)
+        XCTAssertEqual(clientConfig.faunaRoot, NSURL(string: "https://rest.faunadb.com")!)
         XCTAssertEqual(clientConfig.timeoutIntervalForRequest, 60)
     }
     
