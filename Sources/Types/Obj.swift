@@ -10,22 +10,22 @@ import Foundation
 import Gloss
 
 public struct Obj: ValueType, DictionaryLiteralConvertible {
-    private var dictionary = [String: ExprType]()
+    private var dictionary = [String: ValueType]()
     
-    public init(dictionaryLiteral elements: (String, ExprType)...){
-        var dictionary = [String:ExprType]()
+    public init(dictionaryLiteral elements: (String, ValueType)...){
+        var dictionary = [String:ValueType]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
-    public init(_ elements: (String, ExprType)...){
-        var dictionary = [String:ExprType]()
+    public init(_ elements: (String, ValueType)...){
+        var dictionary = [String:ValueType]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
     public init?(json: JSON){
-        var dictionary = [String:ExprType]()
+        var dictionary = [String:ValueType]()
         json.forEach({ (key, value) in
             switch value {
             case let dicValue as [String: AnyObject]:
@@ -87,31 +87,31 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension Obj: CollectionType {
-    public typealias Element = (String, ExprType)
-    public typealias Index = DictionaryIndex<String, ExprType>
+    public typealias Element = (String, ValueType)
+    public typealias Index = DictionaryIndex<String, ValueType>
     
     /// Create an empty dictionary.
     public init(){}
 
-    public var startIndex: DictionaryIndex<String, ExprType> { return dictionary.startIndex }
-    public var endIndex: DictionaryIndex<String, ExprType> { return dictionary.endIndex }
-    public func indexForKey(key: String) -> DictionaryIndex<String, ExprType>? {
+    public var startIndex: DictionaryIndex<String, ValueType> { return dictionary.startIndex }
+    public var endIndex: DictionaryIndex<String, ValueType> { return dictionary.endIndex }
+    public func indexForKey(key: String) -> DictionaryIndex<String, ValueType>? {
         return dictionary.indexForKey(key)
     }
-    public subscript (position: DictionaryIndex<String, ExprType>) -> (String, ExprType) {
+    public subscript (position: DictionaryIndex<String, ValueType>) -> (String, ValueType) {
         return dictionary[position]
     }
-    public subscript (key: String) -> ExprType? {
+    public subscript (key: String) -> ValueType? {
         return dictionary[key]
     }
     
-    public mutating func updateValue(value: ExprType, forKey key: String) -> ExprType?{
+    public mutating func updateValue(value: ValueType, forKey key: String) -> ValueType?{
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: DictionaryIndex<String, ExprType>) -> (String, ExprType) {
+    public mutating func removeAtIndex(index: DictionaryIndex<String, ValueType>) -> (String, ValueType) {
         return dictionary.removeAtIndex(index)
     }
-    public mutating func removeValueForKey(key: String) -> ExprType?{
+    public mutating func removeValueForKey(key: String) -> ValueType?{
         return dictionary.removeValueForKey(key)
     }
     

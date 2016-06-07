@@ -11,12 +11,12 @@ import Gloss
 
 public struct Arr: ValueType, ArrayLiteralConvertible {
     
-    private var array = [ExprType]()
+    private var array = [ValueType]()
     
     public init(){}
     
-    public init(arrayLiteral elements: ExprType...){
-        var array = [ExprType]()
+    public init(arrayLiteral elements: ValueType...){
+        var array = [ValueType]()
         elements.forEach { array.append($0) }
         self.array = array
     }
@@ -39,7 +39,7 @@ extension Arr: MutableCollectionType {
     
     public var startIndex: Int { return array.startIndex }
     public var endIndex: Int { return array.endIndex }
-    public subscript (position: Int) -> ExprType {
+    public subscript (position: Int) -> ValueType {
         get { return array[position] }
         set { array[position] = newValue }
     }
@@ -49,17 +49,17 @@ extension Arr: RangeReplaceableCollectionType {
     
     // MARK: RangeReplaceableCollectionType
     
-    public mutating func append(exp: ExprType){
+    public mutating func append(exp: ValueType){
         array.append(exp)
     }
     
-    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == ExprType>(newExprs: S) {
+    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == ValueType>(newExprs: S) {
         array.appendContentsOf(newExprs)
     }
     
     public mutating func reserveCapacity(n: Int){ array.reserveCapacity(n) }
     
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == ExprType>(subRange: Range<Int>, with newExprs: C) {
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == ValueType>(subRange: Range<Int>, with newExprs: C) {
         array.replaceRange(subRange, with: newExprs)
     }
     

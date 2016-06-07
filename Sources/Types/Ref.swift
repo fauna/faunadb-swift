@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-public struct Ref: ExprType {
+public struct Ref: ValueType {
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
