@@ -9,3 +9,10 @@
 import Foundation
 
 public protocol ValueType: ExprType {}
+
+extension ValueType {
+    
+    func isEquals(other: ValueType){
+        
+    }
+}

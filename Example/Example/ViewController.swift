@@ -18,15 +18,29 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
         let db_name = "app_db_\(arc4random())"
         client.query(Create(Ref.databases,  ["name": db_name])) { [weak self] (result) in
             switch result {
-            case .Success(let _):
+            case .Success:
                 self?.client.query(Create(Ref.keys, ["database": Ref("databases/\(db_name)"),
                     "role": "server"])) { (result) in
+                        switch result {
+                        case .Success(let value):
+                            let keyRef: String = try! Field("secret").get(value)
+                            print("REFKEY =====>: \(keyRef)")
+                        case .Failure(_):
+                            break
+                        }
+                        
+                        
+                        
+                        
                 }
-            case .Failure(let error):
+            case .Failure(_):
                 break
             }
         }

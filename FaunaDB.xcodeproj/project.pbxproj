@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		287AB3481D0726930002B487 /* FieldPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* FieldPath.swift */; };
 		287AB3681D0766970002B487 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* Field.swift */; };
+		287AB36D1D0782A50002B487 /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
 		287D0A6E1C4B73BD004566D6 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
 		28DCFF371CFE050E00A813D3 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
 		28DCFF391CFE063800A813D3 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */; };
@@ -134,6 +135,7 @@
 /* Begin PBXFileReference section */
 		287AB3471D0726930002B487 /* FieldPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldPath.swift; path = Types/FieldPath.swift; sourceTree = "<group>"; };
 		287AB3671D0766970002B487 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Field.swift; path = Types/Field.swift; sourceTree = "<group>"; };
+		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF361CFE050E00A813D3 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */,
 				28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */,
 				28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */,
+				287AB36C1D0782A50002B487 /* FieldTests.swift */,
 			);
 			name = Tests;
 			path = FaunaDBTests;
@@ -533,6 +536,7 @@
 			files = (
 				287D0A6E1C4B73BD004566D6 /* FaunaDBTests.swift in Sources */,
 				28DCFF401CFE3AB000A813D3 /* ClientTests.swift in Sources */,
+				287AB36D1D0782A50002B487 /* FieldTests.swift in Sources */,
 				28DCFF3E1CFE37F400A813D3 /* ClientConfigurationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

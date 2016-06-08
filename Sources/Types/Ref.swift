@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-public struct Ref: ValueType {
+public struct Ref: ValueType, Equatable {
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
@@ -48,6 +48,11 @@ extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
     public var debugDescription: String {
         return description
     }
+}
+
+
+public func ==(lhs: Ref, rhs: Ref) -> Bool {
+    return lhs.ref == rhs.ref
 }
 
 extension Ref: Encodable, FaunaEncodable {
