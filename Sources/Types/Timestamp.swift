@@ -20,8 +20,11 @@ extension NSDate: FaunaEncodable, Encodable {
     public convenience init(iso8601: String){
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
-        let date = dateFormatter.dateFromString(iso8601)!
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+        let date = dateFormatter.dateFromString(iso8601) ?? {
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+            return dateFormatter.dateFromString(iso8601)!
+        }()
         self.init(timeInterval: 0, sinceDate: date)
     }
 }
@@ -32,7 +35,7 @@ extension NSDate {
         let dateFormatter = NSDateFormatter()
         let enUSPosixLocale = NSLocale(localeIdentifier: "en_US_POSIX")
         dateFormatter.locale = enUSPosixLocale
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
         dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT:0)
         return dateFormatter.stringFromDate(self)
     }

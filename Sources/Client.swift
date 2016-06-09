@@ -41,7 +41,7 @@ public final class Client {
 extension Client {
     
     public func query(expr: ExprType, completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil)  {
-        let jsonData = try! NSJSONSerialization.dataWithJSONObject(expr.toAnyObjectJSON()!, options: .PrettyPrinted)
+        let jsonData = try! NSJSONSerialization.dataWithJSONObject(expr.toAnyObjectJSON()!, options: [])
         postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }

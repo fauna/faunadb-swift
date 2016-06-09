@@ -14,7 +14,8 @@ public enum Action {
     case Delete
 }
 
-extension Action {
+extension Action: FaunaEncodable {
+    
     public func toAnyObjectJSON() -> AnyObject? {
         switch self {
         case .Create:

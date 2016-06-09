@@ -23,7 +23,7 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testObj() {
-        let obj = Obj(("test", 1), ("test2", Ref("some/ref")))
+        let obj: Obj = ["test": 1, "test2": Ref("some/ref")]
         XCTAssertEqual(obj.jsonString, "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}")
     }
     
@@ -63,21 +63,29 @@ class SerializationTests: FaunaDBTests {
         
         //Insert
         let insert = Insert(ref: "classes/spells/123456", ts: Timestamp(timeIntervalSince1970: 0), action: .Create, params: ["data": replaceSpell])
-        XCTAssertEqual(insert.jsonString, "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00Z\"}}")
+        XCTAssertEqual(insert.jsonString, "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
         
 
         //Remove
         let remove = Remove(ref: "classes/spells/123456", ts: Timestamp(timeIntervalSince1970: 0), action: .Create)
-        XCTAssertEqual(remove.jsonString, "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00Z\"}}")
+        XCTAssertEqual(remove.jsonString, "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
     }
     
     
     func testDateAndTimestamp() {
         let ts: Timestamp = Timestamp(timeIntervalSince1970: 0)
-        XCTAssertEqual(ts.jsonString, "{\"@ts\":\"1970-01-01T00:00:00Z\"}")
+        XCTAssertEqual(ts.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
         
         let ts2 = Timestamp(timeInterval: 5.MIN, sinceDate: ts)
-        XCTAssertEqual(ts2.jsonString, "{\"@ts\":\"1970-01-01T00:05:00Z\"}")
+        XCTAssertEqual(ts2.jsonString, "{\"@ts\":\"1970-01-01T00:05:00.000Z\"}")
+        
+        
+        let ts3 = Timestamp(iso8601: "1970-01-01T00:00:00.123Z")
+        XCTAssertEqual(ts3.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.123Z\"}")
+        
+        let ts4 = Timestamp(iso8601: "1970-01-01T00:00:00Z")
+        XCTAssertEqual(ts4.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
+        
         
         let date = Date(day: 18, month: 7, year: 1984)
         XCTAssertEqual(date.jsonString, "{\"@date\":\"1984-07-18\"}")

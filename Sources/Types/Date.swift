@@ -9,32 +9,37 @@
 import Foundation
 import Gloss
 
-public struct Date: ScalarType {
-    let dateComponents: NSDateComponents
+extension NSDateComponents: ScalarType {
     
-    public init(day: Int, month: Int, year: Int){
-        dateComponents = NSDateComponents()
-        dateComponents.day = day
-        dateComponents.month = month
-        dateComponents.year = year
+    public convenience init(day: Int, month: Int, year: Int){
+        self.init()
+        self.day = day
+        self.month = month
+        self.year = year
     }
     
-    public init(iso8601: String){
+    public convenience init(iso8601: String){
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT:0)
         let calendar = NSCalendar.currentCalendar()
         let date = dateFormatter.dateFromString(iso8601)!
-        dateComponents = calendar.componentsInTimeZone(NSTimeZone(forSecondsFromGMT:0), fromDate: date)
+        let dateComponents = calendar.componentsInTimeZone(NSTimeZone(forSecondsFromGMT:0), fromDate: date)
+        self.init()
+        self.day = dateComponents.day
+        self.month = dateComponents.month
+        self.year = dateComponents.year
     }
 }
 
-extension Date: FaunaEncodable, Encodable {
+extension NSDateComponents: Encodable {
     
     public func toJSON() -> JSON? {
-        let monthStr = dateComponents.month < 9 ? "0\(dateComponents.month)" : String(dateComponents.month)
-        let dayStr = dateComponents.day < 9 ? "0\(dateComponents.day)" : String(dateComponents.day)
-        return "@date" ~~> "\(dateComponents.year)-\(monthStr)-\(dayStr)"
+        let monthStr = month < 9 ? "0\(month)" : String(month)
+        let dayStr = day < 9 ? "0\(day)" : String(day)
+        return "@date" ~~> "\(year)-\(monthStr)-\(dayStr)"
     }
 }
+
+public typealias Date = NSDateComponents
