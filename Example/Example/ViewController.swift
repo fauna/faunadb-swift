@@ -35,10 +35,6 @@ class ViewController: UIViewController {
                         case .Failure(_):
                             break
                         }
-                        
-                        
-                        
-                        
                 }
             case .Failure(_):
                 break

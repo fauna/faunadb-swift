@@ -17,9 +17,7 @@ public struct Arr: ValueType, ArrayLiteralConvertible {
     
     
     public init(_ elements: ValueType...){
-        var array = [ValueType]()
-        elements.forEach { array.append($0) }
-        self.array = array
+        array = elements
     }
     
     public init(arrayLiteral elements: ValueType...){

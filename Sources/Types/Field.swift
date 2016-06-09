@@ -15,7 +15,7 @@ protocol FieldType {
     func getOptional(value: ValueType) throws -> T?
 }
 
-public struct Field<T: ValueType>: FieldType {
+public struct Field<T: ValueType>: FieldType, ArrayLiteralConvertible {
 
     var path: [FieldPathType]
     
@@ -37,4 +37,11 @@ public struct Field<T: ValueType>: FieldType {
         }
         return result as? T
     }
+    
+    
+    public init(arrayLiteral elements: FieldPathType...){
+        let array = elements
+        path = array
+    }
 }
+

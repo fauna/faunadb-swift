@@ -9,7 +9,7 @@ import Foundation
 import Result
 
 public final class Client {
-    
+
     private enum ClientHeaders: String {
         case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON" // true
         case Authorization = "Authorization"
@@ -20,7 +20,7 @@ public final class Client {
     var secret: String
     var authHeader: String
     public var observers = [ClientObserverType]()
-    
+
     public init (configuration: ClientConfiguration){
         faunaRoot = configuration.faunaRoot
         secret = configuration.secret
@@ -39,10 +39,10 @@ public final class Client {
 
 
 extension Client {
-    
-    public func query(expr: ExprType, completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil)  {
-        let jsonData = try! NSJSONSerialization.dataWithJSONObject(expr.toAnyObjectJSON()!, options: [])
-        postJSON(jsonData) { [weak self] (data, response, error) in
+
+    public func query(expr: ExprType, completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
+        let jsonData = try! NSJSONSerialization.dataWithJSONObject(expr.toAnyObjectJSON()!, options: .PrettyPrinted)
+        return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
@@ -59,50 +59,51 @@ extension Client {
             }
         }
     }
-    
-    public func query(expression: (()-> ExprType), completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) {
-        query(expression(), completionHandler: completionHandler)
+
+    public func query(expression: (()-> ExprType), completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask{
+        return query(expression(), completionHandler: completionHandler)
     }
-    
+
 }
 
 extension Client {
-    
-    private func postJSON(data: NSData, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)){
+
+    private func postJSON(data: NSData, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask{
         let request = NSMutableURLRequest(URL: faunaRoot)
         request.HTTPBody = data
         request.HTTPMethod = "POST"
         var headers = request.allHTTPHeaderFields ?? [String: String]()
         headers["Content-Type"] = "application/json; charset=utf-8"
         request.allHTTPHeaderFields = headers
-        performRequest(request, completionHandler: completionHandler);
+        return performRequest(request, completionHandler: completionHandler);
     }
-    
-    private func performRequest(request: NSURLRequest, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)){
-        
+
+    private func performRequest(request: NSURLRequest, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask {
+
         let dataTask = session.dataTaskWithRequest(request) { [weak self] data, response, error  in
             self?.observers.forEach { $0.didReceiveResponse(response, data: data, error: error, request: request) }
             completionHandler(data, response, error)
         }
         observers.forEach { $0.willSendRequest(dataTask.currentRequest ?? dataTask.originalRequest ?? request, session: session) }
         dataTask.resume()
+        return dataTask
     }
-    
+
 }
 
 extension Client {
-    
-    
+
+
     func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
         throw FaunaDB.Error.NetworkingException(response: response, error: error, msg: error.description)
     }
-    
+
     func handleQueryErrors(response: NSURLResponse?, data: NSData?) throws -> AnyObject? {
         guard let httpResponse = response as? NSHTTPURLResponse else {
             throw FaunaDB.Error.NetworkingException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
         }
-        
+
         if httpResponse.statusCode >= 300 {
             do {
                 let jsonData: [AnyObject] = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! [AnyObject]
@@ -139,11 +140,11 @@ extension Client {
 
 
 extension Client {
-    
+
     private static func authHeaderValue(token: String) -> String {
         return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([]) //  NSUTF8StringEncoding
     }
-    
+
     private func valueTypeForObject(object: AnyObject) -> ValueType {
         if let dicValue = object as? [String: AnyObject] {
             let result: ValueType = Obj(json: dicValue) ?? Null()
@@ -156,5 +157,5 @@ extension Client {
 
 
 internal class ClientDelegate: NSObject, NSURLSessionDataDelegate {
-    
+
 }
