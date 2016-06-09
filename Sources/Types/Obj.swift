@@ -42,6 +42,8 @@ public struct Obj: ValueType, DictionaryLiteralConvertible {
                 dictionary[key] = intValue
             case let boolValue as Bool:
                 dictionary[key] = boolValue
+            case _ as NSNull:
+                dictionary[key] = Null()
             case let arrayValue as [AnyObject]:
                 dictionary[key] = Arr(rawArray: arrayValue)
             default:
@@ -58,12 +60,7 @@ extension Obj: Encodable, FaunaEncodable {
     public func toJSON() -> JSON? {
         var result = [String : AnyObject]()
         for keyValue in dictionary{
-            if let encodableItem = keyValue.1 as? Encodable {
-                result[keyValue.0] = encodableItem.toJSON()
-            }
-            else if let anyObject = keyValue.1 as? AnyObject {
-                result[keyValue.0] = anyObject
-            }
+            result[keyValue.0] = keyValue.1.toAnyObjectJSON()
         }
         return ["object": result]
     }
@@ -102,7 +99,8 @@ extension Obj: CollectionType {
         return dictionary[position]
     }
     public subscript (key: String) -> ValueType? {
-        return dictionary[key]
+        get{ return dictionary[key] }
+        set(newValue) { dictionary[key] = newValue }
     }
     
     public mutating func updateValue(value: ValueType, forKey key: String) -> ValueType?{
@@ -113,50 +111,5 @@ extension Obj: CollectionType {
     }
     public mutating func removeValueForKey(key: String) -> ValueType?{
         return dictionary.removeValueForKey(key)
-    }
-    
-    //    /// Create a dictionary with at least the given number of
-    //    /// elements worth of storage.  The actual capacity will be the
-    //    /// smallest power of 2 that's >= `minimumCapacity`.
-    //    public init(minimumCapacity: Int)
-    
-    /// Removes all elements.
-    ///
-    /// - Postcondition: `capacity == 0` if `keepCapacity` is `false`, otherwise
-    ///   the capacity will not be decreased.
-    ///
-    /// Invalidates all indices with respect to `self`.
-    ///
-    /// - parameter keepCapacity: If `true`, the operation preserves the
-    ///   storage capacity that the collection has, otherwise the underlying
-    ///   storage is released.  The default is `false`.
-    ///
-    /// Complexity: O(`self.count`).
-//    public mutating func removeAll(keepCapacity keepCapacity: Bool = default)
-    /// The number of entries in the dictionary.
-    ///
-    /// - Complexity: O(1).
-//    public var count: Int { return }
-    /// Returns a generator over the (key, value) pairs.
-    ///
-    /// - Complexity: O(1).
-//    public func generate() -> DictionaryGenerator<Key, Value>
-    /// Create an instance initialized with `elements`.
-//    public init(dictionaryLiteral elements: (Key, Value)...)
-    /// A collection containing just the keys of `self`.
-    ///
-    /// Keys appear in the same order as they occur as the `.0` member
-    /// of key-value pairs in `self`.  Each key in the result has a
-    /// unique value.
-//    public var keys: LazyMapCollection<[Key : Value], Key> { get }
-    /// A collection containing just the values of `self`.
-    ///
-    /// Values appear in the same order as they occur as the `.1` member
-    /// of key-value pairs in `self`.
-//    public var values: LazyMapCollection<[Key : Value], Value> { get }
-    /// `true` iff `count == 0`.
-//    public var isEmpty: Bool { get }
-    
-    
-    
+    }    
 }

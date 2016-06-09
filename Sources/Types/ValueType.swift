@@ -12,7 +12,7 @@ public protocol ValueType: ExprType {}
 
 extension ValueType {
     
-    func isEquals(other: ValueType){
-        
+    func isEquals(other: ValueType) -> Bool{
+        return false
     }
 }

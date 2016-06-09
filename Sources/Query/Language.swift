@@ -14,6 +14,17 @@ public enum Action {
     case Delete
 }
 
+extension Action {
+    public func toAnyObjectJSON() -> AnyObject? {
+        switch self {
+        case .Create:
+            return "create"
+        case .Delete:
+            return "delete"
+        }
+    }
+}
+
 protocol SimpleFunctionType: FunctionType {
     init(_ ref: Ref, _ params: Obj)
 }
@@ -56,10 +67,6 @@ extension Update: Encodable, FaunaEncodable {
         return jsonify(["update" ~~> ref,
             "object" ~~> params])
     }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
-    }
 }
 
 public struct Replace: SimpleFunctionType {
@@ -76,11 +83,7 @@ extension Replace: Encodable {
     
     public func toJSON() -> JSON? {
         return jsonify(["replace" ~~> ref,
-            "object" ~~> params])
-    }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
+                        "params" ~~> params])
     }
 }
 
@@ -99,24 +102,39 @@ extension Delete: Encodable {
     public func toJSON() -> JSON? {
         return "delete" ~~> ref
     }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
+}
+
+public struct Insert: FunctionType {
+    let ref: Ref
+    let ts: Timestamp
+    let action: Action
+    let params: Obj
+}
+
+extension Insert: Encodable, FaunaEncodable {
+ 
+    public func toJSON() -> JSON? {
+        return jsonify(["insert" ~~> ref,
+                        "ts" ~~> ts,
+                        "action" ~~> action.toAnyObjectJSON(),
+                        "params" ~~> params
+            ])
     }
 }
 
-//struct Insert {
-//    let ref: Ref
-//    let ts: NSTimeInterval
-//    let action: Action
-//    let params: Obj
-//}
-//
-//
-//struct Remove {
-//    let ref: Ref
-//    let ts: NSTimeInterval
-//    let action: Action
-//    let params: Obj
-//}
-//
+public struct Remove: FunctionType {
+    let ref: Ref
+    let ts: Timestamp
+    let action: Action
+}
+
+
+extension Remove: Encodable, FaunaEncodable {
+    
+    public func toJSON() -> JSON? {
+        return jsonify(["remove" ~~> ref,
+                        "ts" ~~> ts,
+                        "action" ~~> action.toAnyObjectJSON()
+            ])
+    }
+}

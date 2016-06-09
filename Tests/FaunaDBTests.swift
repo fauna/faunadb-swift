@@ -33,3 +33,15 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
         XCTFail("Wrong error")
     }
 }
+
+extension ExprType {
+    
+    var jsonString: String {
+        let data = try! NSJSONSerialization.dataWithJSONObject(toAnyObjectJSON()!, options: [])
+        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+    }
+}
+
+extension Int {
+    var MIN: NSTimeInterval { return Double(self) * 60 }
+}

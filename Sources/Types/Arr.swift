@@ -15,10 +15,15 @@ public struct Arr: ValueType, ArrayLiteralConvertible {
     
     public init(){}
     
-    public init(arrayLiteral elements: ValueType...){
+    
+    public init(_ elements: ValueType...){
         var array = [ValueType]()
         elements.forEach { array.append($0) }
         self.array = array
+    }
+    
+    public init(arrayLiteral elements: ValueType...){
+        self.init(_: elements)
     }
     
     init(rawArray: [AnyObject]) {

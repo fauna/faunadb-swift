@@ -15,3 +15,10 @@ public protocol FaunaEncodable {
 }
 
 public protocol ExprType: FaunaEncodable {}
+
+extension ExprType where Self: Encodable {
+    public func toAnyObjectJSON() -> AnyObject? {
+        return toJSON()
+    }
+}
+
