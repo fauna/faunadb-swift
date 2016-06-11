@@ -10,6 +10,12 @@ import XCTest
 
 class FaunaDBTests: XCTestCase {
     
+    static let fieldRef = Field<Ref>("ref")
+    static let fieldClass = Field<Ref>("class")
+    static let fieldSecret = Field<String>("secret")
+    
+    static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -42,6 +48,15 @@ extension ExprType {
     }
 }
 
+extension Mapper {
+    static func fromString(strData: String) throws -> ValueType {
+        let data = strData.dataUsingEncoding(NSUTF8StringEncoding)
+        let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+        return try Mapper.fromData(jsonData)
+    }
+}
+
 extension Int {
     var MIN: NSTimeInterval { return Double(self) * 60 }
+    var SEC: NSTimeInterval { return Double(self) }
 }

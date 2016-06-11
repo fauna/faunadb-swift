@@ -11,6 +11,12 @@
 		287AB3681D0766970002B487 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* Field.swift */; };
 		287AB36D1D0782A50002B487 /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
 		287D0A6E1C4B73BD004566D6 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
+		288614181D0AF605007FB922 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; };
+		288614191D0AF605007FB922 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; };
+		288614401D0AFBC1007FB922 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		288614411D0AFBC1007FB922 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		288614451D0B4C5D007FB922 /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
+		2886144F1D0C8CF7007FB922 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
 		28DCFF371CFE050E00A813D3 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
 		28DCFF391CFE063800A813D3 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */; };
 		28DCFF3E1CFE37F400A813D3 /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
@@ -278,11 +284,29 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2886143B1D0AFB53007FB922 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				288614401D0AFBC1007FB922 /* Quick.framework in CopyFiles */,
+				288614411D0AFBC1007FB922 /* Nimble.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		287AB3471D0726930002B487 /* FieldPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldPath.swift; path = Types/FieldPath.swift; sourceTree = "<group>"; };
 		287AB3671D0766970002B487 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Field.swift; path = Types/Field.swift; sourceTree = "<group>"; };
 		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; };
+		288614161D0AF605007FB922 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		288614171D0AF605007FB922 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
+		288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientExceptionsTests.swift; path = Tests/ClientExceptionsTests.swift; sourceTree = SOURCE_ROOT; };
+		2886144E1D0C8CF7007FB922 /* SetRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetRef.swift; path = Types/SetRef.swift; sourceTree = "<group>"; };
 		28DCFF361CFE050E00A813D3 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
 		28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientConfigurationTests.swift; path = Tests/ClientConfigurationTests.swift; sourceTree = SOURCE_ROOT; };
@@ -337,6 +361,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				288614181D0AF605007FB922 /* Quick.framework in Frameworks */,
+				288614191D0AF605007FB922 /* Nimble.framework in Frameworks */,
 				28F828881C494B2C00330CF4 /* FaunaDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,6 +383,7 @@
 				287AB3671D0766970002B487 /* Field.swift */,
 				28E9D8601D08EE7800A511AA /* Date.swift */,
 				28E9D8621D08EE8700A511AA /* Timestamp.swift */,
+				2886144E1D0C8CF7007FB922 /* SetRef.swift */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -375,6 +402,8 @@
 		28DCFF581D00CF0400A813D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				288614161D0AF605007FB922 /* Quick.framework */,
+				288614171D0AF605007FB922 /* Nimble.framework */,
 				28E9D8641D09D59000A511AA /* Rx.xcodeproj */,
 				28DCFF8F1D0222BA00A813D3 /* Result.xcodeproj */,
 				28DCFF7D1D020C1400A813D3 /* Gloss.xcodeproj */,
@@ -493,6 +522,7 @@
 				287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */,
 				28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */,
 				28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */,
+				288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */,
 				287AB36C1D0782A50002B487 /* FieldTests.swift */,
 				28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */,
 				28E9D84B1D0849F700A511AA /* SerializationTests.swift */,
@@ -579,6 +609,7 @@
 				28F828831C494B2C00330CF4 /* Sources */,
 				28F828841C494B2C00330CF4 /* Frameworks */,
 				28F828851C494B2C00330CF4 /* Resources */,
+				2886143B1D0AFB53007FB922 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -923,6 +954,7 @@
 				287AB3481D0726930002B487 /* FieldPath.swift in Sources */,
 				28DCFF5C1D01CBF800A813D3 /* ValueType.swift in Sources */,
 				28E9D8611D08EE7800A511AA /* Date.swift in Sources */,
+				2886144F1D0C8CF7007FB922 /* SetRef.swift in Sources */,
 				28DCFF491CFF907E00A813D3 /* Obj.swift in Sources */,
 				28DCFF471CFF906200A813D3 /* Ref.swift in Sources */,
 				28DCFF521CFF98C800A813D3 /* ScalarType.swift in Sources */,
@@ -944,6 +976,7 @@
 				287AB36D1D0782A50002B487 /* FieldTests.swift in Sources */,
 				28E9D83D1D0849CA00A511AA /* DeserializationTests.swift in Sources */,
 				28E9D84C1D0849F700A511AA /* SerializationTests.swift in Sources */,
+				288614451D0B4C5D007FB922 /* ClientExceptionsTests.swift in Sources */,
 				28DCFF3E1CFE37F400A813D3 /* ClientConfigurationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1133,6 +1166,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;
@@ -1145,6 +1182,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;

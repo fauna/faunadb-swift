@@ -24,8 +24,9 @@ public struct Arr: ValueType, ArrayLiteralConvertible {
         self.init(_: elements)
     }
     
-    init(rawArray: [AnyObject]) {
-        
+    public init?(json: [AnyObject]) {
+        guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
+        array = arr
     }
 }
 
@@ -81,5 +82,17 @@ extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
     public var debugDescription: String {
         return description
     }
+}
+
+extension Arr: Equatable {}
+
+public func ==(lhs: Arr, rhs: Arr) -> Bool {
+    guard lhs.count == rhs.count else { return false }
+    var i1 = lhs.generate()
+    var i2 = rhs.generate()
+    while let e1 = i1.next(), e2 = i2.next() {
+        guard e1.isEquals(e2) else { return false }
+    }
+    return true
 }
 

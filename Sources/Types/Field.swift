@@ -19,8 +19,12 @@ public struct Field<T: ValueType>: FieldType, ArrayLiteralConvertible {
 
     var path: [FieldPathType]
     
+    public init(_ array: [FieldPathType]){
+        path = array
+    }
+    
     public init(_ filePaths:FieldPathType...){
-        self.path = filePaths
+        self.init(filePaths)
     }
 
     public func get(value: ValueType) throws -> T {

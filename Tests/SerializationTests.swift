@@ -81,16 +81,17 @@ class SerializationTests: FaunaDBTests {
         
         
         let ts3 = Timestamp(iso8601: "1970-01-01T00:00:00.123Z")
-        XCTAssertEqual(ts3.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.123Z\"}")
+        XCTAssertEqual(ts3?.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.123Z\"}")
         
         let ts4 = Timestamp(iso8601: "1970-01-01T00:00:00Z")
-        XCTAssertEqual(ts4.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
+        XCTAssertEqual(ts4?.jsonString, "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
         
         
         let date = Date(day: 18, month: 7, year: 1984)
         XCTAssertEqual(date.jsonString, "{\"@date\":\"1984-07-18\"}")
         
         let date2 = Date(iso8601:"1984-07-18")
-        XCTAssertEqual(date2.jsonString, "{\"@date\":\"1984-07-18\"}")
+        XCTAssertNotNil(date2)
+        XCTAssertEqual(date2?.jsonString, "{\"@date\":\"1984-07-18\"}")
     }
 }

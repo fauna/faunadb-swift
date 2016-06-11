@@ -130,7 +130,7 @@ public struct Remove: FunctionType {
 }
 
 
-extension Remove: Encodable, FaunaEncodable {
+extension Remove: Encodable {
     
     public func toJSON() -> JSON? {
         return jsonify(["remove" ~~> ref,
@@ -139,3 +139,20 @@ extension Remove: Encodable, FaunaEncodable {
             ])
     }
 }
+
+public struct Get: FunctionType {
+    let ref: Ref
+    
+    public init(_ ref: Ref){
+        self.ref = ref
+    }
+}
+
+extension Get: Encodable {
+    
+    public func toJSON() -> JSON? {
+        return "get" ~~> ref
+    }
+}
+
+

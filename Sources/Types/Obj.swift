@@ -26,36 +26,22 @@ public struct Obj: ValueType, DictionaryLiteralConvertible {
     
     public init?(json: JSON){
         var dictionary = [String:ValueType]()
-        json.forEach({ (key, value) in
-            switch value {
-            case let dicValue as [String: AnyObject]:
-                if dicValue.count == 1 && key == "@ref" {
-                    let ref: Ref = (key <~~ dicValue)!
-                    dictionary[key] = ref
-                }
-                break
-            case let strValue as String:
-                dictionary[key] = strValue
-            case let doubleValue as Double:
-                dictionary[key] = doubleValue
-            case let intValue as Int:
-                dictionary[key] = intValue
-            case let boolValue as Bool:
-                dictionary[key] = boolValue
-            case _ as NSNull:
-                dictionary[key] = Null()
-            case let arrayValue as [AnyObject]:
-                dictionary[key] = Arr(rawArray: arrayValue)
-            default:
-                break
+        var json = json
+        if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
+            json = objData
+        }
+        do {
+            try json.forEach {  (key, value) throws in
+                dictionary[key] = try Mapper.fromData(value)
             }
-        })
+        }
+        catch { return nil }
         self.dictionary = dictionary
     }
     
 }
 
-extension Obj: Encodable, FaunaEncodable {
+extension Obj: Encodable {
     
     public func toJSON() -> JSON? {
         var result = [String : AnyObject]()
@@ -112,4 +98,16 @@ extension Obj: CollectionType {
     public mutating func removeValueForKey(key: String) -> ValueType?{
         return dictionary.removeValueForKey(key)
     }    
+}
+
+extension Obj: Equatable {}
+
+public func ==(lhs: Obj, rhs: Obj) -> Bool {
+    guard lhs.count == rhs.count else { return false }
+    for (key, value) in lhs {
+        guard let rValue = rhs[key] where value.isEquals(rValue) else {
+            return false
+        }
+    }
+    return true
 }

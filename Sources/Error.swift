@@ -16,8 +16,10 @@ public enum Error: ErrorType {
     case UnauthorizedException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case UnknownException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case InternalException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
-    case NetworkingException(response: NSURLResponse?, error: NSError?, msg: String?)
+    case NetworkException(response: NSURLResponse?, error: NSError?, msg: String?)
+    case DecodeException(data: AnyObject)
 }
+
 
 extension Error: CustomDebugStringConvertible, CustomStringConvertible {
     
@@ -35,8 +37,10 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
             return getDesc(response, errors: errors, msg: msg)
         case .InternalException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
-        case .NetworkingException(let response, let error, let msg):
+        case .NetworkException(let response, let error, let msg):
             return getDesc(response, errors: [], msg: msg, error: error)
+        case .DecodeException(let data):
+            return "Cannot decode json object: \(data)"
         }
     }
     
@@ -64,14 +68,14 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
 
 public struct ErrorResponse {
     let code: String
-    let desc: String?
+    let desc: String
     let position: [String]
     
     
     public init?(json: JSON){
         guard let code: String = "code" <~~ json else { return nil }
         self.code = code
-        self.desc = "description" <~~ json
+        self.desc = "description" <~~ json ?? ""
         self.position = "position" <~~ json ?? []
     }
 }
