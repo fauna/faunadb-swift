@@ -82,6 +82,13 @@ class DeserializationTests: FaunaDBTests {
         XCTAssert(deseralizedValue.isEquals(date!))
     }
     
+    func testBool(){
+        let toDeserialize = "{\"bool\": true}"
+        let deseralizedValue = try! Mapper.fromString(toDeserialize)
+         XCTAssert(deseralizedValue.isEquals(Obj(("bool", true))))
+        
+    }
+    
     func testArr(){
         let toDeserialize = "[2, \"Hi\", {\"@date\":\"1970-01-03\"}, {\"@ts\":\"1970-01-01T00:05:00Z\"}]"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
@@ -89,8 +96,5 @@ class DeserializationTests: FaunaDBTests {
         XCTAssertNotNil(date)
         let arr: Arr = [Double(2), "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
         XCTAssert(deseralizedValue.isEquals(arr))
-    }
-    
-    
-    
+    }    
 }

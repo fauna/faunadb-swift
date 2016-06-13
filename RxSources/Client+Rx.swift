@@ -15,7 +15,7 @@ extension FaunaDB.Client {
 
     public func rx_query(expr: ExprType) -> Observable<ValueType> {
         return Observable.create { [weak self] subscriber in
-            let task = self?.query(expr, completionHandler: { result in
+            let task = self?.query(expr) { result in
                 switch result {
                 case .Failure(let error):
                     subscriber.onError(error)
@@ -23,7 +23,7 @@ extension FaunaDB.Client {
                     subscriber.onNext(value)
                     subscriber.onCompleted()
                 }
-            })
+            }
             return AnonymousDisposable {
                 task?.cancel()
             }

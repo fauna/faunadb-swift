@@ -37,7 +37,6 @@ class SerializationTests: FaunaDBTests {
         XCTAssertEqual(false.toAnyObjectJSON() as? Bool, false)
         XCTAssertEqual("test".toAnyObjectJSON() as? String, "test")
         XCTAssertEqual(Int.max.toAnyObjectJSON() as? Int, Int.max)
-        XCTAssertEqual(Float(3.14).toAnyObjectJSON() as? Float, Float(3.14))
         XCTAssertEqual(3.14.toAnyObjectJSON() as? Double, Double(3.14))
         XCTAssertEqual(Null().toAnyObjectJSON() as? NSNull, NSNull())
     }
@@ -93,5 +92,40 @@ class SerializationTests: FaunaDBTests {
         let date2 = Date(iso8601:"1984-07-18")
         XCTAssertNotNil(date2)
         XCTAssertEqual(date2?.jsonString, "{\"@date\":\"1984-07-18\"}")
+    }
+    
+    
+    func testCollections() {
+        
+        let map = Map(arr: [1,2,3], lambda: Lambda(vars: "munchings", expr: Var("munchings")))
+        XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}")
+        
+        let map1 = Map(arr: [1,2,3], lambda: { x in x })
+        XCTAssertEqual(map1.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
+        
+        let map2 = Map(arr: [1,2,3]) { $0 }
+        XCTAssertEqual(map2.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
+        
+        let map3 = [1,2,3].mapFauna { (value: Value) -> Expr in
+            value
+        }
+        XCTAssertEqual(map3.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
+        
+        let foreach = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")], lambda: Lambda(vars: "refData", expr: Create("some/ref", ["data": Obj(("some", Var("refData")))])))
+        XCTAssertEqual(foreach.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}")
+        
+        let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
+                            Create("some/ref", ["data": Obj(("some", ref))])
+                        }
+        XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"x\"}}}}}},\"lambda\":\"x\"}}")
+        
+        let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
+                            Create("some/ref", ["data": Obj(("some", $0))])
+                        }
+        XCTAssertEqual(foreach3.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"x\"}}}}}},\"lambda\":\"x\"}}")
+        
+        let arr = [1,2,3]
+        let filter = Filter(arr: arr, lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        XCTAssertEqual(filter.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"x\"}]},\"lambda\":\"x\"}}")
     }
 }

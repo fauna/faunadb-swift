@@ -30,6 +30,9 @@ class ViewController: UIViewController {
                         case .Success(let value):
                             let secret: String = try! value.get("secret")
                             self?.client = Client(configuration: ClientConfiguration(secret: secret))
+                            
+//                            let arr: Arr = ["First post", "Second Post", "Third Post"]
+//                            self?.client.query(arr.mapFauna { Create("classes/posts", ["data": Obj(("title", $0))]) })
                             var ecoString: String?
                             self?.client.query("ayz") { result in
                                 let responseValue = try! result.dematerialize() as! String
@@ -43,9 +46,7 @@ class ViewController: UIViewController {
                 break
             }
         }
-        
-        
     }
-
 }
+
 

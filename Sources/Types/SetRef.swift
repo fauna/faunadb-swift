@@ -9,5 +9,5 @@
 import Foundation
 
 public struct SetRef {
-    let value: ValueType
+    let value: Value
 }

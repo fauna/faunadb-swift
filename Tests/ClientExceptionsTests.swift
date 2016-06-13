@@ -72,6 +72,20 @@ class ClientExceptionsTests: FaunaDBTests {
             }
         }
     }
+    
+    func testUnauthorized(){
+        let badClient = Client(configuration: ClientConfiguration(secret: "notavalidsecret"))
+        waitUntil(timeout: 3) { done in
+            badClient.query(Get("classes/spells/1234")) { result in
+                guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _, msg: _) = queryError else  {
+                    fail()
+                    done()
+                    return
+                }
+                done()
+            }
+        }
+    }
 
 }
 

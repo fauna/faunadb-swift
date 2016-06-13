@@ -40,7 +40,7 @@ public final class Client {
 
 extension Client {
 
-    public func query(expr: ExprType, completion: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
+    public func query(expr: Expr, completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
         let jsonData = try! toData(expr.toAnyObjectJSON()) ?? NSData()
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
@@ -60,7 +60,7 @@ extension Client {
         }
     }
 
-    public func query(expression: (()-> ExprType), completion: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask{
+    public func query(expression: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask{
         return query(expression(), completion: completion)
     }
     
@@ -133,7 +133,10 @@ extension Client {
             }
         }
         if let data = data {
+            let str = String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+            print (str)
             let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            
             return jsonData.objectForKey("resource")
         }
         return nil

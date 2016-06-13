@@ -9,23 +9,23 @@
 import Foundation
 import Gloss
 
-public struct Obj: ValueType, DictionaryLiteralConvertible {
-    private var dictionary = [String: ValueType]()
+public struct Obj: Value, DictionaryLiteralConvertible {
+    private var dictionary = [String: Value]()
     
-    public init(dictionaryLiteral elements: (String, ValueType)...){
-        var dictionary = [String:ValueType]()
+    public init(dictionaryLiteral elements: (String, Value)...){
+        var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
-    public init(_ elements: (String, ValueType)...){
-        var dictionary = [String:ValueType]()
+    public init(_ elements: (String, Value)...){
+        var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
     public init?(json: JSON){
-        var dictionary = [String:ValueType]()
+        var dictionary = [String:Value]()
         var json = json
         if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
             json = objData
@@ -51,8 +51,8 @@ extension Obj: Encodable {
         return ["object": result]
     }
     
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
+    public func toAnyObjectJSON() -> AnyObject {
+        return toJSON()!
     }
 }
 
@@ -70,32 +70,32 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension Obj: CollectionType {
-    public typealias Element = (String, ValueType)
-    public typealias Index = DictionaryIndex<String, ValueType>
+    public typealias Element = (String, Value)
+    public typealias Index = DictionaryIndex<String, Value>
     
     /// Create an empty dictionary.
     public init(){}
 
-    public var startIndex: DictionaryIndex<String, ValueType> { return dictionary.startIndex }
-    public var endIndex: DictionaryIndex<String, ValueType> { return dictionary.endIndex }
-    public func indexForKey(key: String) -> DictionaryIndex<String, ValueType>? {
+    public var startIndex: DictionaryIndex<String, Value> { return dictionary.startIndex }
+    public var endIndex: DictionaryIndex<String, Value> { return dictionary.endIndex }
+    public func indexForKey(key: String) -> DictionaryIndex<String, Value>? {
         return dictionary.indexForKey(key)
     }
-    public subscript (position: DictionaryIndex<String, ValueType>) -> (String, ValueType) {
+    public subscript (position: DictionaryIndex<String, Value>) -> (String, Value) {
         return dictionary[position]
     }
-    public subscript (key: String) -> ValueType? {
+    public subscript (key: String) -> Value? {
         get{ return dictionary[key] }
         set(newValue) { dictionary[key] = newValue }
     }
     
-    public mutating func updateValue(value: ValueType, forKey key: String) -> ValueType?{
+    public mutating func updateValue(value: Value, forKey key: String) -> Value?{
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: DictionaryIndex<String, ValueType>) -> (String, ValueType) {
+    public mutating func removeAtIndex(index: DictionaryIndex<String, Value>) -> (String, Value) {
         return dictionary.removeAtIndex(index)
     }
-    public mutating func removeValueForKey(key: String) -> ValueType?{
+    public mutating func removeValueForKey(key: String) -> Value?{
         return dictionary.removeValueForKey(key)
     }    
 }

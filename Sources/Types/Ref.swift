@@ -9,14 +9,14 @@
 import Foundation
 import Gloss
 
-public struct Ref: ValueType, Decodable{
+public struct Ref: Value, Decodable{
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
     public static let classes: Ref = "classes"
     public static let keys: Ref = "keys"
     
-    var ref: String
+    let ref: String
     
     public init(_ ref: String){
         self.ref = ref
@@ -62,8 +62,8 @@ extension Ref: Encodable {
         return "@ref" ~~> ref
     }
     
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
+    public func toAnyObjectJSON() -> AnyObject {
+        return toJSON()!
     }
 }
 
