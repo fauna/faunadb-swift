@@ -8,4 +8,4 @@
 
 import Foundation
 
-public protocol LanguageType: ExprType {}
+public protocol LanguageType: Expr {}
