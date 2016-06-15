@@ -10,6 +10,12 @@ import XCTest
 
 class FaunaDBTests: XCTestCase {
     
+    static let fieldRef = Field<Ref>("ref")
+    static let fieldClass = Field<Ref>("class")
+    static let fieldSecret = Field<String>("secret")
+    
+    static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -34,14 +40,31 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
     }
 }
 
-extension ExprType {
+extension Expr {
     
     var jsonString: String {
-        let data = try! NSJSONSerialization.dataWithJSONObject(toAnyObjectJSON()!, options: [])
+        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
         return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+    }
+}
+
+extension Lambda {
+    
+    var jsonString: String {
+        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
+        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+    }
+}
+
+extension Mapper {
+    static func fromString(strData: String) throws -> Value {
+        let data = strData.dataUsingEncoding(NSUTF8StringEncoding)
+        let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+        return try Mapper.fromData(jsonData)
     }
 }
 
 extension Int {
     var MIN: NSTimeInterval { return Double(self) * 60 }
+    var SEC: NSTimeInterval { return Double(self) }
 }

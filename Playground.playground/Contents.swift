@@ -12,7 +12,6 @@ import Foundation
 
 
 @testable import FaunaDB
-import Gloss
 import Result
 
 func stringFormat(json: JSON) -> String{
@@ -123,10 +122,36 @@ client.query(Create(Ref.databases, ["name": "blog_db"])){ result in
 //let clientConfiguration = ClientConfiguration(
 //var client = Client(configuration: ClientConfiguration
 
-//var fun =  { (a: Int, b: String) in
-//    return 4.5 }
-//
-//let mirror = Mirror.init(reflecting: fun)
+var fun =  { (a: Int, b: String) in
+                return 4.5 }
+let mirror = Mirror.init(reflecting: fun)
+
+mirror.description
+
+mirror.displayStyle
+
+mirror.subjectType
+
+mirror.superclassMirror()
+
+
+
+var result = [String]()
+
+for prop in mirror.children
+{
+    prop
+    if let name = prop.label
+    {
+        result.append(name)
+    }
+    else {
+        result.append("Nothing to show")
+    }
+}
+
+result
+
 //
 //mirror.description
 //

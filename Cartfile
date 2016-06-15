@@ -1,2 +1,3 @@
 github "antitypical/Result" "master"
 github "hkellaway/Gloss"
+github "ReactiveX/RxSwift"

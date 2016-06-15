@@ -11,7 +11,7 @@ import Result
 
 public enum FieldPathError: ErrorType, Equatable {
     case NotFound(fieldPath: FieldPathType)
-    case UnexpectedType(v: ValueType, expectedType: Any.Type, fieldPath: FieldPathType)
+    case UnexpectedType(v: Value, expectedType: Any.Type, fieldPath: FieldPathType)
 }
 
 
@@ -20,7 +20,7 @@ public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
     case (.NotFound(let fieldPath1), .NotFound(let fieldPath2)):
         return fieldPath1.isEqual(fieldPath2)
     case (.UnexpectedType(let value1, let expectedType1, let fieldPath1), .UnexpectedType(let value2, let expectedType2, let fieldPath2)):
-        return fieldPath1.isEqual(fieldPath2) && expectedType1 == expectedType2 //&& value1 === value2
+        return fieldPath1.isEqual(fieldPath2) && expectedType1 == expectedType2 && value1.isEquals(value2)
     default:
         return false
     }
@@ -28,7 +28,7 @@ public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
 }
 
 public protocol FieldPathType: CustomStringConvertible, CustomDebugStringConvertible {
-    func subValue(v: ValueType) throws -> ValueType
+    func subValue(v: Value) throws -> Value
     func isEqual(other: FieldPathType) -> Bool
 }
 
@@ -67,7 +67,7 @@ extension FieldPathType {
 
 extension String: FieldPathType {
     
-    public func subValue(v: ValueType) throws -> ValueType {
+    public func subValue(v: Value) throws -> Value {
         switch v{
         case let obj as Obj:
             guard let objValue = obj[self] else { throw FieldPathError.NotFound(fieldPath: self) }
@@ -79,7 +79,7 @@ extension String: FieldPathType {
 }
 
 extension Int: FieldPathType {
-    public func subValue(v: ValueType) throws -> ValueType {
+    public func subValue(v: Value) throws -> Value {
         switch v{
         case let arr as Arr:
             guard arr.count > self  else { throw FieldPathError.NotFound(fieldPath: self) }
@@ -96,7 +96,7 @@ public struct FieldPathEmpty: FieldPathType {
         return "/"
     }
     
-    public func subValue(v: ValueType) throws -> ValueType {
+    public func subValue(v: Value) throws -> Value {
         return v
     }
 }
@@ -118,7 +118,7 @@ public struct FieldPathNode: FieldPathType {
         }
     }
     
-    public func subValue(v: ValueType) throws -> ValueType {
+    public func subValue(v: Value) throws -> Value {
         return try right.subValue(left.subValue(v))
     }
 }
