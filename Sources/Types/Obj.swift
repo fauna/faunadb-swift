@@ -7,73 +7,49 @@
 //
 
 import Foundation
-import Gloss
 
-public struct Obj: ValueType, DictionaryLiteralConvertible {
-    private var dictionary = [String: ExprType]()
+public struct Obj: Value, DictionaryLiteralConvertible {
+    private var dictionary = [String: Value]()
     
-    public init(dictionaryLiteral elements: (String, ExprType)...){
-        var dictionary = [String:ExprType]()
+    public init(dictionaryLiteral elements: (String, Value)...){
+        var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
-    public init(_ elements: (String, ExprType)...){
-        var dictionary = [String:ExprType]()
+    public init(_ elements: (String, Value)...){
+        var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
     
-    public init?(json: JSON){
-        var dictionary = [String:ExprType]()
-        json.forEach({ (key, value) in
-            switch value {
-            case let dicValue as [String: AnyObject]:
-                if dicValue.count == 1 && key == "@ref" {
-                    let ref: Ref = (key <~~ dicValue)!
-                    dictionary[key] = ref
-                }
-                break
-            case let strValue as String:
-                dictionary[key] = strValue
-            case let doubleValue as Double:
-                dictionary[key] = doubleValue
-            case let intValue as Int:
-                dictionary[key] = intValue
-            case let boolValue as Bool:
-                dictionary[key] = boolValue
-            case let arrayValue as [AnyObject]:
-                dictionary[key] = Arr(rawArray: arrayValue)
-            default:
-                break
+    public init?(json: [String: AnyObject]){
+        var dictionary = [String:Value]()
+        var json = json
+        if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
+            json = objData
+        }
+        do {
+            try json.forEach {  (key, value) throws in
+                dictionary[key] = try Mapper.fromData(value)
             }
-        })
+        }
+        catch { return nil }
         self.dictionary = dictionary
     }
     
 }
 
-extension Obj: Encodable, FaunaEncodable {
+extension Obj: Encodable {
     
-    public func toJSON() -> JSON? {
+    public func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
         for keyValue in dictionary{
-            if let encodableItem = keyValue.1 as? Encodable {
-                result[keyValue.0] = encodableItem.toJSON()
-            }
-            else if let anyObject = keyValue.1 as? AnyObject {
-                result[keyValue.0] = anyObject
-            }
+            result[keyValue.0] = keyValue.1.toJSON()
         }
         return ["object": result]
     }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
-    }
 }
-
-extension Obj: Decodable {}
 
 extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
     
@@ -87,76 +63,44 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension Obj: CollectionType {
-    public typealias Element = (String, ExprType)
-    public typealias Index = DictionaryIndex<String, ExprType>
+    public typealias Element = (String, Value)
+    public typealias Index = DictionaryIndex<String, Value>
     
     /// Create an empty dictionary.
     public init(){}
 
-    public var startIndex: DictionaryIndex<String, ExprType> { return dictionary.startIndex }
-    public var endIndex: DictionaryIndex<String, ExprType> { return dictionary.endIndex }
-    public func indexForKey(key: String) -> DictionaryIndex<String, ExprType>? {
+    public var startIndex: DictionaryIndex<String, Value> { return dictionary.startIndex }
+    public var endIndex: DictionaryIndex<String, Value> { return dictionary.endIndex }
+    public func indexForKey(key: String) -> DictionaryIndex<String, Value>? {
         return dictionary.indexForKey(key)
     }
-    public subscript (position: DictionaryIndex<String, ExprType>) -> (String, ExprType) {
+    public subscript (position: DictionaryIndex<String, Value>) -> (String, Value) {
         return dictionary[position]
     }
-    public subscript (key: String) -> ExprType? {
-        return dictionary[key]
+    public subscript (key: String) -> Value? {
+        get{ return dictionary[key] }
+        set(newValue) { dictionary[key] = newValue }
     }
     
-    public mutating func updateValue(value: ExprType, forKey key: String) -> ExprType?{
+    public mutating func updateValue(value: Value, forKey key: String) -> Value?{
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: DictionaryIndex<String, ExprType>) -> (String, ExprType) {
+    public mutating func removeAtIndex(index: DictionaryIndex<String, Value>) -> (String, Value) {
         return dictionary.removeAtIndex(index)
     }
-    public mutating func removeValueForKey(key: String) -> ExprType?{
+    public mutating func removeValueForKey(key: String) -> Value?{
         return dictionary.removeValueForKey(key)
+    }    
+}
+
+extension Obj: Equatable {}
+
+public func ==(lhs: Obj, rhs: Obj) -> Bool {
+    guard lhs.count == rhs.count else { return false }
+    for (key, value) in lhs {
+        guard let rValue = rhs[key] where value.isEquals(rValue) else {
+            return false
+        }
     }
-    
-    //    /// Create a dictionary with at least the given number of
-    //    /// elements worth of storage.  The actual capacity will be the
-    //    /// smallest power of 2 that's >= `minimumCapacity`.
-    //    public init(minimumCapacity: Int)
-    
-    /// Removes all elements.
-    ///
-    /// - Postcondition: `capacity == 0` if `keepCapacity` is `false`, otherwise
-    ///   the capacity will not be decreased.
-    ///
-    /// Invalidates all indices with respect to `self`.
-    ///
-    /// - parameter keepCapacity: If `true`, the operation preserves the
-    ///   storage capacity that the collection has, otherwise the underlying
-    ///   storage is released.  The default is `false`.
-    ///
-    /// Complexity: O(`self.count`).
-//    public mutating func removeAll(keepCapacity keepCapacity: Bool = default)
-    /// The number of entries in the dictionary.
-    ///
-    /// - Complexity: O(1).
-//    public var count: Int { return }
-    /// Returns a generator over the (key, value) pairs.
-    ///
-    /// - Complexity: O(1).
-//    public func generate() -> DictionaryGenerator<Key, Value>
-    /// Create an instance initialized with `elements`.
-//    public init(dictionaryLiteral elements: (Key, Value)...)
-    /// A collection containing just the keys of `self`.
-    ///
-    /// Keys appear in the same order as they occur as the `.0` member
-    /// of key-value pairs in `self`.  Each key in the result has a
-    /// unique value.
-//    public var keys: LazyMapCollection<[Key : Value], Key> { get }
-    /// A collection containing just the values of `self`.
-    ///
-    /// Values appear in the same order as they occur as the `.1` member
-    /// of key-value pairs in `self`.
-//    public var values: LazyMapCollection<[Key : Value], Value> { get }
-    /// `true` iff `count == 0`.
-//    public var isEmpty: Bool { get }
-    
-    
-    
+    return true
 }

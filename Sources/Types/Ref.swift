@@ -7,18 +7,22 @@
 //
 
 import Foundation
-import Gloss
 
-public struct Ref: ExprType {
+public struct Ref: Value{
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
     public static let classes: Ref = "classes"
     public static let keys: Ref = "keys"
     
-    var ref: String
+    let ref: String
     
     public init(_ ref: String){
+        self.ref = ref
+    }
+    
+    public init?(json: [String: AnyObject]){
+        guard let ref = json["@ref"] as? String where json.count == 1 else { return nil }
         self.ref = ref
     }
 }
@@ -42,7 +46,7 @@ extension Ref: StringLiteralConvertible {
 extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
     
     public var description: String{
-        return ref
+        return "Ref(\(ref))"
     }
     
     public var debugDescription: String {
@@ -50,14 +54,16 @@ extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
-extension Ref: Encodable, FaunaEncodable {
+
+extension Ref: Encodable {
     
-    public func toJSON() -> JSON? {
-        return "@ref" ~~> ref
-    }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
+    public func toJSON() -> AnyObject {
+        return ["@ref": ref.toJSON()]
     }
 }
 
+extension Ref: Equatable {}
+
+public func ==(lhs: Ref, rhs: Ref) -> Bool {
+    return lhs.ref == rhs.ref
+}

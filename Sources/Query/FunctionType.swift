@@ -8,4 +8,6 @@
 
 import Foundation
 
-public protocol FunctionType: ExprType {}
+public protocol FunctionType: Expr {}
+
+public protocol LambdaFunctionType: FunctionType {}
