@@ -7,32 +7,32 @@
 //
 
 import Foundation
-import Gloss
 
-public struct Arr: ValueType, ArrayLiteralConvertible {
+public struct Arr: Value, ArrayLiteralConvertible {
     
-    private var array = [ValueType]()
+    private var array = [Value]()
     
     public init(){}
     
     
-    public init(_ elements: ValueType...){
+    public init(_ elements: Value...){
         array = elements
     }
     
-    public init(arrayLiteral elements: ValueType...){
+    public init(arrayLiteral elements: Value...){
         self.init(_: elements)
     }
     
-    init(rawArray: [AnyObject]) {
-        
+    public init?(json: [AnyObject]) {
+        guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
+        array = arr
     }
 }
 
-extension Arr: FaunaEncodable {
+extension Arr: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject? {
-        return array.map { $0.toAnyObjectJSON()  ?? NSNull() }
+    public func toJSON() -> AnyObject {
+        return array.map { $0.toJSON() }
     }
 }
 
@@ -42,7 +42,7 @@ extension Arr: MutableCollectionType {
     
     public var startIndex: Int { return array.startIndex }
     public var endIndex: Int { return array.endIndex }
-    public subscript (position: Int) -> ValueType {
+    public subscript (position: Int) -> Value {
         get { return array[position] }
         set { array[position] = newValue }
     }
@@ -52,17 +52,17 @@ extension Arr: RangeReplaceableCollectionType {
     
     // MARK: RangeReplaceableCollectionType
     
-    public mutating func append(exp: ValueType){
+    public mutating func append(exp: Value){
         array.append(exp)
     }
     
-    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == ValueType>(newExprs: S) {
+    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == Value>(newExprs: S) {
         array.appendContentsOf(newExprs)
     }
     
     public mutating func reserveCapacity(n: Int){ array.reserveCapacity(n) }
     
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == ValueType>(subRange: Range<Int>, with newExprs: C) {
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == Value>(subRange: Range<Int>, with newExprs: C) {
         array.replaceRange(subRange, with: newExprs)
     }
     
@@ -81,5 +81,17 @@ extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
     public var debugDescription: String {
         return description
     }
+}
+
+extension Arr: Equatable {}
+
+public func ==(lhs: Arr, rhs: Arr) -> Bool {
+    guard lhs.count == rhs.count else { return false }
+    var i1 = lhs.generate()
+    var i2 = rhs.generate()
+    while let e1 = i1.next(), e2 = i2.next() {
+        guard e1.isEquals(e2) else { return false }
+    }
+    return true
 }
 

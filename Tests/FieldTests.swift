@@ -20,14 +20,14 @@ class FieldTests: FaunaDBTests {
         let myInt = try! field.get(arr)
         XCTAssertEqual(myInt, 3)
         
-        // let's see what happens if we use a wrong ValueType
+        // let's see what happens if we use a wrong Value
         let obj: Obj = ["name": "my_db_name"]
         XCTAssertThrowss(FieldPathError.UnexpectedType(v: obj, expectedType: Arr.self, fieldPath: 0)) { try field.get(obj) }
         
         
         
         var arr2 = arr
-        arr2.append(Obj(("key", Ref.classes)))
+        arr2.append(["key": Ref.classes] as Obj)
         let field2 = Field<Ref>(3, "key")
         let ref = try! field2.get(arr2)
         XCTAssertEqual(ref, Ref.classes)

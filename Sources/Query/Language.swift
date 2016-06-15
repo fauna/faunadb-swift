@@ -7,135 +7,204 @@
 //
 
 import Foundation
-import Gloss
 
-public enum Action {
-    case Create
-    case Delete
+public struct Exists: FunctionType {
+    
+    let ref: Ref
+    let ts: Timestamp?
+    
+    init(_ ref: Ref, ts: Timestamp? = nil){
+        self.ref = ref
+        self.ts = ts
+    }
 }
 
-extension Action: FaunaEncodable {
+extension Exists: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject? {
-        switch self {
-        case .Create:
-            return "create"
-        case .Delete:
-            return "delete"
+    public func toJSON() -> AnyObject {
+        if let ts = ts {
+            return ["exists": ref.toJSON(),
+                    "ts": ts.toJSON()]
         }
-    }
-}
-
-protocol SimpleFunctionType: FunctionType {
-    init(_ ref: Ref, _ params: Obj)
-}
-
-public struct Create: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Create: Encodable, FaunaEncodable {
-    
-    public func toJSON() -> JSON? {
-        return jsonify(["create" ~~> ref,
-                        "params" ~~> params])
-    }
-    
-    public func toAnyObjectJSON() -> AnyObject? {
-        return toJSON()
-    }
-}
-
-public struct Update: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Update: Encodable, FaunaEncodable {
-    
-    public func toJSON() -> JSON? {
-        return jsonify(["update" ~~> ref,
-            "object" ~~> params])
-    }
-}
-
-public struct Replace: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Replace: Encodable {
-    
-    public func toJSON() -> JSON? {
-        return jsonify(["replace" ~~> ref,
-                        "params" ~~> params])
+        return ["exists": ref.toJSON()]
     }
 }
 
 
-public struct Delete: FunctionType {
+public struct Var: Value {
     
-    var ref: Ref
+    let name: String
     
-    init(_ ref: Ref){
-        self.ref = ref
+    public init(_ name: String){
+        self.name = name
     }
 }
 
-extension Delete: Encodable {
-    
-    public func toJSON() -> JSON? {
-        return "delete" ~~> ref
+extension Var: Encodable {
+    public func toJSON() -> AnyObject {
+        return ["var": name ]
     }
 }
 
-public struct Insert: FunctionType {
-    let ref: Ref
-    let ts: Timestamp
-    let action: Action
-    let params: Obj
+extension Var: StringLiteralConvertible {
+    
+    public init(stringLiteral value: String){
+        name = value
+    }
+    
+    public init(extendedGraphemeClusterLiteral value: String){
+        name = value
+    }
+    
+    public init(unicodeScalarLiteral value: String){
+        name = value
+    }
+
 }
 
-extension Insert: Encodable, FaunaEncodable {
+/**
+ * A Map expression.
+ *
+ * '''Reference''': [[https:faunadb.com/documentation/queries#collection_functions]]
+ //        client.query(
+ //            Map(
+ //                Lambda { name => Concat(Arr(name, "Wen")) },
+ //                Arr("Hen ")))
  
-    public func toJSON() -> JSON? {
-        return jsonify(["insert" ~~> ref,
-                        "ts" ~~> ts,
-                        "action" ~~> action.toAnyObjectJSON(),
-                        "params" ~~> params
-            ])
-    }
-}
-
-public struct Remove: FunctionType {
-    let ref: Ref
-    let ts: Timestamp
-    let action: Action
-}
-
-
-extension Remove: Encodable, FaunaEncodable {
+ 
+ 
+ 
+ //        client.query(
+ //            Map(
+ //                Lambda { (f, l) => Concat(Arr(f, l), " ") },
+ //                Arr(Arr("Hen", "Wen"))))
+ 
+ 
+ 
+ //        client.query(
+ //            Map(
+ //                Lambda { (f, _) => f },
+ //                Arr(Arr("Hen", "Wen"))))
+ 
+ */
+public struct Map: LambdaFunctionType{
+    let lambda: Lambda
+    let collection: Arr
     
-    public func toJSON() -> JSON? {
-        return jsonify(["remove" ~~> ref,
-                        "ts" ~~> ts,
-                        "action" ~~> action.toAnyObjectJSON()
-            ])
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
+        self.collection = Arr(arr)
+        self.lambda = lambda
+    }
+    
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        self.init(arr: arr, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+    
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+    
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: ((Value, Value) -> Expr)){
+        self.init(arr: arr, lambda: Lambda(vars: "x", "y", expr: lambda(Var("x"), Var("y"))))
     }
 }
+
+extension Map: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return ["map": lambda.toJSON(),
+                "collection": collection.toJSON()]
+    }
+}
+
+
+/**
+ * A Foreach expression.
+ *
+ * '''Reference''': [[https://faunadb.com/documentation/queries#collection_functions]]
+ 
+ def Foreach(lambda: Expr, collection: Expr): Expr =
+ Expr(ObjectV("foreach" -> lambda.value, "collection" -> collection.value))
+
+ */
+public struct Foreach: LambdaFunctionType {
+    let lambda: Lambda
+    let collection: Arr
+    
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
+        self.collection = Arr(arr)
+        self.lambda = lambda
+    }
+    
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, lambda: Lambda){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: lambda)
+    }
+    
+    
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        self.init(arr: arr, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+    
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+}
+
+extension Foreach: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return ["foreach": lambda.toJSON(),
+                "collection": collection.toJSON()]
+    }
+}
+
+
+public struct Filter: FunctionType {
+    let lambda: Lambda
+    let collection: Arr
+    
+    /**
+     * A Filter expression.
+     *
+     * '''Reference''': [[https://faunadb.com/documentation/queries#collection_functions]]
+     */
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
+        self.collection = Arr(arr)
+        self.lambda = lambda
+    }
+    
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, lambda: Lambda){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: lambda)
+    }
+    
+    
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        self.init(arr: arr, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+    
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
+}
+
+
+extension Filter: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return ["filter": lambda.toJSON(),
+                "collection": collection.toJSON()]
+    }
+}
+
+
+

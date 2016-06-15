@@ -13,9 +13,9 @@ import Result
 
 extension FaunaDB.Client {
 
-    public func rx_query(expr: ExprType) -> Observable<ValueType> {
+    public func rx_query(expr: Expr) -> Observable<Value> {
         return Observable.create { [weak self] subscriber in
-            let task = self?.query(expr, completionHandler: { result in
+            let task = self?.query(expr) { result in
                 switch result {
                 case .Failure(let error):
                     subscriber.onError(error)
@@ -23,7 +23,7 @@ extension FaunaDB.Client {
                     subscriber.onNext(value)
                     subscriber.onCompleted()
                 }
-            })
+            }
             return AnonymousDisposable {
                 task?.cancel()
             }
@@ -33,9 +33,9 @@ extension FaunaDB.Client {
 }
 
 
-extension ObservableType where Self.E == ValueType {
+extension ObservableType where Self.E == Value {
     
-    public func mapWithField<T: ValueType>(field: Field<T>) -> Observable<T> {
+    public func mapWithField<T: Value>(field: Field<T>) -> Observable<T> {
         return self.map {
             return try field.get($0)
         }

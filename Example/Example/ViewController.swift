@@ -7,6 +7,7 @@
 
 import UIKit
 import FaunaDB
+import Result
 
 class ViewController: UIViewController {
 
@@ -19,19 +20,24 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        // Do any additional setup after loading the view, typically from a nib.
         let db_name = "app_db_\(arc4random())"
-        client.query(Create(Ref.databases,  ["name": db_name])) { [weak self] (result) in
+        client.query(Create(ref: Ref.databases,  params: ["name": db_name])) { [weak self] (result) in
             switch result {
             case .Success:
-                self?.client.query(Create(Ref.keys, ["database": Ref("databases/\(db_name)"),
+                self?.client.query(Create(ref: Ref.keys, params: ["database": Ref("databases/\(db_name)"),
                     "role": "server"])) { (result) in
                         switch result {
                         case .Success(let value):
-                            let keyRef: String = try! Field("secret").get(value)
-                            print("REFKEY =====>: \(keyRef)")
+                            let secret: String = try! value.get("secret")
+                            self?.client = Client(configuration: ClientConfiguration(secret: secret))
+                            
+//                            let arr: Arr = ["First post", "Second Post", "Third Post"]
+//                            self?.client.query(arr.mapFauna { Create("classes/posts", ["data": Obj(("title", $0))]) })
+                            var ecoString: String?
+                            self?.client.query("ayz") { result in
+                                let responseValue = try! result.dematerialize() as! String
+                                ecoString = responseValue
+                            }
                         case .Failure(_):
                             break
                         }
@@ -40,17 +46,7 @@ class ViewController: UIViewController {
                 break
             }
         }
-        
-        
-        
-        // use the new key
-        
-//        client.query({ () -> ExprType in
-//            Create(Ref.classes, ["name": "posts"])
-//        }, completionHandler: { (result) in
-//            
-//        })
     }
-
 }
+
 

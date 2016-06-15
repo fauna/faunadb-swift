@@ -7,29 +7,42 @@
 //
 
 import Foundation
-import Gloss
 
-extension NSDate: ScalarType {}
+public typealias Timestamp = NSDate
 
-extension NSDate: FaunaEncodable, Encodable {
+extension Timestamp: ScalarType {}
+
+extension Timestamp: Encodable {
     
-    public func toJSON() -> JSON? {
-        return "@ts" ~~> ISO8601
+    public func toJSON() -> AnyObject {
+        return ["@ts": ISO8601]
     }
     
-    public convenience init(iso8601: String){
+    public convenience init?(iso8601: String){
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-        let date = dateFormatter.dateFromString(iso8601) ?? {
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
-            return dateFormatter.dateFromString(iso8601)!
-        }()
-        self.init(timeInterval: 0, sinceDate: date)
+        if let date = dateFormatter.dateFromString(iso8601) {
+            self.init(timeInterval: 0, sinceDate: date)
+            return
+        }
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+        if let date = dateFormatter.dateFromString(iso8601) {
+            self.init(timeInterval: 0, sinceDate: date)
+            return
+        }
+        return nil
     }
+    
+    public convenience init?(json: [String: AnyObject]){
+        guard let date = json["@ts"] as? String where json.count == 1 else { return nil }
+        self.init(iso8601:date)
+    }
+    
 }
 
-extension NSDate {
+extension Timestamp {
     
     private var ISO8601: String {
         let dateFormatter = NSDateFormatter()
@@ -41,4 +54,3 @@ extension NSDate {
     }
 }
 
-public typealias Timestamp = NSDate

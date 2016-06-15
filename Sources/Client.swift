@@ -40,49 +40,44 @@ public final class Client {
 
 extension Client {
 
-    public func query(expr: ExprType, completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
-        let jsonData = try! NSJSONSerialization.dataWithJSONObject(expr.toAnyObjectJSON()!, options: .PrettyPrinted)
+    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
+        let jsonData = try! toData(expr().toJSON()) ?? NSData()
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
                 let jsonData =  try mySelf.handleQueryErrors(response, data: data)
-                let result = mySelf.valueTypeForObject(jsonData!)
-                completionHandler?(Result.Success(result))
+                let result = try! Mapper.fromData(jsonData ?? NSNull())
+                completion?(Result.Success(result))
             }
             catch {
                 guard let faunaError = error as? FaunaDB.Error else {
-                    completionHandler?(.Failure(FaunaDB.Error.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
+                    completion?(.Failure(FaunaDB.Error.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
                     return
                 }
-                completionHandler?(.Failure(faunaError))
+                completion?(.Failure(faunaError))
             }
         }
     }
-
-    public func query(expression: (()-> ExprType), completionHandler: (Result<ValueType, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask{
-        return query(expression(), completionHandler: completionHandler)
-    }
-
 }
 
 extension Client {
 
-    private func postJSON(data: NSData, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask{
+    private func postJSON(data: NSData, completion: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask{
         let request = NSMutableURLRequest(URL: faunaRoot)
         request.HTTPBody = data
         request.HTTPMethod = "POST"
         var headers = request.allHTTPHeaderFields ?? [String: String]()
         headers["Content-Type"] = "application/json; charset=utf-8"
         request.allHTTPHeaderFields = headers
-        return performRequest(request, completionHandler: completionHandler);
+        return performRequest(request, completion: completion);
     }
 
-    private func performRequest(request: NSURLRequest, completionHandler: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask {
+    private func performRequest(request: NSURLRequest, completion: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask {
 
         let dataTask = session.dataTaskWithRequest(request) { [weak self] data, response, error  in
             self?.observers.forEach { $0.didReceiveResponse(response, data: data, error: error, request: request) }
-            completionHandler(data, response, error)
+            completion(data, response, error)
         }
         observers.forEach { $0.willSendRequest(dataTask.currentRequest ?? dataTask.originalRequest ?? request, session: session) }
         dataTask.resume()
@@ -96,42 +91,47 @@ extension Client {
 
     func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
-        throw FaunaDB.Error.NetworkingException(response: response, error: error, msg: error.description)
+        throw FaunaDB.Error.NetworkException(response: response, error: error, msg: error.description)
     }
 
     func handleQueryErrors(response: NSURLResponse?, data: NSData?) throws -> AnyObject? {
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            throw FaunaDB.Error.NetworkingException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
+            throw FaunaDB.Error.NetworkException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
         }
 
         if httpResponse.statusCode >= 300 {
+            var errors = [ErrorResponse]()
             do {
-                let jsonData: [AnyObject] = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! [AnyObject]
-                let errors = jsonData.map { $0 as! [String: AnyObject] }.map { ErrorResponse(json: $0)! }
-                switch httpResponse.statusCode {
-                case 400:
-                    throw Error.BadRequestException(response: response, errors: errors, msg: nil)
-                case 401:
-                    throw Error.UnauthorizedException(response: response, errors: errors, msg: nil)
-                case 404:
-                    throw Error.NotFoundException(response: response, errors: errors, msg: nil)
-                case 500:
-                    throw Error.InternalException(response: response, errors: errors, msg: nil)
-                case 503:
-                    throw Error.UnavailableException(response: response, errors: errors, msg: nil)
-                default:
-                    throw Error.UnknownException(response: response, errors: errors, msg: nil)
-                }
+                let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+                let array = json.objectForKey("errors") as! [[String: AnyObject]]
+                errors = array.map { ErrorResponse(json: $0)! }
             }
             catch {
-                if httpResponse.statusCode == 503 {
-                    throw Error.UnknownException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
-                }
-                throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
+                    if httpResponse.statusCode == 503 {
+                        throw Error.UnknownException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
+                    }
+                    throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
+            }    
+            switch httpResponse.statusCode {
+            case 400:
+                throw Error.BadRequestException(response: response, errors: errors, msg: nil)
+            case 401:
+                throw Error.UnauthorizedException(response: response, errors: errors, msg: nil)
+            case 404:
+                throw Error.NotFoundException(response: response, errors: errors, msg: nil)
+            case 500:
+                throw Error.InternalException(response: response, errors: errors, msg: nil)
+            case 503:
+                throw Error.UnavailableException(response: response, errors: errors, msg: nil)
+            default:
+                throw Error.UnknownException(response: response, errors: errors, msg: nil)
             }
         }
         if let data = data {
+            let str = String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+            print (str)
             let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            
             return jsonData.objectForKey("resource")
         }
         return nil
@@ -142,16 +142,20 @@ extension Client {
 extension Client {
 
     private static func authHeaderValue(token: String) -> String {
-        return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([]) //  NSUTF8StringEncoding
+        return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([])
+    }
+    
+    private func toData(object: AnyObject?) throws -> NSData? {
+        guard let object = object else { return nil }
+        if object is [AnyObject] || object is [String: AnyObject] {
+            return try NSJSONSerialization.dataWithJSONObject(object, options: [])
+        }
+        else if let str = object as? String, let data = str.dataUsingEncoding(NSUTF8StringEncoding) {
+            return data
+        }
+        return nil
     }
 
-    private func valueTypeForObject(object: AnyObject) -> ValueType {
-        if let dicValue = object as? [String: AnyObject] {
-            let result: ValueType = Obj(json: dicValue) ?? Null()
-            return result
-        }
-        return Null()
-    }
 }
 
 
