@@ -7,6 +7,8 @@
 //
 import Foundation
 
+
+
 public protocol SetFunctionType: FunctionType {}
 
 /**

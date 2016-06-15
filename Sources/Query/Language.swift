@@ -8,134 +8,6 @@
 
 import Foundation
 
-public enum Action {
-    case Create
-    case Delete
-}
-
-extension Action: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        switch self {
-        case .Create:
-            return "create"
-        case .Delete:
-            return "delete"
-        }
-    }
-}
-
-protocol SimpleFunctionType: FunctionType {
-    init(_ ref: Ref, _ params: Obj)
-}
-
-public struct Create: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Create: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["create": ref.toJSON(),
-                "params": params.toJSON()]
-    }
-}
-
-public struct Update: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Update: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["update": ref.toJSON(),
-                "params": params.toJSON()]
-    }
-}
-
-public struct Replace: SimpleFunctionType {
-    var ref: Ref
-    var params: Obj
-    
-    public init(_ ref: Ref, _ params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-}
-
-extension Replace: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["replace": ref.toJSON(),
-                "params": params.toJSON()]
-    }
-}
-
-
-public struct Delete: FunctionType {
-    
-    var ref: Ref
-    
-    init(_ ref: Ref){
-        self.ref = ref
-    }
-}
-
-extension Delete: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["delete": ref.toJSON()]
-    }
-}
-
-public struct Insert: FunctionType {
-    let ref: Ref
-    let ts: Timestamp
-    let action: Action
-    let params: Obj
-}
-
-extension Insert: Encodable {
- 
-    public func toJSON() -> AnyObject {
-        return ["insert": ref.toJSON(),
-                "ts": ts.toJSON(),
-                "action": action.toJSON(),
-                "params": params.toJSON()
-                ]
-    }
-}
-
-public struct Remove: FunctionType {
-    let ref: Ref
-    let ts: Timestamp
-    let action: Action
-}
-
-
-extension Remove: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["remove": ref.toJSON(),
-                "ts": ts.toJSON(),
-                "action": action.toJSON()]
-    }
-}
-
-
-
 public struct Exists: FunctionType {
     
     let ref: Ref
@@ -158,47 +30,12 @@ extension Exists: Encodable {
     }
 }
 
-public struct If: FunctionType {
-    let pred: Expr
-    let then: Expr
-    let `else`: Expr
-    
-    init(_ pred: Expr, then: Expr, `else`: Expr) {
-        self.pred = pred
-        self.then = then
-        self.`else` = `else`
-    }
-}
-
-extension If: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["if": pred.toJSON(),
-                "then": then.toJSON(),
-                "else": `else`.toJSON()]
-    }
-}
-
-public struct Do: FunctionType {
-    let exprs: [Expr]
-    
-    init (_ exprs: Expr...){
-        self.exprs = exprs
-    }
-}
-
-extension Do: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        let expArray = exprs.map { $0.toJSON() }
-        return ["do": expArray]
-    }
-}
 
 public struct Var: Value {
+    
     let name: String
     
-    init(_ name: String){
+    public init(_ name: String){
         self.name = name
     }
 }
@@ -224,42 +61,6 @@ extension Var: StringLiteralConvertible {
     }
 
 }
-
-
-public struct Lambda {
-    
-//    let vars: [Var]?
-    let exprs: [Expr]
-    let expr: Expr
-    
-    public init(vars: Var..., expr: Expr){
-        self.exprs = vars.map { $0 as Expr }
-        self.expr = expr
-    }
-    
-    public init(exprs: Expr..., expr: Expr){
-        self.exprs = exprs
-        self.expr = expr
-    }
-    
-    public init(@noescape lambda: ((Value)-> Expr)){
-        self.init(vars: "x", expr: lambda(Var("x")))
-    }
-    
-    public init(@noescape lambda: ((Value, Value)-> Expr)){
-        self.init(vars: "x", "y", expr: lambda(Var("x"), Var("y")))
-    }
-    
-}
-
-extension Lambda: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["lambda": (exprs[0] as! Var).name,
-                "expr": expr.toJSON()]
-    }
-}
-
-
 
 /**
  * A Map expression.
@@ -299,15 +100,15 @@ public struct Map: LambdaFunctionType{
         self.init(arr: arr, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
     }
     
-//    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
-//        var array: Arr = Arr()
-//        arr.forEach { array.append($0) }
-//        self.init(arr: array, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
-//    }
+    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
+        var array: Arr = Arr()
+        arr.forEach { array.append($0) }
+        self.init(arr: array, lambda: Lambda(vars: "x", expr: lambda(Var("x"))))
+    }
     
-//    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: ((Value, Value) -> Expr)){
-//        self.init(arr: arr, lambda: Lambda(vars: "x", "y", expr: lambda(Var("x"), Var("y"))))
-//    }
+    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: ((Value, Value) -> Expr)){
+        self.init(arr: arr, lambda: Lambda(vars: "x", "y", expr: lambda(Var("x"), Var("y"))))
+    }
 }
 
 extension Map: Encodable {

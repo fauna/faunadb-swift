@@ -48,6 +48,14 @@ extension Expr {
     }
 }
 
+extension Lambda {
+    
+    var jsonString: String {
+        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
+        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+    }
+}
+
 extension Mapper {
     static func fromString(strData: String) throws -> Value {
         let data = strData.dataUsingEncoding(NSUTF8StringEncoding)

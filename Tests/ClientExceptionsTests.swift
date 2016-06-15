@@ -31,12 +31,12 @@ class ClientExceptionsTests: FaunaDBTests {
     }
     
     func testClientExceptions() {
-        let create = Create(Ref.databases, ["name": testDbName])
+        let create = Create(ref: Ref.databases, params: ["name": testDbName])
         var dbRef: Ref?
         var secret: String?
         client.query(create) { [weak self] result in
             dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
-            self?.client.query(Create(Ref.keys, ["database": dbRef!, "role": "server"]))  { result in
+            self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
                 let sec: String = try! result.dematerialize().get("secret")
                 self?.client = Client(configuration: ClientConfiguration(secret: sec))
                 secret = sec
@@ -49,14 +49,14 @@ class ClientExceptionsTests: FaunaDBTests {
         
         
         waitUntil(timeout: 3){ [weak self] action in
-            self?.client.query(Create(Ref.classes, ["name": "spells"])){ _ in
+            self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])){ _ in
                 action()
             }
         }
         waitUntil(timeout: 3){ [weak self] action in
-            self?.client.query(Create(Ref.indexes, ["name": "spells_by_element",
+            self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
                                           "source": Ref("classes/spells"),
-                                          "terms": Arr(Obj(("path", "data.element"))),
+                                          "terms": [["path": "data.element"] as Obj] as Arr ,
                 "active": true])){ _ in
                 action()
             }

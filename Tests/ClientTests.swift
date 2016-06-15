@@ -29,12 +29,12 @@ class ClientTests: FaunaDBTests {
     }
     
     func testClient() {
-        let create = Create(Ref.databases, ["name": testDbName])
+        let create = Create(ref: Ref.databases, params: ["name": testDbName])
         var dbRef: Ref?
         var secret: String?
         client.query(create) { [weak self] result in
             dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
-            self?.client.query(Create(Ref.keys, ["database": dbRef!, "role": "server"]))  { result in
+            self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
                 let sec: String = try! result.dematerialize().get("secret")
                 self?.client = Client(configuration: ClientConfiguration(secret: sec))
                 secret = sec
@@ -46,7 +46,7 @@ class ClientTests: FaunaDBTests {
         
         // Create spells class
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(Ref.classes, ["name": "spells"])) { result in
+            self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])) { result in
                 if case .Failure(_) = result {
                     fail()
                 }
@@ -56,10 +56,10 @@ class ClientTests: FaunaDBTests {
         
         // Create a index
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(Ref.indexes, [
+            self?.client.query(Create(ref: Ref.indexes, params: [
             "name": "spells_by_element",
             "source": Ref("classes/spells"),
-            "terms": Arr(Obj(("path", "data.element"))),
+            "terms": [["path": "data.element"] as Obj] as Arr,
                 "active": true])){  result in
                     if case .Failure(_) = result {
                         fail()
@@ -90,7 +90,7 @@ class ClientTests: FaunaDBTests {
         // Create an instance
         var inst: Value?
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create("classes/spells", ["data": Obj(("testField", "testValue"))])){ result in
+            self?.client.query(Create(ref: "classes/spells", params: ["data": ["testField": "testValue"] as Obj])){ result in
                 inst = try! result.dematerialize()
                 done()
             }

@@ -25,7 +25,7 @@ class DeserializationTests: FaunaDBTests {
         let value: Obj = ["ref": Ref("classes/derp/101192216816386048"),
                           "class": Ref("classes/derp"),
                           "ts": Double(1432763268186882),
-                          "data": Obj(("test", Double(1)))]
+                          "data": ["test": 1 as Double] as Obj]
         XCTAssert(deseralizedValue.isEquals(value))
     }
 
@@ -42,7 +42,7 @@ class DeserializationTests: FaunaDBTests {
         let value: Obj = ["ref": Ref("classes/spells/93044099947429888"),
                      "class": Ref("classes/spells"),
                      "ts": Double(1424992618413105),
-                     "data": Obj(("refField", Ref("classes/spells/93044099909681152")))]        
+                     "data": ["refField": Ref("classes/spells/93044099909681152")] as Obj]
         XCTAssert(deseralizedValue.isEquals(value))
     }
     
@@ -58,7 +58,7 @@ class DeserializationTests: FaunaDBTests {
         let value: Obj = ["ref": Ref("classes/derp/101727203651223552"),
                           "class": Ref("classes/derp"),
                           "ts": Double(1433273471399755),
-                          "data": Obj(("test", Obj(("field1", Obj(("@name", "Test"))))))]
+                          "data": ["test": ["field1": ["@name": "Test"] as Obj] as Obj] as Obj]
         XCTAssert(deseralizedValue.isEquals(value))
     }
     
@@ -85,8 +85,7 @@ class DeserializationTests: FaunaDBTests {
     func testBool(){
         let toDeserialize = "{\"bool\": true}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
-         XCTAssert(deseralizedValue.isEquals(Obj(("bool", true))))
-        
+         XCTAssert(deseralizedValue.isEquals(["bool": true] as Obj))
     }
     
     func testArr(){

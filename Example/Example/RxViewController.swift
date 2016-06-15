@@ -23,23 +23,25 @@ class RxViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let db_name = "app_db_\(arc4random())"
-        client.rx_query(Create(Ref.databases, Obj(("name", db_name))))
+        client.rx_query(Create(ref: Ref.databases, params: ["name": db_name] as Obj))
             .flatMap { _ -> Observable<Value> in
-                return self.client.rx_query(Create(Ref.keys, ["database": Ref("databases/\(db_name)"), "role": "server"]))
+                return self.client.rx_query(Create(ref: Ref.keys, params: ["database": Ref("databases/\(db_name)"), "role": "server"]))
             }
             .mapWithField(["secret"])
             .doOnNext { (secret: String) in
-                print(secret)
                 self.client = Client(configuration: ClientConfiguration(secret: secret))
             }
             .flatMap { _ -> Observable<Value> in
-                return self.client.rx_query(Create(Ref.classes, ["name":"posts"]))
+                return self.client.rx_query(Create(ref: Ref.classes, params: ["name":"posts"]))
             }
             .flatMap { _ -> Observable<Value> in
-                let arr: Arr = ["My First post", "My Second Post", "My third post"]
-                return self.client.rx_query(arr.mapFauna { santi in  Create("classes/posts", ["data": Obj(("title", santi))]) })
+                let arr = ["My First post", "My Second Post", "My third post"]
+                return self.client.rx_query(
+                                            arr
+                                            .mapFauna { title in
+                                                    Create(ref: "classes/posts", params: ["data": ["title": title] as Obj])
+                                            })
             }
             .doOnNext({ value in
                 print(value)

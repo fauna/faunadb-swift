@@ -18,17 +18,15 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testArr(){
-        let arr: Arr = [3, "test", Null()]
-        XCTAssertEqual(arr.jsonString, "[3,\"test\",null]")
+        XCTAssertEqual(([3, "test", Null()] as Arr).jsonString, "[3,\"test\",null]")
     }
     
     func testObj() {
-        let obj: Obj = ["test": 1, "test2": Ref("some/ref")]
-        XCTAssertEqual(obj.jsonString, "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}")
+        XCTAssertEqual((["test": 1, "test2": Ref("some/ref")] as Obj).jsonString, "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}")
     }
     
     func testArrWithObj() {
-        let arr: Arr = [Arr(Obj(("test", "value")), 2323, true), "hi", Obj(("test", "yo"), ("test2", Null()))]
+        let arr: Arr = [[["test":"value"] as Obj, 2323, true] as Arr, "hi", ["test": "yo","test2": nil as Null] as Obj]
         XCTAssertEqual(arr.jsonString, "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]")
     }
     
@@ -43,7 +41,35 @@ class SerializationTests: FaunaDBTests {
     
     func testBasicForms() {
         
+        // If Form
+        let if1 = If(pred: true, then: "was true", else: "was false")
+        XCTAssertEqual(if1.jsonString, "{\"else\":\"was false\",\"if\":true,\"then\":\"was true\"}")
+        let if2 = If(pred: true, then: {
+                                    return "was true"
+                                 }(),
+                                 else: {
+                                    return "was false"
+                                 }())
+        XCTAssertEqual(if2.jsonString, "{\"else\":\"was false\",\"if\":true,\"then\":\"was true\"}")
         
+        // Do Form
+        let doForm = Do(exprs: Create(ref: "some/ref/1", params: ["data": ["name": "Hen Wen"] as Obj]),
+                               Get(ref: "some/ref/1"))
+        XCTAssertEqual(doForm.jsonString, "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}")
+        
+        let lambda1 = Lambda { a in a }
+        XCTAssertEqual(lambda1.jsonString, "{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}")
+        
+
+        let lambda2 = Lambda { a, b in Arr(b, a) }
+        XCTAssertEqual(lambda2.jsonString, "{\"expr\":[{\"var\":\"y\"},{\"var\":\"x\"}],\"lambda\":[\"x\",\"y\"]}")
+  
+        let lambda3 = Lambda { a, _, _ in a }
+        XCTAssertEqual(lambda3.jsonString, "{\"expr\":{\"var\":\"x\"},\"lambda\":[\"x\",\"y\",\"z\"]}")
+
+        
+        let lambda4 = Lambda { a in Not(expr: a) }
+        XCTAssertEqual(lambda4.jsonString, "{\"expr\":{\"not\":{\"var\":\"x\"}},\"lambda\":\"x\"}")
         
     }
     
@@ -51,19 +77,22 @@ class SerializationTests: FaunaDBTests {
         
         //Create
         let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost":15]
-        let create = Create("classes/spells", ["data": spell])
+        let create = Create(ref: "classes/spells", params: ["data": spell])
         XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
-
+ 
+        let update = Update(ref: "classes/spells/123456", params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+        XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
+        
         //Replace
         var replaceSpell = spell
         replaceSpell["name"] = "Mountain's Thunder"
         replaceSpell["element"] = Arr("air", "earth")
         replaceSpell["cost"] = 10
-        let replace = Replace("classes/spells/123456", ["data": replaceSpell])
+        let replace = Replace(ref: "classes/spells/123456", params: ["data": replaceSpell])
         XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
         
         //Delete
-        let delete = Delete("classes/spells/123456")
+        let delete = Delete(ref: "classes/spells/123456")
         XCTAssertEqual(delete.jsonString, "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
         //Insert
@@ -106,10 +135,10 @@ class SerializationTests: FaunaDBTests {
         let map = Map(arr: [1,2,3], lambda: Lambda(vars: "munchings", expr: Var("munchings")))
         XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}")
         
-        let map1 = Map(arr: [1,2,3], lambda: { x in x })
+        let map1 = Map(arr: [1,2,3] as Arr, lambda: { x in x })
         XCTAssertEqual(map1.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
         
-        let map2 = Map(arr: [1,2,3]) { $0 }
+        let map2 = Map(arr: [1,2,3] as [Int]) { $0 }
         XCTAssertEqual(map2.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
         
         let map3 = [1,2,3].mapFauna { (value: Value) -> Expr in
@@ -117,16 +146,16 @@ class SerializationTests: FaunaDBTests {
         }
         XCTAssertEqual(map3.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"x\"},\"lambda\":\"x\"}}")
         
-        let foreach = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")], lambda: Lambda(vars: "refData", expr: Create("some/ref", ["data": Obj(("some", Var("refData")))])))
+        let foreach = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")], lambda: Lambda(vars: "refData", expr: Create(ref: "some/ref", params: ["data": ["some": Var("refData")] as Obj])))
         XCTAssertEqual(foreach.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}")
         
         let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
-                            Create("some/ref", ["data": Obj(("some", ref))])
+                            Create(ref: "some/ref", params: ["data": ["some": ref] as Obj])
                         }
         XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"x\"}}}}}},\"lambda\":\"x\"}}")
         
         let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
-                            Create("some/ref", ["data": Obj(("some", $0))])
+                            Create(ref: "some/ref", params: ["data": ["some": $0] as Obj])
                         }
         XCTAssertEqual(foreach3.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"x\"}}}}}},\"lambda\":\"x\"}}")
         

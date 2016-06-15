@@ -21,10 +21,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let db_name = "app_db_\(arc4random())"
-        client.query(Create(Ref.databases,  ["name": db_name])) { [weak self] (result) in
+        client.query(Create(ref: Ref.databases,  params: ["name": db_name])) { [weak self] (result) in
             switch result {
             case .Success:
-                self?.client.query(Create(Ref.keys, ["database": Ref("databases/\(db_name)"),
+                self?.client.query(Create(ref: Ref.keys, params: ["database": Ref("databases/\(db_name)"),
                     "role": "server"])) { (result) in
                         switch result {
                         case .Success(let value):

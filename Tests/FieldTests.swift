@@ -27,7 +27,7 @@ class FieldTests: FaunaDBTests {
         
         
         var arr2 = arr
-        arr2.append(Obj(("key", Ref.classes)))
+        arr2.append(["key": Ref.classes] as Obj)
         let field2 = Field<Ref>(3, "key")
         let ref = try! field2.get(arr2)
         XCTAssertEqual(ref, Ref.classes)
