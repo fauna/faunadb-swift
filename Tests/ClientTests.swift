@@ -102,7 +102,7 @@ class ClientTests: FaunaDBTests {
         
         
         waitUntil(timeout: 3) { [weak self] done in
-            try! self?.client.query(Exists(inst!.get(FaunaDBTests.fieldRef))){ result in
+            self?.client.query(Exists(try! inst!.get(FaunaDBTests.fieldRef))){ result in
                 let responseValue = try! result.dematerialize() as! Bool
                 expect(responseValue).to(beTrue())
                 done()

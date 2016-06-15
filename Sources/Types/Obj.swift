@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public struct Obj: Value, DictionaryLiteralConvertible {
     private var dictionary = [String: Value]()
@@ -24,7 +23,7 @@ public struct Obj: Value, DictionaryLiteralConvertible {
         self.dictionary = dictionary
     }
     
-    public init?(json: JSON){
+    public init?(json: [String: AnyObject]){
         var dictionary = [String:Value]()
         var json = json
         if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
@@ -43,20 +42,14 @@ public struct Obj: Value, DictionaryLiteralConvertible {
 
 extension Obj: Encodable {
     
-    public func toJSON() -> JSON? {
+    public func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
         for keyValue in dictionary{
-            result[keyValue.0] = keyValue.1.toAnyObjectJSON()
+            result[keyValue.0] = keyValue.1.toJSON()
         }
         return ["object": result]
     }
-    
-    public func toAnyObjectJSON() -> AnyObject {
-        return toJSON()!
-    }
 }
-
-extension Obj: Decodable {}
 
 extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
     

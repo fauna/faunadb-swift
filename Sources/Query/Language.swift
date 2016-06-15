@@ -7,16 +7,15 @@
 //
 
 import Foundation
-import Gloss
 
 public enum Action {
     case Create
     case Delete
 }
 
-extension Action: FaunaEncodable {
+extension Action: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         switch self {
         case .Create:
             return "create"
@@ -40,15 +39,11 @@ public struct Create: SimpleFunctionType {
     }
 }
 
-extension Create: Encodable, FaunaEncodable {
+extension Create: Encodable {
     
-    public func toJSON() -> JSON? {
-        return jsonify(["create" ~~> ref,
-                        "params" ~~> params])
-    }
-    
-    public func toAnyObjectJSON() -> AnyObject {
-        return toJSON()!
+    public func toJSON() -> AnyObject {
+        return ["create": ref.toJSON(),
+                "params": params.toJSON()]
     }
 }
 
@@ -62,11 +57,11 @@ public struct Update: SimpleFunctionType {
     }
 }
 
-extension Update: Encodable, FaunaEncodable {
+extension Update: Encodable {
     
-    public func toJSON() -> JSON? {
-        return jsonify(["update" ~~> ref,
-            "object" ~~> params])
+    public func toJSON() -> AnyObject {
+        return ["update": ref.toJSON(),
+                "params": params.toJSON()]
     }
 }
 
@@ -82,9 +77,9 @@ public struct Replace: SimpleFunctionType {
 
 extension Replace: Encodable {
     
-    public func toJSON() -> JSON? {
-        return jsonify(["replace" ~~> ref,
-                        "params" ~~> params])
+    public func toJSON() -> AnyObject {
+        return ["replace": ref.toJSON(),
+                "params": params.toJSON()]
     }
 }
 
@@ -100,8 +95,8 @@ public struct Delete: FunctionType {
 
 extension Delete: Encodable {
     
-    public func toJSON() -> JSON? {
-        return "delete" ~~> ref
+    public func toJSON() -> AnyObject {
+        return ["delete": ref.toJSON()]
     }
 }
 
@@ -112,14 +107,14 @@ public struct Insert: FunctionType {
     let params: Obj
 }
 
-extension Insert: Encodable, FaunaEncodable {
+extension Insert: Encodable {
  
-    public func toJSON() -> JSON? {
-        return jsonify(["insert" ~~> ref,
-                        "ts" ~~> ts,
-                        "action" ~~> action.toAnyObjectJSON(),
-                        "params" ~~> params
-            ])
+    public func toJSON() -> AnyObject {
+        return ["insert": ref.toJSON(),
+                "ts": ts.toJSON(),
+                "action": action.toJSON(),
+                "params": params.toJSON()
+                ]
     }
 }
 
@@ -132,28 +127,14 @@ public struct Remove: FunctionType {
 
 extension Remove: Encodable {
     
-    public func toJSON() -> JSON? {
-        return jsonify(["remove" ~~> ref,
-                        "ts" ~~> ts,
-                        "action" ~~> action.toAnyObjectJSON()
-            ])
+    public func toJSON() -> AnyObject {
+        return ["remove": ref.toJSON(),
+                "ts": ts.toJSON(),
+                "action": action.toJSON()]
     }
 }
 
-public struct Get: FunctionType {
-    let ref: Ref
-    
-    public init(_ ref: Ref){
-        self.ref = ref
-    }
-}
 
-extension Get: Encodable {
-    
-    public func toJSON() -> JSON? {
-        return "get" ~~> ref
-    }
-}
 
 public struct Exists: FunctionType {
     
@@ -168,12 +149,12 @@ public struct Exists: FunctionType {
 
 extension Exists: Encodable {
     
-    public func toJSON() -> JSON? {
+    public func toJSON() -> AnyObject {
         if let ts = ts {
-            return jsonify(["exists" ~~> ref,
-                            "ts" ~~> ts])
+            return ["exists": ref.toJSON(),
+                    "ts": ts.toJSON()]
         }
-        return "exists" ~~> ref
+        return ["exists": ref.toJSON()]
     }
 }
 
@@ -191,10 +172,10 @@ public struct If: FunctionType {
 
 extension If: Encodable {
     
-    public func toJSON() -> JSON? {
-        return jsonify(["if" ~~> pred.toAnyObjectJSON(),
-                        "then" ~~> then.toAnyObjectJSON(),
-                        "else" ~~> `else`.toAnyObjectJSON()])
+    public func toJSON() -> AnyObject {
+        return ["if": pred.toJSON(),
+                "then": then.toJSON(),
+                "else": `else`.toJSON()]
     }
 }
 
@@ -208,8 +189,8 @@ public struct Do: FunctionType {
 
 extension Do: Encodable {
     
-    public func toJSON() -> JSON? {
-        let expArray = exprs.map { $0.toAnyObjectJSON() }
+    public func toJSON() -> AnyObject {
+        let expArray = exprs.map { $0.toJSON() }
         return ["do": expArray]
     }
 }
@@ -223,7 +204,7 @@ public struct Var: Value {
 }
 
 extension Var: Encodable {
-    public func toJSON() -> JSON? {
+    public func toJSON() -> AnyObject {
         return ["var": name ]
     }
 }
@@ -271,10 +252,10 @@ public struct Lambda {
     
 }
 
-extension Lambda: FaunaEncodable {
-    public func toAnyObjectJSON() -> AnyObject{
+extension Lambda: Encodable {
+    public func toJSON() -> AnyObject {
         return ["lambda": (exprs[0] as! Var).name,
-                "expr": expr.toAnyObjectJSON()]
+                "expr": expr.toJSON()]
     }
 }
 
@@ -331,39 +312,9 @@ public struct Map: LambdaFunctionType{
 
 extension Map: Encodable {
     
-    public func toJSON() -> JSON? {
-        return ["map": lambda.toAnyObjectJSON(),
-                "collection": collection.toAnyObjectJSON()]
-    }
-}
-
-
-extension CollectionType where Self.Generator.Element == Value {
-    public func mapFauna(@noescape lambda: ((Value) -> Expr)) -> Map {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Map(arr: arr, lambda: lambda)
-    }
-    
-    public func forEachFauna(@noescape lambda: ((Value) -> Expr)) -> Foreach {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Foreach(arr: arr, lambda: lambda)
-    }
-}
-
-extension CollectionType where Self.Generator.Element: Value {
-    
-    public func mapFauna(@noescape lambda: ((Value) -> Expr)) -> Map {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Map(arr: arr, lambda: lambda)
-    }
-    
-    public func forEachFauna(@noescape lambda: ((Value) -> Expr)) -> Foreach {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Foreach(arr: arr, lambda: lambda)
+    public func toJSON() -> AnyObject {
+        return ["map": lambda.toJSON(),
+                "collection": collection.toJSON()]
     }
 }
 
@@ -406,9 +357,9 @@ public struct Foreach: LambdaFunctionType {
 
 extension Foreach: Encodable {
     
-    public func toJSON() -> JSON? {
-        return ["foreach": lambda.toAnyObjectJSON(),
-                "collection": collection.toAnyObjectJSON()]
+    public func toJSON() -> AnyObject {
+        return ["foreach": lambda.toJSON(),
+                "collection": collection.toJSON()]
     }
 }
 
@@ -448,9 +399,9 @@ public struct Filter: FunctionType {
 
 extension Filter: Encodable {
     
-    public func toJSON() -> JSON? {
-        return ["filter": lambda.toAnyObjectJSON(),
-                "collection": collection.toAnyObjectJSON()]
+    public func toJSON() -> AnyObject {
+        return ["filter": lambda.toJSON(),
+                "collection": collection.toJSON()]
     }
 }
 

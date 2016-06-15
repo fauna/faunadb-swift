@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import Gloss
 
-public struct Ref: Value, Decodable{
+public struct Ref: Value{
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
@@ -22,7 +21,7 @@ public struct Ref: Value, Decodable{
         self.ref = ref
     }
     
-    public init?(json: JSON){
+    public init?(json: [String: AnyObject]){
         guard let ref = json["@ref"] as? String where json.count == 1 else { return nil }
         self.ref = ref
     }
@@ -58,12 +57,8 @@ extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
 
 extension Ref: Encodable {
     
-    public func toJSON() -> JSON? {
-        return "@ref" ~~> ref
-    }
-    
-    public func toAnyObjectJSON() -> AnyObject {
-        return toJSON()!
+    public func toJSON() -> AnyObject {
+        return ["@ref": ref.toJSON()]
     }
 }
 

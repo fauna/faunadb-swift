@@ -12,7 +12,6 @@ import Foundation
 
 
 @testable import FaunaDB
-import Gloss
 import Result
 
 func stringFormat(json: JSON) -> String{

@@ -43,7 +43,7 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
 extension Expr {
     
     var jsonString: String {
-        let data = try! NSJSONSerialization.dataWithJSONObject(toAnyObjectJSON(), options: [])
+        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
         return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
     }
 }

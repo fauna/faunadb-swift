@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public typealias Date = NSDateComponents
 
@@ -34,7 +33,7 @@ extension Date: ScalarType {
         self.year = dateComponents.year
     }
     
-    public convenience init?(json: JSON){
+    public convenience init?(json: [String: AnyObject]){
         guard let date = json["@date"] as? String where json.count == 1 else { return nil }
         self.init(iso8601:date)
     }
@@ -42,10 +41,10 @@ extension Date: ScalarType {
 
 extension Date: Encodable {
     
-    public func toJSON() -> JSON? {
+    public func toJSON() -> AnyObject {
         let monthStr = month < 9 ? "0\(month)" : String(month)
         let dayStr = day < 9 ? "0\(day)" : String(day)
-        return "@date" ~~> "\(year)-\(monthStr)-\(dayStr)"
+        return ["@date": "\(year)-\(monthStr)-\(dayStr)"]
     }
 }
 

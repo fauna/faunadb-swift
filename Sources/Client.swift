@@ -40,8 +40,8 @@ public final class Client {
 
 extension Client {
 
-    public func query(expr: Expr, completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
-        let jsonData = try! toData(expr.toAnyObjectJSON()) ?? NSData()
+    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
+        let jsonData = try! toData(expr().toJSON()) ?? NSData()
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
@@ -59,11 +59,6 @@ extension Client {
             }
         }
     }
-
-    public func query(expression: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask{
-        return query(expression(), completion: completion)
-    }
-    
 }
 
 extension Client {

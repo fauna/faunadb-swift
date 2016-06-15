@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public typealias Timestamp = NSDate
 
@@ -15,8 +14,8 @@ extension Timestamp: ScalarType {}
 
 extension Timestamp: Encodable {
     
-    public func toJSON() -> JSON? {
-        return "@ts" ~~> ISO8601
+    public func toJSON() -> AnyObject {
+        return ["@ts": ISO8601]
     }
     
     public convenience init?(iso8601: String){
@@ -36,7 +35,7 @@ extension Timestamp: Encodable {
         return nil
     }
     
-    public convenience init?(json: JSON){
+    public convenience init?(json: [String: AnyObject]){
         guard let date = json["@ts"] as? String where json.count == 1 else { return nil }
         self.init(iso8601:date)
     }

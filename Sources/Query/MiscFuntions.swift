@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public struct Equals: Expr {
     let terms: [Value]
@@ -19,7 +18,7 @@ public struct Equals: Expr {
 
 extension Equals: Encodable {
     
-    public func toJSON() -> JSON? {
-        return ["equals": terms.map { $0.toAnyObjectJSON()} ]
+    public func toJSON() -> AnyObject {
+        return ["equals": terms.map { $0.toJSON()} ]
     }
 }

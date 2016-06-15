@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public protocol Value: Expr {}
 

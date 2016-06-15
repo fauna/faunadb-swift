@@ -7,40 +7,39 @@
 //
 
 import Foundation
-import Gloss
 
 extension Int: ScalarType{}
 
-extension Int: FaunaEncodable {
+extension Int: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         return self
     }
 }
 
 extension Double: ScalarType{}
 
-extension Double: FaunaEncodable {
+extension Double: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         return self
     }
 }
 
 extension String: ScalarType{}
 
-extension String: FaunaEncodable {
+extension String: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         return self
     }
 }
 
 extension Bool: ScalarType{}
 
-extension Bool: FaunaEncodable {
+extension Bool: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         return self
     }
 }
@@ -62,9 +61,9 @@ extension Null: CustomDebugStringConvertible, CustomStringConvertible {
     }
 }
 
-extension Null: FaunaEncodable {
+extension Null: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
+    public func toJSON() -> AnyObject {
         return NSNull()
     }
 }

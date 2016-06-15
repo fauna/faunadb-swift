@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public enum Error: ErrorType {
     case UnavailableException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
@@ -69,19 +68,14 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
 public struct ErrorResponse {
     let code: String
     let desc: String
-    let position: [String]
+    let position: [String]?
     
     
-    public init?(json: JSON){
-        guard let code: String = "code" <~~ json else { return nil }
-        self.code = code
-        self.desc = "description" <~~ json ?? ""
-        self.position = "position" <~~ json ?? []
+    public init?(json: [String: AnyObject]){
+        self.code = json["code"] as! String
+        self.desc = json["description"] as! String
+        self.position = json["position"] as? [String]
     }
-}
-
-extension ErrorResponse : Decodable {
-
 }
 
 extension ErrorResponse: CustomStringConvertible, CustomDebugStringConvertible {

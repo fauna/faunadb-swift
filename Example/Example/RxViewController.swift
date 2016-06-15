@@ -34,10 +34,10 @@ class RxViewController: UIViewController {
                 print(secret)
                 self.client = Client(configuration: ClientConfiguration(secret: secret))
             }
-            .flatMap { _ -> Observable<ValueType> in
+            .flatMap { _ -> Observable<Value> in
                 return self.client.rx_query(Create(Ref.classes, ["name":"posts"]))
             }
-            .flatMap { _ -> Observable<ValueType> in
+            .flatMap { _ -> Observable<Value> in
                 let arr: Arr = ["My First post", "My Second Post", "My third post"]
                 return self.client.rx_query(arr.mapFauna { santi in  Create("classes/posts", ["data": Obj(("title", santi))]) })
             }

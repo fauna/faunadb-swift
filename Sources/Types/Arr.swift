@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Gloss
 
 public struct Arr: Value, ArrayLiteralConvertible {
     
@@ -30,10 +29,10 @@ public struct Arr: Value, ArrayLiteralConvertible {
     }
 }
 
-extension Arr: FaunaEncodable {
+extension Arr: Encodable {
     
-    public func toAnyObjectJSON() -> AnyObject {
-        return array.map { $0.toAnyObjectJSON()  ?? NSNull() }
+    public func toJSON() -> AnyObject {
+        return array.map { $0.toJSON() }
     }
 }
 

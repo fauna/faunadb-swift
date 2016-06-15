@@ -7,14 +7,14 @@
 //
 
 import Foundation
-import Gloss
 
 
-public protocol FaunaEncodable {
-    func toAnyObjectJSON() -> AnyObject
+public protocol Encodable {
+    func toJSON() -> AnyObject
 }
 
-public protocol Expr: FaunaEncodable {
+
+public protocol Expr: Encodable {
     
     func isEquals(other: Expr) -> Bool
 }
@@ -48,11 +48,3 @@ extension Expr {
         }
     }
 }
-
-extension Expr where Self: Encodable {
-    
-    public func toAnyObjectJSON() -> AnyObject {
-        return toJSON() ?? [String: AnyObject]()
-    }
-}
-

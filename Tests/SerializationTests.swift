@@ -33,12 +33,18 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testLiteralValues() {
-        XCTAssertEqual(true.toAnyObjectJSON() as? Bool, true)
-        XCTAssertEqual(false.toAnyObjectJSON() as? Bool, false)
-        XCTAssertEqual("test".toAnyObjectJSON() as? String, "test")
-        XCTAssertEqual(Int.max.toAnyObjectJSON() as? Int, Int.max)
-        XCTAssertEqual(3.14.toAnyObjectJSON() as? Double, Double(3.14))
-        XCTAssertEqual(Null().toAnyObjectJSON() as? NSNull, NSNull())
+        XCTAssertEqual(true.toJSON() as? Bool, true)
+        XCTAssertEqual(false.toJSON() as? Bool, false)
+        XCTAssertEqual("test".toJSON() as? String, "test")
+        XCTAssertEqual(Int.max.toJSON() as? Int, Int.max)
+        XCTAssertEqual(3.14.toJSON() as? Double, Double(3.14))
+        XCTAssertEqual(Null().toJSON() as? NSNull, NSNull())
+    }
+    
+    func testBasicForms() {
+        
+        
+        
     }
     
     func testResourceModifications(){
@@ -124,8 +130,62 @@ class SerializationTests: FaunaDBTests {
                         }
         XCTAssertEqual(foreach3.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"x\"}}}}}},\"lambda\":\"x\"}}")
         
-        let arr = [1,2,3]
-        let filter = Filter(arr: arr, lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        let filter = Filter(arr: [1,2,3] as Arr, lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
         XCTAssertEqual(filter.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"x\"}]},\"lambda\":\"x\"}}")
+        
+        let filter2 = Filter(arr: [1,2,3] as [Int], lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        XCTAssertEqual(filter2.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"x\"}]},\"lambda\":\"x\"}}")
+        
+        let filter3 = Filter(arr: [1,"Hi",3], lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        XCTAssertEqual(filter3.jsonString, "{\"collection\":[1,\"Hi\",3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"x\"}]},\"lambda\":\"x\"}}")
+        
+        let take = Take(2, arr: Arr(1, 2, 3))
+        XCTAssertEqual(take.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
+        
+        let take2 = Take(2, arr: [1, 2, 3] as [Int])
+        XCTAssertEqual(take2.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
+        
+        let take3 = Take(2, arr: [1, "Hi", 3])
+        XCTAssertEqual(take3.jsonString, "{\"collection\":[1,\"Hi\",3],\"take\":2}")
+        
+        let drop = Drop(2, arr: Arr(1,2,3))
+        XCTAssertEqual(drop.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
+        
+        let drop2 = Drop(2, arr: [1, 2, 3] as [Int])
+        XCTAssertEqual(drop2.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
+        
+        let drop3 = Drop(2, arr: [1, "Hi", 3])
+        XCTAssertEqual(drop3.jsonString, "{\"collection\":[1,\"Hi\",3],\"drop\":2}")
+        
+        let prepend = Prepend(Arr(1,2,3), toCollection:  Arr(4,5,6))
+        XCTAssertEqual(prepend.jsonString, "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}")
+    
+        let append = Append(Arr(4,5,6), toCollection:Arr(1,2,3))
+        XCTAssertEqual(append.jsonString, "{\"collection\":[4,5,6],\"append\":[1,2,3]}")
+    }
+    
+    func testResourceRetrievals(){
+        
+        let ref = Ref("some/ref/1")
+        let get = Get(ref: ref)
+        XCTAssertEqual(get.jsonString, "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        let paginate = Paginate(resource: Union(sets: Match(indexRef: "indexes/some_index", terms: "term"), Match(indexRef: "indexes/some_index", terms: "term2")))
+        XCTAssertEqual(paginate.jsonString, "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
+        
+        let paginate2 = Paginate(resource: Union(sets: Match(indexRef: "indexes/some_index", terms: "term"), Match(indexRef: "indexes/some_index", terms: "term2")), sources: true)
+        XCTAssertEqual(paginate2.jsonString, "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")
+        
+        let paginate3 = Paginate(resource: Union(sets: Match(indexRef: "indexes/some_index", terms: "term"), Match(indexRef: "indexes/some_index", terms: "term2")), events: true)
+        XCTAssertEqual(paginate3.jsonString, "{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
+        
+        let paginate4 = Paginate(resource: Union(sets: Match(indexRef: "indexes/some_index", terms: "term"), Match(indexRef: "indexes/some_index", terms: "term2")), size: 4)
+        XCTAssertEqual(paginate4.jsonString, "{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
+
+        let count = Count(set: Match(indexRef: "indexes/spells_by_element", terms: "fire"))
+        XCTAssertEqual(count.jsonString, "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        
+        let count2 = Count(set: Match(indexRef: "indexes/spells_by_element", terms: "fire"), events: true)
+        XCTAssertEqual(count2.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
     }
 }
