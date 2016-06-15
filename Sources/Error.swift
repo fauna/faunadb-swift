@@ -49,17 +49,13 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
     
     private func getDesc(response: NSURLResponse?, errors: [ErrorResponse], msg: String?, error: NSError? = nil) -> String{
         var result = [String]()
-        result.append("Response: " + (response?.description ?? "nil"))
-        if let msg = msg {
-            result.append("Message: \(msg)")
-        }
+        _ = response.map { result.append("Response: " + $0.description) }
+        _ = msg.map { result.append("Message: \($0)") }
         if errors.count > 0 {
             result.append("Errors:")
             errors.forEach { result.append( $0.description ) }
         }
-        if let error = error {
-            result.append("Error: \(error.description)")
-        }
+        _ = error.map { result.append("Error: \($0.description)") }
         return result.joinWithSeparator("\n")
     }
 }

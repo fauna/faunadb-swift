@@ -98,7 +98,7 @@ class ClientTests: FaunaDBTests {
         
         expect(try! inst?.get(FaunaDBTests.fieldRef).ref).to(beginWith("classes/spells/"))
         let dataField = Field<String>("data", "testField")
-        expect(try! inst?.get(dataField)).to(equal("testValue"))
+        expect(inst?.get(dataField)).to(equal("testValue"))
         
         
         waitUntil(timeout: 3) { [weak self] done in

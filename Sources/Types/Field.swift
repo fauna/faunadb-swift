@@ -12,7 +12,7 @@ protocol FieldType {
     associatedtype T: Value
     var path: [FieldPathType] { get }
     func get(value: Value) throws -> T
-    func getOptional(value: Value) throws -> T?
+    func getOptional(value: Value) -> T?
 }
 
 public struct Field<T: Value>: FieldType, ArrayLiteralConvertible {
@@ -31,17 +31,13 @@ public struct Field<T: Value>: FieldType, ArrayLiteralConvertible {
         let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
             return try path.subValue(partialValue)
         }
-        guard let typedValue = result as? T else { throw FieldPathError.NotFound(fieldPath: 3) }
+        guard let typedValue = result as? T else { throw FieldPathError.UnexpectedType(v: result, expectedType: T.self, fieldPath: FieldPathEmpty()) }
         return typedValue
     }
     
-    public func getOptional(value: Value) throws -> T? {
-        let result: Value = path.reduce(value) { (partialValue, path) -> Value in
-            return try! path.subValue(partialValue)
-        }
-        return result as? T
+    public func getOptional(value: Value) -> T? {
+        return try? get(value)
     }
-    
     
     public init(arrayLiteral elements: FieldPathType...){
         let array = elements

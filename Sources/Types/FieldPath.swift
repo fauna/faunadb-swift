@@ -56,8 +56,6 @@ extension FieldPathType {
             return int == int2
         case ( _ as FieldPathEmpty, _ as FieldPathEmpty):
             return true
-        case (let node as FieldPathNode, let node1 as FieldPathNode):
-            return node == node1
         default:
             return false
         }
@@ -99,30 +97,4 @@ public struct FieldPathEmpty: FieldPathType {
     public func subValue(v: Value) throws -> Value {
         return v
     }
-}
-
-
-public struct FieldPathNode: FieldPathType {
-    
-    let left: FieldPathType
-    let right: FieldPathType
-    
-    public var description: String {
-        switch (left, right) {
-        case (is FieldPathEmpty, let r):
-            return r.description
-        case (let l, is FieldPathEmpty):
-            return l.description
-        case(let l, let r):
-            return "\(l)\(r)"
-        }
-    }
-    
-    public func subValue(v: Value) throws -> Value {
-        return try right.subValue(left.subValue(v))
-    }
-}
-
-func ==(lhs: FieldPathNode, rhs: FieldPathNode) -> Bool {
-    return lhs.left.isEqual(rhs.left) && lhs.right.isEqual(rhs.right)
 }

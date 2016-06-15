@@ -14,13 +14,24 @@ extension Value {
     
     public func get<T: Value>(path: FieldPathType...) throws -> T{
         let field: Field<T> = Field<T>(path)
-        return try self.get(field)
+        return try get(field)
         
     }
     
     public func get<T: Value>(field: Field<T>) throws -> T{
         return try field.get(self)
     }
+    
+    public func get<T: Value>(path: FieldPathType...) -> T?{
+        let field: Field<T> = Field<T>(path)
+        return try? get(field)
+        
+    }
+    
+    public func get<T: Value>(field: Field<T>) -> T?{
+        return try? field.get(self)
+    }
+    
 }
 
 struct Mapper {

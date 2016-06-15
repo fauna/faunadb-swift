@@ -52,7 +52,7 @@ extension Client {
             }
             catch {
                 guard let faunaError = error as? FaunaDB.Error else {
-                    completion?(.Failure(FaunaDB.Error.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
+                    completion?(.Failure(.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
                     return
                 }
                 completion?(.Failure(faunaError))
@@ -91,12 +91,12 @@ extension Client {
 
     func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
-        throw FaunaDB.Error.NetworkException(response: response, error: error, msg: error.description)
+        throw Error.NetworkException(response: response, error: error, msg: error.description)
     }
 
     func handleQueryErrors(response: NSURLResponse?, data: NSData?) throws -> AnyObject? {
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            throw FaunaDB.Error.NetworkException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
+            throw Error.NetworkException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
         }
 
         if httpResponse.statusCode >= 300 {
@@ -108,7 +108,7 @@ extension Client {
             }
             catch {
                     if httpResponse.statusCode == 503 {
-                        throw Error.UnknownException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
+                        throw Error.UnavailableException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
                     }
                     throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
             }    
