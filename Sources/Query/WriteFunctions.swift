@@ -27,11 +27,12 @@ extension Action: Encodable {
 
 /**
  *  Creates an instance of a class.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Create Reference](https://faunadb.com/documentation/queries#write_functions-create_class_ref_params_params_object)
  */
 public struct Create: FunctionType {
-    let ref: Ref
-    let params: Obj
+    let ref: Expr
+    let params: Expr
     
     /**
      * Creates an instance of the class referred to by ref, using params.
@@ -42,7 +43,11 @@ public struct Create: FunctionType {
      - returns: A Create expression.
      */
     public init(ref: Ref, params: Obj){
-        self.ref = ref
+        self.init(refExpr: ref, params: params)
+    }
+    
+    public init(refExpr: Expr, params: Expr){
+        self.ref = refExpr
         self.params = params
     }
 }
@@ -57,11 +62,12 @@ extension Create: Encodable {
 
 /**
  *  Updates a resource.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Update Reference](https://faunadb.com/documentation/queries#write_functions-update_ref_params_object)
  */
 public struct Update: FunctionType {
-    let ref: Ref
-    let params: Obj
+    let ref: Expr
+    let params: Expr
     
     /**
      Updates a resource ref. Updates are partial, and only modify values that are specified. Scalar values and arrays are replaced by newer versions, objects are merged, and null removes a value.
@@ -73,6 +79,11 @@ public struct Update: FunctionType {
      */
     public init(ref: Ref, params: Obj){
         self.ref = ref
+        self.params = params
+    }
+    
+    public init(refExpr: Expr, params: Expr){
+        self.ref = refExpr
         self.params = params
     }
 }
@@ -87,11 +98,12 @@ extension Update: Encodable {
 
 /**
  *  Replaces the resource ref using the provided params. Values not specified are removed.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Replace Reference](https://faunadb.com/documentation/queries#write_functions-replace_ref_params_params_object)
  */
 public struct Replace: FunctionType {
-    let ref: Ref
-    let params: Obj
+    let ref: Expr
+    let params: Expr
     
     /**
      Replaces the resource ref using the provided params. Values not specified are removed.
@@ -103,7 +115,11 @@ public struct Replace: FunctionType {
      - returns: A Replace expression.
      */
     public init(ref: Ref, params: Obj){
-        self.ref = ref
+        self.init(refExpr: ref, params: params)
+    }
+    
+    public init(refExpr: Expr, params: Expr){
+        self.ref = refExpr
         self.params = params
     }
 }
@@ -118,11 +134,12 @@ extension Replace: Encodable {
 
 /**
  *  Removes a resource.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Delete Reference](https://faunadb.com/documentation/queries#write_functions-delete_ref)
  */
 public struct Delete: FunctionType {
     
-    let ref: Ref
+    let ref: Expr
     
     /**
      Removes a resource.
@@ -132,7 +149,11 @@ public struct Delete: FunctionType {
      - returns: A Delete expression.
      */
     public init(ref: Ref){
-        self.ref = ref
+        self.init(refExpr: ref)
+    }
+    
+    public init(refExpr: Ref){
+        self.ref = refExpr
     }
 }
 
@@ -145,19 +166,24 @@ extension Delete: Encodable {
 
 /**
  *  Adds an event to an instance’s history. The ref must refer to an instance of a user-defined class or a key - all other refs result in an “invalid argument” error.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Insert Reference](https://faunadb.com/documentation/queries#write_functions-insert_ref_ts_timestamp_action_create_delete_params_object)
  */
 public struct Insert: FunctionType {
-    let ref: Ref
+    let ref: Expr
     let ts: Timestamp
     let action: Action
-    let params: Obj
+    let params: Expr
     
     public init(ref: Ref, ts: Timestamp, action: Action, params: Obj){
-        self.ref = ref
+        self.init(refExpr: ref, ts: ts, action: action, paramsExpr: params)
+    }
+    
+    public init(refExpr: Expr, ts: Timestamp, action: Action, paramsExpr: Expr){
+        self.ref = refExpr
         self.ts = ts
         self.action = action
-        self.params = params
+        self.params = paramsExpr
     }
 }
 
@@ -175,15 +201,20 @@ extension Insert: Encodable {
 
 /**
  *  Deletes an event from an instance’s history. The ref must refer to an instance of a user-defined class - all other refs result in an “invalid argument” error.
- *  [Reference](https://faunadb.com/documentation/queries#write_functions)
+ *
+ *  [Remove Reference](https://faunadb.com/documentation/queries#write_functions-remove_ref_ts_timestamp_action_create_delete)
  */
 public struct Remove: FunctionType {
-    let ref: Ref
+    let ref: Expr
     let ts: Timestamp
     let action: Action
     
     public init(ref: Ref, ts: Timestamp, action: Action){
-        self.ref = ref
+        self.init(refExpr: ref, ts: ts, action: action)
+    }
+    
+    public init(refExpr: Expr, ts: Timestamp, action: Action){
+        self.ref = refExpr
         self.ts = ts
         self.action = action
     }
