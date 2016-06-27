@@ -25,22 +25,36 @@ public struct Match: FunctionType {
      
      - returns: a Match expression.
      */
-    public init(indexRef: Ref, terms: Expr...){
-        self.indexRef = indexRef
+    public init(index: Ref, terms: Expr...){
+        self.indexRef = index
         self.terms = terms
     }
     
-    public init(indexRefExpr: Expr, terms: Expr...){
+    public init(index: Ref){
+        self.indexRef = index
+        self.terms = []
+    }
+    
+    
+    public init(_ indexRefExpr: Expr, terms: Expr...){
         self.indexRef = indexRefExpr
         self.terms = terms
+    }
+    
+    public init(_ indexRefExpr: Expr){
+        self.indexRef = indexRefExpr
+        self.terms = []
     }
 }
 
 extension Match: Encodable {
     
     public func toJSON() -> AnyObject {
-        return [ "match": indexRef.toJSON(),
-                 "terms":  terms.varArgsToAnyObject ]
+        if terms > 0 {
+            return [ "match": indexRef.toJSON(),
+                     "terms":  terms.varArgsToAnyObject ]
+        }
+        return [ "match": indexRef.toJSON()]
     }
 }
 
@@ -113,7 +127,6 @@ extension Intersection: Encodable {
  */
 public struct Difference: FunctionType {
     
-    let source: Expr
     let sets: [Expr]
     
     /**
@@ -125,8 +138,9 @@ public struct Difference: FunctionType {
      - returns: An Difference expression.
      */
     public init(source: Expr, sets: Expr...){
-        self.source = source
-        self.sets = sets
+        var sourceC = [source]
+        sourceC.appendContentsOf(sets)
+        self.sets = sourceC
     }
     
 }
@@ -134,9 +148,7 @@ public struct Difference: FunctionType {
 extension Difference: Encodable {
     
     public func toJSON() -> AnyObject {
-        var array = [source]
-        array.appendContentsOf(sets)
-        return ["difference" : array.varArgsToAnyObject]
+        return ["difference" : sets.varArgsToAnyObject]
     }
 }
 

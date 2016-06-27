@@ -10,4 +10,3 @@ import Foundation
 
 public protocol FunctionType: Expr {}
 
-public protocol LambdaFunctionType: FunctionType {}
