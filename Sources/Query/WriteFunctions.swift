@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Action {
+public enum Action: Expr {
     case Create
     case Delete
 }
@@ -206,14 +206,14 @@ extension Insert: Encodable {
  */
 public struct Remove: FunctionType {
     let ref: Expr
-    let ts: Timestamp
-    let action: Action
+    let ts: Expr
+    let action: Expr
     
     public init(ref: Ref, ts: Timestamp, action: Action){
-        self.init(refExpr: ref, ts: ts, action: action)
+        self.init(ref, ts: ts, action: action)
     }
     
-    public init(refExpr: Expr, ts: Timestamp, action: Action){
+    public init(_ refExpr: Expr, ts: Expr, action: Expr){
         self.ref = refExpr
         self.ts = ts
         self.action = action
