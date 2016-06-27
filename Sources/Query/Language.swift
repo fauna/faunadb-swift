@@ -87,7 +87,7 @@ extension Var: StringLiteralConvertible {
  //                Arr(Arr("Hen", "Wen"))))
  
  */
-public struct Map: LambdaFunctionType{
+public struct Map: FunctionType{
     let lambda: Lambda
     let collection: Arr
     
@@ -129,7 +129,7 @@ extension Map: Encodable {
  Expr(ObjectV("foreach" -> lambda.value, "collection" -> collection.value))
 
  */
-public struct Foreach: LambdaFunctionType {
+public struct Foreach: FunctionType {
     let lambda: Lambda
     let collection: Arr
     

@@ -8,15 +8,14 @@
 import Foundation
 
 
-
-public protocol SetFunctionType: FunctionType {}
-
 /**
- *  Match returns the set of instances that match the terms, based on the configuration of the specified index. terms can be either a single value, or an array.
+ *  `Match` returns the set of instances that match the terms, based on the configuration of the specified index. terms can be either a single value, or an array.
+ *
+ * [Match Reference](https://faunadb.com/documentation/queries#sets-match_index_ref_terms_terms)
  */
-public struct Match: SetFunctionType {
-    let indexRef: Ref
-    let terms: [Value]
+public struct Match: FunctionType {
+    let indexRef: Expr
+    let terms: [Expr]
     
     /**
      Creates a Match expression.
@@ -26,25 +25,36 @@ public struct Match: SetFunctionType {
      
      - returns: a Match expression.
      */
-    public init(indexRef: Ref, terms: Value...){
-        self.indexRef = indexRef
+    public init(index: Ref, terms: Expr...){
+        self.indexRef = index
         self.terms = terms
+    }
+    
+    public init(index: Ref){
+        self.indexRef = index
+        self.terms = []
+    }
+    
+    
+    public init(_ indexRefExpr: Expr, terms: Expr...){
+        self.indexRef = indexRefExpr
+        self.terms = terms
+    }
+    
+    public init(_ indexRefExpr: Expr){
+        self.indexRef = indexRefExpr
+        self.terms = []
     }
 }
 
 extension Match: Encodable {
     
     public func toJSON() -> AnyObject {
-        if terms.count > 1 {
+        if terms > 0 {
             return [ "match": indexRef.toJSON(),
-                 "terms":  terms.map { $0.toJSON() }]
-            
+                     "terms":  terms.varArgsToAnyObject ]
         }
-        else if terms.count == 1 {
-            return [ "match": indexRef.toJSON(),
-                     "terms":  terms[0].toJSON()]
-        }
-        return ["match": indexRef.toJSON() ]
+        return [ "match": indexRef.toJSON()]
     }
 }
 
@@ -52,11 +62,13 @@ extension Match: Encodable {
 
 
 /**
- *  Union represents the set of resources that are present in at least one of the specified sets.
+ *  `Union` represents the set of resources that are present in at least one of the specified sets.
+ *
+ * [Union Reference](https://faunadb.com/documentation/queries#sets-union_set_1_set_2)
  */
-public struct Union: SetFunctionType {
+public struct Union: FunctionType {
     
-    let sets: [SetFunctionType]
+    let sets: [Expr]
     
     /**
      Creates an Union expression.
@@ -65,7 +77,7 @@ public struct Union: SetFunctionType {
      
      - returns: an Union expression.
      */
-    public init(sets: SetFunctionType...){
+    public init(sets: Expr...){
         self.sets = sets
     }
     
@@ -74,16 +86,18 @@ public struct Union: SetFunctionType {
 extension Union: Encodable {
     
     public func toJSON() -> AnyObject {
-        return ["union" : sets.map { $0.toJSON() }]
+        return ["union" : sets.varArgsToAnyObject]
     }
 }
 
 /**
- *  Intersection represents the set of resources that are present in all of the specified sets.
+ *  `Intersection` represents the set of resources that are present in all of the specified sets.
+ *
+ *  [Intersection Reference](https://faunadb.com/documentation/queries#sets-intersection_set_1_set_2)
  */
-public struct Intersection: SetFunctionType {
+public struct Intersection: FunctionType {
     
-    let sets: [SetFunctionType]
+    let sets: [Expr]
     
     /**
      Creates an Intersection expression.
@@ -92,7 +106,7 @@ public struct Intersection: SetFunctionType {
      
      - returns: an Intersection expression.
      */
-    public init(sets: SetFunctionType...){
+    public init(sets: Expr...){
         self.sets = sets
     }
     
@@ -101,30 +115,32 @@ public struct Intersection: SetFunctionType {
 extension Intersection: Encodable {
     
     public func toJSON() -> AnyObject {
-        return ["intersection" : sets.map { $0.toJSON() }]
+        return ["intersection" : sets.varArgsToAnyObject]
     }
 }
 
 
 /**
- *   Difference represents the set of resources present in the source set and not in any of the other specified sets.
+ * `Difference` represents the set of resources present in the source set and not in any of the other specified sets.
+ *
+ * [Difference Reference](https://faunadb.com/documentation/queries#sets-difference_source_set_1_set_2)
  */
-public struct Difference: SetFunctionType {
+public struct Difference: FunctionType {
     
-    let source: SetFunctionType
-    let sets: [SetFunctionType]
+    let sets: [Expr]
     
     /**
      Creates an Difference expression.
      
      - parameter source: Difference resources must be present on source collection.
-     - parameter sets:   Any resource present in sets respurces will not be present in Difference resource set.
+     - parameter sets:   Any resource present in sets resources will not be present in Difference resource set.
      
      - returns: An Difference expression.
      */
-    public init(source: SetFunctionType,  sets: SetFunctionType...){
-        self.source = source
-        self.sets = sets
+    public init(source: Expr, sets: Expr...){
+        var sourceC = [source]
+        sourceC.appendContentsOf(sets)
+        self.sets = sourceC
     }
     
 }
@@ -132,19 +148,19 @@ public struct Difference: SetFunctionType {
 extension Difference: Encodable {
     
     public func toJSON() -> AnyObject {
-        var array = [source]
-        array.appendContentsOf(sets)
-        return ["difference" : array.map { $0.toJSON() }]
+        return ["difference" : sets.varArgsToAnyObject]
     }
 }
 
 
 /**
  *  Distinct function returns the set after removing duplicates.
+ *
+ * [Distinct Reference](https://faunadb.com/documentation/queries#sets-distinct_set)
  */
-public struct Distinct: SetFunctionType {
+public struct Distinct: FunctionType {
     
-    let set: SetFunctionType
+    let set: Expr
     
     /**
      Instantiate a Distinct expression.
@@ -153,7 +169,7 @@ public struct Distinct: SetFunctionType {
      
      - returns: a Distinct instance.
      */
-    public init(set: SetFunctionType){
+    public init(set: Expr){
         self.set = set
     }
 }
@@ -166,10 +182,38 @@ extension Distinct: Encodable {
 }
 
 
+/**
+ *  `Join` derives a set of resources from target by applying each instance in `sourceSet` to `with` target. Target can be either an index reference or a lambda function
+ *
+ *  The index form is useful when the instances in the `sourceSet` match the terms in an index. The join returns instances from index (specified by with) that match the terms from `sourceSet`.
+ *
+ * [Join Reference](https://faunadb.com/documentation/queries#sets-join_source_set_with_target)
+ */
+public struct Join: FunctionType {
+    
+    let sourceSet: Expr
+    let with: Expr
+    
+    /**
+     Creates a `Join` expression.
+     
+     - parameter sourceSet: set to perform the join.
+     - parameter with:      `with` target can be either an index reference or a lambda function.
+     
+     - returns: A `Join` Expression.
+     */
+    public init(sourceSet: Expr, with: Expr){
+        self.sourceSet = sourceSet
+        self.with = with
+    }
+    
+}
 
-
-// Paginate(Union
-// Paginate(Intersection
-//
-
+extension Join: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return ["join": sourceSet.toJSON(),
+                "with": with.toJSON()]
+    }
+}
 
