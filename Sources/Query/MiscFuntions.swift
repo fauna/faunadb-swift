@@ -8,6 +8,25 @@
 
 import Foundation
 
+
+public let NextId = Next_Id()
+
+public struct Next_Id: Expr {
+    
+    let sharedInstance = Next_Id()
+    
+    public init(){}
+    
+}
+
+extension Next_Id: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return ["next_id": NSNull() ]
+    }
+}
+
+
 /**
  *  `Equals` tests equivalence between a list of values.
  *
