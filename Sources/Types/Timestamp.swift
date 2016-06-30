@@ -35,7 +35,7 @@ extension Timestamp: Encodable {
         return nil
     }
     
-    public convenience init?(json: [String: AnyObject]){
+    convenience init?(json: [String: AnyObject]){
         guard let date = json["@ts"] as? String where json.count == 1 else { return nil }
         self.init(iso8601:date)
     }

@@ -9,10 +9,19 @@
 import Foundation
 
 public struct Obj: Value, DictionaryLiteralConvertible {
+    
     private var dictionary = [String: Value]()
     
-    public init(dictionaryLiteral elements: (String, Value)...){
+    
+    public init(_ elements: [(String, Value)]){
         var dictionary = [String:Value]()
+        elements.forEach { dictionary[$0.0] = $0.1 }
+        self.dictionary = dictionary
+    }
+
+    
+    public init(dictionaryLiteral elements: (String, Value)...){
+        var dictionary = [String: Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
@@ -23,7 +32,7 @@ public struct Obj: Value, DictionaryLiteralConvertible {
         self.dictionary = dictionary
     }
     
-    public init?(json: [String: AnyObject]){
+    init?(json: [String: AnyObject]){
         var dictionary = [String:Value]()
         var json = json
         if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
@@ -37,7 +46,6 @@ public struct Obj: Value, DictionaryLiteralConvertible {
         catch { return nil }
         self.dictionary = dictionary
     }
-    
 }
 
 extension Obj: Encodable {
@@ -103,4 +111,19 @@ public func ==(lhs: Obj, rhs: Obj) -> Bool {
         }
     }
     return true
+}
+
+extension Dictionary: ValueConvertible {
+    
+    public var value: FaunaDB.Value {
+        let content: [(String, FaunaDB.Value)] =
+                    self
+                    .map { k, v in
+                        let key = k as! String
+                        let value = (v as? FaunaDB.Value) ?? (v as? ValueConvertible)?.value ?? (v as! NSObject).value()
+                        return (key, value)
+                    }
+        
+        return Obj(content)
+    }
 }

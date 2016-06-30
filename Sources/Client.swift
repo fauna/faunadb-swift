@@ -14,9 +14,9 @@ public final class Client {
         case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON" // true
         case Authorization = "Authorization"
     }
-    var session: NSURLSession
+    public private(set) var session: NSURLSession
     var delegate: ClientDelegate
-    var faunaRoot: NSURL
+    public private(set) var faunaRoot: NSURL
     var secret: String
     var authHeader: String
     public var observers = [ClientObserverType]()

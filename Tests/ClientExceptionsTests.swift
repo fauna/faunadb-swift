@@ -60,6 +60,14 @@ class ClientExceptionsTests: FaunaDBTests {
                 "active": true])){ _ in
                 action()
             }
+            
+            
+            self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
+                "source": Ref("classes/spells"),
+                "terms": [["path": "data.element"] as Obj] as Arr ,
+                "active": true])){ _ in
+                    action()
+            }
         }
         waitUntil(timeout: 3) {[weak self] done in
             self?.client.query(Get(ref: "classes/spells/1234")) { result in

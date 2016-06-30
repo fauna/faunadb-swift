@@ -44,7 +44,10 @@ extension Bool: Encodable {
     }
 }
 
-public struct Null: ScalarType {}
+public struct Null: ScalarType {
+    
+    public init(){}
+}
 
 extension Null: NilLiteralConvertible{
     public init(nilLiteral: ()){}

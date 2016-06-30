@@ -9,17 +9,16 @@
 import Foundation
 
 
-public let NextId = Next_Id()
 
-public struct Next_Id: Expr {
+public struct NextId: Expr {
     
-    let sharedInstance = Next_Id()
+    public static let sharedInstance = NextId()
     
     public init(){}
     
 }
 
-extension Next_Id: Encodable {
+extension NextId: Encodable {
     
     public func toJSON() -> AnyObject {
         return ["next_id": NSNull() ]

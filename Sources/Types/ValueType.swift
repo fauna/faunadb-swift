@@ -8,11 +8,17 @@
 
 import Foundation
 
-public protocol Value: Expr {}
+
+public protocol ValueType: Expr {}
+public protocol Value: ValueType{}
+public protocol ValueConvertible: ValueType {
+    var value: Value { get }
+}
+
 
 extension Value {
     
-    public func get<T: Value>(path: FieldPathType...) throws -> T{
+    public func get<T: Value>(path: PathComponentType...) throws -> T{
         let field: Field<T> = Field<T>(path)
         return try get(field)
         
@@ -22,7 +28,7 @@ extension Value {
         return try field.get(self)
     }
     
-    public func get<T: Value>(path: FieldPathType...) -> T?{
+    public func get<T: Value>(path: PathComponentType...) -> T?{
         let field: Field<T> = Field<T>(path)
         return try? get(field)
         
@@ -31,7 +37,42 @@ extension Value {
     public func get<T: Value>(field: Field<T>) -> T?{
         return try? field.get(self)
     }
+}
+
+//extension Value {
+//    public var value: Value { return self }
+//}
+
+extension ValueConvertible {
     
+    public func get<T: Value>(path: PathComponentType...) throws -> T{
+        let field: Field<T> = Field<T>(path)
+        return try get(field)
+        
+    }
+    
+    public func get<T: Value>(field: Field<T>) throws -> T{
+        return try value.get(field)
+    }
+    
+    public func get<T: Value>(path: PathComponentType...) -> T?{
+        let field: Field<T> = Field<T>(path)
+        return try? get(field)
+        
+    }
+    
+    public func get<T: Value>(field: Field<T>) -> T?{
+        return try? value.get(field)
+    }
+
+}
+
+
+
+extension ValueConvertible {
+    public func toJSON() -> AnyObject {
+        return value.toJSON()
+    }
 }
 
 struct Mapper {
@@ -64,8 +105,11 @@ struct Mapper {
 extension NSNumber {
     
     func isBoolNumber() -> Bool{
-        let boolID = CFBooleanGetTypeID() // the type ID of CFBoolean
-        let numID = CFGetTypeID(self) // the type ID of num
-        return numID == boolID
+        return CFGetTypeID(self) == CFBooleanGetTypeID()
     }
+    
+    func isDoubleNumber() -> Bool{
+        return CFNumberGetType(self) == CFNumberType.DoubleType || CFNumberGetType(self) == CFNumberType.Float64Type
+    }
+    
 }

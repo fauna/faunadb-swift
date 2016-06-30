@@ -31,11 +31,9 @@
 		28DCFF4B1CFF909100A813D3 /* Scalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4A1CFF909100A813D3 /* Scalars.swift */; };
 		28DCFF501CFF910100A813D3 /* ExprType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* ExprType.swift */; };
 		28DCFF521CFF98C800A813D3 /* ScalarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF511CFF98C800A813D3 /* ScalarType.swift */; };
-		28DCFF541CFFA01900A813D3 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF531CFFA01900A813D3 /* Language.swift */; };
 		28DCFF571D00A86E00A813D3 /* Arr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* Arr.swift */; };
 		28DCFF5C1D01CBF800A813D3 /* ValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* ValueType.swift */; };
 		28DCFF7A1D01F9B200A813D3 /* FunctionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF791D01F9B200A813D3 /* FunctionType.swift */; };
-		28DCFF7C1D01FA0100A813D3 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF7B1D01FA0100A813D3 /* LanguageType.swift */; };
 		28E9D83D1D0849CA00A511AA /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
 		28E9D84C1D0849F700A511AA /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D84B1D0849F700A511AA /* SerializationTests.swift */; };
 		28E9D8611D08EE7800A511AA /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8601D08EE7800A511AA /* Date.swift */; };
@@ -293,11 +291,9 @@
 		28DCFF4A1CFF909100A813D3 /* Scalars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scalars.swift; path = Types/Scalars.swift; sourceTree = "<group>"; };
 		28DCFF4F1CFF910100A813D3 /* ExprType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExprType.swift; path = Query/ExprType.swift; sourceTree = "<group>"; };
 		28DCFF511CFF98C800A813D3 /* ScalarType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScalarType.swift; path = Types/ScalarType.swift; sourceTree = "<group>"; };
-		28DCFF531CFFA01900A813D3 /* Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Language.swift; path = Query/Language.swift; sourceTree = "<group>"; };
 		28DCFF561D00A86E00A813D3 /* Arr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Arr.swift; path = Types/Arr.swift; sourceTree = "<group>"; };
 		28DCFF5B1D01CBF800A813D3 /* ValueType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueType.swift; path = Types/ValueType.swift; sourceTree = "<group>"; };
 		28DCFF791D01F9B200A813D3 /* FunctionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FunctionType.swift; path = Query/FunctionType.swift; sourceTree = "<group>"; };
-		28DCFF7B1D01FA0100A813D3 /* LanguageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanguageType.swift; path = Query/LanguageType.swift; sourceTree = "<group>"; };
 		28DCFF8F1D0222BA00A813D3 /* Result.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Result.xcodeproj; path = Carthage/Checkouts/Result/Result.xcodeproj; sourceTree = "<group>"; };
 		28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeserializationTests.swift; path = Tests/DeserializationTests.swift; sourceTree = SOURCE_ROOT; };
 		28E9D84B1D0849F700A511AA /* SerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializationTests.swift; path = Tests/SerializationTests.swift; sourceTree = SOURCE_ROOT; };
@@ -371,8 +367,6 @@
 			children = (
 				28DCFF4F1CFF910100A813D3 /* ExprType.swift */,
 				28DCFF791D01F9B200A813D3 /* FunctionType.swift */,
-				28DCFF7B1D01FA0100A813D3 /* LanguageType.swift */,
-				28DCFF531CFFA01900A813D3 /* Language.swift */,
 				2886147B1D0F6E50007FB922 /* MiscFuntions.swift */,
 				288F0F771D0FA41D00079435 /* SetFunctions.swift */,
 				28F99C871D1061440016F809 /* CollectionFunctions.swift */,
@@ -901,8 +895,6 @@
 				28DCFF571D00A86E00A813D3 /* Arr.swift in Sources */,
 				288F0F781D0FA41D00079435 /* SetFunctions.swift in Sources */,
 				28DCFF501CFF910100A813D3 /* ExprType.swift in Sources */,
-				28DCFF541CFFA01900A813D3 /* Language.swift in Sources */,
-				28DCFF7C1D01FA0100A813D3 /* LanguageType.swift in Sources */,
 				28DCFF7A1D01F9B200A813D3 /* FunctionType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

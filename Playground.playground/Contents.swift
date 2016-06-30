@@ -9,17 +9,28 @@
 
 import UIKit
 import Foundation
-
-
-@testable import FaunaDB
+import FaunaDB
 import Result
 
-func stringFormat(json: JSON) -> String{
+
+[1,2,3] == [1,2]
+let nsObjectArray: [AnyObject]  = [2, "M"]
+let nsObjectArray2: [NSObject] = [3, "M"]
+
+//let intArray: [Value] = [2, 3]
+//
+//let a = intArray as? [Int]
+//
+//let nsObjectArray7 = a as? [NSObject]
+//nsObjectArray == nsObjectArray2
+
+
+
+func stringFormat(json: AnyObject) -> String{
     let jsonData = try! NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
     let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
     return jsonString
 }
-
 
 // ref
 
@@ -75,16 +86,15 @@ client.observers = [Logger()]
 
 let request = NSMutableURLRequest(URL: client.faunaRoot)
 request.HTTPMethod = "GET"
-let string = request.cURLRepresentation(client.session)
-
-//
+//let string = request.cURLRepresentation(client.session)
 
 
-let exp = Create(Ref.databases,  ["name": "blog_db"])
+
+let exp = Create(ref: Ref.databases,  params: ["name": "blog_db"])
 
 var json =  exp.toJSON()
 
-let str = stringFormat(json!)
+let str = stringFormat(json)
 
 
 
@@ -100,7 +110,7 @@ client.query(exp){ result in
 }
 
 
-client.query(Create(Ref.databases, ["name": "blog_db"])){ result in
+client.query(Create(ref: Ref.databases, params: ["name": "blog_db"])){ result in
     switch result {
     case .Success(let value):
         break

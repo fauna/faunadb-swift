@@ -10,29 +10,39 @@ import Foundation
 import Result
 
 public enum FieldPathError: ErrorType, Equatable {
-    case NotFound(fieldPath: FieldPathType)
-    case UnexpectedType(v: Value, expectedType: Any.Type, fieldPath: FieldPathType)
+    case NotFound(value: Value, path: [PathComponentType])
+    case UnexpectedType(value: Value, expectedType: Any.Type, path: [PathComponentType])
 }
 
 
 public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
     switch (lhs, rhs) {
-    case (.NotFound(let fieldPath1), .NotFound(let fieldPath2)):
-        return fieldPath1.isEqual(fieldPath2)
-    case (.UnexpectedType(let value1, let expectedType1, let fieldPath1), .UnexpectedType(let value2, let expectedType2, let fieldPath2)):
-        return fieldPath1.isEqual(fieldPath2) && expectedType1 == expectedType2 && value1.isEquals(value2)
+    case (.NotFound(let value1, let path1), .NotFound(let value2, let path2)):
+        return path1 == path2 && value1.isEquals(value2)
+    case (.UnexpectedType(let value1, let expectedType1, let path1), .UnexpectedType(let value2, let expectedType2, let path2)):
+        return path1 == path2 && expectedType1 == expectedType2 && value1.isEquals(value2)
     default:
         return false
     }
     
 }
 
-public protocol FieldPathType: CustomStringConvertible, CustomDebugStringConvertible {
+public protocol PathComponentType: CustomStringConvertible, CustomDebugStringConvertible, Value {
     func subValue(v: Value) throws -> Value
-    func isEqual(other: FieldPathType) -> Bool
+    func isEqual(other: PathComponentType) -> Bool
 }
 
-extension FieldPathType {
+func ==(lhs: [PathComponentType], rhs: [PathComponentType]) -> Bool{
+    guard lhs.count == rhs.count else { return false }
+    var i1 = lhs.generate()
+    var i2 = rhs.generate()
+    while let e1 = i1.next(), e2 = i2.next() {
+        guard e1.isEqual(e2) else { return false }
+    }
+    return true
+}
+
+extension PathComponentType {
     
     public var description: String {
         if let str = self as? String {
@@ -41,21 +51,19 @@ extension FieldPathType {
         else if let int = self as? Int {
             return "/[\(int)]"
         }
-        return "Unknown FieldPathType"
+        return "Unknown PathComponentType"
     }
     
     public var debugDescription: String {
         return description
     }
     
-    public func isEqual(other: FieldPathType) -> Bool {
+    public func isEqual(other: PathComponentType) -> Bool {
         switch (self, other) {
         case (let str as String, let str2 as String):
             return str == str2
         case (let int as Int, let int2 as Int):
             return int == int2
-        case ( _ as FieldPathEmpty, _ as FieldPathEmpty):
-            return true
         default:
             return false
         }
@@ -63,38 +71,32 @@ extension FieldPathType {
 }
 
 
-extension String: FieldPathType {
+extension String: PathComponentType {
     
     public func subValue(v: Value) throws -> Value {
         switch v{
         case let obj as Obj:
-            guard let objValue = obj[self] else { throw FieldPathError.NotFound(fieldPath: self) }
+            guard let objValue = obj[self] else { throw FieldPathError.NotFound(value: v, path: [self]) }
             return objValue
+        case let valueConvertible as ValueConvertible:
+            return try subValue(valueConvertible.value)
         default:
-            throw FieldPathError.UnexpectedType(v: v, expectedType: Obj.self, fieldPath: self)
+            throw FieldPathError.UnexpectedType(value: v, expectedType: Obj.self, path: [self])
         }
     }
 }
 
-extension Int: FieldPathType {
+extension Int: PathComponentType {
     public func subValue(v: Value) throws -> Value {
         switch v{
         case let arr as Arr:
-            guard arr.count > self  else { throw FieldPathError.NotFound(fieldPath: self) }
+            guard arr.count > self  else { throw FieldPathError.NotFound(value: v, path: [self]) }
             return arr[self]
+        case let valueConvertible as ValueConvertible:
+            return try subValue(valueConvertible.value)
         default:
-            throw FieldPathError.UnexpectedType(v: v, expectedType: Arr.self, fieldPath: self)
+            throw FieldPathError.UnexpectedType(value: v, expectedType: Arr.self, path: [self])
         }
     }
 }
 
-public struct FieldPathEmpty: FieldPathType {
-    
-    public var description: String {
-        return "/"
-    }
-    
-    public func subValue(v: Value) throws -> Value {
-        return v
-    }
-}

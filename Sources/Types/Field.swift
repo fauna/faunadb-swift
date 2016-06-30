@@ -10,20 +10,20 @@ import Foundation
 
 protocol FieldType {
     associatedtype T: Value
-    var path: [FieldPathType] { get }
+    var path: [PathComponentType] { get }
     func get(value: Value) throws -> T
     func getOptional(value: Value) -> T?
 }
 
 public struct Field<T: Value>: FieldType, ArrayLiteralConvertible {
 
-    var path: [FieldPathType]
+    var path: [PathComponentType]
     
-    public init(_ array: [FieldPathType]){
+    public init(_ array: [PathComponentType]){
         path = array
     }
     
-    public init(_ filePaths:FieldPathType...){
+    public init(_ filePaths:PathComponentType...){
         self.init(filePaths)
     }
 
@@ -31,7 +31,7 @@ public struct Field<T: Value>: FieldType, ArrayLiteralConvertible {
         let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
             return try path.subValue(partialValue)
         }
-        guard let typedValue = result as? T else { throw FieldPathError.UnexpectedType(v: result, expectedType: T.self, fieldPath: FieldPathEmpty()) }
+        guard let typedValue = result as? T else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
         return typedValue
     }
     
@@ -39,7 +39,7 @@ public struct Field<T: Value>: FieldType, ArrayLiteralConvertible {
         return try? get(value)
     }
     
-    public init(arrayLiteral elements: FieldPathType...){
+    public init(arrayLiteral elements: PathComponentType...){
         let array = elements
         path = array
     }

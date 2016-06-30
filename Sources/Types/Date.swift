@@ -33,7 +33,7 @@ extension Date: ScalarType {
         self.year = dateComponents.year
     }
     
-    public convenience init?(json: [String: AnyObject]){
+    convenience init?(json: [String: AnyObject]){
         guard let date = json["@date"] as? String where json.count == 1 else { return nil }
         self.init(iso8601:date)
     }

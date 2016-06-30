@@ -50,7 +50,7 @@ public struct Match: FunctionType {
 extension Match: Encodable {
     
     public func toJSON() -> AnyObject {
-        if terms > 0 {
+        if terms.count > 0 {
             return [ "match": indexRef.toJSON(),
                      "terms":  terms.varArgsToAnyObject ]
         }

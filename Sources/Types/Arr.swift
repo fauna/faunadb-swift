@@ -14,16 +14,25 @@ public struct Arr: Value, ArrayLiteralConvertible {
     
     public init(){}
     
-    
-    public init(_ elements: Value...){
-        array = elements
+    public init(_ elements: ValueType...){
+        array = elements.map { valueType in
+            
+            let valueT = (valueType as? ValueConvertible)?.value
+            let vT = valueType as? Value
+            return valueT ?? vT!
+        }
     }
     
-    public init(arrayLiteral elements: Value...){
-        self.init(_: elements)
+    public init(arrayLiteral elements: ValueType...){
+        array = elements.map { valueType in
+            
+            let valueT = (valueType as? ValueConvertible)?.value
+            let vT = valueType as? Value
+            return valueT ?? vT!
+        }
     }
     
-    public init?(json: [AnyObject]) {
+    init?(json: [AnyObject]) {
         guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
         array = arr
     }
@@ -73,7 +82,6 @@ extension Arr: RangeReplaceableCollectionType {
 
 extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
     
-    
     public var description: String{
         return "Arr(\(array.map { String($0) }.joinWithSeparator(", ")))"
     }
@@ -95,3 +103,67 @@ public func ==(lhs: Arr, rhs: Arr) -> Bool {
     return true
 }
 
+extension Array: ValueConvertible {
+    
+    public var value: Value {
+        return Arr(            
+            filter { item in
+                return item is Value || item is ValueConvertible || item is NSObject
+            }.map { item in
+                let value = item as? Value
+                let valueConvertibleValue = (item as? ValueConvertible)?.value
+                let objectValue = (item as? NSObject)?.value()
+                return objectValue ?? value ?? valueConvertibleValue!
+            })
+    }
+}
+
+
+
+// Helper
+
+extension NSObject {
+    
+    func value() -> Value {
+        switch  self {
+        case let str as NSString:
+            return str as String
+        case let int as NSNumber:
+            if int.isDoubleNumber() {
+                return int as Double
+            }
+            else if int.isBoolNumber() {
+                return int as Bool
+            }
+            else {
+                return int as Int
+            }
+        case let date as NSDate:
+            return date
+        case let dateComponents as NSDateComponents:
+            return dateComponents
+        case let nsArray as NSArray:
+            var result: Arr = []
+            for item in nsArray {
+                result.append((item as! NSObject).value())
+            }
+            return result
+        case let nsDictionary as NSDictionary:
+            var result: Obj = [:]
+            for item in nsDictionary {
+                result[item.key as! String] = (item.value as! NSObject).value()
+            }
+            return result
+        default:
+            assertionFailure()
+            return ""
+        }
+    }
+}
+
+//extension Array {
+//
+//    internal static func deserialize()-> [Value] {
+//        return try! self.map({ return try Mapper.fromData($0) })
+//    }
+//}
