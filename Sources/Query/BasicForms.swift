@@ -2,8 +2,7 @@
 //  BasicForms.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/14/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
@@ -13,17 +12,17 @@ import Foundation
  *
  * [Reference](https://faunadb.com/documentation/queries#basic_forms)
  */
-public struct Var: Value {
-    let varname: String
+public struct Var: ValueConvertible {
+    let name: String
     
-    public init(_ varname: String){
-        self.varname = varname
+    public init(_ name: String){
+        self.name = name
     }
     
     //MARK: Helpers
     
-    internal static var index: Int = 0
-    internal static var newName: String {
+    private static var index: Int = 0
+    private static var newName: String {
         if index == Int.max {
             index = 0
         }
@@ -40,26 +39,25 @@ public struct Var: Value {
     }
 }
 
-extension Var: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["var": varname ]
+extension Var {
+    public var value: Value {
+        return fn(Obj(("var", name)))
     }
 }
 
 extension Var: StringLiteralConvertible {
     
     public init(stringLiteral value: String){
-        varname = value
+        name = value
     }
     
     public init(extendedGraphemeClusterLiteral value: String){
-        varname = value
+        name = value
     }
     
     public init(unicodeScalarLiteral value: String){
-        varname = value
+        name = value
     }
-    
 }
 
 /**
@@ -67,120 +65,83 @@ extension Var: StringLiteralConvertible {
  *
  * [Reference](https://faunadb.com/documentation/queries#basic_forms)
  */
-public struct Let: FunctionType {
-    
-    let bindings: [(String, Expr)]
-    let expr: Expr
-    
-    
-    private init(v1: String, e1: Expr, @noescape `in`: (Value -> Expr)){
-        bindings = [(v1, e1)]
-        expr = `in`(Var(v1))
-    }
-    
-    private init(v1: String, e1: Expr,
-                v2: String, e2: Expr, @noescape `in`: ((Value, Value) -> Expr)){
-        bindings = [(v1, e1), (v2, e2)]
-        expr = `in`(Var(v1), Var(v2))
-    }
-    
-    private init(v1: String, e1: Expr,
-                v2: String, e2: Expr,
-                v3: String, e3: Expr , @noescape `in`: ((Value, Value, Value) -> Expr)){
-        bindings = [(v1, e1), (v2, e2), (v3, e3)]
-        expr = `in`(Var(v1), Var(v2),Var(v3))
-    }
-    
-    private init(v1: String, e1: Expr,
-                v2: String, e2: Expr,
-                v3: String, e3: Expr,
-                v4: String, e4: Expr,
-                @noescape `in`: ((Value, Value, Value, Value) -> Expr)){
-        bindings = [(v1, e1), (v2, e2), (v3, e3), (v4, e4)]
-        expr = `in`(Var(v1), Var(v2), Var(v3), Var(v4))
-    }
-    
-    private init(v1: String, e1: Expr,
-                v2: String, e2: Expr,
-                v3: String, e3: Expr,
-                v4: String, e4: Expr,
-                v5: String, e5: Expr,
-                @noescape `in`: ((Value, Value, Value, Value, Value) -> Expr)){
-        bindings = [(v1, e1), (v2, e2), (v3, e3), (v4, e4), (v5, e5)]
-        expr = `in`(Var(v1), Var(v2), Var(v3), Var(v4), Var(v5))
-    }
 
     
-    public init(_ e1: Expr, @noescape `in`: (Value -> Expr)){
-        self.init(v1: Var.newName, e1: e1, in: `in`)
-    }
+public func Let(bindings bindings:[(String, Expr)], expr: Expr) -> Expr{
+    var bindingsData = Obj()
+    bindings.forEach { bindingsData[$0.0] = $0.1.value  }
+    return Expr(fn(["let": fn(bindingsData), "in": expr.value] as Obj))
+}
     
-    public init(_ e1: Expr, _ e2: Expr, @noescape `in`: ((Value, Value) -> Expr)){
-        self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, in: `in`)
-    }
-    
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, @noescape `in`: ((Value, Value, Value) -> Expr)){
-        self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, in: `in`)
-    }
-    
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, @noescape `in`: ((Value, Value, Value, Value) -> Expr)){
-        self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, in: `in`)
-    }
-    
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, _ e5: Expr, @noescape `in`: ((Value, Value, Value, Value, Value) -> Expr)){
-        self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, v5: Var.newName, e5: e5, in: `in`)
-    }
-    
-    private init(_ binding: (String, Expr)..., expr: Expr){
-        self.bindings = binding
-        self.expr = expr
-    }
-    
+public func Let(v1 v1: String, e1: Expr, @noescape `in`: (Expr -> Expr)) -> Expr{
+    return Let(bindings: [(v1, e1)], expr: `in`(Expr(Var(v1))))
 }
 
-extension Let: Encodable {
-    public func toJSON() -> AnyObject {
-        var vars = [String: AnyObject]()
-        bindings.forEach { vars[$0.0] = $0.1.toJSON() }
-        return ["let": vars, "in": expr.toJSON()]
-    }
+public func Let(v1 v1: String, e1: Expr,
+                   v2: String, e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)) -> Expr{
+    return Let(bindings: [(v1, e1), (v2, e2)], expr: `in`(Expr(Var(v1)), Expr(Var(v2))))
 }
 
+public func Let(v1 v1: String, e1: Expr,
+            v2: String, e2: Expr,
+            v3: String, e3: Expr , @noescape `in`: ((Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(bindings: [(v1, e1), (v2, e2), (v3, e3)], expr: `in`(Expr(Var(v1)), Expr(Var(v2)), Expr(Var(v3))))
+}
+
+public func Let(v1 v1: String, e1: Expr,
+            v2: String, e2: Expr,
+            v3: String, e3: Expr,
+            v4: String, e4: Expr,
+            @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4)], expr: `in`(Expr(Var(v1)), Expr(Var(v2)), Expr(Var(v3)), Expr(Var(v4))))
+}
+
+public func Let(v1 v1: String, e1: Expr,
+            v2: String, e2: Expr,
+            v3: String, e3: Expr,
+            v4: String, e4: Expr,
+            v5: String, e5: Expr,
+            @noescape `in`: ((Expr, Expr, Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4), (v5, e5)], expr: `in`(Expr(Var(v1)), Expr(Var(v2)), Expr(Var(v3)), Expr(Var(v4)), Expr(Var(v5))))
+}
+
+public func Let(e1: Expr, @noescape `in`: (Expr -> Expr)) -> Expr{
+    return Let(v1: Var.newName, e1: e1, in: `in`)
+}
+
+public func Let(e1: Expr, _ e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)) -> Expr{
+    return Let(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, in: `in`)
+}
+
+public func Let(e1: Expr, _ e2: Expr, _ e3: Expr, @noescape `in`: ((Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, in: `in`)
+}
+
+public func Let(e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, in: `in`)
+}
+
+public func Let(e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, _ e5: Expr, @noescape `in`: ((Expr, Expr, Expr, Expr, Expr) -> Expr)) -> Expr{
+    return Let(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, v5: Var.newName, e5: e5, in: `in`)
+}
 
 /**
  *  If evaluates and returns then expr or else expr depending on the value of pred. If cond evaluates to anything other than a Boolean, if returns an “invalid argument” error.
  *
  * [Reference](https://faunadb.com/documentation/queries#basic_forms)
  */
-public struct If: FunctionType {
-    
-    let pred: Expr
-    let `then`: Expr
-    let `else`: Expr
-    
-    /**
-     If evaluates and returns then expr or else expr depending on the value of pred. If cond evaluates to anything other than a Boolean, if returns an “invalid argument” error.
-     
-     - parameter pred:   Predicate expression. Must evaluate to Bool value.
-     - parameter `then`: Expression to execute if pred evaluation is true.
-     - parameter `else`: Expression to execute if pred evaluation fails.
-     
-     - returns: An If expression.
-     */
-    public init(pred: Expr, @autoclosure `then`: (()-> Expr), @autoclosure `else`: (()-> Expr)) {
-        self.pred = pred
-        self.`then` = `then`()
-        self.`else` = `else`()
-    }
-}
 
-extension If: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["if": pred.toJSON(),
-                "then": `then`.toJSON(),
-                "else": `else`.toJSON()]
-    }
+/**
+ If evaluates and returns then expr or else expr depending on the value of pred. If cond evaluates to anything other than a Boolean, if returns an “invalid argument” error.
+ 
+ - parameter pred:   Predicate expression. Must evaluate to Bool value.
+ - parameter `then`: Expression to execute if pred evaluation is true.
+ - parameter `else`: Expression to execute if pred evaluation fails.
+ 
+ - returns: An If expression.
+ */
+public func If(pred pred: Expr, @autoclosure `then`: (()-> Expr), @autoclosure `else`: (()-> Expr)) -> Expr{
+    return Expr(fn(["if": pred.value, "then": `then`().value, "else": `else`().value] as Obj))
 }
 
 /**
@@ -188,28 +149,16 @@ extension If: Encodable {
  *
  * [Reference](https://faunadb.com/documentation/queries#basic_forms)
  */
-public struct Do: FunctionType {
-    let exprs: [Expr]
-    
-    /**
-     Do sequentially evaluates its arguments, and returns the evaluation of the last expression. If no expressions are provided, do returns an error.
-     
-     - parameter exprs: Expressions to evaluate.
-     
-     - returns: A Do expression.
-     */
-    public init (exprs: Expr...){
-        self.exprs = exprs
-    }
+/**
+ Do sequentially evaluates its arguments, and returns the evaluation of the last expression. If no expressions are provided, do returns an error.
+ 
+ - parameter exprs: Expressions to evaluate.
+ 
+ - returns: A Do expression.
+ */
+public func Do(exprs exprs: Expr...) -> Expr{
+    return Expr(fn(Obj(("do", varargs(exprs)))))
 }
-
-extension Do: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["do": exprs.varArgsToAnyObject]
-    }
-}
-
 
 /**
  *  `Lambda` creates an anonymous function that binds one or more variables in the expression at `expr`.
@@ -217,76 +166,66 @@ extension Do: Encodable {
  *
  * [Reference](https://faunadb.com/documentation/queries#basic_forms)
  */
-public struct Lambda: Expr {
-    
-    let vars: [Var]
-    let expr: Expr
-    
-    public init(vars: Var..., expr: Expr){
-        self.vars = vars
-        self.expr = expr
-    }
-    public init(@noescape lambda: ((Value)-> Expr)){
-        let newVar = Var.newVar
-        self.init(vars: newVar, expr: lambda(newVar))
-    }
-    
-    public init(@noescape lambda: ((Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        self.init(vars: newVar, newVar2, expr: lambda(newVar, newVar2))
-    }
-    
-    public init(@noescape lambda: ((Value, Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        let newVar3 = Var.newVar
-        self.init(vars: newVar, newVar2, newVar3, expr: lambda(newVar, newVar2, newVar3))
-    }
-    
-    public init(@noescape lambda: ((Value, Value, Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        let newVar3 = Var.newVar
-        let newVar4 = Var.newVar
-        self.init(vars: newVar, newVar2, newVar3, newVar4, expr: lambda(newVar, newVar2, newVar3, newVar4))
-    }
-    
-    public init(@noescape lambda: ((Value, Value, Value, Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        let newVar3 = Var.newVar
-        let newVar4 = Var.newVar
-        let newVar5 = Var.newVar
-        self.init(vars: newVar, newVar2, newVar3, newVar4, newVar5, expr: lambda(newVar, newVar2, newVar3, newVar4, newVar5))
-    }
-    
-    public init(@noescape lambda: ((Value, Value, Value, Value, Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        let newVar3 = Var.newVar
-        let newVar4 = Var.newVar
-        let newVar5 = Var.newVar
-        let newVar6 = Var.newVar
-        self.init(vars: newVar, newVar2, newVar3, newVar4, newVar5, newVar6, expr: lambda(newVar, newVar2, newVar3, newVar4, newVar5, newVar6))
-    }
-    
 
-    public init(@noescape lambda: ((Value, Value, Value, Value, Value, Value, Value)-> Expr)){
-        let newVar = Var.newVar
-        let newVar2 = Var.newVar
-        let newVar3 = Var.newVar
-        let newVar4 = Var.newVar
-        let newVar5 = Var.newVar
-        let newVar6 = Var.newVar
-        let newVar7 = Var.newVar
-        self.init(vars: newVar, newVar2, newVar3, newVar4, newVar5, newVar6, newVar7, expr: lambda(newVar, newVar2, newVar3, newVar4, newVar5, newVar6, newVar7))
-    }
+    
+public func Lambda(vars vars: Var..., expr: Expr) -> Expr{
+    return Expr(fn(Obj(("expr", expr.value),("lambda", varargs(vars.map { $0.name })))))
 }
 
-extension Lambda: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["expr": expr.toJSON(), "lambda": vars.map { $0.varname as Expr }.varArgsToAnyObject]
-    }
+public func Lambda(@noescape lambda lambda: ((Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    return Lambda(vars: newVar, expr: lambda(Expr(newVar)))
+}
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    return Lambda(vars: newVar, newVar2, expr: lambda(Expr(newVar), Expr(newVar2)))
+}
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    let newVar3 = Var.newVar
+    return Lambda(vars: newVar, newVar2, newVar3, expr: lambda(Expr(newVar), Expr(newVar2), Expr(newVar3)))
+}
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr, Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    let newVar3 = Var.newVar
+    let newVar4 = Var.newVar
+    return Lambda(vars: newVar, newVar2, newVar3, newVar4, expr: lambda(Expr(newVar), Expr(newVar2), Expr(newVar3), Expr(newVar4)))
+}
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr, Expr, Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    let newVar3 = Var.newVar
+    let newVar4 = Var.newVar
+    let newVar5 = Var.newVar
+    return Lambda(vars: newVar, newVar2, newVar3, newVar4, newVar5, expr: lambda(Expr(newVar), Expr(newVar2), Expr(newVar3), Expr(newVar4), Expr(newVar5)))
+}
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    let newVar3 = Var.newVar
+    let newVar4 = Var.newVar
+    let newVar5 = Var.newVar
+    let newVar6 = Var.newVar
+    return Lambda(vars: newVar, newVar2, newVar3, newVar4, newVar5, newVar6, expr: lambda(Expr(newVar), Expr(newVar2), Expr(newVar3), Expr(newVar4), Expr(newVar5), Expr(newVar6)))
+}
+
+
+public func Lambda(@noescape lambda lambda: ((Expr, Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    let newVar3 = Var.newVar
+    let newVar4 = Var.newVar
+    let newVar5 = Var.newVar
+    let newVar6 = Var.newVar
+    let newVar7 = Var.newVar
+    return Lambda(vars: newVar, newVar2, newVar3, newVar4, newVar5, newVar6, newVar7, expr: lambda(Expr(newVar), Expr(newVar2), Expr(newVar3), Expr(newVar4), Expr(newVar5), Expr(newVar6), Expr(newVar7)))
 }
 

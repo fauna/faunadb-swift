@@ -2,34 +2,10 @@
 //  CollectionFunctions.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/14/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
-
-protocol CollectionFunctionType: FunctionType {}
-
- //        client.query(
- //            Map(
- //                Lambda { name => Concat(Arr(name, "Wen")) },
- //                Arr("Hen ")))
- 
- 
- 
- 
- //        client.query(
- //            Map(
- //                Lambda { (f, l) => Concat(Arr(f, l), " ") },
- //                Arr(Arr("Hen", "Wen"))))
- 
- 
- 
- //        client.query(
- //            Map(
- //                Lambda { (f, _) => f },
- //                Arr(Arr("Hen", "Wen"))))
-
 
 /**
  *  `Map` applies `lambda` expression to each member of the Array or Page coll, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
@@ -38,47 +14,29 @@ protocol CollectionFunctionType: FunctionType {}
  *
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
  */
-public struct Map: FunctionType{
-    let lambda: Lambda
-    let collection: Arr
     
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
-        self.collection = Arr(arr)
-        self.lambda = lambda
-    }
-    
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        let newVar = Var(Var.newName)
-        self.init(arr: arr, lambda: Lambda(vars:  newVar, expr: lambda(newVar)))
-    }
-    
-    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        var array: Arr = Arr()
-        arr.forEach { array.append($0) }
-        let newVar = Var(Var.newName)
-        self.init(arr: array, lambda: Lambda(vars: newVar, expr: lambda(newVar)))
-    }
-    
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: ((Value, Value) -> Expr)){
-        let newVar = Var(Var.newName)
-        let newVar2 = Var(Var.newName)
-        self.init(arr: arr, lambda: Lambda(vars: newVar, newVar2, expr: lambda(newVar, newVar2)))
-    }
-    
-    
-    
+public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
+    return Expr(fn(["map": lambda.value, "collection": Arr(arr)] as Obj))
 }
 
-extension Map: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["map": lambda.toJSON(),
-                "collection": collection.toJSON()]
-    }
+public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    let newVar = Var.newVar
+    return Map(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
 
-//def Foreach(lambda: Expr, collection: Expr): Expr =
-//Expr(ObjectV("foreach" -> lambda.value, "collection" -> collection.value)
+public func Map<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    var array: Arr = Arr()
+    arr.forEach { array.append($0) }
+    let newVar = Var.newVar
+    return Map(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
+}
+
+public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: ((Expr, Expr) -> Expr)) -> Expr{
+    let newVar = Var.newVar
+    let newVar2 = Var.newVar
+    return Map(arr: arr, lambda: Lambda(vars: newVar, newVar2, expr: lambda(Expr(newVar), Expr(newVar2))))
+}
+
 
 /**
  * `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
@@ -87,42 +45,31 @@ extension Map: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
  */
-public struct Foreach: FunctionType {
-    let lambda: Lambda
-    let collection: Arr
+
     
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
-        self.collection = Arr(arr)
-        self.lambda = lambda
-    }
-    
-    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, lambda: Lambda){
-        var array: Arr = Arr()
-        arr.forEach { array.append($0) }
-        self.init(arr: array, lambda: lambda)
-    }
-    
-    
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        let newVar = Var(Var.newName)
-        self.init(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(newVar)))
-    }
-    
-    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        var array: Arr = Arr()
-        arr.forEach { array.append($0) }
-        let newVar = Var(Var.newName)
-        self.init(arr: array, lambda: Lambda(vars: newVar, expr: lambda(newVar)))
-    }
+public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
+    return Expr(fn(["foreach": lambda.value, "collection": Arr(arr)] as Obj))
 }
 
-extension Foreach: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["foreach": lambda.toJSON(),
-                "collection": collection.toJSON()]
-    }
+public func Foreach<C: CollectionType where C.Generator.Element: Value>(arr arr: C, lambda: Expr) -> Expr{
+    var array: Arr = Arr()
+    arr.forEach { array.append($0) }
+    return Foreach(arr: array, lambda: lambda)
 }
+
+
+public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    let newVar = Var.newVar
+    return Foreach(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
+}
+
+public func Foreach<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    var array: Arr = Arr()
+    arr.forEach { array.append($0) }
+    let newVar = Var.newVar
+    return Foreach(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
+}
+
 
 /**
  * `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
@@ -131,42 +78,26 @@ extension Foreach: Encodable {
  *
  * [Filtrer Reference](https://faunadb.com/documentation/queries#collection_functions-filter_lambda_expr_collection_coll)
  */
-public struct Filter: FunctionType {
-    let lambda: Lambda
-    let collection: Arr
-    
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, lambda: Lambda){
-        self.collection = Arr(arr)
-        self.lambda = lambda
-    }
-    
-    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, lambda: Lambda){
-        var array: Arr = Arr()
-        arr.forEach { array.append($0) }
-        self.init(arr: array, lambda: lambda)
-    }
-    
-    
-    public init<C: CollectionType where C.Generator.Element == Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        let newVar = Var.newVar
-        self.init(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(newVar)))
-    }
-    
-    public init<C: CollectionType where C.Generator.Element: Value>(arr: C, @noescape lambda: (Value -> Expr)){
-        var array: Arr = Arr()
-        arr.forEach { array.append($0) }
-        let newVar = Var.newVar
-        self.init(arr: array, lambda: Lambda(vars: newVar, expr: lambda(newVar)))
-    }
+public func Filter<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
+    return Expr(fn(["filter": lambda.value, "collection": Arr(arr)] as Obj))
 }
 
+public func Filter<C: CollectionType where C.Generator.Element: Value>(arr arr: C, lambda: Expr) -> Expr{
+    var array: Arr = Arr()
+    arr.forEach { array.append($0) }
+    return Filter(arr: array, lambda: lambda)
+}
 
-extension Filter: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["filter": lambda.toJSON(),
-                "collection": collection.toJSON()]
-    }
+public func Filter<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    let newVar = Var.newVar
+    return Filter(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
+}
+
+public func Filter<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+    var array: Arr = Arr()
+    arr.forEach { array.append($0) }
+    let newVar = Var.newVar
+    return Filter(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
 
 
@@ -182,15 +113,15 @@ extension Filter: Encodable {
  *
  * [Take Reference](https://faunadb.com/documentation/queries#collection_functions-take_num_collection_coll)
  */
-public struct Take: CollectionFunctionType{
+public func Take(count count: Int, collection: Expr) -> Expr{
+    return Expr(fn(["take": count, "collection": collection.value] as Obj))
+}
+
+public func Take(count count: Expr, collection: Expr) -> Expr{
+    return Expr(fn(["take": count.value, "collection": collection.value] as Obj))
+}
+
     
-    let take: Int
-    let collection: Expr
-    
-    init(_ take: Int, collection: Expr){
-        self.take = take
-        self.collection = collection
-    }
     
 //    init<C: CollectionType where C.Generator.Element == Value>(_ take: Int, arr: C){
 //        let expr = Arr(arr)
@@ -202,13 +133,6 @@ public struct Take: CollectionFunctionType{
 //        arr.forEach { expr.append($0) }
 //        self.init(take, collection: expr)
 //    }
-}
-
-extension Take: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["take": take.toJSON(), "collection": collection.toJSON()]
-    }
-}
 
 /**
  * `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
@@ -219,74 +143,29 @@ extension Take: Encodable {
  *
  *  [Drop Reference](https://faunadb.com/documentation/queries#collection_functions-drop_num_collection_coll)
  */
-public struct Drop: CollectionFunctionType {
-    let drop: Int
-    let collection: Expr
-    
-    init(_ drop: Int, collection: Expr){
-        self.drop = drop
-        self.collection = collection
-    }
-    
-//    init<C: CollectionType where C.Generator.Element == Value>(_ take: Int, arr: C){
-//        let expr = Arr(arr)
-//        self.init(take, collection: expr)
-//    }
-//    
-//    init<C: CollectionType where C.Generator.Element: Value>(_ take: Int, arr: C){
-//        var expr: Arr = Arr()
-//        arr.forEach { expr.append($0) }
-//        self.init(take, collection: expr)
-//    }
+public func Drop(count count: Int, collection: Expr) -> Expr{
+    return Expr(fn(["drop": count, "collection": collection.value] as Obj))
 }
 
-extension Drop: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["drop": drop.toJSON(), "collection": collection.toJSON()]
-    }
+public func Drop(count count: Expr, collection: Expr) -> Expr{
+    return Expr(fn(["drop": count.value, "collection": collection.value] as Obj))
 }
-
 
 /**
  * `Prepend` returns a new Array that is the result of prepending `elements` onto the Array `toCollection`.
  *
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
  */
-public struct Prepend: CollectionFunctionType {
-    
-    let elements: Expr
-    let collection: Expr
-    
-    init(_ elements: Expr, toCollection collection: Expr){
-        self.elements = elements
-        self.collection = collection
-    }
+public func Prepend(elements elements: Expr, toCollection collection: Expr) -> Expr{
+    return Expr(fn(["collection": elements.value, "prepend": collection.value] as Obj))
 }
 
-extension Prepend: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["collection": elements.toJSON(), "prepend": collection.toJSON()]
-    }
-}
 
 /**
  * `Append` returns a new Array that is the result of appending `elements` onto the `toCollection` array.
  *
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
  */
-public struct Append: CollectionFunctionType{
-    
-    let elements: Expr
-    let collection: Expr
-    
-    init(_ elements: Expr, toCollection collection: Expr){
-        self.elements = elements
-        self.collection = collection
-    }
-}
-
-extension Append: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["collection": elements.toJSON(), "append": collection.toJSON()]
-    }
+public func Append(elements elements: Expr, toCollection collection: Expr) -> Expr{
+    return Expr(fn(["collection": elements.value, "append": collection.value] as Obj))
 }

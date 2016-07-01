@@ -9,7 +9,6 @@
 import XCTest
 import Nimble
 import Result
-
 @testable import FaunaDB
 
 
@@ -102,7 +101,8 @@ class ClientTests: FaunaDBTests {
         
         
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Exists(ref: try! inst!.get(FaunaDBTests.fieldRef))){ result in
+            let ref: Ref = try! inst!.get("ref")
+            self?.client.query(Exists(ref: ref)){ result in
                 let responseValue = try! result.dematerialize() as! Bool
                 expect(responseValue).to(beTrue())
                 done()

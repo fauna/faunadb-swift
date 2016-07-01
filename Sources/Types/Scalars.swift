@@ -1,15 +1,13 @@
 //
-//  Value.swift
+//  Scalars.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/1/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
-extension Int: ScalarType{}
-
+extension Int: ScalarValue{}
 extension Int: Encodable {
     
     public func toJSON() -> AnyObject {
@@ -17,8 +15,15 @@ extension Int: Encodable {
     }
 }
 
-extension Double: ScalarType{}
+extension Float: ScalarValue{}
+extension Float: Encodable {
+    
+    public func toJSON() -> AnyObject {
+        return self
+    }
+}
 
+extension Double: ScalarValue{}
 extension Double: Encodable {
     
     public func toJSON() -> AnyObject {
@@ -26,8 +31,7 @@ extension Double: Encodable {
     }
 }
 
-extension String: ScalarType{}
-
+extension String: ScalarValue{}
 extension String: Encodable {
     
     public func toJSON() -> AnyObject {
@@ -35,8 +39,7 @@ extension String: Encodable {
     }
 }
 
-extension Bool: ScalarType{}
-
+extension Bool: ScalarValue{}
 extension Bool: Encodable {
     
     public func toJSON() -> AnyObject {
@@ -44,8 +47,7 @@ extension Bool: Encodable {
     }
 }
 
-public struct Null: ScalarType {
-    
+public struct Null: ScalarValue {
     public init(){}
 }
 
@@ -65,6 +67,8 @@ extension Null: CustomDebugStringConvertible, CustomStringConvertible {
 }
 
 extension Null: Encodable {
+    
+    //MARK: Encodable
     
     public func toJSON() -> AnyObject {
         return NSNull()

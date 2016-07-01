@@ -2,13 +2,12 @@
 //  Ref.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/1/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
-public struct Ref: Value{
+public struct Ref: ScalarValue {
     
     public static let databases: Ref = "databases"
     public static let indexes: Ref = "indexes"
@@ -56,6 +55,8 @@ extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
 
 
 extension Ref: Encodable {
+    
+    //MARK: Encodable
     
     public func toJSON() -> AnyObject {
         return ["@ref": ref.toJSON()]

@@ -2,48 +2,24 @@
 //  MiscFuntions.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/13/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
-
-
-public struct NextId: Expr {
-    
-    public static let sharedInstance = NextId()
-    
-    public init(){}
-    
-}
-
-extension NextId: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["next_id": NSNull() ]
-    }
-}
-
+/**
+ *
+ *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
+ */
+public let NextId = Expr(fn(Obj(("next_id", Null()))))
 
 /**
  *  `Equals` tests equivalence between a list of values.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Equals: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension Equals: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["equals": terms.varArgsToAnyObject ]
-    }
+public func Equals(terms terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("equals", varargs(terms)))))
 }
 
 
@@ -52,26 +28,12 @@ extension Equals: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Contains: Expr {
-    
-    let path: [Expr]
-    let inExpr: Expr
-    
-    public init(path: PathComponentType..., inExpr: Expr){
-        self.path = path.map { $0 as Expr }
-        self.inExpr = inExpr
-    }
-    
-    public init(pathExpr: Expr, inExpr: Expr){
-        self.path = [pathExpr]
-        self.inExpr = inExpr
-    }
+public func Contains(path path: PathComponentType..., inExpr: Expr) -> Expr{
+    return Expr(fn(Obj(("contains", varargs(path)), ("in", inExpr.value))))
 }
-
-extension Contains: Encodable {
-    public func toJSON() -> AnyObject {
-        return ["contains": path.varArgsToAnyObject, "in": inExpr.toJSON()]
-    }
+    
+public func Contains(path: Expr, inExpr: Expr) -> Expr{
+    return Expr(fn(Obj(("contains", path.value), ("in", inExpr.value))))
 }
 
 /**
@@ -79,35 +41,17 @@ extension Contains: Encodable {
  *
  * [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Select: Expr {
     
-    let path: [Expr]
-    let from: Expr
-    let defaultValue: Expr?
-    
-    public init(path: PathComponentType..., from: Expr, defaultValue: Expr? = nil){
-        self.path = path.map { $0 as Expr }
-        self.from = from
-        self.defaultValue = defaultValue
-    }
-    
-    public init(pathExpr: Expr, from: Expr, defaultValue: Expr? = nil){
-        self.path = [pathExpr]
-        self.from = from
-        self.defaultValue = defaultValue
-    }
-    
-    
+public func Select(path path: PathComponentType..., from: Expr, defaultValue: Expr? = nil) -> Expr{
+    var obj: Obj = ["select": varargs(path), "from": from.value]
+    obj["default"] = defaultValue?.value
+    return Expr(fn(obj))
 }
-
-extension Select: Encodable {
     
-    public func toJSON() -> AnyObject {
-        var result = [ "select": path.varArgsToAnyObject,
-                   "from": from.toJSON()]
-        result["default"] = defaultValue?.toJSON()
-        return result
-    }
+public func Select(path: Expr, from: Expr, defaultValue: Expr? = nil) -> Expr{
+    var obj: Obj = ["select": path.value, "from": from.value]
+    obj["default"] = defaultValue?.value
+    return Expr(fn(obj))
 }
 
 /**
@@ -115,39 +59,18 @@ extension Select: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Add: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func Add(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("add", varargs(terms)))))
 }
 
-extension Add: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["add": terms.varArgsToAnyObject ]
-    }
-}
 
 /**
  *  `Multiply` computes the product of a list of numbers. Attempting to multiply fewer than two numbers will result in an “invalid argument” error.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Multiply: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension Multiply: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["multiply": terms.varArgsToAnyObject ]
-    }
+public func Multiply(terms: Expr...) -> Expr {
+    return Expr(fn(Obj(("multiply", varargs(terms)))))
 }
 
 /**
@@ -155,40 +78,17 @@ extension Multiply: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Subtract: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func Subtract(terms: Expr...) -> Expr {
+    return Expr(fn(Obj(("subtract", varargs(terms)))))
 }
-
-extension Subtract: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["subtract": terms.varArgsToAnyObject ]
-    }
-}
-
 
 /**
  *  `Divide` computes the quotient of a list of numbers.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Divide: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension Divide: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["divide": terms.varArgsToAnyObject ]
-    }
+public func Divide(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("divide", varargs(terms)))))
 }
 
 
@@ -197,19 +97,8 @@ extension Divide: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Modulo: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension Modulo: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["modulo": terms.varArgsToAnyObject ]
-    }
+public func Modulo(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("modulo", varargs(terms)))))
 }
 
 /**
@@ -217,39 +106,18 @@ extension Modulo: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct LT: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func LT(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("lt", varargs(terms)))))
 }
 
-extension LT: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["lt": terms.varArgsToAnyObject ]
-    }
-}
 
 /**
  *  `LTE` returns true if each specified value compares as less than or equal to the ones following it, and false otherwise. The function takes one or more arguments; it always returns  true if it has a single argument.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct LTE: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension LTE: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["lte": terms.varArgsToAnyObject ]
-    }
+public func LTE(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("lte", varargs(terms)))))
 }
 
 /**
@@ -257,19 +125,8 @@ extension LTE: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct GT: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
-}
-
-extension GT: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["gt": terms.varArgsToAnyObject ]
-    }
+public func GT(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("gt", varargs(terms)))))
 }
 
 /**
@@ -277,91 +134,38 @@ extension GT: Encodable {
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct GTE: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func GTE(terms: Expr...)-> Expr{
+    return Expr(fn(Obj(("gte", varargs(terms)))))
 }
-
-extension GTE: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["gte": terms.varArgsToAnyObject ]
-    }
-}
-
-
 
 /**
  *  `And` computes the conjunction of a list of boolean values, returning `true` if all elements are true, and `false` otherwise.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct And: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func And(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("and", varargs(terms)))))
 }
-
-extension And: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["and": terms.varArgsToAnyObject ]
-    }
-}
-
 
 /**
  *  `Or` computes the disjunction of a list of boolean values, returning `true` if any elements are true, and `false` otherwise.
  *
  *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Or: Expr {
-    let terms: [Expr]
-    
-    init(terms: Expr...){
-        self.terms = terms
-    }
+public func Or(terms: Expr...) -> Expr{
+    return Expr(fn(Obj(("or", varargs(terms)))))
 }
-
-extension Or: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["or": terms.varArgsToAnyObject ]
-    }
-}
-
 
 /**
  *  `Not` computes the negation of a boolean expression.
+ Computes the negation of a boolean value, returning true if its argument is false, or false if its argument is true.
+ 
+ - parameter boolExpr: indicates the expression to negate.
  *
  * [Reference](https://faunadb.com/documentation/queries#misc_functions)
  */
-public struct Not: Expr {
-    let expr: Expr
-    
-    /**
-     Computes the negation of a boolean value, returning true if its argument is false, or false if its argument is true.
-     
-     - parameter boolExpr: indicates the expression to negate.
-     
-     - returns: A Not expression.
-     */
-    public init(boolExpr: Expr){
-        self.expr = boolExpr
-    }
+public func Not(boolExpr expr: Expr) -> Expr {
+    return Expr(fn(Obj(("not", expr.value))))
 }
-
-extension Not: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["not": expr.toJSON()]
-    }
-}
-
 
 

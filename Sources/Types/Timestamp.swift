@@ -2,21 +2,16 @@
 //  Timestamp.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/8/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
 public typealias Timestamp = NSDate
 
-extension Timestamp: ScalarType {}
+extension Timestamp: ScalarValue {}
 
-extension Timestamp: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["@ts": ISO8601]
-    }
+extension Timestamp {
     
     public convenience init?(iso8601: String){
         let dateFormatter = NSDateFormatter()
@@ -40,6 +35,15 @@ extension Timestamp: Encodable {
         self.init(iso8601:date)
     }
     
+}
+
+extension Timestamp: Encodable {
+    
+    //MARK: Encodable
+    
+    public func toJSON() -> AnyObject {
+        return ["@ts": ISO8601]
+    }
 }
 
 extension Timestamp {

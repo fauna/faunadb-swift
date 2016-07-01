@@ -40,28 +40,13 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
     }
 }
 
-extension Expr {
+extension ValueConvertible {
     
     var jsonString: String {
-        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
+        let data = try! NSJSONSerialization.dataWithJSONObject(self.toJSON(), options: [])
         return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
     }
 }
-
-//extension ValueConvertible {
-//    var jsonString: String {
-//        let data = try! NSJSONSerialization.dataWithJSONObject(value.toJSON(), options: [])
-//        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
-//    }
-//}
-
-//extension Lambda {
-//    
-//    var jsonString: String {
-//        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
-//        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
-//    }
-//}
 
 extension Mapper {
     static func fromString(strData: String) throws -> Value {

@@ -2,15 +2,14 @@
 //  Date.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/8/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
 public typealias Date = NSDateComponents
 
-extension Date: ScalarType {
+extension Date: ScalarValue {
     
     public convenience init(day: Int, month: Int, year: Int){
         self.init()
@@ -40,6 +39,8 @@ extension Date: ScalarType {
 }
 
 extension Date: Encodable {
+    
+    //MARK: Encodable
     
     public func toJSON() -> AnyObject {
         let monthStr = month < 9 ? "0\(month)" : String(month)

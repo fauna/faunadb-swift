@@ -1,9 +1,8 @@
 //
-//  FieldPath.swift
+//  PathComponentType.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/7/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
@@ -78,7 +77,7 @@ extension String: PathComponentType {
         case let obj as Obj:
             guard let objValue = obj[self] else { throw FieldPathError.NotFound(value: v, path: [self]) }
             return objValue
-        case let valueConvertible as ValueConvertible:
+        case let valueConvertible as ValueConvertible where valueConvertible.value is Obj:
             return try subValue(valueConvertible.value)
         default:
             throw FieldPathError.UnexpectedType(value: v, expectedType: Obj.self, path: [self])
@@ -92,7 +91,7 @@ extension Int: PathComponentType {
         case let arr as Arr:
             guard arr.count > self  else { throw FieldPathError.NotFound(value: v, path: [self]) }
             return arr[self]
-        case let valueConvertible as ValueConvertible:
+        case let valueConvertible as ValueConvertible where valueConvertible.value is Arr:
             return try subValue(valueConvertible.value)
         default:
             throw FieldPathError.UnexpectedType(value: v, expectedType: Arr.self, path: [self])

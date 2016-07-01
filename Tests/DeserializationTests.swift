@@ -9,9 +9,7 @@
 import XCTest
 @testable import FaunaDB
 
-
 class DeserializationTests: FaunaDBTests {
-
     
     func testQueryResponse() {
         let toDeserialize =
@@ -26,8 +24,8 @@ class DeserializationTests: FaunaDBTests {
                           "class": Ref("classes/derp"),
                           "ts": Double(1432763268186882),
                           "data":["test": 1.0]]
-        let exprValue: ValueType = value
-        XCTAssertTrue(deseralizedValue.isEquals(exprValue))
+        let exprValue: ValueConvertible = value
+        XCTAssertTrue(deseralizedValue.isEquals(exprValue.value))
     }
 
    
@@ -44,7 +42,7 @@ class DeserializationTests: FaunaDBTests {
                      "class": Ref("classes/spells"),
                      "ts": Double(1424992618413105),
                      "data": ["refField": Ref("classes/spells/93044099909681152")]]
-        XCTAssert(deseralizedValue.isEquals(value))
+        XCTAssert(deseralizedValue.isEquals(value.value))
     }
 
     
@@ -61,7 +59,7 @@ class DeserializationTests: FaunaDBTests {
                           "class": Ref("classes/derp"),
                           "ts": Double(1433273471399755),
                           "data": ["test": ["field1": ["@name": "Test"]]]]
-        XCTAssert(deseralizedValue.isEquals(value))
+        XCTAssert(deseralizedValue.isEquals(value.value))
     }
 
     func testEmptyObject(){
@@ -98,15 +96,13 @@ class DeserializationTests: FaunaDBTests {
         XCTAssertNotNil(date)
         let arr: Arr = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
         let arr2: [Any] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
-        let arr3: [Expr] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
-        let arr4: Arr = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)] // same as [Value]
-        let arr5: [NSObject] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
-        let arr6: [AnyObject] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
+        let arr3: Arr = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)] // same as [Value]
+        let arr4: [NSObject] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
+        let arr5: [AnyObject] = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
         XCTAssert(deseralizedValue.isEquals(arr))
-        XCTAssert(deseralizedValue.isEquals(arr2))
+        XCTAssert(deseralizedValue.isEquals(arr2.value))
         XCTAssert(deseralizedValue.isEquals(arr3))
-        XCTAssert(deseralizedValue.isEquals(arr4))
-        XCTAssert(deseralizedValue.isEquals(arr5))
-        XCTAssert(deseralizedValue.isEquals(arr6))
+        XCTAssert(deseralizedValue.isEquals(arr4.value))
+        XCTAssert(deseralizedValue.isEquals(arr5.value))
     }
 }

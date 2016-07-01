@@ -11,7 +11,6 @@ import XCTest
 
 class FieldTests: FaunaDBTests {
 
-
     func testField() {
         
         let field = Field<Int>(0)

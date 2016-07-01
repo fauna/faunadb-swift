@@ -2,201 +2,109 @@
 //  WriteFunctions.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/15/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
-public enum Action: Expr {
-    case Create
-    case Delete
+public enum Action: String, ValueConvertible {
+    case Create = "create"
+    case Delete = "delete"
 }
 
-extension Action: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        switch self {
-        case .Create:
-            return "create"
-        case .Delete:
-            return "delete"
-        }
+extension Action {
+    public var value: Value {
+        return self.rawValue
     }
 }
+
 
 /**
- *  Creates an instance of a class.
- *
- *  [Create Reference](https://faunadb.com/documentation/queries#write_functions-create_class_ref_params_params_object)
+ * Creates an instance of the class referred to by ref, using params.
+ 
+ - parameter ref: Indicates the calss where the instance should be created.
+ - parameter params: data to create the instance.
+ 
+ - returns: A Create expression.
  */
-public struct Create: FunctionType {
-    let ref: Expr
-    let params: Expr
-    
-    /**
-     * Creates an instance of the class referred to by ref, using params.
-     
-     - parameter ref: Indicates the calss where the instance should be created.
-     - parameter params: data to create the instance.
-     
-     - returns: A Create expression.
-     */
-    public init(ref: Ref, params: Obj){
-        self.init(refExpr: ref, params: params)
-    }
-    
-    public init(refExpr: Expr, params: Expr){
-        self.ref = refExpr
-        self.params = params
-    }
+public func Create(ref ref: Ref, params: Obj) -> Expr{
+    return Expr(fn(Obj(("create", ref),("params", params))))
 }
 
-extension Create: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["create": ref.toJSON(),
-                "params": params.toJSON()]
-    }
+public func Create(ref ref: Ref, params: Expr) -> Expr{
+    return Expr(fn(Obj(("create", ref),("params", params.value))))
 }
+    
+public func Create(ref: Expr, params: Expr) -> Expr{
+    return Expr(fn(Obj(("create", ref.value),("params", params.value))))
+}
+
+    
+/**
+ Updates a resource ref. Updates are partial, and only modify values that are specified. Scalar values and arrays are replaced by newer versions, objects are merged, and null removes a value.
+ 
+ - parameter ref:    Indicates the instance to be updated.
+ - parameter params: data to update the instance. Notice that Obj are merged, and Null removes a value.
+ 
+ - returns: An Update expression.
+ */
+public func Update(ref ref: Ref, params: Obj) -> Expr{
+    return Expr(fn(Obj(("update", ref),("params", params))))
+}
+
+public func Update(ref: Expr, params: Expr) -> Expr{
+    return Expr(fn(Obj(("update", ref.value),("params", params.value))))
+}
+
+
+
+    
+/**
+ Replaces the resource ref using the provided params. Values not specified are removed.
+
+ 
+ - parameter ref:    Indicates the instance to be updated.
+ - parameter params: new instance data.
+ 
+ - returns: A Replace expression.
+ */
+public func Replace(ref ref: Ref, params: Obj) -> Expr{
+    return Expr(fn(Obj(("replace",ref),("params",params))))
+}
+    
+public func Replace(ref: Expr, params: Expr) -> Expr{
+    return Expr(fn(Obj(("replace",ref.value),("params",params.value))))
+}
+
+
 
 /**
- *  Updates a resource.
- *
- *  [Update Reference](https://faunadb.com/documentation/queries#write_functions-update_ref_params_object)
+ Removes a resource.
+ 
+ - parameter ref: Indicates the resource to remmove.
+ 
+ - returns: A Delete expression.
  */
-public struct Update: FunctionType {
-    let ref: Expr
-    let params: Expr
-    
-    /**
-     Updates a resource ref. Updates are partial, and only modify values that are specified. Scalar values and arrays are replaced by newer versions, objects are merged, and null removes a value.
-     
-     - parameter ref:    Indicates the instance to be updated.
-     - parameter params: data to update the instance. Notice that Obj are merged, and Null removes a value.
-     
-     - returns: An Update expression.
-     */
-    public init(ref: Ref, params: Obj){
-        self.ref = ref
-        self.params = params
-    }
-    
-    public init(refExpr: Expr, params: Expr){
-        self.ref = refExpr
-        self.params = params
-    }
+public func Delete(ref ref: Ref) -> Expr{
+    return Expr(fn(Obj(("delete",ref))))
 }
 
-extension Update: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["update": ref.toJSON(),
-                "params": params.toJSON()]
-    }
+public func Delete(refExpr: Expr) -> Expr{
+    return Expr(fn(Obj(("delete",refExpr.value))))
 }
 
-/**
- *  Replaces the resource ref using the provided params. Values not specified are removed.
- *
- *  [Replace Reference](https://faunadb.com/documentation/queries#write_functions-replace_ref_params_params_object)
- */
-public struct Replace: FunctionType {
-    let ref: Expr
-    let params: Expr
-    
-    /**
-     Replaces the resource ref using the provided params. Values not specified are removed.
-
-     
-     - parameter ref:    Indicates the instance to be updated.
-     - parameter params: new instance data.
-     
-     - returns: A Replace expression.
-     */
-    public init(ref: Ref, params: Obj){
-        self.init(refExpr: ref, params: params)
-    }
-    
-    public init(refExpr: Expr, params: Expr){
-        self.ref = refExpr
-        self.params = params
-    }
-}
-
-extension Replace: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["replace": ref.toJSON(),
-                "params": params.toJSON()]
-    }
-}
-
-/**
- *  Removes a resource.
- *
- *  [Delete Reference](https://faunadb.com/documentation/queries#write_functions-delete_ref)
- */
-public struct Delete: FunctionType {
-    
-    let ref: Expr
-    
-    /**
-     Removes a resource.
-     
-     - parameter ref: Indicates the resource to remmove.
-     
-     - returns: A Delete expression.
-     */
-    public init(ref: Ref){
-        self.init(refExpr: ref)
-    }
-    
-    public init(refExpr: Ref){
-        self.ref = refExpr
-    }
-}
-
-extension Delete: Encodable {
-    
-    public func toJSON() -> AnyObject {
-        return ["delete": ref.toJSON()]
-    }
-}
 
 /**
  *  Adds an event to an instance’s history. The ref must refer to an instance of a user-defined class or a key - all other refs result in an “invalid argument” error.
  *
  *  [Insert Reference](https://faunadb.com/documentation/queries#write_functions-insert_ref_ts_timestamp_action_create_delete_params_object)
  */
-public struct Insert: FunctionType {
-    let ref: Expr
-    let ts: Timestamp
-    let action: Action
-    let params: Expr
-    
-    public init(ref: Ref, ts: Timestamp, action: Action, params: Obj){
-        self.init(refExpr: ref, ts: ts, action: action, paramsExpr: params)
-    }
-    
-    public init(refExpr: Expr, ts: Timestamp, action: Action, paramsExpr: Expr){
-        self.ref = refExpr
-        self.ts = ts
-        self.action = action
-        self.params = paramsExpr
-    }
+public func Insert(ref ref: Ref, ts: Timestamp, action: Action, params: Obj) -> Expr{
+    return Expr(fn(Obj(("insert",ref),("ts", ts),("action", action.value),("params",params))))
 }
-
-
-extension Insert: Encodable {
     
-    public func toJSON() -> AnyObject {
-        return ["insert": ref.toJSON(),
-                "ts": ts.toJSON(),
-                "action": action.toJSON(),
-                "params": params.toJSON()
-        ]
-    }
+public func Insert(ref: Expr, ts: Expr, action: Expr, params: Expr) -> Expr{
+    return Expr(fn(Obj(("insert",ref.value),("ts", ts.value),("action", action.value),("params",params.value))))
 }
 
 /**
@@ -204,28 +112,10 @@ extension Insert: Encodable {
  *
  *  [Remove Reference](https://faunadb.com/documentation/queries#write_functions-remove_ref_ts_timestamp_action_create_delete)
  */
-public struct Remove: FunctionType {
-    let ref: Expr
-    let ts: Expr
-    let action: Expr
-    
-    public init(ref: Ref, ts: Timestamp, action: Action){
-        self.init(ref, ts: ts, action: action)
-    }
-    
-    public init(_ refExpr: Expr, ts: Expr, action: Expr){
-        self.ref = refExpr
-        self.ts = ts
-        self.action = action
-    }
+public func Remove(ref ref: Ref, ts: Timestamp, action: Action) -> Expr{
+    return Expr(fn(Obj(("remove",ref),("ts", ts),("action", action.value))))
 }
-
-
-extension Remove: Encodable {
     
-    public func toJSON() -> AnyObject {
-        return ["remove": ref.toJSON(),
-                "ts": ts.toJSON(),
-                "action": action.toJSON()]
-    }
+public func Remove(ref: Expr, ts: Expr, action: Expr) -> Expr{
+    return Expr(fn(Obj(("remove",ref.value),("ts", ts.value),("action", action.value))))
 }

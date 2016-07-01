@@ -1,17 +1,16 @@
 //
-//  ObjectValue.swift
+//  Obj.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/1/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
 public struct Obj: Value, DictionaryLiteralConvertible {
     
-    private var dictionary = [String: Value]()
-    
+    var fn = false
+    var dictionary = [String: Value]()
     
     public init(_ elements: [(String, Value)]){
         var dictionary = [String:Value]()
@@ -27,6 +26,12 @@ public struct Obj: Value, DictionaryLiteralConvertible {
     }
     
     public init(_ elements: (String, Value)...){
+        var dictionary = [String:Value]()
+        elements.forEach { dictionary[$0.0] = $0.1 }
+        self.dictionary = dictionary
+    }
+    
+    internal init(expr elements: (String, Value)...){
         var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
@@ -50,12 +55,17 @@ public struct Obj: Value, DictionaryLiteralConvertible {
 
 extension Obj: Encodable {
     
+    //MARK: Encodable
+    
     public func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
         for keyValue in dictionary{
             result[keyValue.0] = keyValue.1.toJSON()
         }
-        return ["object": result]
+        if !fn {
+            result = ["object": result]
+        }
+        return result
     }
 }
 
@@ -106,9 +116,7 @@ extension Obj: Equatable {}
 public func ==(lhs: Obj, rhs: Obj) -> Bool {
     guard lhs.count == rhs.count else { return false }
     for (key, value) in lhs {
-        guard let rValue = rhs[key] where value.isEquals(rValue) else {
-            return false
-        }
+        guard let rValue = rhs[key] where value.isEquals(rValue) else { return false }
     }
     return true
 }
@@ -117,8 +125,7 @@ extension Dictionary: ValueConvertible {
     
     public var value: FaunaDB.Value {
         let content: [(String, FaunaDB.Value)] =
-                    self
-                    .map { k, v in
+                    map { k, v in
                         let key = k as! String
                         let value = (v as? FaunaDB.Value) ?? (v as? ValueConvertible)?.value ?? (v as! NSObject).value()
                         return (key, value)

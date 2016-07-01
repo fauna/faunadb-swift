@@ -12,20 +12,6 @@ import Foundation
 import FaunaDB
 import Result
 
-
-[1,2,3] == [1,2]
-let nsObjectArray: [AnyObject]  = [2, "M"]
-let nsObjectArray2: [NSObject] = [3, "M"]
-
-//let intArray: [Value] = [2, 3]
-//
-//let a = intArray as? [Int]
-//
-//let nsObjectArray7 = a as? [NSObject]
-//nsObjectArray == nsObjectArray2
-
-
-
 func stringFormat(json: AnyObject) -> String{
     let jsonData = try! NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
     let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
@@ -35,12 +21,7 @@ func stringFormat(json: AnyObject) -> String{
 // ref
 
 let refValue = Ref.databases
-
-String(refValue)
-
-
 let anotherRefValue: Ref = "databases"
-
 
 // Null
 
@@ -51,30 +32,49 @@ let anotherNilValue = Null()
 // ArrayValue
 
 var array: Arr = [3, "Hola", 3.34, true, Double(3.34), refValue, anotherRefValue, nilValue, anotherNilValue]
-
 let arrayStr = String(array)
 
+// any array is a ValueConvertible so we can create a Value representation from it
+let anyArrayType: [Any] = [3, "Hola", 3.34, true, Double(3.34), refValue, anotherRefValue, nilValue, anotherNilValue]
 
+// we can compare it
+anyArrayType.value.isEquals(array)
+
+// another Collection type protocol extension addition.
 array.append("new scalar value")
 
-let nullArray = array.filter { $0 is Null }
+/// We can apply functional methods to Arr and Obj types since they conforms to CollectionType
+var nullArray = array.filter { $0 is Null }
 
-String(nullArray)
+/// replace an arr item using subscript
+nullArray[1] = "Hi"
 
+// another function
+nullArray.removeLast()
 
 let arrayOfArray: Arr = [array, array]
 
-String(arrayOfArray)
-
-
-// ObjectValue
-
+// creates an Obj from dictionary literal
 let objectValue: Obj = ["@name": "Hen Wen", "age": 110]
-String(objectValue)
-
-
 let objectValue2: Obj = ["@obj": objectValue]
-String(objectValue2)
+
+
+/// Values, we can use swift values
+let intValue: Value = 1
+let doubleValue: Value = 2.4
+let stringValue: Value = "string value"
+/// Timestamp is just a swift NSDate typealias
+let timeValue: Value = Timestamp()
+let timeValue2: Value = NSDate()
+/// Date is just a swift NSDateComponents typealias
+let dateVale:Value = Date(day: 18, month: 07, year: 1984)
+let dateVale2:Value = NSDateComponents(day: 18, month: 07, year: 1984)
+
+
+
+
+
+
 
 
 let clientConf = ClientConfiguration(secret: "")
@@ -148,8 +148,7 @@ mirror.superclassMirror()
 
 var result = [String]()
 
-for prop in mirror.children
-{
+for prop in mirror.children{
     prop
     if let name = prop.label
     {

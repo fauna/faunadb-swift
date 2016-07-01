@@ -9,7 +9,6 @@
 import XCTest
 @testable import FaunaDB
 
-
 class SerializationTests: FaunaDBTests {
 
     func testRef() {
@@ -72,7 +71,7 @@ class SerializationTests: FaunaDBTests {
         obj3["test2"] =  Ref("some/ref")
         XCTAssertEqual(obj3, obj2)
         
-        XCTAssertTrue(obj3.isEquals(obj))
+        XCTAssertTrue(obj3.isEquals(obj.value))
         
         // [String: NSObject]
         let obj4 = ["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)]
@@ -81,15 +80,13 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testArrWithObj() {
-        
-        let arr: Arr = [[["test":"value"], 2323, true], "hi", ["test": "yo","test2": nil as Null] as Obj]
+        let arr: Arr = [[["test":"value"] as Obj, 2323, true] as Arr, "hi", ["test": "yo","test2": nil as Null] as Obj]
         XCTAssertEqual(arr.jsonString, "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]")
     }
     
     func testLiteralValues() {
         
         // MARK: Literal Values
-        
         XCTAssertEqual(true.toJSON() as? Bool, true)
         XCTAssertEqual(false.toJSON() as? Bool, false)
         XCTAssertEqual("test".toJSON() as? String, "test")
@@ -143,16 +140,15 @@ class SerializationTests: FaunaDBTests {
         
         
         // MARK: If
-        
         let if1 = If(pred: true, then: "was true", else: "was false")
-        XCTAssertEqual(if1.jsonString, "{\"else\":\"was false\",\"if\":true,\"then\":\"was true\"}")
+        XCTAssertEqual(if1.jsonString,  "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")
         let if2 = If(pred: true, then: {
                                     return "was true"
                                  }(),
                                  else: {
                                     return "was false"
                                  }())
-        XCTAssertEqual(if2.jsonString, "{\"else\":\"was false\",\"if\":true,\"then\":\"was true\"}")
+        XCTAssertEqual(if2.jsonString, "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")
         
         //MARK: Do
         
@@ -258,8 +254,7 @@ class SerializationTests: FaunaDBTests {
         
          Var.resetIndex()
         let map = Map(arr: [1,2,3],
-                   lambda: Lambda(vars: "munchings", expr: Var("munchings")))
-        
+                      lambda: Lambda(vars: "munchings", expr: Expr(Var("munchings"))))
         XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}")
         
         Var.resetIndex()
@@ -285,18 +280,20 @@ class SerializationTests: FaunaDBTests {
         let foreach = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")],
                            lambda: Lambda(vars: "refData",
                                           expr: Create(ref: Ref("some/ref"),
-                                                    params: ["data": ["some": Var("refData")] as Obj] as Obj)))
+                                                    params: ["data": ["some": Expr(Var("refData"))]]
+                                    )))
         XCTAssertEqual(foreach.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}")
         
         Var.resetIndex()
         let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
-                            Create(ref: "some/ref", params: ["data": ["some": ref] as Obj])
+                            Create(ref: "some/ref", params: ["data": ["some": ref]])
                         }
         XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
         let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
-                            Create(ref: "some/ref", params: ["data": ["some": $0] as Obj])
+                            Create(ref: "some/ref",
+                                params: ["data": ["some": $0]])
                         }
         XCTAssertEqual(foreach3.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
         
@@ -321,35 +318,35 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Take
         
-        let take = Take(2, collection: [1, 2, 3])
+        let take = Take(count: 2, collection: [1, 2, 3])
         XCTAssertEqual(take.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
         
         
-        let take2 = Take(2, collection: [1, 2, 3] as [Int])
+        let take2 = Take(count: 2, collection: Expr([1, 2, 3]))
         XCTAssertEqual(take2.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
 
-        let take3 = Take(2, collection: [1, "Hi", 3])
+        let take3 = Take(count: 2, collection: [1, "Hi", 3])
         XCTAssertEqual(take3.jsonString, "{\"collection\":[1,\"Hi\",3],\"take\":2}")
         
         //MARK: Drop
         
-        let drop = Drop(2, collection: [1,2,3])
+        let drop = Drop(count: 2, collection: [1,2,3])
         XCTAssertEqual(drop.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
         
-        let drop2 = Drop(2, collection: [1, 2, 3] as [Int])
+        let drop2 = Drop(count: 2, collection: Expr([1, 2, 3] as [Int]))
         XCTAssertEqual(drop2.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
         
-        let drop3 = Drop(2, collection: [1, "Hi", 3])
+        let drop3 = Drop(count: 2, collection: [1, "Hi", 3])
         XCTAssertEqual(drop3.jsonString, "{\"collection\":[1,\"Hi\",3],\"drop\":2}")
         
         //MARK: Prepend
 
-        let prepend = Prepend([1,2,3], toCollection: [4,5,6])
+        let prepend = Prepend(elements: [1,2,3], toCollection: [4,5,6])
         XCTAssertEqual(prepend.jsonString, "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}")
     
         //MARK: Append
         
-        let append = Append([4,5,6], toCollection: [1,2,3])
+        let append = Append(elements: [4,5,6], toCollection: [1,2,3])
         XCTAssertEqual(append.jsonString, "{\"collection\":[4,5,6],\"append\":[1,2,3]}")
     }
     
@@ -414,13 +411,13 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Difference
         
-        let difference = Difference(source: Match(index: "indexes/spells_by_element", terms: "fire"),
-                                      sets: Match(index: "indexes/spells_by_element", terms: "water"))
+        let difference = Difference(sets: Match(index: "indexes/spells_by_element", terms: "fire"),
+                                          Match(index: "indexes/spells_by_element", terms: "water"))
         XCTAssertEqual(difference.jsonString, "{\"difference\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}")
         
         //MARK: Join
         
-        let lambda_ = Lambda { (value: Value) -> Expr in return  Get(value) }
+        let lambda_ = Lambda { value in return  Get(value) }
         
         let join = Join(sourceSet: Match(index: Ref("indexes/spells_by_element"),
                                             terms: "fire"),
@@ -431,7 +428,7 @@ class SerializationTests: FaunaDBTests {
     
     func testMiscellaneousFunctions(){
         
-        let equals = Equals(terms: 2, 2, Var("v2"))
+        let equals = Equals(terms: 2, 2, Expr(Var("v2")))
         XCTAssertEqual(equals.jsonString, "{\"equals\":[2,2,{\"var\":\"v2\"}]}")
         
         let equals2 = Equals(terms: Match(index: "indexes/spells_by_element", terms: "fire"))
@@ -441,9 +438,9 @@ class SerializationTests: FaunaDBTests {
             ["foods":
                 ["crunchings",
                     "munchings",
-                    "lunchings"] as Arr
-                ] as Obj
-            ] as Obj)
+                    "lunchings"]
+                ]
+            ])
         
         XCTAssertEqual(contains.jsonString, "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
         
@@ -452,9 +449,9 @@ class SerializationTests: FaunaDBTests {
             ["foods":
                 ["crunchings",
                     "munchings",
-                    "lunchings"] as Arr
-                ] as Obj
-            ] as Obj)
+                    "lunchings"]
+                ]
+            ])
         
         XCTAssertEqual(contains2.jsonString, "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
         
@@ -465,9 +462,9 @@ class SerializationTests: FaunaDBTests {
                 ["foods":
                     ["crunchings",
                         "munchings",
-                        "lunchings"] as Arr
-                    ] as Obj
-                ] as Obj)
+                        "lunchings"]
+                    ]
+                ])
         XCTAssertEqual(select.jsonString, "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
     }
     

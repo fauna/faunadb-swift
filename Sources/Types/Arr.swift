@@ -1,9 +1,8 @@
 //
-//  ArrayExpr.swift
+//  Arr.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/2/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
@@ -14,22 +13,12 @@ public struct Arr: Value, ArrayLiteralConvertible {
     
     public init(){}
     
-    public init(_ elements: ValueType...){
-        array = elements.map { valueType in
-            
-            let valueT = (valueType as? ValueConvertible)?.value
-            let vT = valueType as? Value
-            return valueT ?? vT!
-        }
+    public init(_ elements: Value...){
+        array = elements
     }
     
-    public init(arrayLiteral elements: ValueType...){
-        array = elements.map { valueType in
-            
-            let valueT = (valueType as? ValueConvertible)?.value
-            let vT = valueType as? Value
-            return valueT ?? vT!
-        }
+    public init(arrayLiteral elements: Value...){
+        array = elements
     }
     
     init?(json: [AnyObject]) {
@@ -39,6 +28,8 @@ public struct Arr: Value, ArrayLiteralConvertible {
 }
 
 extension Arr: Encodable {
+    
+    //MARK: Encodable
     
     public func toJSON() -> AnyObject {
         return array.map { $0.toJSON() }
@@ -120,50 +111,4 @@ extension Array: ValueConvertible {
 
 
 
-// Helper
 
-extension NSObject {
-    
-    func value() -> Value {
-        switch  self {
-        case let str as NSString:
-            return str as String
-        case let int as NSNumber:
-            if int.isDoubleNumber() {
-                return int as Double
-            }
-            else if int.isBoolNumber() {
-                return int as Bool
-            }
-            else {
-                return int as Int
-            }
-        case let date as NSDate:
-            return date
-        case let dateComponents as NSDateComponents:
-            return dateComponents
-        case let nsArray as NSArray:
-            var result: Arr = []
-            for item in nsArray {
-                result.append((item as! NSObject).value())
-            }
-            return result
-        case let nsDictionary as NSDictionary:
-            var result: Obj = [:]
-            for item in nsDictionary {
-                result[item.key as! String] = (item.value as! NSObject).value()
-            }
-            return result
-        default:
-            assertionFailure()
-            return ""
-        }
-    }
-}
-
-//extension Array {
-//
-//    internal static func deserialize()-> [Value] {
-//        return try! self.map({ return try Mapper.fromData($0) })
-//    }
-//}

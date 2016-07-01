@@ -1,9 +1,8 @@
 //
-//  ClientError.swift
+//  Error.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 5/31/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
@@ -17,6 +16,7 @@ public enum Error: ErrorType {
     case InternalException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case NetworkException(response: NSURLResponse?, error: NSError?, msg: String?)
     case DecodeException(data: AnyObject)
+    case EncodeException(data: AnyObject)
 }
 
 
@@ -40,9 +40,11 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
             return getDesc(response, errors: [], msg: msg, error: error)
         case .DecodeException(let data):
             return "Cannot decode json object: \(data)"
+        case .EncodeException(let data):
+            return "Cannot endode json object: \(data)"
         }
     }
-    
+
     public var debugDescription: String {
         return description
     }
