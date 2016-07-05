@@ -14,9 +14,7 @@ import RxCocoa
 
 
 var faunaClient: Client = {
-    let client = Client(configuration: ClientConfiguration(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"))
-    client.observers = [Logger()]
-    return client
+    return Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
 }()
 
 

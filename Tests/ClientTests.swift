@@ -15,9 +15,7 @@ import Result
 class ClientTests: FaunaDBTests {
     
     lazy var client: Client = {
-        let result = Client(configuration: ClientConfiguration(secret: FaunaDBTests.secret))
-        result.observers = [Logger()]
-        return result
+        return Client(secret: FaunaDBTests.secret)
     }()
     
     let testDbName = "faunadb-swift-test-\(arc4random())"
@@ -35,7 +33,7 @@ class ClientTests: FaunaDBTests {
             dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
             self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
                 let sec: String = try! result.dematerialize().get("secret")
-                self?.client = Client(configuration: ClientConfiguration(secret: sec))
+                self?.client = Client(secret: sec)
                 secret = sec
             }
         }

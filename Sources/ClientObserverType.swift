@@ -16,7 +16,11 @@ public protocol ClientObserverType {
 
 public struct Logger: ClientObserverType {
     
-    public init() {}
+    let hideSecret: Bool
+    
+    public init(hideSecret: Bool = true) {
+        self.hideSecret = hideSecret
+    }
     
     public func willSendRequest(request: NSURLRequest, session: NSURLSession){
         print(request.cURLRepresentation(session))

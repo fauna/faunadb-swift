@@ -27,7 +27,6 @@
 		28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
 		28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
 		28DCFF371CFE050E00A813D3 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
-		28DCFF391CFE063800A813D3 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */; };
 		28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
 		28DCFF441CFE40B600A813D3 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
 		28DCFF471CFF906200A813D3 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF461CFF906200A813D3 /* Ref.swift */; };
@@ -281,7 +280,6 @@
 		288F0F771D0FA41D00079435 /* SetFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetFunctions.swift; path = Query/SetFunctions.swift; sourceTree = "<group>"; };
 		28A1B1AD1D25C616006AA400 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		28DCFF361CFE050E00A813D3 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
-		28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
 		28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientConfigurationTests.swift; path = Tests/ClientConfigurationTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTests.swift; path = Tests/ClientTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF411CFE3B3400A813D3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -500,7 +498,6 @@
 				28DCFF4E1CFF90D800A813D3 /* Query */,
 				28DCFF451CFF903C00A813D3 /* Types */,
 				28DCFF361CFE050E00A813D3 /* Client.swift */,
-				28DCFF381CFE063800A813D3 /* ClientConfiguration.swift */,
 				28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */,
 				28DCFF411CFE3B3400A813D3 /* Error.swift */,
 			);
@@ -877,7 +874,6 @@
 				28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */,
 				28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */,
 				2886147C1D0F6E50007FB922 /* MiscFuntions.swift in Sources */,
-				28DCFF391CFE063800A813D3 /* ClientConfiguration.swift in Sources */,
 				28F99CAF1D10C5AA0016F809 /* SyntacticSugars.swift in Sources */,
 				28F99CAB1D10655E0016F809 /* BasicForms.swift in Sources */,
 				28DCFF371CFE050E00A813D3 /* Client.swift in Sources */,

@@ -44,7 +44,7 @@ class SetUpFaunaController: UIViewController {
                 }
                 .mapWithField(["secret"])
                 .doOnNext { (secret: String) in
-                    faunaClient = Client(configuration: ClientConfiguration(secret: secret))
+                    faunaClient = Client(secret: secret, observers: [Logger()])
                 }
                 .flatMap { _ in
                     return Create(ref: Ref.classes, params: ["name": "posts"]).rx_query()
@@ -65,7 +65,7 @@ class SetUpFaunaController: UIViewController {
         return Create(ref: Ref.keys, params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
             .mapWithField(["secret"])
             .doOnNext { (secret: String) in
-                faunaClient = Client(configuration: ClientConfiguration(secret: secret))
+                faunaClient = Client(secret: secret)
             }
             .map { $0 as Value}
     }
@@ -73,7 +73,6 @@ class SetUpFaunaController: UIViewController {
     func createInstances(create: Bool) -> Observable<Value> {
         if (create){
             return
-                
                 (1...100).map { int in
                     return BlogPost(name: "Blog Post \(int)", author: "Martin B",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
                     }.mapFauna { blogValue in

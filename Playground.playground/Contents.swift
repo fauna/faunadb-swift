@@ -144,8 +144,6 @@ mirror.subjectType
 
 mirror.superclassMirror()
 
-
-
 var result = [String]()
 
 for prop in mirror.children{

@@ -8,15 +8,14 @@
 import Foundation
 
 public enum Error: ErrorType {
-    case UnavailableException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
+    case UnavailableException(response: NSURLResponse?, errors:[ErrorResponse])
     case BadRequestException(response: NSURLResponse?, errors:[ErrorResponse])
-    case NotFoundException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
-    case UnauthorizedException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
+    case NotFoundException(response: NSURLResponse?, errors:[ErrorResponse])
+    case UnauthorizedException(response: NSURLResponse?, errors:[ErrorResponse])
     case UnknownException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case InternalException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case NetworkException(response: NSURLResponse?, error: NSError?, msg: String?)
-    case DecodeException(data: AnyObject)
-    case EncodeException(data: AnyObject)
+    case DriverException(data: Any?, msg: String?)
 }
 
 
@@ -24,24 +23,22 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
     
     public var description: String {
         switch self {
-        case .UnavailableException(let response, let errors, let msg):
-            return getDesc(response, errors: errors, msg: msg)
+        case .UnavailableException(let response, let errors):
+            return getDesc(response, errors: errors)
         case .BadRequestException(let response, let errors):
-            return getDesc(response, errors: errors, msg: nil)
-        case .NotFoundException(let response, let errors, let msg):
-            return getDesc(response, errors: errors, msg: msg)
-        case .UnauthorizedException(let response, let errors, let msg):
-            return getDesc(response, errors: errors, msg: msg)
+            return getDesc(response, errors: errors)
+        case .NotFoundException(let response, let errors):
+            return getDesc(response, errors: errors)
+        case .UnauthorizedException(let response, let errors):
+            return getDesc(response, errors: errors)
         case .UnknownException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
         case .InternalException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
         case .NetworkException(let response, let error, let msg):
-            return getDesc(response, errors: [], msg: msg, error: error)
-        case .DecodeException(let data):
-            return "Cannot decode json object: \(data)"
-        case .EncodeException(let data):
-            return "Cannot endode json object: \(data)"
+            return getDesc(response, msg: msg, error: error)
+        case .DriverException(_, let msg):
+            return getDesc(nil, msg: msg)
         }
     }
 
@@ -49,10 +46,10 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         return description
     }
     
-    private func getDesc(response: NSURLResponse?, errors: [ErrorResponse], msg: String?, error: NSError? = nil) -> String{
+    private func getDesc(response: NSURLResponse?, errors: [ErrorResponse] = [], msg: String? = nil, error: NSError? = nil) -> String{
         var result = [String]()
+        _ = msg.map { result.append("Error: \($0)") }
         _ = response.map { result.append("Response: " + $0.description) }
-        _ = msg.map { result.append("Message: \($0)") }
         if errors.count > 0 {
             result.append("Errors:")
             errors.forEach { result.append( $0.description ) }

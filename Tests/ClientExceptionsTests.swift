@@ -14,9 +14,7 @@ import Result
 class ClientExceptionsTests: FaunaDBTests {
     
     lazy var client: Client = {
-        let result = Client(configuration: ClientConfiguration(secret: FaunaDBTests.secret))
-        result.observers = [Logger()]
-        return result
+        return Client(secret: FaunaDBTests.secret)
     }()
     
     let testDbName = "faunadb-swift-test-\(arc4random())"
@@ -35,7 +33,7 @@ class ClientExceptionsTests: FaunaDBTests {
             dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
             self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
                 let sec: String = try! result.dematerialize().get("secret")
-                self?.client = Client(configuration: ClientConfiguration(secret: sec))
+                self?.client = Client(secret: sec)
                 secret = sec
             }
         }
@@ -71,7 +69,7 @@ class ClientExceptionsTests: FaunaDBTests {
         
         waitUntil(timeout: 3) {[weak self] done in
             self?.client.query(Get(ref: "classes/spells/1234")) { result in
-                guard case let .Failure(queryError) = result, case .NotFoundException(response: _, errors: _, msg: _) = queryError else {
+                guard case let .Failure(queryError) = result, case .NotFoundException(response: _, errors: _) = queryError else {
                     fail()
                     done()
                     return
@@ -82,7 +80,7 @@ class ClientExceptionsTests: FaunaDBTests {
     }
     
     func testUnauthorized(){
-        let badClient = Client(configuration: ClientConfiguration(secret: "notavalidsecret"))
+        let badClient = Client(secret: "notavalidsecret")
         waitUntil(timeout: 3) { done in
             badClient.query(Get(ref: "classes/spells/1234")) { result in
                 guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _, msg: _) = queryError else {
