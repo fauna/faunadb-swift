@@ -11,6 +11,9 @@
 		287D0A721C4B7877004566D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A711C4B7877004566D6 /* ExampleUITests.swift */; };
 		287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; };
 		287D0A7E1C4B7B55004566D6 /* FaunaDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */; };
+		28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DE1D2AC3B000FD948F /* Helpers.swift */; };
+		28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B4E6E21D2B033200FD948F /* RxCocoa.framework */; };
 		28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828CF1C4B714D00330CF4 /* AppDelegate.swift */; };
 		28F828D21C4B714D00330CF4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828D11C4B714D00330CF4 /* ViewController.swift */; };
 		28F828D51C4B714D00330CF4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28F828D31C4B714D00330CF4 /* Main.storyboard */; };
@@ -74,6 +77,9 @@
 		28773DCC1D09DF95003CE59C /* RxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxViewController.swift; path = Example/RxViewController.swift; sourceTree = "<group>"; };
 		287D0A711C4B7877004566D6 /* ExampleUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExampleUITests.swift; path = Example/ExampleUITests/ExampleUITests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = FaunaDB.xcodeproj; sourceTree = "<group>"; };
+		28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaginationViewModel.swift; path = Example/Helpers/PaginationViewModel.swift; sourceTree = "<group>"; };
+		28B4E6DE1D2AC3B000FD948F /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = Example/Helpers/Helpers.swift; sourceTree = "<group>"; };
+		28B4E6E21D2B033200FD948F /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		28F828CC1C4B714D00330CF4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828CF1C4B714D00330CF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Example/AppDelegate.swift; sourceTree = "<group>"; };
 		28F828D11C4B714D00330CF4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Example/ViewController.swift; sourceTree = "<group>"; };
@@ -90,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */,
 				287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,9 +121,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		28B4E6D91D2ABDCF00FD948F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */,
+				28B4E6DE1D2AC3B000FD948F /* Helpers.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		28B4E6E11D2B031D00FD948F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28B4E6E21D2B033200FD948F /* RxCocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		28F828C31C4B714D00330CF4 = {
 			isa = PBXGroup;
 			children = (
+				28B4E6E11D2B031D00FD948F /* Frameworks */,
 				28F828CE1C4B714D00330CF4 /* Example */,
 				28F828E31C4B714D00330CF4 /* ExampleUITests */,
 				28F828CD1C4B714D00330CF4 /* Products */,
@@ -136,6 +161,7 @@
 		28F828CE1C4B714D00330CF4 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				28B4E6D91D2ABDCF00FD948F /* Helpers */,
 				28F828CF1C4B714D00330CF4 /* AppDelegate.swift */,
 				28F828D11C4B714D00330CF4 /* ViewController.swift */,
 				28773DCC1D09DF95003CE59C /* RxViewController.swift */,
@@ -290,6 +316,8 @@
 			files = (
 				28F828D21C4B714D00330CF4 /* ViewController.swift in Sources */,
 				28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */,
+				28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */,
+				28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */,
 				28773DCD1D09DF95003CE59C /* RxViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +453,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.Example;
@@ -437,6 +469,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.Example;

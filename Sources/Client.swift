@@ -114,7 +114,7 @@ extension Client {
             }    
             switch httpResponse.statusCode {
             case 400:
-                throw Error.BadRequestException(response: response, errors: errors, msg: nil)
+                throw Error.BadRequestException(response: response, errors: errors)
             case 401:
                 throw Error.UnauthorizedException(response: response, errors: errors, msg: nil)
             case 404:

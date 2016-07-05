@@ -10,79 +10,149 @@ import Foundation
 import FaunaDB
 import RxFaunaDB
 import RxSwift
+import RxCocoa
+
+
+var faunaClient: Client = {
+    let client = Client(configuration: ClientConfiguration(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"))
+    client.observers = [Logger()]
+    return client
+}()
+
+
 
 struct BlogPost {
     let name: String
     let author: String
     let content: String
+    let tags: [String]
+    
+    init(name:String, author: String, content: String){
+        self.name = name
+        self.author = author
+        self.content = content
+        self.tags = []
+    }
+    
+    init(name:String, author: String, content: String, tags: [String]){
+        self.name = name
+        self.author = author
+        self.content = content
+        self.tags = tags
+    }
+    
+    var fId: String?
 }
 
-
 extension BlogPost: FaunaModel {
+
     
     var value: Value {
-        let data = ["name": name, "author": author, "content": content]
+        let data: [String: Any] = ["name": name, "author": author, "content": content, "tags": tags]
         return data.value
+    }
+    
+    static var classRef: Ref { return "classes/posts" }
+    
+    init(data: Arr) {
+        // 0 is ts
+        self.name = try! data.get(1)
+        self.author = try! data.get(2)
+        self.content = try! data.get(3)
+        let arrTags: Arr? = data.get(4)
+        self.tags = arrTags?.map { $0 as! String } ?? []
     }
 }
 
-public protocol FaunaModel: ValueConvertible {
-
-}
 
 class RxViewController: UIViewController {
     
-    let disposeBag = DisposeBag()
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    let refreshControl = UIRefreshControl()
     
-    lazy var client: Client = {
-        let client = Client(configuration: ClientConfiguration(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"))
-        client.observers = [Logger()]
-        return client
+    private lazy var emptyStateLabel: UILabel = {
+        let emptyStateLabel = UILabel()
+        emptyStateLabel.text = "No blog posts"
+        emptyStateLabel.textAlignment = .Center
+        return emptyStateLabel
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setUpSchema(true).flatMap { _ -> Observable<Value> in
-            return self.createInstances(true)
-        }
-        .subscribe()
-        .addDisposableTo(disposeBag)
+    let disposeBag = DisposeBag()
+    
+    lazy var viewModel: PaginationViewModel<PaginationRequest<BlogPost>> = { [unowned self] in
+        return PaginationViewModel(paginationRequest: PaginationRequest(paginate: Paginate<BlogPost>(
+                                                        match: Match(index: "indexes/posts_by_tags_with_title", terms: "travel"),
+                                                        cursor: nil)))
+        }()
+    
+    override func viewDidLoad() {        
+        tableView.backgroundView = emptyStateLabel
+        tableView.keyboardDismissMode = .OnDrag
+        tableView.addSubview(self.refreshControl)
+        emptyStateLabel.text = "No blog post found"
+        
+        
+        segmentedControl.rx_valueChanged
+            .map { [weak self] in
+                return Match(index: Ref("indexes/posts_by_tags_with_title"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel") }
+            .bindTo(viewModel.matchTrigger)
+            .addDisposableTo(disposeBag)
+        
+        
+        rx_sentMessage(#selector(RxViewController.viewWillAppear(_:)))
+            .map { _ in false }
+            .bindTo(viewModel.refreshTrigger)
+            .addDisposableTo(disposeBag)
+        
+        tableView.rx_reachedBottom
+            .bindTo(viewModel.loadNextPageTrigger)
+            .addDisposableTo(disposeBag)
+
+        viewModel.loading
+            .drive(activityIndicator.rx_animating)
+            .addDisposableTo(disposeBag)
+
+        Driver.combineLatest(viewModel.elements.asDriver(), viewModel.firstPageLoading) { elements, loading in return loading ? [] : elements }
+            .asDriver()
+            .drive(tableView.rx_itemsWithCellIdentifier("Cell")) { _, blogPost, cell in
+                cell.textLabel?.text = blogPost.name
+                cell.detailTextLabel?.text = "\(blogPost.tags.joinWithSeparator(",")) - \(blogPost.author)"
+            }
+            .addDisposableTo(disposeBag)
+        
+        
+        
+        refreshControl.rx_valueChanged
+            .filter {
+                return self.refreshControl.refreshing
+            }
+            .bindTo(viewModel.pullToRefreshTrigger)
+            .addDisposableTo(disposeBag)
+
+
+        
+        viewModel.loading
+            .filter { !$0 && self.refreshControl.refreshing }
+            .driveNext { _ in
+                self.refreshControl.endRefreshing()
+            }
+            .addDisposableTo(disposeBag)
+
+        viewModel.loading
+            .filter { !$0 && self.refreshControl.refreshing }
+            .driveNext { _ in self.refreshControl.endRefreshing() }
+            .addDisposableTo(disposeBag)
+        
+        viewModel.emptyState
+            .driveNext { [weak self] emptyState in self?.emptyStateLabel.hidden = !emptyState }
+            .addDisposableTo(disposeBag)
+
     }
     
 }
 
-extension RxViewController{
-    
-    func setUpSchema(setUp: Bool) -> Observable<Value> {
-        if setUp {
-            let db_name = "app_db_\(arc4random())"
-            return client.rx_query(Create(ref: Ref.databases, params: ["name": db_name]))
-                .flatMap { _ -> Observable<Value> in
-                    return self.client.rx_query(Create(ref: Ref.keys, params: ["database": Ref("databases/\(db_name)"), "role": "server"]))
-                }
-                .mapWithField(["secret"])
-                .doOnNext { (secret: String) in
-                    self.client = Client(configuration: ClientConfiguration(secret: secret))
-                }
-                .flatMap { _ -> Observable<Value> in
-                    return self.client.rx_query(Create(ref: Ref.classes, params: ["name":"posts"]))
-                }
-        }
-        return Observable.just(Null())
-    }
-    
-    func createInstances(create: Bool) -> Observable<Value> {
-        
-        if (create){
-            return self.client.rx_query(
-                (1...100).map { int in
-                    return BlogPost(name: "Blog Post \(int.value)", author: "Martin B",  content: "content")
-                    }.mapFauna { blogValue in
-                        Create(ref: "classes/posts", params: ["data": blogValue])
-                })
-        }
-        return Observable.just(Null())
-    }
-}
+
 
 

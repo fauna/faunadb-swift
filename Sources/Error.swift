@@ -9,7 +9,7 @@ import Foundation
 
 public enum Error: ErrorType {
     case UnavailableException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
-    case BadRequestException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
+    case BadRequestException(response: NSURLResponse?, errors:[ErrorResponse])
     case NotFoundException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case UnauthorizedException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case UnknownException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
@@ -26,8 +26,8 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         switch self {
         case .UnavailableException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
-        case .BadRequestException(let response, let errors, let msg):
-            return getDesc(response, errors: errors, msg: msg)
+        case .BadRequestException(let response, let errors):
+            return getDesc(response, errors: errors, msg: nil)
         case .NotFoundException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
         case .UnauthorizedException(let response, let errors, let msg):

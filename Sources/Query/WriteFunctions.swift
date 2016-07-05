@@ -31,9 +31,6 @@ public func Create(ref ref: Ref, params: Obj) -> Expr{
     return Expr(fn(Obj(("create", ref),("params", params))))
 }
 
-public func Create(ref ref: Ref, params: Expr) -> Expr{
-    return Expr(fn(Obj(("create", ref),("params", params.value))))
-}
     
 public func Create(ref: Expr, params: Expr) -> Expr{
     return Expr(fn(Obj(("create", ref.value),("params", params.value))))
@@ -89,8 +86,8 @@ public func Delete(ref ref: Ref) -> Expr{
     return Expr(fn(Obj(("delete",ref))))
 }
 
-public func Delete(refExpr: Expr) -> Expr{
-    return Expr(fn(Obj(("delete",refExpr.value))))
+public func Delete(ref: Expr) -> Expr{
+    return Expr(fn(Obj(("delete",ref.value))))
 }
 
 
