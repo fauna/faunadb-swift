@@ -28,14 +28,16 @@ public struct Logger: ClientObserverType {
     
     public func didReceiveResponse(response: NSURLResponse?, data: NSData?, error: NSError?, request: NSURLRequest?) {
         if let error = error {
-            print("ERROR ====>: \(error)")
+            print("\nRESPONSE ERROR: \(error)")
         }
+        print("\nRESPONSE STATUS: \((response as! NSHTTPURLResponse).statusCode)")
         if let data = data {
-                let jsonData = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-                print("\nRESPONSE Status: \((response as! NSHTTPURLResponse).statusCode)  \n\(jsonData)")
+            print("\nRESPONSE DATA:")
+            let jsonData = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            print("\n\(jsonData)")
         }
         else {
-             print("No RESPONSE DATA")
+            print("\nNO RESPONSE DATA")
         }
     }
 }
@@ -43,7 +45,7 @@ public struct Logger: ClientObserverType {
 extension NSURLRequest {
     
     func cURLRepresentation(session: NSURLSession) -> String {
-        var components = ["$ curl -i"]
+        var components = ["\n$ curl -i"]
         
         guard let
             URL = URL,
@@ -97,7 +99,7 @@ extension NSURLRequest {
         }
         
         for (field, value) in headers {
-            components.append("-H \"\(field): \(value)\"")
+            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field ? value : "Basic <hidden>")\"")
         }
         
         if let

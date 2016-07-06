@@ -8,17 +8,17 @@
 import Foundation
 import Result
 
-public final class Client {
+enum ClientHeaders: String {
+    case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON"
+    case Authorization = "Authorization"
+}
 
-    private enum ClientHeaders: String {
-        case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON"
-        case Authorization = "Authorization"
-    }
+public final class Client {
     public let session: NSURLSession
     public let faunaRoot: NSURL
     public let secret: String
     
-    private let observers = [ClientObserverType]()
+    private let observers: [ClientObserverType]
     private var authHeader: String
     
     public init(secret:String,
@@ -26,6 +26,7 @@ public final class Client {
                 timeoutInterval: NSTimeInterval = 60, observers: [ClientObserverType] = []){
         self.faunaRoot = faunaRoot
         self.secret = secret
+        self.observers = observers
         authHeader = Client.authHeaderValue(secret)
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         sessionConfig.timeoutIntervalForRequest = timeoutInterval

@@ -17,7 +17,6 @@ public struct Obj: Value, DictionaryLiteralConvertible {
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
     }
-
     
     public init(dictionaryLiteral elements: (String, Value)...){
         var dictionary = [String: Value]()
@@ -26,12 +25,6 @@ public struct Obj: Value, DictionaryLiteralConvertible {
     }
     
     public init(_ elements: (String, Value)...){
-        var dictionary = [String:Value]()
-        elements.forEach { dictionary[$0.0] = $0.1 }
-        self.dictionary = dictionary
-    }
-    
-    internal init(expr elements: (String, Value)...){
         var dictionary = [String:Value]()
         elements.forEach { dictionary[$0.0] = $0.1 }
         self.dictionary = dictionary
