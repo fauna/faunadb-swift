@@ -31,6 +31,11 @@ public func Create(ref ref: Ref, params: Obj) -> Expr{
     return Expr(fn(Obj(("create", ref),("params", params))))
 }
 
+public func Create(ref ref: Ref, params: Expr) -> Expr{
+    return Expr(fn(Obj(("create", ref),("params", params.value))))
+}
+
+
     
 public func Create(ref: Expr, params: Expr) -> Expr{
     return Expr(fn(Obj(("create", ref.value),("params", params.value))))
@@ -48,6 +53,11 @@ public func Create(ref: Expr, params: Expr) -> Expr{
 public func Update(ref ref: Ref, params: Obj) -> Expr{
     return Expr(fn(Obj(("update", ref),("params", params))))
 }
+
+public func Update(ref ref: Ref, params: Expr) -> Expr{
+    return Expr(fn(Obj(("update", ref),("params", params.value))))
+}
+
 
 public func Update(ref: Expr, params: Expr) -> Expr{
     return Expr(fn(Obj(("update", ref.value),("params", params.value))))

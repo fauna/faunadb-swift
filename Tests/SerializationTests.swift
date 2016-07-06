@@ -152,7 +152,7 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Do
         
-        let doForm = Do(exprs: Create(ref: "some/ref/1", params: ["data": ["name": "Hen Wen"] as Obj] as Obj),
+        let doForm = Do(exprs: Create(ref: "some/ref/1", params: ["data": ["name": "Hen Wen"]]),
                                Get(ref: "some/ref/1"))
         XCTAssertEqual(doForm.jsonString, "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}")
         
@@ -187,7 +187,7 @@ class SerializationTests: FaunaDBTests {
         //MARK: Update
         
         let update = Update(ref: "classes/spells/123456",
-                         params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+                         params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
         XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
         //MARK: Replace
@@ -286,7 +286,7 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
-                            Create(ref: "some/ref", params: ["data": ["some": ref]])
+            Create(ref: "some/ref", params: ["data": ["some": ref]])
                         }
         XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
         

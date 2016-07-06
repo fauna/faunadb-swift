@@ -83,7 +83,7 @@ class ClientExceptionsTests: FaunaDBTests {
         let badClient = Client(secret: "notavalidsecret")
         waitUntil(timeout: 3) { done in
             badClient.query(Get(ref: "classes/spells/1234")) { result in
-                guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _, msg: _) = queryError else {
+                guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _) = queryError else {
                     fail()
                     done()
                     return
