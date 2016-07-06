@@ -64,6 +64,18 @@ extension Client {
             }
         }
     }
+    
+    public func query(@autoclosure expr: (()-> ValueConvertible), failure: (FaunaDB.Error) -> Void, success: (Value) -> Void) -> NSURLSessionDataTask {
+        let task = query(expr) { (result: Result<Value, FaunaDB.Error>) in
+            switch result {
+            case .Failure(let error):
+                failure(error)
+            case .Success(let value):
+                success(value)
+            }
+        }
+        return task
+    }
 }
 
 extension Client {

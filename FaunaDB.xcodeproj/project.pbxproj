@@ -16,6 +16,7 @@
 		283EB4F21D26FBC500E59EBA /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
+		287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */; };
 		28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
 		288614181D0AF605007FB922 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; };
 		288614191D0AF605007FB922 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; };
@@ -271,6 +272,7 @@
 		287AB3671D0766970002B487 /* FieldType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldType.swift; path = Types/FieldType.swift; sourceTree = "<group>"; };
 		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; };
+		287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		28858D2A1D11C49400532DE7 /* WriteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WriteFunctions.swift; path = Query/WriteFunctions.swift; sourceTree = "<group>"; };
 		288614161D0AF605007FB922 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		288614171D0AF605007FB922 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +378,7 @@
 		28DCFF581D00CF0400A813D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */,
 				288614161D0AF605007FB922 /* Quick.framework */,
 				288614171D0AF605007FB922 /* Nimble.framework */,
 				28E9D8641D09D59000A511AA /* Rx.xcodeproj */,
@@ -925,6 +929,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RxFaunaDB/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
@@ -945,6 +953,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RxFaunaDB/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
