@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Encodable {
+internal protocol Encodable {
     func toJSON() -> AnyObject
 }
 
@@ -15,12 +15,12 @@ public protocol ValueConvertible {
     var value: Value { get }
 }
 
-public protocol Value: ValueConvertible, Encodable{}
+public protocol Value: ValueConvertible{}
 public protocol ScalarValue: Value {}
 
 extension ValueConvertible {
-    public func toJSON() -> AnyObject {
-        return value.toJSON()
+    func toJSON() -> AnyObject {
+        return (value as! Encodable).toJSON()
     }
 }
 

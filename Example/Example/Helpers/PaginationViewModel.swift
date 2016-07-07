@@ -93,7 +93,7 @@ public struct PaginationRequest<E: FaunaModel>: PaginationRequestType {
 extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
     
     /**
-     Returns an `Observable` of [Response] for the PaginationRequestType instance. If something goes wrong a Opera.Error error is propagated through the result sequence.
+     Returns an `Observable` of [Response] for the PaginationRequestType instance. If something goes wrong a Error error is propagated through the result sequence.
      
      - returns: An instance of `Observable<Response>`
      */
@@ -123,7 +123,7 @@ extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
 }
 
 
-/// Reactive View Model helper to load list of OperaDecodable items.
+/// Reactive View Model helper to load list of FaunaModel items.
 public class PaginationViewModel<PaginationRequest: PaginationRequestType where PaginationRequest.Response.Paginate.Element: FaunaModel> {
     
     /// pagination request

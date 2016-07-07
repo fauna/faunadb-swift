@@ -174,20 +174,37 @@ class SerializationTests: FaunaDBTests {
         let lambda4 = Lambda { a in Not(boolExpr: a) }
         XCTAssertEqual(lambda4.jsonString, "{\"expr\":{\"not\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}")
     }
-    
+
     func testResourceModifications(){
         
         //MARK: Create
         
-        let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost":15]
-        let create = Create(ref: "classes/spells",
+        let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost": 15]
+        var create = Create(ref: "classes/spells",
                          params: ["data": spell])
         XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
+        
+        create = Create(ref: "classes/spells",
+                            params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
+        XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
+        
+        create = Create(Expr(Ref("classes/spells")),
+                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
+        XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
+        
  
         //MARK: Update
         
-        let update = Update(ref: "classes/spells/123456",
-                         params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
+        var update = Update(ref: "classes/spells/123456",
+                         params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+        XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
+        
+        update = Update(ref: "classes/spells/123456",
+                     params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
+        XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
+        
+        update = Update(Expr(Ref("classes/spells/123456")),
+                        params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
         XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
         //MARK: Replace
@@ -196,28 +213,54 @@ class SerializationTests: FaunaDBTests {
         replaceSpell["name"] = "Mountain's Thunder"
         replaceSpell["element"] = ["air", "earth"] as Arr
         replaceSpell["cost"] = 10
-        let replace = Replace(ref: "classes/spells/123456",
+        var replace = Replace(ref: "classes/spells/123456",
                            params: ["data": replaceSpell])
         XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
         
+        
+        replace = Replace(ref: "classes/spells/123456",
+                              params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
+        XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
+
+        replace = Replace(Expr(Ref("classes/spells/123456")),
+                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
+        XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
+
         //MARK: Delete
         
-        let delete = Delete(ref: "classes/spells/123456")
+        var delete = Delete(ref: "classes/spells/123456")
+        XCTAssertEqual(delete.jsonString, "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
+        
+        delete = Delete(Expr(Ref("classes/spells/123456")))
         XCTAssertEqual(delete.jsonString, "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
         //MARK: Insert
         
-        let insert = Insert(ref: "classes/spells/123456",
+        var insert = Insert(ref: "classes/spells/123456",
                              ts: Timestamp(timeIntervalSince1970: 0),
                          action: .Create,
                          params: ["data": replaceSpell])
         XCTAssertEqual(insert.jsonString, "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
         
+        
+        insert = Insert(Expr(Ref("classes/spells/123456")),
+                        ts: Expr(Timestamp(timeIntervalSince1970: 0)),
+                        action: Expr(Action.Create),
+                        params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
+        
+        XCTAssertEqual(insert.jsonString, "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
+        
+        
         //MARK: Remove
         
-        let remove = Remove(ref: "classes/spells/123456",
+        var remove = Remove(ref: "classes/spells/123456",
                              ts: Timestamp(timeIntervalSince1970: 0),
                          action: .Create)
+        XCTAssertEqual(remove.jsonString, "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
+        
+        remove = Remove(Expr(Ref("classes/spells/123456")),
+                        ts: Expr(Timestamp(timeIntervalSince1970: 0)),
+                        action: Expr(Action.Create))
         XCTAssertEqual(remove.jsonString, "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
     }
     
@@ -355,10 +398,51 @@ class SerializationTests: FaunaDBTests {
         //MARK: Get
         
         let ref: Ref = "some/ref/1"
-        let get = Get(ref: ref)
+        var get = Get(ref: ref)
         XCTAssertEqual(get.jsonString, "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
+        get = Get(Expr(ref))
+        XCTAssertEqual(get.jsonString, "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        get = Get(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
+        XCTAssertEqual(get.jsonString, "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        get = Get(Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
+        XCTAssertEqual(get.jsonString, "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        //MARK: Exists
+        
+        var exists = Exists(ref: ref)
+        XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        exists = Exists(Expr(ref))
+        XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}")
+        
+        exists = Exists(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
+        XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
+        
+        exists = Exists(Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
+        XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
+        
+        //MARK: Count
+        
+        var count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"))
+        XCTAssertEqual(count.jsonString, "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        
+        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+                           countEvents: true)
+        XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        
+        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+                           countEvents: true)
+        XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        
+        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+                      countEvents: Expr(true))
+        XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        
         //MARK: Paginate
+        
         let paginate = Paginate(resource: Union(sets: Match(index: "indexes/some_index", terms: "term"),
                                                        Match(index: "indexes/some_index", terms: "term2")))
         XCTAssertEqual(paginate.jsonString, "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
@@ -377,15 +461,12 @@ class SerializationTests: FaunaDBTests {
                                                        Match(index: "indexes/some_index", terms: "term2")),
                                  size: 4)
         XCTAssertEqual(paginate4.jsonString, "{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
-
-        //MARK: Count
         
-        let count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"))
-        XCTAssertEqual(count.jsonString, "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        let paginate5 = Paginate(Union(sets: Match(index: "indexes/some_index", terms: "term"),
+            Match(index: "indexes/some_index", terms: "term2")),
+                                 size: Expr(4), events: Expr(true), sources: Expr(true))
+        XCTAssertEqual(paginate5.jsonString, "{\"size\":4,\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")
         
-        let count2 = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
-                        events: true)
-        XCTAssertEqual(count2.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
     }
     
     

@@ -50,7 +50,7 @@ extension Obj: Encodable {
     
     //MARK: Encodable
     
-    public func toJSON() -> AnyObject {
+    func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
         for keyValue in dictionary{
             result[keyValue.0] = keyValue.1.toJSON()

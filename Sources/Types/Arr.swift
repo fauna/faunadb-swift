@@ -31,7 +31,7 @@ extension Arr: Encodable {
     
     //MARK: Encodable
     
-    public func toJSON() -> AnyObject {
+    func toJSON() -> AnyObject {
         return array.map { $0.toJSON() }
     }
 }

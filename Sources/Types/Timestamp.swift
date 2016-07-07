@@ -41,7 +41,7 @@ extension Timestamp: Encodable {
     
     //MARK: Encodable
     
-    public func toJSON() -> AnyObject {
+    func toJSON() -> AnyObject {
         return ["@ts": ISO8601]
     }
 }
