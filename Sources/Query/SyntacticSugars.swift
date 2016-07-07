@@ -8,46 +8,49 @@
 import Foundation
 
 
-extension CollectionType where Self.Generator.Element == Value {
+extension SequenceType where Self.Generator.Element: ValueConvertible {
+    
     public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Map(arr: arr, lambda: lambda)
+        return Map(collection: Expr(self.map { $0 }), lambda: lambda)
     }
     
     public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Foreach(arr: arr, lambda: lambda)
+        return Foreach(collection: Expr(self.map { $0 }), lambda: lambda)
+    }
+    
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
+        return Filter(collection: Expr(self.map { $0 }), lambda: lambda)
     }
 }
 
-extension CollectionType where Self.Generator.Element: Value {
+extension SequenceType where Self.Generator.Element == Value {
     
     public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Map(arr: arr, lambda: lambda)
+        return Map(collection: Expr(self.map { $0 }), lambda: lambda)
     }
     
     public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0) }
-        return Foreach(arr: arr, lambda: lambda)
+        return Foreach(collection: Expr(self.map { $0 }), lambda: lambda)
+    }
+    
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
+        return Filter(collection: Expr(self.map { $0 }), lambda: lambda)
     }
 }
 
-extension CollectionType where Self.Generator.Element: ValueConvertible {
+extension SequenceType where Self.Generator.Element == ValueConvertible {
     
     public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0.value) }
-        return Map(arr: arr, lambda: lambda)
+        return Map(collection: Expr(self.map { $0 }), lambda: lambda)
     }
     
     public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        var arr: Arr  = []
-        forEach { arr.append($0.value) }
-        return Foreach(arr: arr, lambda: lambda)
+        return Foreach(collection: Expr(self.map { $0 }), lambda: lambda)
+    }
+    
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
+        return Filter(collection: Expr(self.map { $0 }), lambda: lambda)
     }
 }
+
+

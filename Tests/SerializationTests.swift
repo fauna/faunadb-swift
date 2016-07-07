@@ -292,31 +292,34 @@ class SerializationTests: FaunaDBTests {
         //MARK: Map
         
          Var.resetIndex()
-        let map = Map(arr: [1,2,3],
+        var map = Map(collection: Expr([1,2,3].value),
                       lambda: Lambda(vars: "munchings", expr: Expr(Var("munchings"))))
         XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}")
         
         Var.resetIndex()
-        let map1 = Map(arr: [1,2,3] as Arr,
-                    lambda: { x in
-                                x
-                            })
-        XCTAssertEqual(map1.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
+        map = ([1,2,3] as Arr).mapFauna { x in
+                                            x
+                                         }
+        XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
+        
+        
+        
+        
         
         Var.resetIndex()
-        let map2 = Map(arr: [1,2,3] as [Int]) { $0 }
-        XCTAssertEqual(map2.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
+        map = ([1,2,3] as [Int]).mapFauna { $0 }
+        XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
-        let map3 = [1,2,3].mapFauna { (value: Expr) -> Expr in
+        map = [1,2,3].mapFauna { (value: Expr) -> Expr in
             value
         }
-        XCTAssertEqual(map3.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
+        XCTAssertEqual(map.jsonString, "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}")
 
         //MARK: Foreach
         
         Var.resetIndex()
-        let foreach = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")],
+        var foreach = Foreach(collection: Expr([Ref("another/ref/1"), Ref("another/ref/2")]),
                            lambda: Lambda(vars: "refData",
                                           expr: Create(ref: Ref("some/ref"),
                                                     params: ["data": ["some": Expr(Var("refData"))]]
@@ -324,10 +327,10 @@ class SerializationTests: FaunaDBTests {
         XCTAssertEqual(foreach.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}")
         
         Var.resetIndex()
-        let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
+        foreach = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna { ref in
             Create(ref: Ref("some/ref"), params: ["data": ["some": ref]])
-                        }
-        XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
+        }
+        XCTAssertEqual(foreach.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
         let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
@@ -340,20 +343,20 @@ class SerializationTests: FaunaDBTests {
         //MARK: Filter
         
         Var.resetIndex()
-        let filter = Filter(arr: [1,2,3] as Arr, lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        var filter = Filter(collection: Expr([1,2,3] as Arr), lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
         XCTAssertEqual(filter.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
-        let filter2 = Filter(arr: [1,2,3] as [Int], lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
-        XCTAssertEqual(filter2.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}")
+        filter = [1,2,3].filterFauna { i in  Equals(terms: 1, i) }
+        XCTAssertEqual(filter.jsonString, "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
-        let filter3 = Filter(arr: [1,"Hi",3],
+        filter = Filter(collection: Expr([1,"Hi",3]),
                           lambda: Lambda(lambda: { i in
                                                     Equals(terms: 1, i)
                                                  })
         )
-        XCTAssertEqual(filter3.jsonString, "{\"collection\":[1,\"Hi\",3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}")
+        XCTAssertEqual(filter.jsonString, "{\"collection\":[1,\"Hi\",3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}")
         
         //MARK: Take
         

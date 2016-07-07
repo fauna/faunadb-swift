@@ -25,14 +25,7 @@ struct BlogPost {
     let content: String
     let tags: [String]
     
-    init(name:String, author: String, content: String){
-        self.name = name
-        self.author = author
-        self.content = content
-        self.tags = []
-    }
-    
-    init(name:String, author: String, content: String, tags: [String]){
+    init(name:String, author: String, content: String, tags: [String] = []){
         self.name = name
         self.author = author
         self.content = content

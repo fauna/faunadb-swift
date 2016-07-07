@@ -8,37 +8,23 @@
 import Foundation
 
 /**
- *  `Map` applies `lambda` expression to each member of the Array or Page coll, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+ *  `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
  *
  *  `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
  *
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+ 
+ - parameter collection:    collection to perform map expression
+ - parameter lambda: lambda expression to apply to each collection item.
+ 
+ - returns: A Map expression.
  */
-    
-public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
-    return Expr(fn(["map": lambda.value, "collection": Arr(arr)] as Obj))
-}
-
-public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    let newVar = Var.newVar
-    return Map(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
-public func Map<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    var array: Arr = Arr()
-    arr.forEach { array.append($0.value) }
-    let newVar = Var.newVar
-    return Map(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
-public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: ((Expr, Expr) -> Expr)) -> Expr{
-    let newVar = Var.newVar
-    let newVar2 = Var.newVar
-    return Map(arr: arr, lambda: Lambda(vars: newVar, newVar2, expr: lambda(Expr(newVar), Expr(newVar2))))
-}
-
 public func Map(collection collection: Expr, lambda: Expr) -> Expr {
     return Expr(fn(["map": lambda.value, "collection": collection.value] as Obj))
+}
+
+public func Map(collection collection: Expr, @noescape lambda: (Expr)-> Expr) -> Expr {
+    return Map(collection: collection, lambda: Lambda(lambda: lambda))
 }
 
 
@@ -50,30 +36,13 @@ public func Map(collection collection: Expr, lambda: Expr) -> Expr {
  *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
  */
 
-    
-public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
-    return Expr(fn(["foreach": lambda.value, "collection": Arr(arr)] as Obj))
+public func Foreach(collection collection: Expr, lambda: Expr) -> Expr {
+    return Expr(fn(["foreach": lambda.value, "collection": collection.value] as Obj))
 }
 
-public func Foreach<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, lambda: Expr) -> Expr{
-    var array: Arr = Arr()
-    arr.forEach { array.append($0.value) }
-    return Foreach(arr: array, lambda: lambda)
+public func Foreach(collection collection: Expr, @noescape lambda: (Expr)-> Expr) -> Expr {
+    return Foreach(collection: collection, lambda: Lambda(lambda: lambda))
 }
-
-
-public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    let newVar = Var.newVar
-    return Foreach(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
-public func Foreach<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    var array: Arr = Arr()
-    arr.forEach { array.append($0.value) }
-    let newVar = Var.newVar
-    return Foreach(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
 
 /**
  * `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
@@ -82,28 +51,13 @@ public func Foreach<C: CollectionType where C.Generator.Element: ValueConvertibl
  *
  * [Filtrer Reference](https://faunadb.com/documentation/queries#collection_functions-filter_lambda_expr_collection_coll)
  */
-public func Filter<C: CollectionType where C.Generator.Element == Value>(arr arr: C, lambda: Expr) -> Expr{
-    return Expr(fn(["filter": lambda.value, "collection": Arr(arr)] as Obj))
+public func Filter(collection collection: Expr, lambda: Expr) -> Expr {
+    return Expr(fn(["filter": lambda.value, "collection": collection.value] as Obj))
 }
 
-public func Filter<C: CollectionType where C.Generator.Element: Value>(arr arr: C, lambda: Expr) -> Expr{
-    var array: Arr = Arr()
-    arr.forEach { array.append($0) }
-    return Filter(arr: array, lambda: lambda)
+public func Filter(collection collection: Expr, @noescape lambda: (Expr)-> Expr) -> Expr {
+    return Filter(collection: collection, lambda: Lambda(lambda: lambda))
 }
-
-public func Filter<C: CollectionType where C.Generator.Element == Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    let newVar = Var.newVar
-    return Filter(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
-public func Filter<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
-    var array: Arr = Arr()
-    arr.forEach { array.append($0.value) }
-    let newVar = Var.newVar
-    return Filter(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
-}
-
 
 /**
  * `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll. 
