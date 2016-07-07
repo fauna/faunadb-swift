@@ -31,7 +31,7 @@ public func Get(ref ref: Ref, ts: Timestamp? = nil) -> Expr{
  
  - returns: a Get expression.
  */
-public func Get(ref: Expr, ts: Expr? = nil) -> Expr{
+public func Get(ref ref: Expr, ts: Expr? = nil) -> Expr{
     var obj: Obj = ["get":ref.value]
     obj["ts"] = ts?.value
     return Expr(fn(obj))
@@ -62,7 +62,7 @@ public func Exists(ref ref: Ref, ts: Timestamp? = nil) -> Expr{
  
  - returns: A Exists expression.
  */
-public func Exists(ref: Expr, ts: Expr? = nil) -> Expr{
+public func Exists(ref ref: Expr, ts: Expr? = nil) -> Expr{
     var obj = ["exists": ref.value] as Obj
     obj["ts"] = ts?.value
     return Expr(fn(obj))

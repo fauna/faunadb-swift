@@ -21,7 +21,7 @@ func stringFormat(json: AnyObject) -> String{
 // ref
 
 let refValue = Ref.databases
-let anotherRefValue: Ref = "databases"
+let anotherRefValue: Ref = Ref("databases")
 
 // Null
 
@@ -73,14 +73,7 @@ let dateVale2:Value = NSDateComponents(day: 18, month: 07, year: 1984)
 
 
 
-
-
-
-
-let clientConf = ClientConfiguration(secret: "")
-let client = Client(configuration: clientConf)
-client.observers = [Logger()]
-
+let client = Client(secret: "", observers: [Logger()])
 
 // just a Hack to see request curl
 
@@ -91,15 +84,6 @@ request.HTTPMethod = "GET"
 
 
 let exp = Create(ref: Ref.databases,  params: ["name": "blog_db"])
-
-var json =  exp.toJSON()
-
-let str = stringFormat(json)
-
-
-
-
-
 client.query(exp){ result in
     switch result {
     case .Success(let value):

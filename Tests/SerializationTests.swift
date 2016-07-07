@@ -14,12 +14,8 @@ class SerializationTests: FaunaDBTests {
     func testRef() {
         
         // MARK: Ref
-        
         let ref = Ref("some/ref")
         XCTAssertEqual(ref.jsonString, "{\"@ref\":\"some\\/ref\"}")
-        
-        let ref2: Ref = "some/ref"
-        XCTAssertTrue(ref == ref2)
     }
     
     func testArr(){
@@ -152,8 +148,8 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Do
         
-        let doForm = Do(exprs: Create(ref: "some/ref/1", params: ["data": ["name": "Hen Wen"]]),
-                               Get(ref: "some/ref/1"))
+        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: ["data": ["name": "Hen Wen"]]),
+                               Get(ref: Ref("some/ref/1")))
         XCTAssertEqual(doForm.jsonString, "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}")
         
         //MARK: Lambda
@@ -180,30 +176,30 @@ class SerializationTests: FaunaDBTests {
         //MARK: Create
         
         let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost": 15]
-        var create = Create(ref: "classes/spells",
+        var create = Create(ref: Ref("classes/spells"),
                          params: ["data": spell])
         XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
         
-        create = Create(ref: "classes/spells",
+        create = Create(ref: Ref("classes/spells"),
                             params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
         XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
         
-        create = Create(Expr(Ref("classes/spells")),
+        create = Create(ref: Expr(Ref("classes/spells")),
                         params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
         XCTAssertEqual(create.jsonString, "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")
         
  
         //MARK: Update
         
-        var update = Update(ref: "classes/spells/123456",
+        var update = Update(ref: Ref("classes/spells/123456"),
                          params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
         XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
-        update = Update(ref: "classes/spells/123456",
+        update = Update(ref: Ref("classes/spells/123456"),
                      params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
         XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
-        update = Update(Expr(Ref("classes/spells/123456")),
+        update = Update(ref: Expr(Ref("classes/spells/123456")),
                         params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
         XCTAssertEqual(update.jsonString, "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
@@ -213,12 +209,12 @@ class SerializationTests: FaunaDBTests {
         replaceSpell["name"] = "Mountain's Thunder"
         replaceSpell["element"] = ["air", "earth"] as Arr
         replaceSpell["cost"] = 10
-        var replace = Replace(ref: "classes/spells/123456",
+        var replace = Replace(ref: Ref("classes/spells/123456"),
                            params: ["data": replaceSpell])
         XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
         
         
-        replace = Replace(ref: "classes/spells/123456",
+        replace = Replace(ref: Ref("classes/spells/123456"),
                               params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
         XCTAssertEqual(replace.jsonString, "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")
 
@@ -228,7 +224,7 @@ class SerializationTests: FaunaDBTests {
 
         //MARK: Delete
         
-        var delete = Delete(ref: "classes/spells/123456")
+        var delete = Delete(ref: Ref("classes/spells/123456"))
         XCTAssertEqual(delete.jsonString, "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}")
         
         delete = Delete(Expr(Ref("classes/spells/123456")))
@@ -236,7 +232,7 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Insert
         
-        var insert = Insert(ref: "classes/spells/123456",
+        var insert = Insert(ref: Ref("classes/spells/123456"),
                              ts: Timestamp(timeIntervalSince1970: 0),
                          action: .Create,
                          params: ["data": replaceSpell])
@@ -253,7 +249,7 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Remove
         
-        var remove = Remove(ref: "classes/spells/123456",
+        var remove = Remove(ref: Ref("classes/spells/123456"),
                              ts: Timestamp(timeIntervalSince1970: 0),
                          action: .Create)
         XCTAssertEqual(remove.jsonString, "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
@@ -329,13 +325,13 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         let foreach2 = Foreach(arr: [Ref("another/ref/1"), Ref("another/ref/2")]) { ref in
-            Create(ref: "some/ref", params: ["data": ["some": ref]])
+            Create(ref: Ref("some/ref"), params: ["data": ["some": ref]])
                         }
         XCTAssertEqual(foreach2.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
         
         Var.resetIndex()
         let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
-                            Create(ref: "some/ref",
+                            Create(ref: Ref("some/ref"),
                                 params: ["data": ["some": $0]])
                         }
         XCTAssertEqual(foreach3.jsonString, "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}")
@@ -397,17 +393,17 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Get
         
-        let ref: Ref = "some/ref/1"
+        let ref = Ref("some/ref/1")
         var get = Get(ref: ref)
         XCTAssertEqual(get.jsonString, "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
-        get = Get(Expr(ref))
+        get = Get(ref: Expr(ref))
         XCTAssertEqual(get.jsonString, "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
         get = Get(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
         XCTAssertEqual(get.jsonString, "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
-        get = Get(Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
+        get = Get(ref: Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
         XCTAssertEqual(get.jsonString, "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
         //MARK: Exists
@@ -415,55 +411,55 @@ class SerializationTests: FaunaDBTests {
         var exists = Exists(ref: ref)
         XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
-        exists = Exists(Expr(ref))
+        exists = Exists(ref: Expr(ref))
         XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}")
         
         exists = Exists(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
         XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
         
-        exists = Exists(Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
+        exists = Exists(ref: Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
         XCTAssertEqual(exists.jsonString, "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")
         
         //MARK: Count
         
-        var count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"))
+        var count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))
         XCTAssertEqual(count.jsonString, "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
         
-        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
                            countEvents: true)
         XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
         
-        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
                            countEvents: true)
         XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
         
-        count = Count(set: Match(index: "indexes/spells_by_element", terms: "fire"),
+        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
                       countEvents: Expr(true))
         XCTAssertEqual(count.jsonString, "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
         
         //MARK: Paginate
         
-        let paginate = Paginate(resource: Union(sets: Match(index: "indexes/some_index", terms: "term"),
-                                                       Match(index: "indexes/some_index", terms: "term2")))
+        let paginate = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
+                                                       Match(index: Ref("indexes/some_index"), terms: "term2")))
         XCTAssertEqual(paginate.jsonString, "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
         
-        let paginate2 = Paginate(resource: Union(sets: Match(index: "indexes/some_index", terms: "term"),
-                                          Match(index: "indexes/some_index", terms: "term2")),
+        let paginate2 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
+                                          Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  sources: true)
         XCTAssertEqual(paginate2.jsonString, "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")
         
-        let paginate3 = Paginate(resource: Union(sets: Match(index: "indexes/some_index", terms: "term"),
-                                                      Match(index: "indexes/some_index", terms: "term2")),
+        let paginate3 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
+                                                      Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  events: true)
         XCTAssertEqual(paginate3.jsonString, "{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
         
-        let paginate4 = Paginate(resource: Union(sets: Match(index: "indexes/some_index", terms: "term"),
-                                                       Match(index: "indexes/some_index", terms: "term2")),
+        let paginate4 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
+                                                       Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  size: 4)
         XCTAssertEqual(paginate4.jsonString, "{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")
         
-        let paginate5 = Paginate(Union(sets: Match(index: "indexes/some_index", terms: "term"),
-            Match(index: "indexes/some_index", terms: "term2")),
+        let paginate5 = Paginate(Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
+                                             Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  size: Expr(4), events: Expr(true), sources: Expr(true))
         XCTAssertEqual(paginate5.jsonString, "{\"size\":4,\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")
         
@@ -474,31 +470,46 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Match
         
-        let matchSet = Match(index: "indexes/spells_by_elements",
-                                terms: "fire")
+        var matchSet = Match(index: Ref("indexes/spells_by_elements"),
+                             terms: "fire")
         XCTAssertEqual(matchSet.jsonString, "{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_elements\"}}")
+        
+        
+        
+        matchSet = Match(index: Ref.databases)
+        XCTAssertEqual(matchSet.jsonString, "{\"match\":{\"@ref\":\"databases\"}}")
+        
+        
+        matchSet = Match(index: Expr(Ref("indexes/spells_by_elements")),
+                         terms: "fire")
+        XCTAssertEqual(matchSet.jsonString, "{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_elements\"}}")
+        
+        
+        
+        matchSet = Match(index: Expr(Ref.databases))
+        XCTAssertEqual(matchSet.jsonString, "{\"match\":{\"@ref\":\"databases\"}}")
         
         //MARK: Union
         
-        let union = Union(sets: Match(index: "indexes/spells_by_element", terms: "fire"),
-                                Match(index: "indexes/spells_by_element", terms: "water"))
+        let union = Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
+                                Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         XCTAssertEqual(union.jsonString, "{\"union\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}")
         
         //MARK: Intersection
         
-        let intersection = Intersection(sets: Match(index: "indexes/spells_by_element", terms: "fire"),
-                                              Match(index: "indexes/spells_by_element", terms: "water"))
+        let intersection = Intersection(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
+                                              Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         XCTAssertEqual(intersection.jsonString, "{\"intersection\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}")
         
         //MARK: Difference
         
-        let difference = Difference(sets: Match(index: "indexes/spells_by_element", terms: "fire"),
-                                          Match(index: "indexes/spells_by_element", terms: "water"))
+        let difference = Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
+                                          Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         XCTAssertEqual(difference.jsonString, "{\"difference\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}")
         
         //MARK: Join
         
-        let lambda_ = Lambda { value in return  Get(value) }
+        let lambda_ = Lambda { value in return  Get(ref: value) }
         
         let join = Join(sourceSet: Match(index: Ref("indexes/spells_by_element"),
                                             terms: "fire"),
@@ -509,13 +520,13 @@ class SerializationTests: FaunaDBTests {
     
     func testMiscellaneousFunctions(){
         
-        let equals = Equals(terms: 2, 2, Expr(Var("v2")))
+        var equals = Equals(terms: 2, 2, Expr(Var("v2")))
         XCTAssertEqual(equals.jsonString, "{\"equals\":[2,2,{\"var\":\"v2\"}]}")
         
-        let equals2 = Equals(terms: Match(index: "indexes/spells_by_element", terms: "fire"))
-        XCTAssertEqual(equals2.jsonString, "{\"equals\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
+        equals = Equals(terms: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))
+        XCTAssertEqual(equals.jsonString, "{\"equals\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")
         
-        let contains = Contains(path: "favorites", "foods", inExpr:  ["favorites":
+        var contains = Contains(path: "favorites", "foods", inExpr:  ["favorites":
             ["foods":
                 ["crunchings",
                     "munchings",
@@ -526,7 +537,7 @@ class SerializationTests: FaunaDBTests {
         XCTAssertEqual(contains.jsonString, "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
         
         
-        let contains2 = Contains(path: "favorites", inExpr:  ["favorites":
+        contains = Contains(path: "favorites", inExpr:  ["favorites":
             ["foods":
                 ["crunchings",
                     "munchings",
@@ -534,7 +545,7 @@ class SerializationTests: FaunaDBTests {
                 ]
             ])
         
-        XCTAssertEqual(contains2.jsonString, "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
+        XCTAssertEqual(contains.jsonString, "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")
         
         //MARK: Select
         

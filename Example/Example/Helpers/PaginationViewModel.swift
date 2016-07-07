@@ -99,14 +99,20 @@ extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
      */
     public func rx_response() -> Observable<Response> {
         let myPage = paginate
-        return FaunaDB.Paginate(paginate.match, cursor: paginate.cursor).rx_query()
+        return Map(collection: FaunaDB.Paginate(resource: paginate.match,
+                                                  cursor: paginate.cursor),
+                       lambda: Lambda(){ expr in
+                            Get(ref: expr)
+                        })
+            
+                .rx_query()
             .flatMap { value -> Observable<Response> in
                 let data:Arr = try! value.get("data")
                 var cursorData: Arr? = value.get("after")
                 let nextCursor = cursorData.map { Cursor.After(expr: Expr($0) )}
                 cursorData = value.get("before")
                 let beforeCursor = cursorData.map { Cursor.Before(expr: Expr($0) )}
-                let elements = data.map { Response.Paginate.Element.init(data: $0 as! Arr) }
+                let elements = data.map { Response.Paginate.Element.init(data: try! $0.get("data")) }
                 return Observable.just(Response.init(elements: elements, previousPage: beforeCursor, nextPage: nextCursor, paginate: myPage))
             }
         }

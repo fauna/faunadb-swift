@@ -24,9 +24,9 @@ public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C
     return Map(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
 
-public func Map<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+public func Map<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
     var array: Arr = Arr()
-    arr.forEach { array.append($0) }
+    arr.forEach { array.append($0.value) }
     let newVar = Var.newVar
     return Map(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
@@ -35,6 +35,10 @@ public func Map<C: CollectionType where C.Generator.Element == Value>(arr arr: C
     let newVar = Var.newVar
     let newVar2 = Var.newVar
     return Map(arr: arr, lambda: Lambda(vars: newVar, newVar2, expr: lambda(Expr(newVar), Expr(newVar2))))
+}
+
+public func Map(collection collection: Expr, lambda: Expr) -> Expr {
+    return Expr(fn(["map": lambda.value, "collection": collection.value] as Obj))
 }
 
 
@@ -51,9 +55,9 @@ public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr ar
     return Expr(fn(["foreach": lambda.value, "collection": Arr(arr)] as Obj))
 }
 
-public func Foreach<C: CollectionType where C.Generator.Element: Value>(arr arr: C, lambda: Expr) -> Expr{
+public func Foreach<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, lambda: Expr) -> Expr{
     var array: Arr = Arr()
-    arr.forEach { array.append($0) }
+    arr.forEach { array.append($0.value) }
     return Foreach(arr: array, lambda: lambda)
 }
 
@@ -63,9 +67,9 @@ public func Foreach<C: CollectionType where C.Generator.Element == Value>(arr ar
     return Foreach(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
 
-public func Foreach<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+public func Foreach<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
     var array: Arr = Arr()
-    arr.forEach { array.append($0) }
+    arr.forEach { array.append($0.value) }
     let newVar = Var.newVar
     return Foreach(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
@@ -93,9 +97,9 @@ public func Filter<C: CollectionType where C.Generator.Element == Value>(arr arr
     return Filter(arr: arr, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
 
-public func Filter<C: CollectionType where C.Generator.Element: Value>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
+public func Filter<C: CollectionType where C.Generator.Element: ValueConvertible>(arr arr: C, @noescape lambda: (Expr -> Expr)) -> Expr{
     var array: Arr = Arr()
-    arr.forEach { array.append($0) }
+    arr.forEach { array.append($0.value) }
     let newVar = Var.newVar
     return Filter(arr: array, lambda: Lambda(vars: newVar, expr: lambda(Expr(newVar))))
 }
@@ -120,19 +124,6 @@ public func Take(count count: Int, collection: Expr) -> Expr{
 public func Take(count count: Expr, collection: Expr) -> Expr{
     return Expr(fn(["take": count.value, "collection": collection.value] as Obj))
 }
-
-    
-    
-//    init<C: CollectionType where C.Generator.Element == Value>(_ take: Int, arr: C){
-//        let expr = Arr(arr)
-//        self.init(take, collection: expr)
-//    }
-//    
-//    init<C: CollectionType where C.Generator.Element: Value>(_ take: Int, arr: C){
-//        var expr: Arr = Arr()
-//        arr.forEach { expr.append($0) }
-//        self.init(take, collection: expr)
-//    }
 
 /**
  * `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.

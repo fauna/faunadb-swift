@@ -364,11 +364,11 @@
 			isa = PBXGroup;
 			children = (
 				28DCFF4F1CFF910100A813D3 /* Expr.swift */,
-				2886147B1D0F6E50007FB922 /* MiscFuntions.swift */,
-				288F0F771D0FA41D00079435 /* SetFunctions.swift */,
-				28F99C871D1061440016F809 /* CollectionFunctions.swift */,
-				28F99CAA1D10655E0016F809 /* BasicForms.swift */,
 				28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */,
+				28F99CAA1D10655E0016F809 /* BasicForms.swift */,
+				2886147B1D0F6E50007FB922 /* MiscFuntions.swift */,
+				28F99C871D1061440016F809 /* CollectionFunctions.swift */,
+				288F0F771D0FA41D00079435 /* SetFunctions.swift */,
 				28F99CAC1D1065E20016F809 /* ReadFunctions.swift */,
 				28858D2A1D11C49400532DE7 /* WriteFunctions.swift */,
 			);

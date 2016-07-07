@@ -50,14 +50,14 @@ class SetUpFaunaController: UIViewController {
                     return Create(ref: Ref.classes, params: ["name": "posts"]).rx_query()
                 }
                 .flatMap { _ in
-                    return Create(Expr(Ref.indexes), params: ["name": "posts_by_tags_with_title",
+                    return Create(ref: Expr(Ref.indexes), params: ["name": "posts_by_tags_with_title",
                         "source": Expr(BlogPost.classRef),
                         "terms": [["field": ["data", "tags"]]],
                         "values": [
-                            ["field": ["ts"], "reverse": false],
-                            ["field": ["data", "name"], "unique": true],
-                            ["field": ["data", "author"]],
-                            ["field": ["data", "content"]] //,
+//                            ["field": ["ts"], "reverse": false],
+//                            ["field": ["data", "name"], "unique": true],
+//                            ["field": ["data", "author"]],
+//                            ["field": ["data", "content"]] //,
 //                            ["field": ["data", "tags"]]
                         ]]).rx_query()
             }
@@ -76,7 +76,7 @@ class SetUpFaunaController: UIViewController {
                 (1...100).map { int in
                     return BlogPost(name: "Blog Post \(int)", author: "Martin B",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
                     }.mapFauna { blogValue in
-                        Create(ref: "classes/posts", params: ["data": blogValue.value])
+                        Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
                     }.rx_query()
         }
         return Observable.just(Null())

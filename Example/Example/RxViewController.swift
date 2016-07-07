@@ -50,14 +50,14 @@ extension BlogPost: FaunaModel {
         return data.value
     }
     
-    static var classRef: Ref { return "classes/posts" }
+    static var classRef: Ref { return Ref("classes/posts") }
     
-    init(data: Arr) {
+    init(data: Obj) {
         // 0 is ts
-        self.name = try! data.get(1)
-        self.author = try! data.get(2)
-        self.content = try! data.get(3)
-        let arrTags: Arr? = data.get(4)
+        self.name = try! data.get("name")
+        self.author = try! data.get("author")
+        self.content = try! data.get("content")
+        let arrTags: Arr? = data.get("tags")
         self.tags = arrTags?.map { $0 as! String } ?? []
     }
 }
@@ -81,7 +81,7 @@ class RxViewController: UIViewController {
     
     lazy var viewModel: PaginationViewModel<PaginationRequest<BlogPost>> = { [unowned self] in
         return PaginationViewModel(paginationRequest: PaginationRequest(paginate: Paginate<BlogPost>(
-                                                        match: Match(index: "indexes/posts_by_tags_with_title", terms: "travel"),
+                                                        match: Match(index: Ref("indexes/posts_by_tags_with_title"), terms: "travel"),
                                                         cursor: nil)))
         }()
     
@@ -116,7 +116,7 @@ class RxViewController: UIViewController {
             .asDriver()
             .drive(tableView.rx_itemsWithCellIdentifier("Cell")) { _, blogPost, cell in
                 cell.textLabel?.text = blogPost.name
-                cell.detailTextLabel?.text = "\(blogPost.tags.joinWithSeparator(",")) - \(blogPost.author)"
+                cell.detailTextLabel?.text = "\(blogPost.tags.joinWithSeparator(", ")) - \(blogPost.author)"
             }
             .addDisposableTo(disposeBag)
         

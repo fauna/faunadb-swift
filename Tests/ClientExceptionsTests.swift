@@ -68,7 +68,7 @@ class ClientExceptionsTests: FaunaDBTests {
         }
         
         waitUntil(timeout: 3) {[weak self] done in
-            self?.client.query(Get(ref: "classes/spells/1234")) { result in
+            self?.client.query(Get(ref: Ref("classes/spells/1234"))) { result in
                 guard case let .Failure(queryError) = result, case .NotFoundException(response: _, errors: _) = queryError else {
                     fail()
                     done()
@@ -82,7 +82,7 @@ class ClientExceptionsTests: FaunaDBTests {
     func testUnauthorized(){
         let badClient = Client(secret: "notavalidsecret")
         waitUntil(timeout: 3) { done in
-            badClient.query(Get(ref: "classes/spells/1234")) { result in
+            badClient.query(Get(ref: Ref("classes/spells/1234"))) { result in
                 guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _) = queryError else {
                     fail()
                     done()

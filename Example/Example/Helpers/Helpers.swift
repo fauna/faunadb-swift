@@ -46,7 +46,7 @@ public protocol FaunaModel: ValueConvertible {
     static var classRef: Ref { get }
     var fId: String? { get set }
     
-    init(data: Arr)
+    init(data: Obj)
 }
 
 extension ValueConvertible {

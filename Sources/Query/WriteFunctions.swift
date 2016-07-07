@@ -57,7 +57,7 @@ public func Create(ref ref: Ref, params: Expr) -> Expr{
  
  - returns: A Create expression.
  */
-public func Create(ref: Expr, params: Expr) -> Expr{
+public func Create(ref ref: Expr, params: Expr) -> Expr{
     return Expr(fn(Obj(("create", ref.value),("params", params.value))))
 }
 
@@ -98,7 +98,7 @@ public func Update(ref ref: Ref, params: Expr) -> Expr{
  
  - returns: An Update expression.
  */
-public func Update(ref: Expr, params: Expr) -> Expr{
+public func Update(ref ref: Expr, params: Expr) -> Expr{
     return Expr(fn(Obj(("update", ref.value),("params", params.value))))
 }
 

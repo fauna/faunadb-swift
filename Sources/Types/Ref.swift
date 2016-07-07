@@ -9,10 +9,10 @@ import Foundation
 
 public struct Ref: ScalarValue {
     
-    public static let databases: Ref = "databases"
-    public static let indexes: Ref = "indexes"
-    public static let classes: Ref = "classes"
-    public static let keys: Ref = "keys"
+    public static let databases: Ref = Ref("databases")
+    public static let indexes: Ref = Ref("indexes")
+    public static let classes: Ref = Ref("classes")
+    public static let keys: Ref = Ref("keys")
     
     let ref: String
     
@@ -29,22 +29,6 @@ public struct Ref: ScalarValue {
         self.ref = ref
     }
 }
-
-extension Ref: StringLiteralConvertible {
-    
-    public init(stringLiteral value: String){
-        ref = value
-    }
-    
-    public init(extendedGraphemeClusterLiteral value: String){
-        ref = value
-    }
-    
-    public init(unicodeScalarLiteral value: String){
-        ref = value
-    }
-}
-
 
 extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
     

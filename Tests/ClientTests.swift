@@ -87,7 +87,7 @@ class ClientTests: FaunaDBTests {
         // Create an instance
         var inst: Value?
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: "classes/spells", params: ["data": ["testField": "testValue"] as Obj])){ result in
+            self?.client.query(Create(ref: Ref("classes/spells"), params: ["data": ["testField": "testValue"] as Obj])){ result in
                 inst = try! result.dematerialize()
                 done()
             }
