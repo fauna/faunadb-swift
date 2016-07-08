@@ -364,7 +364,7 @@ class SerializationTests: FaunaDBTests {
         XCTAssertEqual(take.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
         
         
-        let take2 = Take(count: 2, collection: Expr([1, 2, 3]))
+        let take2 = Take(count: Expr(2), collection: Expr([1, 2, 3]))
         XCTAssertEqual(take2.jsonString, "{\"collection\":[1,2,3],\"take\":2}")
 
         let take3 = Take(count: 2, collection: [1, "Hi", 3])
@@ -375,7 +375,7 @@ class SerializationTests: FaunaDBTests {
         let drop = Drop(count: 2, collection: [1,2,3])
         XCTAssertEqual(drop.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
         
-        let drop2 = Drop(count: 2, collection: Expr([1, 2, 3] as [Int]))
+        let drop2 = Drop(count: Expr(2), collection: Expr([1, 2, 3] as [Int]))
         XCTAssertEqual(drop2.jsonString, "{\"collection\":[1,2,3],\"drop\":2}")
         
         let drop3 = Drop(count: 2, collection: [1, "Hi", 3])
@@ -383,12 +383,19 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Prepend
 
-        let prepend = Prepend(elements: [1,2,3], toCollection: [4,5,6])
+        var prepend = Prepend(elements: [1,2,3], toCollection: [4,5,6])
         XCTAssertEqual(prepend.jsonString, "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}")
+        
+        prepend = Prepend(elements: Expr([1,2,3]), toCollection: Expr([4,5,6]))
+        XCTAssertEqual(prepend.jsonString, "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}")
+
     
         //MARK: Append
         
-        let append = Append(elements: [4,5,6], toCollection: [1,2,3])
+        var append = Append(elements: [4,5,6], toCollection: [1,2,3])
+        XCTAssertEqual(append.jsonString, "{\"collection\":[4,5,6],\"append\":[1,2,3]}")
+        
+        append = Append(elements: Expr([4,5,6]), toCollection: Expr([1,2,3]))
         XCTAssertEqual(append.jsonString, "{\"collection\":[4,5,6],\"append\":[1,2,3]}")
     }
     
