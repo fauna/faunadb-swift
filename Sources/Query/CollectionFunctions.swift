@@ -20,7 +20,7 @@ import Foundation
  - returns: A Map expression.
  */
 public func Map(collection collection: Expr, lambda: Expr) -> Expr {
-    return Expr(fn(["map": lambda.value, "collection": collection.value] as Obj))
+    return Expr(fn(["map": lambda.value, "collection": collection.value]))
 }
 
 /**
@@ -53,7 +53,7 @@ public func Map(collection collection: Expr, @noescape lambda: (Expr)-> Expr) ->
  - returns: A Foreach expression.
  */
 public func Foreach(collection collection: Expr, lambda: Expr) -> Expr {
-    return Expr(fn(["foreach": lambda.value, "collection": collection.value] as Obj))
+    return Expr(fn(["foreach": lambda.value, "collection": collection.value]))
 }
 
 /**
@@ -85,7 +85,7 @@ public func Foreach(collection collection: Expr, @noescape lambda: (Expr)-> Expr
  - returns: A Filter expression.
  */
 public func Filter(collection collection: Expr, lambda: Expr) -> Expr {
-    return Expr(fn(["filter": lambda.value, "collection": collection.value] as Obj))
+    return Expr(fn(["filter": lambda.value, "collection": collection.value]))
 }
 
 /**
@@ -121,7 +121,7 @@ public func Filter(collection collection: Expr, @noescape lambda: (Expr)-> Expr)
  - returns: A take expression.
  */
 public func Take(count count: Int, collection: Expr) -> Expr{
-    return Expr(fn(["take": count, "collection": collection.value] as Obj))
+    return Expr(fn(["take": count, "collection": collection.value]))
 }
 
 /**
@@ -141,7 +141,7 @@ public func Take(count count: Int, collection: Expr) -> Expr{
  - returns: A take expression.
  */
 public func Take(count count: Expr, collection: Expr) -> Expr{
-    return Expr(fn(["take": count.value, "collection": collection.value] as Obj))
+    return Expr(fn(["take": count.value, "collection": collection.value]))
 }
 
 /**
@@ -159,7 +159,7 @@ public func Take(count count: Expr, collection: Expr) -> Expr{
  - returns: A Drop expression.
  */
 public func Drop(count count: Int, collection: Expr) -> Expr{
-    return Expr(fn(["drop": count, "collection": collection.value] as Obj))
+    return Expr(fn(["drop": count, "collection": collection.value]))
 }
 
 /**
@@ -177,7 +177,7 @@ public func Drop(count count: Int, collection: Expr) -> Expr{
  - returns: A Drop expression.
  */
 public func Drop(count count: Expr, collection: Expr) -> Expr{
-    return Expr(fn(["drop": count.value, "collection": collection.value] as Obj))
+    return Expr(fn(["drop": count.value, "collection": collection.value]))
 }
 
 /**
@@ -191,7 +191,7 @@ public func Drop(count count: Expr, collection: Expr) -> Expr{
  - returns: A Prepend expression.
  */
 public func Prepend(elements elements: Expr, toCollection collection: Expr) -> Expr{
-    return Expr(fn(["collection": elements.value, "prepend": collection.value] as Obj))
+    return Expr(fn(["collection": elements.value, "prepend": collection.value]))
 }
 
 /**
@@ -205,5 +205,5 @@ public func Prepend(elements elements: Expr, toCollection collection: Expr) -> E
  - returns: An Append expression.
  */
 public func Append(elements elements: Expr, toCollection collection: Expr) -> Expr{
-    return Expr(fn(["collection": elements.value, "append": collection.value] as Obj))
+    return Expr(fn(["collection": elements.value, "append": collection.value]))
 }

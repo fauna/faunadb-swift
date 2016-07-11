@@ -177,7 +177,7 @@ public func Delete(ref: Expr) -> Expr{
  - returns: An Insert expression.
  */
 public func Insert(ref ref: Ref, ts: Timestamp, action: Action, params: Obj) -> Expr{
-    return Expr(fn(Obj(("insert",ref),("ts", ts),("action", action.value),("params",params))))
+    return Expr(fn(["insert": ref, "ts": ts, "action": action.value, "params":params]))
 }
 
 /**
@@ -206,7 +206,7 @@ public func Insert(ref: Expr, ts: Expr, action: Expr, params: Expr) -> Expr{
  - returns: A Remove expression.
  */
 public func Remove(ref ref: Ref, ts: Timestamp, action: Action) -> Expr{
-    return Expr(fn(Obj(("remove",ref),("ts", ts),("action", action.value))))
+    return Expr(fn(["remove": ref, "ts": ts, "action": action.value]))
 }
 
 /**
@@ -220,5 +220,5 @@ public func Remove(ref ref: Ref, ts: Timestamp, action: Action) -> Expr{
  - returns: A Remove expression.
  */
 public func Remove(ref: Expr, ts: Expr, action: Expr) -> Expr{
-    return Expr(fn(Obj(("remove",ref.value),("ts", ts.value),("action", action.value))))
+    return Expr(fn(["remove": ref.value, "ts": ts.value, "action": action.value]))
 }

@@ -34,8 +34,6 @@ extension FaunaDB.Client {
 extension ObservableType where Self.E == Value {
     
     public func mapWithField<T: Value>(field: Field<T>) -> Observable<T> {
-        return self.map {
-            return try field.get($0)
-        }
+        return map { try field.get($0) }
     }
 }

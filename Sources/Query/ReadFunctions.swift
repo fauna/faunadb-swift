@@ -47,7 +47,7 @@ public func Get(ref ref: Expr, ts: Expr? = nil) -> Expr{
  - returns: A Exists expression.
  */
 public func Exists(ref ref: Ref, ts: Timestamp? = nil) -> Expr{
-    var obj = ["exists": ref] as Obj
+    var obj: Obj = ["exists": ref]
     obj["ts"] = ts
     return Expr(fn(obj))
 }
@@ -63,7 +63,7 @@ public func Exists(ref ref: Ref, ts: Timestamp? = nil) -> Expr{
  - returns: A Exists expression.
  */
 public func Exists(ref ref: Expr, ts: Expr? = nil) -> Expr{
-    var obj = ["exists": ref.value] as Obj
+    var obj: Obj = ["exists": ref.value]
     obj["ts"] = ts?.value
     return Expr(fn(obj))
 }
@@ -95,7 +95,7 @@ public func Count(set set: Expr, countEvents: Bool = false) -> Expr{
  - returns: A Count expression.
  */
 public func Count(set set: Expr, countEvents: Expr) -> Expr{
-    return Expr(fn(["count": set.value, "events": countEvents.value] as Obj))
+    return Expr(fn(["count": set.value, "events": countEvents.value]))
 }
 
 /**

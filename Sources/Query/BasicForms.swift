@@ -23,10 +23,7 @@ public struct Var: ValueConvertible {
     
     private static var index: Int = 0
     private static var newName: String {
-        if index == Int.max {
-            index = 0
-        }
-        index = index + 1
+        index = index == Int.max ? 0 : index + 1
         return "v\(index)"
     }
     

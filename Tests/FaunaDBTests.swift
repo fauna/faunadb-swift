@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Nimble
 @testable import FaunaDB
 
 class FaunaDBTests: XCTestCase {
@@ -43,7 +44,7 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
 extension ValueConvertible {
     
     var jsonString: String {
-        let data = try! NSJSONSerialization.dataWithJSONObject(self.toJSON(), options: [])
+        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
         return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
     }
 }
@@ -59,4 +60,27 @@ extension Mapper {
 extension Int {
     var MIN: NSTimeInterval { return Double(self) * 60 }
     var SEC: NSTimeInterval { return Double(self) }
+}
+
+@warn_unused_result(message="Follow 'expect(…)' with '.to(…)', '.toNot(…)', 'toEventually(…)', '==', etc.")
+public func expectToJson<T: ValueConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
+    return try expect(expression()?.jsonString)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

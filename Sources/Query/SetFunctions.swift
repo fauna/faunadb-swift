@@ -46,7 +46,7 @@ public func Match(index index: Expr, terms: Expr...) -> Expr{
  - returns: An Union Expression.
  */
 public func Union(sets sets: Expr...) -> Expr{
-    return Expr(fn(Obj(("union", varargs(sets)))))
+    return Expr(fn(["union": varargs(sets)]))
 }
 
 /**
@@ -58,7 +58,7 @@ public func Union(sets sets: Expr...) -> Expr{
  - returns: An Intersection expression.
  */
 public func Intersection(sets sets: Expr...) -> Expr{
-    return Expr(fn(Obj(("intersection", varargs(sets)))))
+    return Expr(fn(["intersection": varargs(sets)]))
 }
 
 
@@ -71,7 +71,7 @@ public func Intersection(sets sets: Expr...) -> Expr{
  - returns: An Intersection expression.
  */
 public func Difference(sets sets: Expr...) -> Expr{
-    return Expr(fn(Obj(("difference", varargs(sets)))))
+    return Expr(fn(["difference": varargs(sets)]))
 }
 
 /**
@@ -83,7 +83,7 @@ public func Difference(sets sets: Expr...) -> Expr{
  - returns: A Distinct expression.
  */
 public func Distinct(set: Expr) -> Expr{
-    return Expr(fn(Obj(("distinct", set.value))))
+    return Expr(fn(["distinct": set.value]))
 }
 
 /**
@@ -92,13 +92,12 @@ public func Distinct(set: Expr) -> Expr{
  *
  * [Reference](https://faunadb.com/documentation/queries#sets)
  
- 
  - parameter sourceSet: set to perform the join.
  - parameter with:      `with` target can be either an index reference or a lambda function.
  
  - returns: A `Join` expression.
  */
 public func Join(sourceSet sourceSet: Expr, with: Expr) -> Expr{
-    return Expr(fn(Obj(("join", sourceSet.value), ("with", with.value))))
+    return Expr(fn(["join": sourceSet.value, "with": with.value]))
 }
 

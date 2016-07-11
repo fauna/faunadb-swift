@@ -67,8 +67,7 @@ extension Expr: ArrayLiteralConvertible {
 
 extension Expr: DictionaryLiteralConvertible {
     public init(dictionaryLiteral elements: (String, Expr)...) {
-        let inner = Obj(elements.map { k, v in (k, v.value) })
-        self.init(inner)
+        self.init(Obj(elements.map { k, v in (k, v.value) }))
     }
 }
 

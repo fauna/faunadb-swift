@@ -17,6 +17,8 @@
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
 		287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */; };
+		287ED58B1D308ED6000E7BC6 /* TimeAndDateFuntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */; };
+		287ED58D1D33DF80000E7BC6 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
 		28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
 		288614181D0AF605007FB922 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; };
 		288614191D0AF605007FB922 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; };
@@ -273,6 +275,8 @@
 		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; };
 		287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeAndDateFuntions.swift; path = Query/TimeAndDateFuntions.swift; sourceTree = "<group>"; };
+		287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFunctions.swift; path = Query/StringFunctions.swift; sourceTree = "<group>"; };
 		28858D2A1D11C49400532DE7 /* WriteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WriteFunctions.swift; path = Query/WriteFunctions.swift; sourceTree = "<group>"; };
 		288614161D0AF605007FB922 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		288614171D0AF605007FB922 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
@@ -371,6 +375,8 @@
 				288F0F771D0FA41D00079435 /* SetFunctions.swift */,
 				28F99CAC1D1065E20016F809 /* ReadFunctions.swift */,
 				28858D2A1D11C49400532DE7 /* WriteFunctions.swift */,
+				287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */,
+				287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */,
 			);
 			name = Query;
 			sourceTree = "<group>";
@@ -874,6 +880,7 @@
 				28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */,
 				28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */,
 				28DCFF4B1CFF909100A813D3 /* Scalars.swift in Sources */,
+				287ED58B1D308ED6000E7BC6 /* TimeAndDateFuntions.swift in Sources */,
 				28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */,
 				28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */,
 				28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */,
@@ -885,6 +892,7 @@
 				287AB3481D0726930002B487 /* PathComponentType.swift in Sources */,
 				28DCFF5C1D01CBF800A813D3 /* Value.swift in Sources */,
 				28E9D8611D08EE7800A511AA /* Date.swift in Sources */,
+				287ED58D1D33DF80000E7BC6 /* StringFunctions.swift in Sources */,
 				2886144F1D0C8CF7007FB922 /* SetRef.swift in Sources */,
 				28DCFF491CFF907E00A813D3 /* Obj.swift in Sources */,
 				28DCFF471CFF906200A813D3 /* Ref.swift in Sources */,
