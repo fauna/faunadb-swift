@@ -1,10 +1,10 @@
 //
-//  ClientExceptions.swift
-//  FaunaDB
+//  ClientConfigurationTests.swift
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 6/10/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
+
 import XCTest
 import Nimble
 import Result
@@ -43,30 +43,32 @@ class ClientExceptionsTests: FaunaDBTests {
        
         
         
-        waitUntil(timeout: 3){ [weak self] action in
+        waitUntil(timeout: 3){ [weak self] done in
             self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])){ _ in
-                action()
+                done()
             }
         }
-        waitUntil(timeout: 3){ [weak self] action in
+        
+        waitUntil(timeout: 3){ [weak self] done in
             self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
                                           "source": Ref("classes/spells"),
                                           "terms": [["path": "data.element"] as Obj] as Arr ,
                 "active": true])){ _ in
-                action()
+                done()
             }
         }
         
         
-        waitUntil(timeout: 3){ [weak self] action in
+        waitUntil(timeout: 3){ [weak self] done in
             self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
                 "source": Ref("classes/spells"),
                 "terms": [["path": "data.element"] as Obj] as Arr ,
                 "active": true])){ _ in
-                    action()
+                    done()
             }
         }
         
+        // MARK: NotFoundException
         waitUntil(timeout: 3) {[weak self] done in
             self?.client.query(Get(ref: Ref("classes/spells/1234"))) { result in
                 guard case let .Failure(queryError) = result, case .NotFoundException(response: _, errors: _) = queryError else {
@@ -77,9 +79,25 @@ class ClientExceptionsTests: FaunaDBTests {
                 done()
             }
         }
+        
+    
+        // MARK: BadRequestException
+        waitUntil(timeout: 3) { [weak self] done in
+            self?.client.query("Hi") { result in
+                guard case let .Failure(queryError) = result, case Error.BadRequestException(response: _, errors: _) = queryError else {
+                    fail()
+                    done()
+                    return
+                }
+                done()
+            }
+        }
+
     }
     
     func testUnauthorized(){
+        
+        // MARK: UnauthorizedException
         let badClient = Client(secret: "notavalidsecret")
         waitUntil(timeout: 3) { done in
             badClient.query(Get(ref: Ref("classes/spells/1234"))) { result in
@@ -92,7 +110,6 @@ class ClientExceptionsTests: FaunaDBTests {
             }
         }
     }
-
 }
 
 

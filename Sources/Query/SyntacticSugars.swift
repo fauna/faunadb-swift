@@ -8,48 +8,63 @@
 import Foundation
 
 
-extension SequenceType where Self.Generator.Element: ValueConvertible {
+extension SequenceType where Self.Generator.Element: ExprConvertible {
     
-    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Map(collection: Expr(map { $0 }), lambda: lambda)
+    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
+        return Map(collection: Arr(map { $0.value }), lambda: lambda)
     }
     
-    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Foreach(collection: Expr(map { $0 }), lambda: lambda)
+    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Foreach {
+        return Foreach(collection: Arr(map { $0.value }), lambda: lambda)
     }
     
-    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Filter(collection: Expr(map { $0 }), lambda: lambda)
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Filter {
+        return Filter(collection: Arr(map { $0.value }), lambda: lambda)
     }
 }
 
 extension SequenceType where Self.Generator.Element == Value {
     
-    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Map(collection: Expr(map { $0 }), lambda: lambda)
+    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
+        return Map(collection: Arr(map { $0 }), lambda: lambda)
     }
     
-    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Foreach(collection: Expr(map { $0 }), lambda: lambda)
+    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Foreach {
+        return Foreach(collection: Arr(map { $0 }), lambda: lambda)
     }
     
-    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Filter(collection: Expr(map { $0 }), lambda: lambda)
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Filter {
+        return Filter(collection: Arr(map { $0 }), lambda: lambda)
     }
 }
 
-extension SequenceType where Self.Generator.Element == ValueConvertible {
+extension SequenceType where Self.Generator.Element == ExprConvertible {
     
-    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Map(collection: Expr(map { $0 }), lambda: lambda)
+    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
+        return Map(collection: Arr(map { $0.value }), lambda: lambda)
     }
     
-    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Foreach(collection: Expr(map { $0 }), lambda: lambda)
+    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Foreach {
+        return Foreach(collection: Arr(map { $0.value }), lambda: lambda)
     }
     
-    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Expr {
-        return Filter(collection: Expr(map { $0 }), lambda: lambda)
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Filter {
+        return Filter(collection: Arr(map { $0.value }), lambda: lambda)
+    }
+}
+
+extension SequenceType where Self.Generator.Element == Expr {
+    
+    public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
+        return Map(collection: Arr(map { $0.value }), lambda: lambda)
+    }
+    
+    public func forEachFauna(@noescape lambda: ((Expr) -> Expr)) -> Foreach {
+        return Foreach(collection: Arr(map { $0.value }), lambda: lambda)
+    }
+    
+    public func filterFauna(@noescape lambda: ((Expr) -> Expr)) -> Filter {
+        return Filter(collection: Arr(map { $0.value }), lambda: lambda)
     }
 }
 

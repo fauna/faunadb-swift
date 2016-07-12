@@ -42,14 +42,14 @@ public final class Client {
 
 extension Client {
 
-    public func query(@autoclosure expr: (()-> ValueConvertible), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
+    public func query(@autoclosure expr: (()-> ExprConvertible), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
         let jsonData = try! toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
                 guard let data = data else {
-                    throw Error.DriverException(data: nil, msg: "Fauna must not be Empty.")
+                    throw Error.DriverException(data: nil, msg: "Fauna data must not be empty.")
                 }
                 try mySelf.handleQueryErrors(response, data: data)
                 let result = try Mapper.fromFaunaResponseData(data)
@@ -65,7 +65,7 @@ extension Client {
         }
     }
     
-    public func query(@autoclosure expr: (()-> ValueConvertible), failure: (FaunaDB.Error) -> Void, success: (Value) -> Void) -> NSURLSessionDataTask {
+    public func query(@autoclosure expr: (()-> ExprConvertible), failure: (FaunaDB.Error) -> Void, success: (Value) -> Void) -> NSURLSessionDataTask {
         let task = query(expr) { (result: Result<Value, FaunaDB.Error>) in
             switch result {
             case .Failure(let error):

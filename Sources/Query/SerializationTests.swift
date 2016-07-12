@@ -1,9 +1,8 @@
 //
-//  SerializationTests.swift
-//  FaunaDB
+//  ClientConfigurationTests.swift
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 6/8/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import XCTest
@@ -44,10 +43,10 @@ class SerializationTests: FaunaDBTests {
         
         let nsObjcetArr2: [NSObject] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
         expectToJson(nsObjcetArr2) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
-
+        
         let complexValue = [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5]]
         expectToJson(complexValue) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5,[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]]"
-
+        
         expectToJson([3, 4, 5, 6, [3, 5, 6, 7]]) == "[3,4,5,6,[3,5,6,7]]"
     }
     
@@ -90,179 +89,6 @@ class SerializationTests: FaunaDBTests {
         expect(Null().toJSON() as? NSNull) == NSNull()
     }
     
-    func testBasicForms() {
-        
-        // MARK: Let
-        
-        Var.resetIndex()
-        var letExpr = Let(1) { $0 }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":{\"var\":\"v1\"}}"
-        
-        Var.resetIndex()
-        letExpr = Let(1) { x in
-                        [x, 4]
-                    }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
-        
-        Var.resetIndex()
-        letExpr = Let(1, "Hi!", Create(ref: Ref.databases, params: ["name": "blog_db"])) { x, y, z in
-                        Do(exprs: x, y, x, y, z)
-                   }
-        expectToJson(letExpr) == "{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"
-
-
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4) { x, y, z, a in
-                        Do(exprs: x, y, z, a)
-                   }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}"
-
-
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
-                        Do(exprs: x, y, z, a, t)
-                   }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}"
-        
-        
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
-                                            Let("Hi") { w in
-                                                Do(exprs: x, y, z, a, t, w)
-                                            }
-                   }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}"
-        
-        
-        // MARK: If
-        var ifExpr = If(pred: true, then: "was true", else: "was false")
-        expectToJson(ifExpr) ==  "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}"
-        ifExpr = If(pred: true, then: {
-                                    return "was true"
-                                 }(),
-                                 else: {
-                                    return "was false"
-                                 }())
-        expectToJson(ifExpr) == "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}"
-        
-        //MARK: Do
-        
-        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: ["data": ["name": "Hen Wen"]]),
-                               Get(ref: Ref("some/ref/1")))
-        expectToJson(doForm) == "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}"
-        
-        //MARK: Lambda
-        
-        Var.resetIndex()
-        let lambda1 = Lambda { a in a }
-        expectToJson(lambda1) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}"
-        
-        Var.resetIndex()
-        let lambda2 = Lambda { a, b in [b , a] }
-        expectToJson(lambda2) == "{\"expr\":[{\"var\":\"v2\"},{\"var\":\"v1\"}],\"lambda\":[\"v1\",\"v2\"]}"
-  
-        Var.resetIndex()
-        let lambda3 = Lambda { a, _, _ in a }
-        expectToJson(lambda3) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":[\"v1\",\"v2\",\"v3\"]}"
-
-        Var.resetIndex()
-        let lambda4 = Lambda { a in Not(boolExpr: a) }
-        expectToJson(lambda4) == "{\"expr\":{\"not\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}"
-    }
-
-    func testResourceModifications(){
-        
-        //MARK: Create
-        
-        let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost": 15]
-        var create = Create(ref: Ref("classes/spells"),
-                         params: ["data": spell])
-        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
-        
-        create = Create(ref: Ref("classes/spells"),
-                            params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
-        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
-        
-        create = Create(ref: Expr(Ref("classes/spells")),
-                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15]])
-        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
-        
- 
-        //MARK: Update
-        
-        var update = Update(ref: Ref("classes/spells/123456"),
-                         params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
-        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-        
-        update = Update(ref: Ref("classes/spells/123456"),
-                     params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
-        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-        
-        update = Update(ref: Expr(Ref("classes/spells/123456")),
-                        params: ["data": ["name": "Mountain's Thunder", "cost": Expr(Null())]])
-        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-        
-        //MARK: Replace
-        
-        var replaceSpell = spell
-        replaceSpell["name"] = "Mountain's Thunder"
-        replaceSpell["element"] = ["air", "earth"] as Arr
-        replaceSpell["cost"] = 10
-        var replace = Replace(ref: Ref("classes/spells/123456"),
-                           params: ["data": replaceSpell])
-        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
-        
-        
-        replace = Replace(ref: Ref("classes/spells/123456"),
-                              params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
-        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
-
-        replace = Replace(Expr(Ref("classes/spells/123456")),
-                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
-        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
-
-        //MARK: Delete
-        
-        var delete = Delete(ref: Ref("classes/spells/123456"))
-        
-        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-        
-        delete = Delete(Expr(Ref("classes/spells/123456")))
-        
-        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-        
-        //MARK: Insert
-        
-        var insert = Insert(ref: Ref("classes/spells/123456"),
-                             ts: Timestamp(timeIntervalSince1970: 0),
-                         action: .Create,
-                         params: ["data": replaceSpell])
-        
-        expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-        
-        
-        insert = Insert(Expr(Ref("classes/spells/123456")),
-                        ts: Expr(Timestamp(timeIntervalSince1970: 0)),
-                        action: Expr(Action.Create),
-                        params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"], "cost": 10]])
-        
-        expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-        
-        
-        //MARK: Remove
-        
-        var remove = Remove(ref: Ref("classes/spells/123456"),
-                             ts: Timestamp(timeIntervalSince1970: 0),
-                         action: .Create)
-        expectToJson(remove) == "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-        
-        remove = Remove(Expr(Ref("classes/spells/123456")),
-                        ts: Expr(Timestamp(timeIntervalSince1970: 0)),
-                        action: Expr(Action.Create))
-        expectToJson(remove) == "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-    }
-    
-    
     func testDateAndTimestamp() {
         
         //MARK: Timestamp
@@ -289,27 +115,140 @@ class SerializationTests: FaunaDBTests {
         expectToJson(date2) == "{\"@date\":\"1984-07-18\"}"
     }
     
+    func testStringFunctions() {
+        
+        //MARK: Concat
+        
+        expectToJson(Concat(strList: ["Hen", "Wen"] as Arr)) == "{\"concat\":[\"Hen\",\"Wen\"]}"
+        expectToJson(Concat(strList: ["Hen", "Wen"] as Arr, separator: " ")) == "{\"concat\":[\"Hen\",\"Wen\"],\"separator\":\" \"}"
+        
+        //MARK: Casefold
+        
+        expectToJson(Casefold(str: "Hen Wen")) == "{\"casefold\":\"Hen Wen\"}"
+    }
+    
+    func testTimeAndDateFunctions() {
+        
+        expectToJson(Time("1970-01-01T00:00:00+00:00")) == "{\"time\":\"1970-01-01T00:00:00+00:00\"}"
+        
+        expectToJson(Epoch(offset: 10, unit: TimeUnit.second)) == "{\"unit\":\"second\",\"epoch\":10}"
+        
+        expectToJson(Epoch(offset: 10, unit: "millisecond")) == "{\"unit\":\"millisecond\",\"epoch\":10}"
+        
+        expectToJson(DateFn(iso8601: "1970-01-02")) == "{\"date\":\"1970-01-02\"}"
+        
+    }
+    
+    func testResourceModifications(){
+        
+        //MARK: Create
+        
+        let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost": 15]
+        var create = Create(ref: Ref("classes/spells"),
+                            params: ["data": spell])
+        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
+        
+        create = Create(ref: Ref("classes/spells"),
+                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15] as Obj] as Obj)
+        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
+        
+        create = Create(ref: Ref("classes/spells"),
+                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15] as Obj] as Obj)
+        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
+        
+        
+        //MARK: Update
+        
+        var update = Update(ref: Ref("classes/spells/123456"),
+                            params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        
+        update = Update(ref: Ref("classes/spells/123456") as Expr,
+                        params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj] as Obj)
+        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        
+        update = Update(ref: Ref("classes/spells/123456"),
+                        params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        
+        //MARK: Replace
+        
+        var replaceSpell = spell
+        replaceSpell["name"] = "Mountain's Thunder"
+        replaceSpell["element"] = ["air", "earth"] as Arr
+        replaceSpell["cost"] = 10
+        var replace = Replace(ref: Ref("classes/spells/123456"),
+                              params: ["data": replaceSpell])
+        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
+        
+        
+        replace = Replace(ref: Ref("classes/spells/123456"),
+                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj])
+        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
+        
+        replace = Replace(ref: Ref("classes/spells/123456"),
+                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj])
+        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
+        
+        //MARK: Delete
+        
+        var delete = Delete(ref: Ref("classes/spells/123456"))
+        
+        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        
+        delete = Delete(ref: Ref("classes/spells/123456"))
+        
+        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        
+        //MARK: Insert
+        
+        var insert = Insert(ref: Ref("classes/spells/123456"),
+                            ts: Timestamp(timeIntervalSince1970: 0),
+                            action: .Create,
+                            params: ["data": replaceSpell])
+        
+        expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        
+        
+        insert = Insert(ref: Ref("classes/spells/123456"),
+                        ts: Timestamp(timeIntervalSince1970: 0),
+                        action: Action.Create,
+                        params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj] as Obj)
+        
+        expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        
+        
+        //MARK: Remove
+        
+        var remove = Remove(ref: Ref("classes/spells/123456"),
+                            ts: Timestamp(timeIntervalSince1970: 0),
+                            action: .Create)
+        expectToJson(remove) == "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        
+        remove = Remove(ref: Ref("classes/spells/123456"),
+                        ts: Timestamp(timeIntervalSince1970: 0),
+                        action: Action.Create)
+        expectToJson(remove) == "{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+    }
+    
     func testCollections() {
         
         //MARK: Map
         
-         Var.resetIndex()
-        var map = Map(collection: Expr([1,2,3]),
-                      lambda: Lambda(vars: "munchings", expr: Expr(Var("munchings"))))
+        Var.resetIndex()
+        var map = Map(collection: [1,2,3] as Arr,
+                      lambda: Lambda(vars: "munchings", expr: Var("munchings")))
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}"
         
         Var.resetIndex()
-        map = ([1,2,3] as Arr).mapFauna { x in
-                                            x
-                                         }
+        map = [1,2,3].mapFauna { x in
+            x
+        }
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
         
         
-        
-        
-        
         Var.resetIndex()
-        map = ([1,2,3] as [Int]).mapFauna { $0 }
+        map = ([1,2,3] as Arr).mapFauna { $0 }
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
@@ -317,35 +256,35 @@ class SerializationTests: FaunaDBTests {
             value
         }
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
-
+        
         //MARK: Foreach
         
         Var.resetIndex()
-        var foreach = Foreach(collection: Expr([Ref("another/ref/1"), Ref("another/ref/2")]),
-                           lambda: Lambda(vars: "refData",
-                                          expr: Create(ref: Ref("some/ref"),
-                                                    params: ["data": ["some": Expr(Var("refData"))]]
-                                    )))
+        var foreach = Foreach(collection: [Ref("another/ref/1"), Ref("another/ref/2")] as Arr,
+                              lambda: Lambda(vars: "refData",
+                                expr: Create(ref: Ref("some/ref"),
+                                    params: ["data": ["some": Var("refData").value] as Obj]
+                                )))
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}"
         
         Var.resetIndex()
         foreach = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna { ref in
-            Create(ref: Ref("some/ref"), params: ["data": ["some": ref]])
+            Create(ref: Ref("some/ref"), params: ["data": ["some": ref.value] as Obj])
         }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
         let foreach3 = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna {
-                            Create(ref: Ref("some/ref"),
-                                params: ["data": ["some": $0]])
-                        }
+            Create(ref: Ref("some/ref"),
+                params: ["data": ["some": $0.value] as Obj])
+        }
         expectToJson(foreach3) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
-
+        
         //MARK: Filter
         
         Var.resetIndex()
-        var filter = Filter(collection: Expr([1,2,3]), lambda: Lambda(lambda: { i in  Equals(terms: 1, i) }))
+        var filter = Filter(collection: [1,2,3] as Arr, lambda: Lambda(lambda: { i in Equals(terms: 1, i) }))
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
@@ -353,52 +292,46 @@ class SerializationTests: FaunaDBTests {
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
-        filter = Filter(collection: Expr([1,"Hi",3]),
-                          lambda: Lambda(lambda: { i in
-                                                    Equals(terms: 1, i)
-                                                 })
+        filter = Filter(collection: [1,"Hi",3] as Arr,
+                        lambda: Lambda(lambda: { i in
+                            Equals(terms: 1, i)
+                        })
         )
         expectToJson(filter) == "{\"collection\":[1,\"Hi\",3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         //MARK: Take
         
-        let take = Take(count: 2, collection: [1, 2, 3])
+        let take = Take(count: 2, collection: [1, 2, 3] as Arr)
         expectToJson(take) == "{\"collection\":[1,2,3],\"take\":2}"
         
         
-        let take2 = Take(count: Expr(2), collection: Expr([1, 2, 3]))
+        let take2 = Take(count: 2 as Expr, collection: [1, 2, 3] as Arr)
         expectToJson(take2) == "{\"collection\":[1,2,3],\"take\":2}"
-
-        let take3 = Take(count: 2, collection: [1, "Hi", 3])
+        
+        let take3 = Take(count: 2, collection: [1, "Hi", 3] as Arr)
         expectToJson(take3) == "{\"collection\":[1,\"Hi\",3],\"take\":2}"
         
         //MARK: Drop
         
-        let drop = Drop(count: 2, collection: [1,2,3])
+        let drop = Drop(count: 2, collection: [1,2,3] as Arr)
         expectToJson(drop) == "{\"collection\":[1,2,3],\"drop\":2}"
         
-        let drop2 = Drop(count: Expr(2), collection: Expr([1, 2, 3]))
+        let drop2 = Drop(count: 2 as Expr, collection: [1, 2, 3] as Arr)
         expectToJson(drop2) == "{\"collection\":[1,2,3],\"drop\":2}"
         
-        let drop3 = Drop(count: 2, collection: [1, "Hi", 3])
+        let drop3 = Drop(count: 2, collection: [1, "Hi", 3] as Arr)
         expectToJson(drop3) == "{\"collection\":[1,\"Hi\",3],\"drop\":2}"
         
         //MARK: Prepend
-
-        var prepend = Prepend(elements: [1,2,3], toCollection: [4,5,6])
+        
+        let prepend = Prepend(elements: [1,2,3] as Arr, toCollection: [4,5,6] as Arr)
         expectToJson(prepend) == "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}"
         
-        prepend = Prepend(elements: Expr([1,2,3]), toCollection: Expr([4,5,6]))
-        expectToJson(prepend) == "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}"
-
-    
         //MARK: Append
         
-        var append = Append(elements: [4,5,6], toCollection: [1,2,3])
+        let append = Append(elements: [4,5,6] as Arr, toCollection: [1,2,3] as Arr)
         expectToJson(append) == "{\"collection\":[4,5,6],\"append\":[1,2,3]}"
         
-        append = Append(elements: Expr([4,5,6]), toCollection: Expr([1,2,3]))
-        expectToJson(append) == "{\"collection\":[4,5,6],\"append\":[1,2,3]}"
     }
     
     func testResourceRetrievals(){
@@ -409,13 +342,7 @@ class SerializationTests: FaunaDBTests {
         var get = Get(ref: ref)
         expectToJson(get) == "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
         
-        get = Get(ref: Expr(ref))
-        expectToJson(get) == "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
-        
         get = Get(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
-        expectToJson(get) == "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
-        
-        get = Get(ref: Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
         expectToJson(get) == "{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
         
         //MARK: Exists
@@ -423,13 +350,7 @@ class SerializationTests: FaunaDBTests {
         var exists = Exists(ref: ref)
         expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}"
         
-        exists = Exists(ref: Expr(ref))
-        expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}"
-        
         exists = Exists(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
-        expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-        
-        exists = Exists(ref: Expr(ref), ts: Expr(Timestamp(timeIntervalSince1970: 0)))
         expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
         
         //MARK: Count
@@ -438,45 +359,122 @@ class SerializationTests: FaunaDBTests {
         expectToJson(count) == "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
         count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                           countEvents: true)
+                      countEvents: true)
         expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
         count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                           countEvents: true)
+                      countEvents: true)
         expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
         count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                      countEvents: Expr(true))
+                      countEvents: true)
         expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
         //MARK: Paginate
         
         let paginate = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-                                                       Match(index: Ref("indexes/some_index"), terms: "term2")))
+            Match(index: Ref("indexes/some_index"), terms: "term2")))
         expectToJson(paginate) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}"
         
         let paginate2 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-                                          Match(index: Ref("indexes/some_index"), terms: "term2")),
+            Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  sources: true)
         expectToJson(paginate2) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}"
         
         let paginate3 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-                                                      Match(index: Ref("indexes/some_index"), terms: "term2")),
+            Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  events: true)
         expectToJson(paginate3) == "{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}"
         
         let paginate4 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-                                                       Match(index: Ref("indexes/some_index"), terms: "term2")),
+            Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  size: 4)
         expectToJson(paginate4) == "{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}"
         
         let paginate5 = Paginate(Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-                                             Match(index: Ref("indexes/some_index"), terms: "term2")),
-                                 size: Expr(4), events: Expr(true), sources: Expr(true))
+            Match(index: Ref("indexes/some_index"), terms: "term2")),
+                                 size: 4, events: true, sources: true)
         expectToJson(paginate5) == "{\"size\":4,\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}"
         
     }
     
+    func testMiscellaneousFunctions(){
+        
+        //MARK: Equals
+        
+        expectToJson(Equals(terms: 2, 2, Var("v2"))) == "{\"equals\":[2,2,{\"var\":\"v2\"}]}"
+        
+        expectToJson(Equals(terms: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))) ==
+        "{\"equals\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
+        
+        //MARK: Contains
+        
+        var contains = Contains(pathComponents: "favorites", "foods", inExpr:  ["favorites":
+            ["foods":
+                ["crunchings",
+                 "munchings",
+                 "lunchings"] as Arr]
+                as Obj] as Obj)
+        
+        expectToJson(contains) == "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
+        
+        
+        contains = Contains(path: "favorites", inExpr:  ["favorites":
+            ["foods":
+                ["crunchings",
+                    "munchings",
+                    "lunchings"] as Arr]
+                as Obj] as Obj)
+        
+        expectToJson(contains) == "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
+        
+        //MARK: Select
+        
+        var select = Select(pathComponents: "favorites", "foods", 1, from:
+            ["favorites":
+                ["foods":
+                    ["crunchings",
+                        "munchings",
+                        "lunchings"] as Arr
+                ] as Obj
+            ] as Obj)
+        expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
+        
+        select = Select(path: ["favorites", "foods", 1] as Arr, from:
+            ["favorites":
+                ["foods":
+                    ["crunchings",
+                        "munchings",
+                        "lunchings"] as Arr
+                ] as Obj
+            ] as Obj)
+        expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
+        
+        
+        expectToJson(Add(terms: 1, 2, 3)) == "{\"add\":[1,2,3]}"
+        
+        expectToJson(Multiply(terms: 1, 2, 3)) == "{\"multiply\":[1,2,3]}"
+        
+        expectToJson(Subtract(terms: 1, 2, 3)) == "{\"subtract\":[1,2,3]}"
+        
+        expectToJson(Divide(terms: 1, 2, 3)) == "{\"divide\":[1,2,3]}"
+        
+        expectToJson(Modulo(terms: 1, 2, 3)) == "{\"modulo\":[1,2,3]}"
+        
+        expectToJson(LT(terms: 1, 2, 3)) == "{\"lt\":[1,2,3]}"
+        
+        expectToJson(LTE(terms: 1, 2, 3)) == "{\"lte\":[1,2,3]}"
+        
+        expectToJson(GT(terms: 1, 2, 3)) == "{\"gt\":[1,2,3]}"
+        
+        expectToJson(GTE(terms: 1, 2, 3)) == "{\"gte\":[1,2,3]}"
+        
+        expectToJson(And(terms: true, false, false)) == "{\"and\":[true,false,false]}"
+        
+        expectToJson(Or(terms: true, false, false)) == "{\"or\":[true,false,false]}"
+        
+        expectToJson(Not(boolExpr: true)) == "{\"not\":true}"
+    }
     
     func testSets(){
         
@@ -492,144 +490,120 @@ class SerializationTests: FaunaDBTests {
         expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
         
         
-        matchSet = Match(index: Expr(Ref("indexes/spells_by_elements")),
+        matchSet = Match(index: Ref("indexes/spells_by_elements"),
                          terms: "fire")
         expectToJson(matchSet) == "{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_elements\"}}"
         
         
         
-        matchSet = Match(index: Expr(Ref.databases))
+        matchSet = Match(index: Ref.databases)
         expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
         
         //MARK: Union
         
         let union = Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                                Match(index: Ref("indexes/spells_by_element"), terms: "water"))
+                          Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         expectToJson(union) == "{\"union\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
         
         //MARK: Intersection
         
         let intersection = Intersection(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                                              Match(index: Ref("indexes/spells_by_element"), terms: "water"))
+                                        Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         expectToJson(intersection) == "{\"intersection\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
         
         //MARK: Difference
         
         let difference = Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                                          Match(index: Ref("indexes/spells_by_element"), terms: "water"))
+                                    Match(index: Ref("indexes/spells_by_element"), terms: "water"))
         expectToJson(difference) == "{\"difference\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
         
         //MARK: Join
         
         let join = Join(sourceSet: Match(index: Ref("indexes/spells_by_element"),
-                                            terms: "fire"),
+            terms: "fire"),
                         with: Lambda { value in return  Get(ref: value) })
         expectToJson(join) == "{\"with\":{\"expr\":{\"get\":{\"var\":\"v2\"}},\"lambda\":\"v2\"},\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
     }
     
-    func testMiscellaneousFunctions(){
+    func testBasicForms() {
         
-        //MARK: Equals
+        // MARK: Let
         
-        expectToJson(Equals(terms: 2, 2, Expr(Var("v2")))) == "{\"equals\":[2,2,{\"var\":\"v2\"}]}"
+        Var.resetIndex()
+        var letExpr = Let(1) { $0 }
+        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":{\"var\":\"v1\"}}"
         
-        expectToJson(Equals(terms: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))) ==
-        "{\"equals\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
+        Var.resetIndex()
+        letExpr = Let(1) { x in
+            [x.value, 4] as Arr
+        }
+        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
         
-        //MARK: Contains
-        
-        var contains = Contains(path: "favorites", "foods", inExpr:  ["favorites":
-            ["foods":
-                ["crunchings",
-                    "munchings",
-                    "lunchings"]
-                ]
-            ])
-        
-        expectToJson(contains) == "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
-        
-        
-        contains = Contains(Expr("favorites"), inExpr:  ["favorites":
-            ["foods":
-                ["crunchings",
-                    "munchings",
-                    "lunchings"]
-                ]
-            ])
-        
-        expectToJson(contains) == "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
-        
-        //MARK: Select
-        
-        var select = Select(path: "favorites", "foods", 1, from:
-            ["favorites":
-                ["foods":
-                    ["crunchings",
-                        "munchings",
-                        "lunchings"]
-                    ]
-                ])
-        expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
-        
-        select = Select(Expr(["favorites", "foods", 1] as Arr), from:
-            ["favorites":
-                ["foods":
-                    ["crunchings",
-                        "munchings",
-                        "lunchings"]
-                ]
-            ])
-        expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
+        Var.resetIndex()
+        letExpr = Let(1, "Hi!", Create(ref: Ref.databases, params: ["name": "blog_db"])) { x, y, z in
+            Do(exprs: x, y, x, y, z)
+        }
+        expectToJson(letExpr) == "{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"
         
         
-        expectToJson(Add(terms: 1, 2, Expr(3))) == "{\"add\":[1,2,3]}"
+        Var.resetIndex()
+        letExpr = Let(1, 2, 3, 4) { x, y, z, a in
+            Do(exprs: x, y, z, a)
+        }
+        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}"
         
-        expectToJson(Multiply(terms: 1, 2, Expr(3))) == "{\"multiply\":[1,2,3]}"
         
-        expectToJson(Subtract(terms: 1, 2, Expr(3))) == "{\"subtract\":[1,2,3]}"
+        Var.resetIndex()
+        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
+            Do(exprs: x, y, z, a, t)
+        }
+        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}"
         
-        expectToJson(Divide(terms: 1, 2, Expr(3))) == "{\"divide\":[1,2,3]}"
         
-        expectToJson(Modulo(terms: 1, 2, Expr(3))) == "{\"modulo\":[1,2,3]}"
+        Var.resetIndex()
+        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
+            Let("Hi") { w in
+                Do(exprs: x, y, z, a, t, w)
+            }
+        }
+        expectToJson(letExpr) == "{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}"
         
-        expectToJson(LT(terms: 1, 2, Expr(3))) == "{\"lt\":[1,2,3]}"
-    
-        expectToJson(LTE(terms: 1, 2, Expr(3))) == "{\"lte\":[1,2,3]}"
-    
-        expectToJson(GT(terms: 1, 2, Expr(3))) == "{\"gt\":[1,2,3]}"
         
-        expectToJson(GTE(terms: 1, 2, Expr(3))) == "{\"gte\":[1,2,3]}"
+        // MARK: If
+        var ifExpr = If(pred: true, then: "was true", else: "was false")
+        expectToJson(ifExpr) ==  "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}"
+        ifExpr = If(pred: true, then: {
+            return "was true"
+            }(),
+                    else: {
+                        return "was false"
+            }())
+        expectToJson(ifExpr) == "{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}"
         
-        expectToJson(And(terms: true, false, Expr(false))) == "{\"and\":[true,false,false]}"
+        //MARK: Do
         
-        expectToJson(Or(terms: true, false, Expr(false))) == "{\"or\":[true,false,false]}"
+        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: ["data": ["name": "Hen Wen"] as Obj]),
+                        Get(ref: Ref("some/ref/1")))
+        expectToJson(doForm) == "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}"
         
-        expectToJson(Not(boolExpr: Expr(true))) == "{\"not\":true}"
+        //MARK: Lambda
+        
+        Var.resetIndex()
+        let lambda1 = Lambda { a in a }
+        expectToJson(lambda1) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}"
+        
+        Var.resetIndex()
+        let lambda2 = Lambda { a, b in Arr([b.value , a.value]) }
+        expectToJson(lambda2) == "{\"expr\":[{\"var\":\"v2\"},{\"var\":\"v1\"}],\"lambda\":[\"v1\",\"v2\"]}"
+        
+        Var.resetIndex()
+        let lambda3 = Lambda { a, _, _ in a }
+        expectToJson(lambda3) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":[\"v1\",\"v2\",\"v3\"]}"
+        
+        Var.resetIndex()
+        let lambda4 = Lambda { a in Not(boolExpr: a) }
+        expectToJson(lambda4) == "{\"expr\":{\"not\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}"
     }
-    
-    func testStringFunctions() {
-        
-        //MARK: Concat
-        
-        expectToJson(Concat(strList: Expr(["Hen", "Wen"] as Arr))) == "{\"concat\":[\"Hen\",\"Wen\"]}"
-        expectToJson(Concat(strList: Expr(["Hen", "Wen"] as Arr), separator: " ")) == "{\"concat\":[\"Hen\",\"Wen\"],\"separator\":\" \"}"
-        
-        //MARK: Casefold
-        
-        expectToJson(Casefold(str: "Hen Wen")) == "{\"casefold\":\"Hen Wen\"}"
-    }
-    
-    func testTimeAndDateFunctions() {
-        
-        expectToJson(Time("1970-01-01T00:00:00+00:00")) == "{\"time\":\"1970-01-01T00:00:00+00:00\"}"
-        
-        expectToJson(Epoch(offset: Expr(10), unit: TimeUnit.second)) == "{\"unit\":\"second\",\"epoch\":10}"
-        
-        expectToJson(Epoch(offset: Expr(10), unit: "millisecond")) == "{\"unit\":\"millisecond\",\"epoch\":10}"
-        
-        expectToJson(DateFn(iso8601: "1970-01-02")) == "{\"date\":\"1970-01-02\"}"
-        
-    }
-    
+
 }

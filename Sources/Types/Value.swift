@@ -11,14 +11,14 @@ internal protocol Encodable {
     func toJSON() -> AnyObject
 }
 
-public protocol ValueConvertible {
+public protocol ExprConvertible {
     var value: Value { get }
 }
 
-public protocol Value: ValueConvertible{}
+public protocol Value: Expr{}
 public protocol ScalarValue: Value {}
 
-extension ValueConvertible {
+extension ExprConvertible {
     func toJSON() -> AnyObject {
         return (value as! Encodable).toJSON()
     }
@@ -58,7 +58,7 @@ extension Value {
     }
 }
 
-extension ValueConvertible {
+extension ExprConvertible {
     
     public func get<T: Value>(path: PathComponentType...) throws -> T{
         return try get(Field<T>(path))

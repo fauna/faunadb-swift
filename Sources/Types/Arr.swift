@@ -94,15 +94,15 @@ public func ==(lhs: Arr, rhs: Arr) -> Bool {
     return true
 }
 
-extension Array: ValueConvertible {
+extension Array: ExprConvertible {
     
     public var value: Value {
         return Arr(            
             filter { item in
-                return item is Value || item is ValueConvertible || item is NSObject
+                return item is Value || item is ExprConvertible || item is NSObject
             }.map { item in
                 let value = item as? Value
-                let valueConvertibleValue = (item as? ValueConvertible)?.value
+                let valueConvertibleValue = (item as? ExprConvertible)?.value
                 let objectValue = (item as? NSObject)?.value()
                 return objectValue ?? value ?? valueConvertibleValue!
             })

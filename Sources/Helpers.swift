@@ -19,7 +19,16 @@ extension NSNumber {
     
 }
 
-func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(collection: C) -> Value{
+func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C) -> Value{
+    switch  collection.count {
+    case 1:
+        return collection.first!.value
+    default:
+        return Arr(collection.map { $0.value })
+    }
+}
+
+func varargs<C: CollectionType where C.Generator.Element: ExprConvertible>(collection: C) -> Value{
     switch  collection.count {
     case 1:
         return collection.first!.value

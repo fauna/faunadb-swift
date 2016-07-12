@@ -1,9 +1,8 @@
 //
-//  DeserializationTests.swift
-//  FaunaDB
+//  ClientConfigurationTests.swift
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 6/8/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import XCTest
@@ -24,7 +23,7 @@ class DeserializationTests: FaunaDBTests {
                           "class": Ref("classes/derp"),
                           "ts": Double(1432763268186882),
                           "data":["test": 1.0]]
-        let exprValue: ValueConvertible = value
+        let exprValue: ExprConvertible = value
         XCTAssertTrue(deseralizedValue.isEquals(exprValue.value))
     }
 

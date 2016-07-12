@@ -1,10 +1,10 @@
 //
 //  ClientConfigurationTests.swift
-//  FaunaDB
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 5/31/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
+
 
 import XCTest
 @testable import FaunaDB

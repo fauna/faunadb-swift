@@ -12,7 +12,6 @@
 		283EB4EE1D26FB6900E59EBA /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
 		283EB4EF1D26FB6C00E59EBA /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
 		283EB4F01D26FB6F00E59EBA /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
-		283EB4F11D26FB7200E59EBA /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D84B1D0849F700A511AA /* SerializationTests.swift */; };
 		283EB4F21D26FBC500E59EBA /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
@@ -29,6 +28,7 @@
 		288F0F781D0FA41D00079435 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
 		28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
 		28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
+		28A398881D341BE300F7D51B /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A398871D341BE300F7D51B /* SerializationTests.swift */; };
 		28DCFF371CFE050E00A813D3 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
 		28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
 		28DCFF441CFE40B600A813D3 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
@@ -285,6 +285,7 @@
 		2886147B1D0F6E50007FB922 /* MiscFuntions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiscFuntions.swift; path = Query/MiscFuntions.swift; sourceTree = "<group>"; };
 		288F0F771D0FA41D00079435 /* SetFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetFunctions.swift; path = Query/SetFunctions.swift; sourceTree = "<group>"; };
 		28A1B1AD1D25C616006AA400 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		28A398871D341BE300F7D51B /* SerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializationTests.swift; path = Sources/Query/SerializationTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF361CFE050E00A813D3 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientConfigurationTests.swift; path = Tests/ClientConfigurationTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTests.swift; path = Tests/ClientTests.swift; sourceTree = SOURCE_ROOT; };
@@ -298,7 +299,6 @@
 		28DCFF5B1D01CBF800A813D3 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Value.swift; path = Types/Value.swift; sourceTree = "<group>"; };
 		28DCFF8F1D0222BA00A813D3 /* Result.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Result.xcodeproj; path = Carthage/Checkouts/Result/Result.xcodeproj; sourceTree = "<group>"; };
 		28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeserializationTests.swift; path = Tests/DeserializationTests.swift; sourceTree = SOURCE_ROOT; };
-		28E9D84B1D0849F700A511AA /* SerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializationTests.swift; path = Tests/SerializationTests.swift; sourceTree = SOURCE_ROOT; };
 		28E9D8601D08EE7800A511AA /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Types/Date.swift; sourceTree = "<group>"; };
 		28E9D8621D08EE8700A511AA /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timestamp.swift; path = Types/Timestamp.swift; sourceTree = "<group>"; };
 		28E9D8641D09D59000A511AA /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Carthage/Checkouts/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
@@ -495,7 +495,7 @@
 				288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */,
 				287AB36C1D0782A50002B487 /* FieldTests.swift */,
 				28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */,
-				28E9D84B1D0849F700A511AA /* SerializationTests.swift */,
+				28A398871D341BE300F7D51B /* SerializationTests.swift */,
 			);
 			name = Tests;
 			path = FaunaDBTests;
@@ -908,9 +908,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				283EB4EE1D26FB6900E59EBA /* ClientExceptionsTests.swift in Sources */,
-				283EB4F11D26FB7200E59EBA /* SerializationTests.swift in Sources */,
 				283EB4F01D26FB6F00E59EBA /* DeserializationTests.swift in Sources */,
 				283EB4ED1D26FB6600E59EBA /* ClientTests.swift in Sources */,
+				28A398881D341BE300F7D51B /* SerializationTests.swift in Sources */,
 				283EB4F21D26FBC500E59EBA /* FaunaDBTests.swift in Sources */,
 				283EB4EF1D26FB6C00E59EBA /* FieldTests.swift in Sources */,
 				283EB4EB1D26FB6000E59EBA /* ClientConfigurationTests.swift in Sources */,

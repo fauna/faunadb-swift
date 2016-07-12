@@ -1,9 +1,8 @@
 //
 //  ClientTests.swift
-//  FaunaDB
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 5/31/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import XCTest
@@ -98,14 +97,14 @@ class ClientTests: FaunaDBTests {
         expect(inst?.get(dataField)).to(equal("testValue"))
         
         
-        waitUntil(timeout: 3) { [weak self] done in
-            let ref: Ref = try! inst!.get("ref")
-            self?.client.query(Exists(ref: ref)){ result in
-                let responseValue = try! result.dematerialize() as! Bool
-                expect(responseValue).to(beTrue())
-                done()
-            }
-        }
+//        waitUntil(timeout: 3) { [weak self] done in
+//            let ref: Ref = try! inst!.get("ref")
+//            self?.client.query(Exists(ref: ref)){ result in
+//                let responseValue = try! result.dematerialize() as! Bool
+//                expect(responseValue).to(beTrue())
+//                done()
+//            }
+//        }
         
         
         // create instance 2

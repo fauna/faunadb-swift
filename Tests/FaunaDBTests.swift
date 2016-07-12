@@ -41,7 +41,7 @@ func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throw
     }
 }
 
-extension ValueConvertible {
+extension ExprConvertible {
     
     var jsonString: String {
         let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
@@ -63,24 +63,6 @@ extension Int {
 }
 
 @warn_unused_result(message="Follow 'expect(…)' with '.to(…)', '.toNot(…)', 'toEventually(…)', '==', etc.")
-public func expectToJson<T: ValueConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
-    return try expect(expression()?.jsonString)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+public func expectToJson<T: ExprConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
+    return try expect(expression()?.jsonString)    
 }

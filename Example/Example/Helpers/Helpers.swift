@@ -13,25 +13,25 @@ import Foundation
 
 extension FaunaModel {
     
-    func fCreate() -> Expr {
+    func fCreate() -> Create {
         return Create(ref: Self.classRef, params: ["data": value])
     }
     
-    func fUpdate() -> Expr? {
+    func fUpdate() -> Update? {
         guard let refId = refId else {
             return nil
         }
         return Update(ref: refId, params: ["data": value])
     }
     
-    func fDelete() -> Expr? {
+    func fDelete() -> Delete? {
         guard let refId = refId else {
             return nil
         }
         return Delete(ref: refId)
     }
     
-    func fReplace() -> Expr {
+    func fReplace() -> Replace? {
         guard let refId = refId else { return nil }
         return Replace(ref: refId, params: ["data": value])
     }
@@ -41,7 +41,7 @@ extension FaunaModel {
     }
 }
 
-public protocol FaunaModel: ValueConvertible {
+public protocol FaunaModel: ExprConvertible {
     var client: Client { get }
     static var classRef: Ref { get }
     var fId: String? { get set }
@@ -49,13 +49,13 @@ public protocol FaunaModel: ValueConvertible {
     init(data: Obj)
 }
 
-extension ValueConvertible {
+extension ExprConvertible {
     var client: Client {
         return faunaClient
     }
 }
 
-extension ValueConvertible {
+extension ExprConvertible {
     
     public func rx_query() -> Observable<Value> {
         return self.client.rx_query(self)

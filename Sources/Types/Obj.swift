@@ -114,13 +114,13 @@ public func ==(lhs: Obj, rhs: Obj) -> Bool {
     return true
 }
 
-extension Dictionary: ValueConvertible {
+extension Dictionary: ExprConvertible {
     
     public var value: FaunaDB.Value {
         let content: [(String, FaunaDB.Value)] =
                     map { k, v in
                         let key = k as! String
-                        let value = (v as? FaunaDB.Value) ?? (v as? ValueConvertible)?.value ?? (v as! NSObject).value()
+                        let value = (v as? FaunaDB.Value) ?? (v as? ExprConvertible)?.value ?? (v as! NSObject).value()
                         return (key, value)
                     }
         
