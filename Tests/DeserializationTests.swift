@@ -23,7 +23,7 @@ class DeserializationTests: FaunaDBTests {
                           "class": Ref("classes/derp"),
                           "ts": Double(1432763268186882),
                           "data":["test": 1.0]]
-        let exprValue: ExprConvertible = value
+        let exprValue: ValueConvertible = value
         XCTAssertTrue(deseralizedValue.isEquals(exprValue.value))
     }
 

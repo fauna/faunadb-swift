@@ -11,7 +11,7 @@ import Foundation
  * Enumeration for event action types.
  * [Reference](https://faunadb.com/documentation/queries#write_functions)
  */
-public enum Action: String, ExprConvertible {
+public enum Action: String, ValueConvertible {
     case Create = "create"
     case Delete = "delete"
 }
@@ -30,7 +30,7 @@ public struct Create: Expr {
      * Creates an instance of the class referred to by ref, using params.
      * [Reference](https://faunadb.com/documentation/queries#write_functions)
      
-     - parameter ref: Indicates the calss where the instance should be created.
+     - parameter ref: Indicates the class where the instance should be created.
      - parameter params: Data to create the instance.
      
      - returns: A Create expression.
@@ -43,7 +43,7 @@ public struct Create: Expr {
      * Creates an instance of the class referred to by ref, using params.
      * [Reference](https://faunadb.com/documentation/queries#write_functions)
      
-     - parameter ref: Indicates the calss where the instance should be created.
+     - parameter ref: Indicates the class where the instance should be created.
      - parameter params: Data to create the instance.
      
      - returns: A Create expression.
@@ -56,7 +56,7 @@ public struct Create: Expr {
      * Creates an instance of the class referred to by ref, using params.
      * [Reference](https://faunadb.com/documentation/queries#write_functions)
      
-     - parameter ref: Indicates the calss where the instance should be created.
+     - parameter ref: Indicates the class where the instance should be created.
      - parameter params: Data to create the instance.
      
      - returns: A Create expression.
@@ -85,8 +85,8 @@ public struct Update: Expr {
     }
 
     /**
-     * Updates a resource ref. Updates are partial, and only modify values that are specified. Scalar values and arrays are replaced by newer versions, objects are merged, and null removes a value.
-     * [Reference](https://faunadb.com/documentation/queries#write_functions)
+     Updates a resource ref. Updates are partial, and only modify values that are specified. Scalar values and arrays are replaced by newer versions, objects are merged, and null removes a value.
+     [Reference](https://faunadb.com/documentation/queries#write_functions)
      
      - parameter ref:    Indicates the instance to be updated.
      - parameter params: data to update the instance. Notice that Obj are merged, and Null removes a value.

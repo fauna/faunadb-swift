@@ -7,5 +7,5 @@
 
 import Foundation
 
-public protocol Expr: ExprConvertible {}
+public protocol Expr: ValueConvertible {}
 

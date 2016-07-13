@@ -12,7 +12,7 @@ import Result
 
 extension FaunaDB.Client {
 
-    public func rx_query(expr: ExprConvertible) -> Observable<Value> {
+    public func rx_query(expr: ValueConvertible) -> Observable<Value> {
         return Observable.create { [weak self] subscriber in
             let task = self?.query(expr) { result in
                 switch result {

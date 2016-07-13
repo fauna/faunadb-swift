@@ -9,6 +9,31 @@ import XCTest
 import Nimble
 @testable import FaunaDB
 
+
+struct BlogPost {
+    let name: String
+    let author: String
+    let content: String
+    let tags: [String]
+    
+    init(name:String, author: String, content: String, tags: [String] = []){
+        self.name = name
+        self.author = author
+        self.content = content
+        self.tags = tags
+    }
+    
+    var fId: String?
+}
+
+extension BlogPost: ValueConvertible {
+    
+    var value: Value {
+        let data: [String: Any] = ["name": name, "author": author, "content": content, "tags": tags]
+        return data.value
+    }
+}
+
 class FieldTests: FaunaDBTests {
 
     func testField() {
@@ -44,6 +69,7 @@ class FieldTests: FaunaDBTests {
         let complexArr = [3, 5, ["test": ["test2": ["test3": [1,2,3]]]]]
         let int2: Int = try! complexArr.get(2, "test", "test2", "test3", 0)
         expect(int2) ==  1
+        
     }
 }
 

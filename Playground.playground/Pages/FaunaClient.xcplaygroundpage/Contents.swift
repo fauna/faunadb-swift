@@ -12,13 +12,13 @@ var client = Client(secret: ourClientSecret, observers: [Logger()])
 /*:
  Fauna client `Client` exposes query method to perform queries.
  
- > query function has 2 arguments, first argument is any instance that can be convertible to an expr (it must conforms to ExprConvertible). All fauna queries conforms to `ExprConvertible` but you can also create your owns. Second argument is a swift closure that will be called asyncronous right after the fauna server responses. Clousure callback receive a single parameter of `Result` enum type. Result can be either a value or an error.
+ > query function has 2 arguments, first argument is any instance that can be convertible to an expr (it must conforms to ValueConvertible). All fauna queries conforms to `ValueConvertible` but you can also create your owns. Second argument is a swift closure that will be called asyncronous right after the fauna server responses. Clousure callback receive a single parameter of `Result` enum type. Result can be either a value or an error.
  
  > It's up to you extend Client to provide other convenience query methods.
  */
 
 client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
-    if case .Failure(let errr) = result {
+    if case .Failure(let error) = result {
         // handle error
     }
     let value = try! result.dematerialize()
@@ -29,8 +29,7 @@ client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion
 */
 
 client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
-    
-    guard let  value = try? result.dematerialize() else { return }
+    guard let value = try? result.dematerialize() else { return }
     //do whatever you want with the value
     
 })
@@ -108,7 +107,7 @@ struct BlogPost {
     }
 }
 
-extension BlogPost: ExprConvertible {
+extension BlogPost: ValueConvertible {
     
     var value: Value {
         return (["name": name, "author": author, "content": content, "tags": Arr(tags.map {$0 as Value})] as Obj)
@@ -129,4 +128,4 @@ client.query({
         // do something with the result.
     }
 
-//: [Next](@next)
+//: [Next](@nex

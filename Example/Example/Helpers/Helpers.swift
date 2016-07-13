@@ -41,7 +41,7 @@ extension FaunaModel {
     }
 }
 
-public protocol FaunaModel: ExprConvertible {
+public protocol FaunaModel: ValueConvertible {
     var client: Client { get }
     static var classRef: Ref { get }
     var fId: String? { get set }
@@ -49,13 +49,13 @@ public protocol FaunaModel: ExprConvertible {
     init(data: Obj)
 }
 
-extension ExprConvertible {
+extension ValueConvertible {
     var client: Client {
         return faunaClient
     }
 }
 
-extension ExprConvertible {
+extension ValueConvertible {
     
     public func rx_query() -> Observable<Value> {
         return self.client.rx_query(self)

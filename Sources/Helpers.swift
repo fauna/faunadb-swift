@@ -28,7 +28,7 @@ func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C)
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element: ExprConvertible>(collection: C) -> Value{
+func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(collection: C) -> Value{
     switch  collection.count {
     case 1:
         return collection.first!.value

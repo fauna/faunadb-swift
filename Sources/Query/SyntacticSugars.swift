@@ -8,7 +8,7 @@
 import Foundation
 
 
-extension SequenceType where Self.Generator.Element: ExprConvertible {
+extension SequenceType where Self.Generator.Element: ValueConvertible {
     
     public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
         return Map(collection: Arr(map { $0.value }), lambda: lambda)
@@ -38,7 +38,7 @@ extension SequenceType where Self.Generator.Element == Value {
     }
 }
 
-extension SequenceType where Self.Generator.Element == ExprConvertible {
+extension SequenceType where Self.Generator.Element == ValueConvertible {
     
     public func mapFauna(@noescape lambda: ((Expr) -> Expr)) -> Map {
         return Map(collection: Arr(map { $0.value }), lambda: lambda)

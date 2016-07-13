@@ -123,15 +123,15 @@ public struct Take: Expr {
     public var value: Value
     
     /**
-     * `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll. 
-     * If `take` value is zero or negative, the resulting collection is empty.
-     * When applied to a page, the returned page’s after cursor is adjusted to only cover the taken elements.
+     `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll.
+     If `take` value is zero or negative, the resulting collection is empty.
+     When applied to a page, the returned page’s after cursor is adjusted to only cover the taken elements.
      
-     * As special cases:
-     * * If `take` value is negative, after will be set to the same value as the original page’s  before.
-     * * If all elements from the original page were taken, after does not change.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     As special cases:
+     * If `take` value is negative, after will be set to the same value as the original page’s  before.
+     * If all elements from the original page were taken, after does not change.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
 
      - parameter count:      number of items to take.
      - parameter collection: collection or page.
@@ -143,15 +143,15 @@ public struct Take: Expr {
     }
 
     /**
-     * `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll.
-     * If `take` value is zero or negative, the resulting collection is empty.
-     * When applied to a page, the returned page’s after cursor is adjusted to only cover the taken elements.
+     `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll.
+     If `take` value is zero or negative, the resulting collection is empty.
+     When applied to a page, the returned page’s after cursor is adjusted to only cover the taken elements.
      
-     * As special cases:
-     * * If `take` value is negative, after will be set to the same value as the original page’s  before.
-     * * If all elements from the original page were taken, after does not change.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     As special cases:
+     * If `take` value is negative, after will be set to the same value as the original page’s  before.
+     * If all elements from the original page were taken, after does not change.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter count:      number of items to take.
      - parameter collection: collection or page.
@@ -167,13 +167,13 @@ public struct Drop: Expr {
     public var value: Value
 
     /**
-     * `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
-     *
-     * When applied to a page, the returned page’s before cursor is adjusted to exclude the dropped elements. As special cases:
-     * * If `drop` value is negative, before does not change.
-     * * Otherwise if all elements from the original page were dropped (including the case where the page was already empty), before will be set to same value as the original page’s after.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
+     
+     When applied to a page, the returned page’s before cursor is adjusted to exclude the dropped elements. As special cases:
+     * If `drop` value is negative, before does not change.
+     * Otherwise if all elements from the original page were dropped (including the case where the page was already empty), before will be set to same value as the original page’s after.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter count:      number of items to drop.
      - parameter collection: collection or page.
@@ -185,13 +185,13 @@ public struct Drop: Expr {
     }
 
     /**
-     * `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
-     *
-     * When applied to a page, the returned page’s before cursor is adjusted to exclude the dropped elements. As special cases:
-     * * If `drop` value is negative, before does not change.
-     * * Otherwise if all elements from the original page were dropped (including the case where the page was already empty), before will be set to same value as the original page’s after.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
+     
+     When applied to a page, the returned page’s before cursor is adjusted to exclude the dropped elements. As special cases:
+     * If `drop` value is negative, before does not change.
+     * Otherwise if all elements from the original page were dropped (including the case where the page was already empty), before will be set to same value as the original page’s after.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter count:      number of items to drop.
      - parameter collection: collection or page.
@@ -209,9 +209,9 @@ public struct Prepend: Expr {
     public var value: Value
     
     /**
-     * `Prepend` returns a new Array that is the result of prepending `elements` onto the Array `toCollection`.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Prepend` returns a new Array that is the result of prepending `elements` onto the Array `toCollection`.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
 
      - parameter elements:     elements to prepend onto `toCollection` collection.
      - parameter toCollection: collection.
@@ -229,11 +229,11 @@ public struct Append: Expr {
     public var value: Value
 
     /**
-     * `Append` returns a new Array that is the result of appending `elements` onto the `toCollection` array.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Append` returns a new Array that is the result of appending `elements` onto the `toCollection` array.
      
-     - parameter elements:   elementos to append to `toCollectiopn` collection.
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter elements:   elements to append to `toCollectiopn` collection.
      - parameter toCollection: collection.
      
      - returns: An Append expression.
