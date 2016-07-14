@@ -30,7 +30,7 @@ class ClientExceptionsTests: FaunaDBTests {
         var dbRef: Ref?
         var secret: String?
         client.query(create) { [weak self] result in
-            dbRef = try! result.dematerialize().get(field: FaunaDBTests.fieldRef)
+            dbRef = try! result.dematerialize().get(field: Fields.ref)
             self?.client.query(Create(ref: Ref("keys"), params: ["database": dbRef!, "role": "server"]))  { result in
                 let sec: String = try! result.dematerialize().get(path: "secret")
                 self?.client = Client(secret: sec)

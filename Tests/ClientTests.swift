@@ -21,134 +21,165 @@ class ClientTests: FaunaDBTests {
     
     override func setUp() {
         super.setUp()
-        Nimble.AsyncDefaults.Timeout = 3.SEC
+        Nimble.AsyncDefaults.Timeout = 5.SEC
     }
     
     func testClient() {
-        let create = Create(ref: Ref("databases"), params: ["name": testDbName])
-        var dbRef: Ref?
-        var secret: String?
-        client.query(create) { [weak self] result in
-            dbRef = try! result.dematerialize().get(field: FaunaDBTests.fieldRef)
-            self?.client.query(Create(ref: Ref("keys"), params: ["database": dbRef!, "role": "server"]))  { result in
-                let sec: String = try! result.dematerialize().get(path: "secret")
-                self?.client = Client(secret: sec)
-                secret = sec
-            }
-        }
-        expect(dbRef).toEventually(equal(Ref("databases/\(testDbName)")))
-        expect(secret).toNotEventually(beNil())
         
+        // Create a database
+        var value = await(expr: Create(ref: Ref("databases"), params: ["name": testDbName]))
+        expect(value).notTo(beNil())
+        
+        let dbRef: Ref = try! value!.get(field: Fields.ref)
+        expect(dbRef) == Ref("databases/\(testDbName)")
+        
+        // Get a new key
+        value = await(expr: Create(ref: Ref("keys"), params: ["database": dbRef, "role": "server"]))
+        expect(value).notTo(beNil())
+        
+        let secret: String = try! value!.get(path: "secret")
+        
+        // set up client using the new secret
+        client = Client(secret: secret, observers: [Logger()])
+    
         
         // Create spells class
-        waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: Ref("classes"), params: ["name": "spells"])) { result in
-                if case .Failure(_) = result {
-                    fail()
-                }
-                done()
-            }
-        }
+        value = await(expr: Create(ref: Ref("classes"), params: ["name": "spells"]))
+        expect(value).notTo(beNil())
         
-        // Create a index
-        waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: Ref("indexes"), params: [
+        
+        // Create an index
+        value = await(expr: Create(ref: Ref("indexes"), params: [
             "name": "spells_by_element",
             "source": Ref("classes/spells"),
             "terms": [["path": "data.element"] as Obj] as Arr,
-                "active": true])){  result in
-                    if case .Failure(_) = result {
-                        fail()
-                    }
-                    done()
-            }
-        }
+            "active": true]))
+        expect(value).notTo(beNil())
+        
+        
+        // MARK: echo values
+        
+        value = await(expr: ["foo": "bar"] as Obj)
+        expect(value).notTo(beNil())
+        let objResult: Obj? = value?.get()
+        expect(objResult) == ["foo": "bar"]
+        
+        
+        value = await(expr: [1, 2, "foo"] as Arr)
+        expect(value).notTo(beNil())
+        let arrResult: Arr? = value?.get()
+        expect(arrResult) == [Double(1), Double(2), "foo"]
+        
+        value = await(expr: "qux")
+        expect(value).notTo(beNil())
+        expect(value?.get()) == "qux"
 
         
-        let obj: Obj = ["foo": "bar"]
-        waitUntil { [weak self] done in
-            self?.client.query(obj) { result in
-                let responseValue = try! result.dematerialize() as! Obj
-                expect(responseValue).to(equal(obj))
-                done()
-            }
-        }
-        
-
-//        var ecoString: String?
-//        client.query("ayz") { result in
-//            let responseValue = try! result.dematerialize() as! String
-//            ecoString = responseValue
-//        }
-//        expect(ecoString).toEventually(equal("ayz"))
         
         
         // Create an instance
-        var inst: Value?
-        waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: Ref("classes/spells"), params: ["data": ["testField": "testValue"] as Obj])){ result in
-                inst = try! result.dematerialize()
+        
+        value = await(expr: Create(ref: Ref("classes/spells"), params: ["data": ["testField": "testValue"] as Obj]))
+        expect(value).notTo(beNil())
+        
+        expect(value?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
+        expect(value?.get(field: Fields.`class`)) == Ref("classes/spells")
+        expect(value?.get(path: "data", "testField")) == "testValue"
+        
+        // Check that it exists
+        let ref: Ref? = value?.get(field: Fields.ref)
+        value = await(expr: Exists(ref: ref!))
+        expect(value?.get()) == true
+        
+        
+        value = await(expr: Create(ref: Ref("classes/spells"), params:
+                                                                    ["data": [ "testData" : [  "array": [1, "2", 3.4] as Arr,
+                                                                                               "bool": true,
+                                                                                               "num": 1234,
+                                                                                               "string": "sup",
+                                                                                               "float": 1.234,
+                                                                                               "null": Null()]
+                                                                                             as Obj]
+                                                                             as Obj]
+                                                                    ))
+        
+        let testData: Obj? = value?.get(path: "data", "testData")
+        expect(testData).notTo(beNil())
+        expect(testData?.get(path: "array", 0)) == Double(1)
+        expect(testData?.get(path: "array", 1)) == "2"
+        expect(testData?.get(path: "array", 2)) == 3.4
+        expect(testData?.get(path: "string")) == "sup"
+        expect(testData?.get(path: "num")) == Double(1234)
+
+    
+        //MARK: Issue a batched query
+        let classRef = Ref("classes/spells")
+        let expr1 = Create(ref: classRef, params: ["data": ["queryTest1": "randomText1"] as Obj])
+        let expr2 = Create(ref: classRef, params: ["data": ["queryTest2": "randomText2"] as Obj])
+        
+        value = await(expr: Arr(expr1.value, expr2.value))
+        let arr: Arr? = value?.get()
+        expect(arr?.count) == 2
+        expect(arr?[0].get(path: "data", "queryTest1")) == "randomText1"
+        expect(arr?[1].get(path: "data", "queryTest2")) == "randomText2"
+        
+        
+        //MARK: "issue a paginated query"
+        
+        
+        let randomClassName = String(randomWithLength: 8)
+        
+        value = await(expr: Create(ref: Ref("classes"), params: ["name": randomClassName]))
+        expect(value).notTo(beNil())
+        
+        let classRef2: Ref? = value?.get(field: Fields.ref)
+        expect(classRef2) == Ref("classes/" + randomClassName)
+        
+        
+        value = await(expr: Create(ref: Ref("indexes"), params: ["name": randomClassName + "_class_index", "source": classRef, "active": true, "unique": false]))
+        expect(value).notTo(beNil())
+        let randomClassIndex: Ref? = value?.get(field: Fields.ref)
+        expect(randomClassIndex) == Ref("indexes/" + randomClassName + "_class_index")
+
+        
+        value = await(expr: Create(ref: Ref("indexes"), params: ["name": randomClassName + "_test_index", "source": classRef, "active": true, "unique": false, "terms": [["path": "data.queryTest1"] as Obj] as Arr]))
+        expect(value).notTo(beNil())
+        let testIndex: Ref? = value?.get(field: Fields.ref)
+        expect(testIndex) == Ref("indexes/" + randomClassName + "_test_index")
+        
+
+        let randomText1 = String(randomWithLength: 8)
+        let randomText2 = String(randomWithLength: 8)
+        let randomText3 = String(randomWithLength: 8)
+        
+        let create1Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText1] as Obj]))
+        expect(create1Value).notTo(beNil())
+        let create2Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText2] as Obj]))
+        expect(create2Value).notTo(beNil())
+        let create3Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText3] as Obj]))
+        expect(create3Value).notTo(beNil())
+        
+        
+        let queryMatchValue = await(expr: Paginate(resource: Match(index: testIndex!, terms: randomText1)))
+        expect(queryMatchValue).notTo(beNil())
+        
+
+    }
+    
+    // Helper
+    private func await(expr expr: Expr) -> Value? {
+        var res: Value?
+        waitUntil(timeout: 5) { [weak self] done in
+            self?.client.query(expr) { result in
+                guard let value = try? result.dematerialize() else {
+                    fail()
+                    return
+                }
+                res = value
                 done()
             }
         }
-        
-        expect(try! inst?.get(field: FaunaDBTests.fieldRef).ref).to(beginWith("classes/spells/"))
-        let dataField = Field<String>("data", "testField")
-        expect(inst?.get(field: dataField)).to(equal("testValue"))
-        
-        
-//        waitUntil(timeout: 3) { [weak self] done in
-//            let ref: Ref = try! inst!.get("ref")
-//            self?.client.query(Exists(ref: ref)){ result in
-//                let responseValue = try! result.dematerialize() as! Bool
-//                expect(responseValue).to(beTrue())
-//                done()
-//            }
-//        }
-        
-        
-        // create instance 2
-//        let testData: Obj = ["array": Arr(1, "2", 3.4),
-//                             "bool": true,
-//                             "num": 1234,
-//                             "string": "sup",
-//                             "float": 1.234,
-//                             "null": Null()]
-//        waitUntil(timeout: 3) { [weak self] done in
-//            self?.client.query(Create(Ref("classes/spells"), Obj(("data", Obj(("testData", testData)))))){ result in
-//                let inst = try! result.dematerialize()
-//                let value: Obj = try! inst.get("data", "testData")
-//                let array_0: Int = try! value.get("array", 0)
-//                let array_1: String = try! value.get("array", 1)
-//                let array_2: Double = try! value.get("array", 2)
-//                let string: String = try! value.get("string")
-//                let integer: Int = try! value.get("num")
-//                done()
-//            }
-//        }
-        
-        
-//        val inst2 = await(client.query(Create(Ref("classes/spells"),
-//        Obj("data" -> Obj(
-//        "testData" -> Obj(
-//        "array" -> Arr(1, "2", 3.4),
-//        "bool" -> true,
-//        "num" -> 1234,
-//        "string" -> "sup",
-//        "float" -> 1.234,
-//        "null" -> NullV))))))
-//        
-//        val testData = inst2("data", "testData")
-//        
-//        testData.isDefined shouldBe true
-//        testData("array", 0).as[Long].get shouldBe 1
-//        testData("array", 1).as[String].get shouldBe "2"
-//        testData("array", 2).as[Double].get shouldBe 3.4
-//        testData("string").as[String].get shouldBe "sup"
-//        testData( "num").as[Long].get shouldBe 1234
-//        
-        
-        
+        return res
     }
     
 }

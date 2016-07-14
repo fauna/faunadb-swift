@@ -145,7 +145,7 @@ extension Client {
         if object is [AnyObject] || object is [String: AnyObject] {
             return try NSJSONSerialization.dataWithJSONObject(object, options: [])
         }
-        else if let str = object as? String, let data = str.dataUsingEncoding(NSUTF8StringEncoding) {
+        else if let str = object as? String, let data = "\"\(str)\"".dataUsingEncoding(NSUTF8StringEncoding) {
             return data
         }
         throw Error.DriverException(data: object, msg: "Unsupported JSON type: \(object.dynamicType)")

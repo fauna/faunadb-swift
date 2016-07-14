@@ -10,11 +10,7 @@ import Nimble
 @testable import FaunaDB
 
 class FaunaDBTests: XCTestCase {
-    
-    static let fieldRef = Field<Ref>("ref")
-    static let fieldClass = Field<Ref>("class")
-    static let fieldSecret = Field<String>("secret")
-    
+
     static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
     
     override func setUp() {
@@ -65,4 +61,47 @@ extension Int {
 @warn_unused_result(message="Follow 'expect(…)' with '.to(…)', '.toNot(…)', 'toEventually(…)', '==', etc.")
 public func expectToJson<T: ValueConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
     return try expect(expression()?.jsonString)    
+}
+
+struct Fields {
+    static let ref = Field<Ref>("ref")
+    static let `class` = Field<Ref>("class")
+    static let secret = Field<String>("secret")
+}
+
+extension CollectionType where Index.Distance == Int{
+    
+    
+    public var sample: Self.Generator.Element? {
+        if !isEmpty {
+            let randomIndex = startIndex.advancedBy(Int(arc4random_uniform(UInt32(count))))
+            return self[randomIndex]
+        }
+        return nil
+    }
+    
+    public func sample(size size: Int) -> [Self.Generator.Element]? {
+        
+        if !self.isEmpty {
+            var sampleElements: [Self.Generator.Element] = []
+            
+            for _ in 1...size {
+                sampleElements.append(sample!)
+            }
+            return sampleElements
+        }
+        
+        return nil
+    }
+    
+
+}
+
+
+extension String{
+
+    public init(randomWithLength length: Int) {
+        self.init("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".characters.sample(size: length)!)
+        
+    }
 }
