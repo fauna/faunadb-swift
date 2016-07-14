@@ -237,7 +237,7 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         var map = Map(collection: [1,2,3] as Arr,
-                      lambda: Lambda(vars: "munchings", expr: Var("munchings")))
+                      lambda: Lambda(vars: Var("munchings"), expr: Var("munchings")))
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}"
         
         Var.resetIndex()
@@ -261,7 +261,7 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         var foreach = Foreach(collection: [Ref("another/ref/1"), Ref("another/ref/2")] as Arr,
-                              lambda: Lambda(vars: "refData",
+                              lambda: Lambda(vars: Var("refData"),
                                 expr: Create(ref: Ref("some/ref"),
                                     params: ["data": ["some": Var("refData").value] as Obj]
                                 )))
@@ -486,7 +486,7 @@ class SerializationTests: FaunaDBTests {
         
         
         
-        matchSet = Match(index: Ref.databases)
+        matchSet = Match(index: Ref("databases"))
         expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
         
         
@@ -496,7 +496,7 @@ class SerializationTests: FaunaDBTests {
         
         
         
-        matchSet = Match(index: Ref.databases)
+        matchSet = Match(index: Ref("databases"))
         expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
         
         //MARK: Union
@@ -541,7 +541,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
         
         Var.resetIndex()
-        letExpr = Let(1, "Hi!", Create(ref: Ref.databases, params: ["name": "blog_db"])) { x, y, z in
+        letExpr = Let(1, "Hi!", Create(ref: Ref("databases"), params: ["name": "blog_db"])) { x, y, z in
             Do(exprs: x, y, x, y, z)
         }
         expectToJson(letExpr) == "{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"

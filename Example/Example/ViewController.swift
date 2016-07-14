@@ -38,26 +38,26 @@ class SetUpFaunaController: UIViewController {
     
     func setUpSchema(createDB: Bool = false, dbName: String = "app_db_120822737") -> Observable<Value> {
         if createDB {
-            return Create(ref: Ref.databases, params: ["name": dbName]).rx_query()
+            return Create(ref: Ref("databases"), params: ["name": dbName]).rx_query()
                 .flatMap { _ in
-                    return Create(ref: Ref.keys, params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
+                    return Create(ref: Ref("keys"), params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
                 }
                 .mapWithField(["secret"])
                 .doOnNext { (secret: String) in
                     faunaClient = Client(secret: secret, observers: [Logger()])
                 }
                 .flatMap { _ in
-                    return Create(ref: Ref.classes, params: ["name": "posts"]).rx_query()
+                    return Create(ref: Ref("classes"), params: ["name": "posts"]).rx_query()
                 }
                 .flatMap { _ in
-                    return Create(ref: Ref.indexes, params: ["name": "posts_by_tags_with_title",
+                    return Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
                         "source": BlogPost.classRef,
                         "terms": [["field": ["data", "tags"] as Arr] as Obj] as Arr,
                         "values": [] as Arr
                         ]).rx_query()
             }
         }
-        return Create(ref: Ref.keys, params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
+        return Create(ref: Ref("keys"), params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
             .mapWithField(["secret"])
             .doOnNext { (secret: String) in
                 faunaClient = Client(secret: secret)
@@ -90,10 +90,10 @@ class SetUpFaunaController: UIViewController {
  //        super.viewDidLoad()
  //
  //        let db_name = "app_db_\(arc4random())"
- //        client.query(Create(ref: Ref.databases,  params: ["name": db_name])) { [weak self] (result) in
+ //        client.query(Create(ref: Ref("databases"),  params: ["name": db_name])) { [weak self] (result) in
  //            switch result {
  //            case .Success:
- //                self?.client.query(Create(ref: Ref.keys, params: ["database": Ref("databases/\(db_name)"),
+ //                self?.client.query(Create(ref: Ref("keys"), params: ["database": Ref("databases/\(db_name)"),
  //                    "role": "server"])) { (result) in
  //                        switch result {
  //                        case .Success(let value):

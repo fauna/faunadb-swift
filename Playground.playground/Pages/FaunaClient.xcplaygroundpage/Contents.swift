@@ -17,7 +17,7 @@ var client = Client(secret: ourClientSecret, observers: [Logger()])
  > It's up to you extend Client to provide other convenience query methods.
  */
 
-client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
+client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
     if case .Failure(let error) = result {
         // handle error
     }
@@ -28,7 +28,7 @@ client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion
 > if we don't want to handle errors we can do..
 */
 
-client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
+client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
     guard let value = try? result.dematerialize() else { return }
     //do whatever you want with the value
     
@@ -38,7 +38,7 @@ client.query(Create(ref: Ref.databases, params: ["name": "db_name"]), completion
 Normally you can rely on swift type inference and remove type information to make the code simpler and more readable. Also trailing closure makes the code cleaner.
 */
 
-client.query(Create(ref: Ref.databases, params: ["name": "db_name"])) { result in
+client.query(Create(ref: Ref("databases"), params: ["name": "db_name"])) { result in
     if case .Failure(let errr) = result {
         // handle error
     }
@@ -47,10 +47,10 @@ client.query(Create(ref: Ref.databases, params: ["name": "db_name"])) { result i
 
 /*:
  > Client provides another query func that has 2 closures as arguments, one for error handling and another for that handles the successful case.
- > trailing form can aalso be used in the last closure argument.
+ > trailing form can also be used in the last closure argument.
  */
 
-client.query(Create(ref: Ref.databases, params: ["name": "db_name"]),
+client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]),
               failure: { error in
                             print(error)
                         },
@@ -62,22 +62,22 @@ client.query(Create(ref: Ref.databases, params: ["name": "db_name"]),
 /*:
  We can also make use of RxSwift reactive extensions provided within RxFauna module.
  
- > we need to add it as a dependency and import it into our ode file. For more information about reactive programming, please visit: http://reactivex.io/ and its correspond swift implementation: https://github.com/ReactiveX/RxSwif.
+ > we need to add it as a dependency and import it into our project. For more information about reactive programming, please visit: http://reactivex.io/ and its correspond swift implementation: https://github.com/ReactiveX/RxSwif.
  */
 import RxSwift
 import RxFaunaDB
 
 
-client.rx_query(Create(ref: Ref.databases, params: ["name": "db_name"] as Obj))
+client.rx_query(Create(ref: Ref("databases"), params: ["name": "db_name"] as Obj))
     .mapWithField(["secret"])
     .doOnNext { (secret: String) in
         client = Client(secret: secret, observers: [Logger()])
     }
     .flatMap { _ in
-        return client.rx_query(Create(ref: Ref.classes, params: ["name": "posts"]))
+        return client.rx_query(Create(ref: Ref("classes"), params: ["name": "posts"]))
     }
     .flatMap { _ in
-        return client.rx_query(Create(ref: Ref.indexes, params: ["name": "posts_by_tags_with_title",
+        return client.rx_query(Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
             "source": Ref("classes/posts"),
             "terms": [["field": ["data", "tags"] as Arr] as Obj] as Arr,
             "values": [] as Arr
@@ -126,6 +126,4 @@ client.query({
         }
     }) { result in
         // do something with the result.
-    }
-
-//: [Next](@nex
+ 

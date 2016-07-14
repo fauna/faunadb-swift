@@ -15,24 +15,23 @@ enum ClientHeaders: String {
 
 public final class Client {
     public let session: NSURLSession
-    public let faunaRoot: NSURL
+    public let endpoint: NSURL
     public let secret: String
     
     private let observers: [ClientObserverType]
     private var authHeader: String
     
     public init(secret:String,
-                faunaRoot: NSURL = NSURL(string: "https://rest.faunadb.com")!,
-                timeoutInterval: NSTimeInterval = 60, observers: [ClientObserverType] = []){
-        self.faunaRoot = faunaRoot
+                endpoint: NSURL = NSURL(string: "https://rest.faunadb.com")!,
+                timeout: NSTimeInterval = 60, observers: [ClientObserverType] = []){
+        self.endpoint = endpoint
         self.secret = secret
         self.observers = observers
         authHeader = Client.authHeaderValue(secret)
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfig.timeoutIntervalForRequest = timeoutInterval
+        sessionConfig.timeoutIntervalForRequest = timeout
         var headers = sessionConfig.HTTPAdditionalHeaders ?? [NSObject: AnyObject]()
         headers[ClientHeaders.Authorization.rawValue] = authHeader
-        headers[ClientHeaders.PrettyPrintJSONResponses.rawValue] = true
         sessionConfig.HTTPAdditionalHeaders = headers
         session =  NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: .mainQueue())
     }
@@ -49,7 +48,7 @@ extension Client {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
                 guard let data = data else {
-                    throw Error.DriverException(data: nil, msg: "Fauna data must not be empty.")
+                    throw Error.UnknownException(response: response, errors: [], msg: "Empty server response")
                 }
                 try mySelf.handleQueryErrors(response, data: data)
                 let result = try Mapper.fromFaunaResponseData(data)
@@ -64,24 +63,12 @@ extension Client {
             }
         }
     }
-    
-    public func query(@autoclosure expr: (()-> ValueConvertible), failure: (FaunaDB.Error) -> Void, success: (Value) -> Void) -> NSURLSessionDataTask {
-        let task = query(expr) { (result: Result<Value, FaunaDB.Error>) in
-            switch result {
-            case .Failure(let error):
-                failure(error)
-            case .Success(let value):
-                success(value)
-            }
-        }
-        return task
-    }
 }
 
 extension Client {
 
     private func postJSON(data: NSData, completion: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask{
-        let request = NSMutableURLRequest(URL: faunaRoot)
+        let request = NSMutableURLRequest(URL: endpoint)
         request.HTTPBody = data
         request.HTTPMethod = "POST"
         var headers = request.allHTTPHeaderFields ?? [String: String]()
@@ -106,14 +93,14 @@ extension Client {
 extension Client {
 
 
-    func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
+    private func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
         throw Error.NetworkException(response: response, error: error, msg: error.description)
     }
 
-    func handleQueryErrors(response: NSURLResponse?, data: NSData) throws {
+    private func handleQueryErrors(response: NSURLResponse?, data: NSData) throws {
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            throw Error.DriverException(data: response, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
+            throw Error.NetworkException(response: response, error: nil, msg: "Fail to parse network response. Invalid response type.")
         }
 
         if httpResponse.statusCode >= 300 {
@@ -161,7 +148,7 @@ extension Client {
         else if let str = object as? String, let data = str.dataUsingEncoding(NSUTF8StringEncoding) {
             return data
         }
-        throw Error.DriverException(data: object, msg: "Cannot encode json object")
+        throw Error.DriverException(data: object, msg: "Unsupported JSON type: \(object.dynamicType)")
     }
 
 }

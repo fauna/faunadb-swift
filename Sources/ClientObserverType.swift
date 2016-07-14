@@ -30,13 +30,27 @@ public struct Logger: ClientObserverType {
             print("\nRESPONSE STATUS: \(response.statusCode)")
         }
         if let data = data {
-            print("\nRESPONSE DATA:")
-            let jsonData = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            print("\n\(jsonData)")
+            if let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) where NSJSONSerialization.isValidJSONObject(jsonData){
+                print("\nRESPONSE DATA:")
+                print("\n\(prettyJSON(jsonData))")
+            }
+            else {
+                print("\nRESPONSE RAW DATA (NOT A VALID JSON):")
+                print("\n\(String(data: data, encoding: NSUTF8StringEncoding))")
+
+            }
         }
         else {
             print("\nNO RESPONSE DATA")
         }
+    }
+    
+    
+    private func prettyJSON(value: AnyObject, prettyPrinted: Bool = true) -> String {
+        guard let prettyData = try? NSJSONSerialization.dataWithJSONObject(value, options: prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : []), let string = NSString(data: prettyData, encoding: NSUTF8StringEncoding) else{
+            return String()
+        }
+        return string as String
     }
 }
 

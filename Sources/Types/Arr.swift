@@ -7,11 +7,19 @@
 
 import Foundation
 
-public struct Arr: Value, ArrayLiteralConvertible {
+public struct Arr: Value {
     
     private var array = [Value]()
     
     public init(){}
+    
+    init?(json: [AnyObject]) {
+        guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
+        array = arr
+    }
+}
+
+extension Arr: ArrayLiteralConvertible {
     
     public init(_ elements: Value...){
         array = elements
@@ -19,11 +27,6 @@ public struct Arr: Value, ArrayLiteralConvertible {
     
     public init(arrayLiteral elements: Value...){
         array = elements
-    }
-    
-    init?(json: [AnyObject]) {
-        guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
-        array = arr
     }
 }
 
@@ -81,6 +84,8 @@ extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
         return description
     }
 }
+
+extension Arr: DecodableValue {}
 
 extension Arr: Equatable {}
 

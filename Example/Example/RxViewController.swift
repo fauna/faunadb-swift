@@ -47,10 +47,10 @@ extension BlogPost: FaunaModel {
     
     init(data: Obj) {
         // 0 is ts
-        self.name = try! data.get("name")
-        self.author = try! data.get("author")
-        self.content = try! data.get("content")
-        let arrTags: Arr? = data.get("tags")
+        self.name = try! data.get(path: "name")
+        self.author = try! data.get(path: "author")
+        self.content = try! data.get(path: "content")
+        let arrTags: Arr? = data.get(path: "tags")
         self.tags = arrTags?.map { $0 as! String } ?? []
     }
 }

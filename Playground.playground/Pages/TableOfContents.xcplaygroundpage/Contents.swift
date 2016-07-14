@@ -18,6 +18,7 @@ import FaunaDB
  3. [Values](Values)
  4. [Query Language](QueryLanguage)
     * [Syntatic Sugars](SyntaticSugars)
+ 5. [Working with fauna response data](FieldType)
  
  */
  

@@ -34,6 +34,13 @@ extension BlogPost: ValueConvertible {
     }
 }
 
+extension BlogPost: DecodableValue {
+    static func decode(value: Value) -> BlogPost? {
+        return try? BlogPost(name: value.get(path: "name"), author: value.get(path: "author"), content: value.get(path: "content"))
+    }
+}
+
+
 class FieldTests: FaunaDBTests {
 
     func testField() {
@@ -49,26 +56,37 @@ class FieldTests: FaunaDBTests {
         XCTAssertThrowss(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try field.get(obj) }
         
         var arr2 = arr
-        arr2.append(["key": Ref.classes] as Obj)
+        arr2.append(["key": Ref("classes")] as Obj)
         let field2 = Field<Ref>(3, "key")
         let ref = try! field2.get(arr2)
-        expect(ref) == Ref.classes
+        expect(ref) == Ref("classes")
         
         let homogeneousArray = [1, 2, 3]
-        let int: Int = try! homogeneousArray.get(0)
+        let int: Int = try! homogeneousArray.get(path: 0)
         expect(int) ==  1
         
         let homogeneousArray2 = ["Hi", "Hi2"]
-        let string: String = try! homogeneousArray2.get(1)
+        let string: String = try! homogeneousArray2.get(path: 1)
         expect(string) == "Hi2"
         
         let homogeneousArray3 = [Timestamp()]
-        let timestamp: Timestamp? = homogeneousArray3.get(0)
+        let timestamp: Timestamp? = homogeneousArray3.get(path: 0)
         expect(timestamp).notTo(beNil())
         
         let complexArr = [3, 5, ["test": ["test2": ["test3": [1,2,3]]]]]
-        let int2: Int = try! complexArr.get(2, "test", "test2", "test3", 0)
+        let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
         expect(int2) ==  1
+        
+        
+        //MARK: DecodableValue
+        
+        let blogPostValue: Obj = ["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": ["DB", "Performance"] as Arr]
+        
+        let post: BlogPost? = blogPostValue.get()
+        
+        expect(post?.name) == "My Blog Post"
+        expect(post?.author) == "FaunaDB Inc"
+        expect(post?.content) == "My Content"
         
     }
 }

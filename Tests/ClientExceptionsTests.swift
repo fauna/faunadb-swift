@@ -26,13 +26,13 @@ class ClientExceptionsTests: FaunaDBTests {
     }
     
     func testClientExceptions() {
-        let create = Create(ref: Ref.databases, params: ["name": testDbName])
+        let create = Create(ref: Ref("databases"), params: ["name": testDbName])
         var dbRef: Ref?
         var secret: String?
         client.query(create) { [weak self] result in
-            dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
-            self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
-                let sec: String = try! result.dematerialize().get("secret")
+            dbRef = try! result.dematerialize().get(field: FaunaDBTests.fieldRef)
+            self?.client.query(Create(ref: Ref("keys"), params: ["database": dbRef!, "role": "server"]))  { result in
+                let sec: String = try! result.dematerialize().get(path: "secret")
                 self?.client = Client(secret: sec)
                 secret = sec
             }
@@ -44,13 +44,13 @@ class ClientExceptionsTests: FaunaDBTests {
         
         
         waitUntil(timeout: 3){ [weak self] done in
-            self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])){ _ in
+            self?.client.query(Create(ref: Ref("classes"), params: ["name": "spells"])){ _ in
                 done()
             }
         }
         
         waitUntil(timeout: 3){ [weak self] done in
-            self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
+            self?.client.query(Create(ref: Ref("indexes"), params: ["name": "spells_by_element",
                                           "source": Ref("classes/spells"),
                                           "terms": [["path": "data.element"] as Obj] as Arr ,
                 "active": true])){ _ in
@@ -60,7 +60,7 @@ class ClientExceptionsTests: FaunaDBTests {
         
         
         waitUntil(timeout: 3){ [weak self] done in
-            self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
+            self?.client.query(Create(ref: Ref("indexes"), params: ["name": "spells_by_element",
                 "source": Ref("classes/spells"),
                 "terms": [["path": "data.element"] as Obj] as Arr ,
                 "active": true])){ _ in

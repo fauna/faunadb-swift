@@ -14,19 +14,19 @@ public struct Obj: Value, DictionaryLiteralConvertible {
     
     public init(_ elements: [(String, Value)]){
         var dictionary = [String:Value]()
-        elements.forEach { dictionary[$0.0] = $0.1 }
+        elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
     
     public init(dictionaryLiteral elements: (String, Value)...){
         var dictionary = [String: Value]()
-        elements.forEach { dictionary[$0.0] = $0.1 }
+        elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
     
     public init(_ elements: (String, Value)...){
         var dictionary = [String:Value]()
-        elements.forEach { dictionary[$0.0] = $0.1 }
+        elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
     
@@ -103,6 +103,8 @@ extension Obj: CollectionType {
         return dictionary.removeValueForKey(key)
     }    
 }
+
+extension Obj: DecodableValue {}
 
 extension Obj: Equatable {}
 

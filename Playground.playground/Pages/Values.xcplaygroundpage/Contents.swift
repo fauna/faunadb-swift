@@ -119,10 +119,10 @@ objectValue2.forEach { key, value in
  Ref. Denotes a resource ref. Refs may be extracted from instances, or constructed using the Ref type initialiser.
  */
 
-var ref = Ref.databases
-ref = Ref.classes
-ref = Ref.indexes
-ref = Ref(ref: Ref.classes, id: "8764")
+var ref = Ref("databases")
+ref = Ref("classes")
+ref = Ref("indexes")
+ref = Ref(ref: Ref("classes"), id: "8764")
 
 
 
@@ -141,5 +141,4 @@ let dateVale:Date = Date(day: 18, month: 07, year: 1984)
 let dateVale2:Date = NSDateComponents(day: 18, month: 07, year: 1984)
 
 
-//: [Next](@next)
-
+//: [Ne

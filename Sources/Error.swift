@@ -16,6 +16,7 @@ public enum Error: ErrorType {
     case InternalException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
     case NetworkException(response: NSURLResponse?, error: NSError?, msg: String?)
     case DriverException(data: Any?, msg: String?)
+    case UnparsedData(data: AnyObject, msg: String?)
 }
 
 
@@ -39,7 +40,10 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
             return getDesc(response, msg: msg, error: error)
         case .DriverException(_, let msg):
             return getDesc(nil, msg: msg)
+        case .UnparsedData(let data, let msg):
+            return getDesc(nil, msg: msg.map { "\($0): /n\(data)" } ?? "\(data)", error: nil)
         }
+        
     }
 
     public var debugDescription: String {

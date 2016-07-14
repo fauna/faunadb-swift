@@ -107,12 +107,12 @@ extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
             
                 .rx_query()
             .flatMap { value -> Observable<Response> in
-                let data:Arr = try! value.get("data")
-                var cursorData: Arr? = value.get("after")
+                let data:Arr = try! value.get(path: "data")
+                var cursorData: Arr? = value.get(path: "after")
                 let nextCursor = cursorData.map { Cursor.After(expr: $0)}
-                cursorData = value.get("before")
+                cursorData = value.get(path: "before")
                 let beforeCursor = cursorData.map { Cursor.Before(expr: $0)}
-                let elements = data.map { Response.Paginate.Element.init(data: try! $0.get("data")) }
+                let elements = data.map { Response.Paginate.Element.init(data: try! $0.get(path: "data")) }
                 return Observable.just(Response.init(elements: elements, previousPage: beforeCursor, nextPage: nextCursor, paginate: myPage))
             }
         }

@@ -48,21 +48,6 @@ extension Var {
     }
 }
 
-extension Var: StringLiteralConvertible {
-    
-    public init(stringLiteral value: String){
-        name = value
-    }
-    
-    public init(extendedGraphemeClusterLiteral value: String){
-        name = value
-    }
-    
-    public init(unicodeScalarLiteral value: String){
-        name = value
-    }
-}
-
 public struct Let: Expr {
     
     public var value: Value
@@ -79,7 +64,7 @@ public struct Let: Expr {
      */
     public init(bindings:[(String, Expr)], in: Expr){
         var bindingsData = Obj()
-        bindings.forEach { bindingsData[$0.0] = $0.1.value  }
+        bindings.forEach { key, value in  bindingsData[key] = value.value  }
         value = fn(["let": fn(bindingsData), "in": `in`.value])
     }
     
@@ -94,7 +79,7 @@ public struct Let: Expr {
      
      - returns: A Let expression.
      */
-    public init(v1: String, e1: Expr, @noescape `in`: (Expr -> Expr)){
+    init(v1: String, e1: Expr, @noescape `in`: (Expr -> Expr)){
         self.init(bindings: [(v1, e1)], in: `in`(Var(v1)))
     }
     
@@ -111,9 +96,9 @@ public struct Let: Expr {
      
      - returns: A Let expression.
      */
-    public init(v1: String, e1: Expr,
-                v2: String, e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)){
-        self.init(bindings: [(v1, e1), (v2, e2)], in: `in`(Var(v1), Var(v2)))
+    init(v1: String, e1: Expr,
+         v2: String, e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)){
+         self.init(bindings: [(v1, e1), (v2, e2)], in: `in`(Var(v1), Var(v2)))
     }
     
     
@@ -132,11 +117,11 @@ public struct Let: Expr {
      
      - returns: A Let expression.
      */
-    public init(v1: String, e1: Expr,
-                v2: String, e2: Expr,
-                v3: String, e3: Expr ,
-                @noescape `in`: ((Expr, Expr, Expr) -> Expr)){
-        self.init(bindings: [(v1, e1), (v2, e2), (v3, e3)], in: `in`(Var(v1), Var(v2), Var(v3)))
+    init(v1: String, e1: Expr,
+         v2: String, e2: Expr,
+         v3: String, e3: Expr ,
+         @noescape `in`: ((Expr, Expr, Expr) -> Expr)){
+         self.init(bindings: [(v1, e1), (v2, e2), (v3, e3)], in: `in`(Var(v1), Var(v2), Var(v3)))
     }
     
     /**
@@ -154,12 +139,12 @@ public struct Let: Expr {
      
      - returns: A Let expression.
      */
-    public init(v1: String, e1: Expr,
-                v2: String, e2: Expr,
-                v3: String, e3: Expr,
-                v4: String, e4: Expr,
-                @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)){
-        self.init(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4)], in: `in`(Var(v1), Var(v2), Var(v3), Var(v4)))
+    init(v1: String, e1: Expr,
+         v2: String, e2: Expr,
+         v3: String, e3: Expr,
+         v4: String, e4: Expr,
+         @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)){
+         self.init(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4)], in: `in`(Var(v1), Var(v2), Var(v3), Var(v4)))
     }
     
     /**
@@ -181,7 +166,7 @@ public struct Let: Expr {
      
      - returns: A Let expression.
      */
-    public init(v1: String, e1: Expr,
+    init(v1: String, e1: Expr,
                 v2: String, e2: Expr,
                 v3: String, e3: Expr,
                 v4: String, e4: Expr,

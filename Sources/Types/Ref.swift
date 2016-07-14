@@ -8,12 +8,7 @@
 import Foundation
 
 public struct Ref: ScalarValue {
-    
-    public static let databases: Ref = Ref("databases")
-    public static let indexes: Ref = Ref("indexes")
-    public static let classes: Ref = Ref("classes")
-    public static let keys: Ref = Ref("keys")
-    
+
     let ref: String
     
     public init(_ ref: String){

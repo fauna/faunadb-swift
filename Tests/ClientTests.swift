@@ -25,13 +25,13 @@ class ClientTests: FaunaDBTests {
     }
     
     func testClient() {
-        let create = Create(ref: Ref.databases, params: ["name": testDbName])
+        let create = Create(ref: Ref("databases"), params: ["name": testDbName])
         var dbRef: Ref?
         var secret: String?
         client.query(create) { [weak self] result in
-            dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
-            self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
-                let sec: String = try! result.dematerialize().get("secret")
+            dbRef = try! result.dematerialize().get(field: FaunaDBTests.fieldRef)
+            self?.client.query(Create(ref: Ref("keys"), params: ["database": dbRef!, "role": "server"]))  { result in
+                let sec: String = try! result.dematerialize().get(path: "secret")
                 self?.client = Client(secret: sec)
                 secret = sec
             }
@@ -42,7 +42,7 @@ class ClientTests: FaunaDBTests {
         
         // Create spells class
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])) { result in
+            self?.client.query(Create(ref: Ref("classes"), params: ["name": "spells"])) { result in
                 if case .Failure(_) = result {
                     fail()
                 }
@@ -52,7 +52,7 @@ class ClientTests: FaunaDBTests {
         
         // Create a index
         waitUntil(timeout: 3) { [weak self] done in
-            self?.client.query(Create(ref: Ref.indexes, params: [
+            self?.client.query(Create(ref: Ref("indexes"), params: [
             "name": "spells_by_element",
             "source": Ref("classes/spells"),
             "terms": [["path": "data.element"] as Obj] as Arr,
@@ -92,9 +92,9 @@ class ClientTests: FaunaDBTests {
             }
         }
         
-        expect(try! inst?.get(FaunaDBTests.fieldRef).ref).to(beginWith("classes/spells/"))
+        expect(try! inst?.get(field: FaunaDBTests.fieldRef).ref).to(beginWith("classes/spells/"))
         let dataField = Field<String>("data", "testField")
-        expect(inst?.get(dataField)).to(equal("testValue"))
+        expect(inst?.get(field: dataField)).to(equal("testValue"))
         
         
 //        waitUntil(timeout: 3) { [weak self] done in

@@ -8,20 +8,20 @@
 import Foundation
 
 protocol FieldType {
-    associatedtype T
+    associatedtype T: DecodableValue
     func get(value: Value) throws -> T
     func getOptional(value: Value) -> T?
 }
 
-public struct Field<T: Value>: FieldType, ArrayLiteralConvertible, IntegerLiteralConvertible, StringLiteralConvertible {
-
+public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, ArrayLiteralConvertible, IntegerLiteralConvertible, StringLiteralConvertible {
+    
     var path: [PathComponentType]
     
     public init(_ array: [PathComponentType]){
         path = array
     }
     
-    public init(_ filePaths:PathComponentType...){
+    public init(_ filePaths: PathComponentType...){
         self.init(filePaths)
     }
     
@@ -33,7 +33,7 @@ public struct Field<T: Value>: FieldType, ArrayLiteralConvertible, IntegerLitera
         let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
             return try path.subValue(partialValue)
         }
-        guard let typedValue = result as? T else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
+        guard let typedValue = T.decode(result) else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
         return typedValue
     }
     
@@ -83,19 +83,19 @@ public struct Field<T: Value>: FieldType, ArrayLiteralConvertible, IntegerLitera
 
 public struct FieldComposition {
     
-    public static func zip<A: Value, B: Value>(field1: Field<A>, field2: Field<B>) -> (Value throws -> (A, B)){
+    public static func zip<A: DecodableValue, B: DecodableValue>(field1: Field<A>, field2: Field<B>) -> (Value throws -> (A, B)){
         return { try (field1.get($0), field2.get($0)) }
     }
     
-    public static func zip<A: Value, B: Value, C: Value>(field1: Field<A>, field2: Field<B>, field3: Field<C>) -> (Value throws  -> (A, B, C)){
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>) -> (Value throws  -> (A, B, C)){
         return { try (field1.get($0), field2.get($0), field3.get($0)) }
     }
     
-    public static func zip<A: Value, B: Value, C: Value, D: Value>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>) -> (Value throws  -> (A, B, C, D)){
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>) -> (Value throws  -> (A, B, C, D)){
         return { try (field1.get($0), field2.get($0), field3.get($0), field4.get($0)) }
     }
     
-    public static func zip<A: Value, B: Value, C: Value, D: Value, E: Value>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>, field5: Field<E>) -> (Value throws  -> (A, B, C, D, E)){
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue, E: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>, field5: Field<E>) -> (Value throws  -> (A, B, C, D, E)){
         return { try (field1.get($0), field2.get($0), field3.get($0), field4.get($0), field5.get($0)) }
     }
 }

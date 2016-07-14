@@ -51,8 +51,7 @@ struct Mapper {
     
     static func fromFaunaResponseData(data: NSData) throws -> Value{
         let jsonData: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-        let resource = jsonData.objectForKey("resource")
-        guard let res = resource else {
+        guard let res = jsonData.objectForKey("resource") else {
             throw Error.DriverException(data: jsonData, msg: "Fauna response does not contain a resource key")
         }
         return try Mapper.fromData(res)
@@ -71,13 +70,13 @@ struct Mapper {
         case _ as NSNull:
             return Null()
         case let value as [AnyObject]:
-            guard let result = Arr(json: value) else { throw Error.DriverException(data: value, msg: "Cannot decode data") }
+            guard let result = Arr(json: value) else { throw Error.UnparsedData(data: value, msg: "Unparseable data to Arr") }
             return result
         case let value as [String: AnyObject]:
-            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? Obj(json: value)  else { throw Error.DriverException(data: value, msg: "Cannot decode data") }
+            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? Obj(json: value)  else { throw Error.UnparsedData(data: value, msg: "Unparseable data") }
             return result
         default:
-            throw Error.DriverException(data: data, msg: "Cannot decode data")
+            throw Error.UnparsedData(data: data, msg: "Unparseable data")
         }
     }
 }
