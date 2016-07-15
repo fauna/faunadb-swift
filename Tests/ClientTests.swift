@@ -24,17 +24,30 @@ class ClientTests: FaunaDBTests {
         Nimble.AsyncDefaults.Timeout = 5.SEC
     }
     
+    private func setupFaunaDB(){
+        
+    }
+    
     func testClient() {
         
+        var value: Value?
+        
         // Create a database
-        var value = await(expr: Create(ref: Ref("databases"), params: ["name": testDbName]))
+        value = await(
+            Create(ref: Ref("databases"),
+                params: ["name": testDbName])
+        )
         expect(value).notTo(beNil())
         
         let dbRef: Ref = try! value!.get(field: Fields.ref)
         expect(dbRef) == Ref("databases/\(testDbName)")
         
         // Get a new key
-        value = await(expr: Create(ref: Ref("keys"), params: ["database": dbRef, "role": "server"]))
+        value = await(
+            Create(ref: Ref("keys"),
+                params: ["database": dbRef,
+                             "role": "server"])
+        )
         expect(value).notTo(beNil())
         
         let secret: String = try! value!.get(path: "secret")
@@ -44,33 +57,39 @@ class ClientTests: FaunaDBTests {
     
         
         // Create spells class
-        value = await(expr: Create(ref: Ref("classes"), params: ["name": "spells"]))
+        value = await(
+            Create(ref: Ref("classes"),
+                params: ["name": "spells"])
+        )
         expect(value).notTo(beNil())
         
         
         // Create an index
-        value = await(expr: Create(ref: Ref("indexes"), params: [
-            "name": "spells_by_element",
-            "source": Ref("classes/spells"),
-            "terms": [["path": "data.element"] as Obj] as Arr,
-            "active": true]))
+        value = await(
+            Create(ref: Ref("indexes"),
+                params:
+                    ["name": "spells_by_element",
+                     "source": Ref("classes/spells"),
+                     "terms": [["path": "data.element"] as Obj] as Arr,
+                     "active": true])
+        )
         expect(value).notTo(beNil())
         
         
         // MARK: echo values
         
-        value = await(expr: ["foo": "bar"] as Obj)
+        value = await(["foo": "bar"] as Obj)
         expect(value).notTo(beNil())
         let objResult: Obj? = value?.get()
         expect(objResult) == ["foo": "bar"]
         
         
-        value = await(expr: [1, 2, "foo"] as Arr)
+        value = await([1, 2, "foo"] as Arr)
         expect(value).notTo(beNil())
         let arrResult: Arr? = value?.get()
         expect(arrResult) == [Double(1), Double(2), "foo"]
         
-        value = await(expr: "qux")
+        value = await("qux")
         expect(value).notTo(beNil())
         expect(value?.get()) == "qux"
 
@@ -79,7 +98,10 @@ class ClientTests: FaunaDBTests {
         
         // Create an instance
         
-        value = await(expr: Create(ref: Ref("classes/spells"), params: ["data": ["testField": "testValue"] as Obj]))
+        value = await(
+            Create(ref: Ref("classes/spells"),
+                params: ["data": ["testField": "testValue"] as Obj])
+        )
         expect(value).notTo(beNil())
         
         expect(value?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
@@ -88,20 +110,23 @@ class ClientTests: FaunaDBTests {
         
         // Check that it exists
         let ref: Ref? = value?.get(field: Fields.ref)
-        value = await(expr: Exists(ref: ref!))
+        value = await(
+            Exists(ref: ref!)
+        )
         expect(value?.get()) == true
         
         
-        value = await(expr: Create(ref: Ref("classes/spells"), params:
-                                                                    ["data": [ "testData" : [  "array": [1, "2", 3.4] as Arr,
-                                                                                               "bool": true,
-                                                                                               "num": 1234,
-                                                                                               "string": "sup",
-                                                                                               "float": 1.234,
-                                                                                               "null": Null()]
-                                                                                             as Obj]
-                                                                             as Obj]
-                                                                    ))
+        value = await(
+            Create(ref: Ref("classes/spells"),
+                params:  ["data": [ "testData" : [ "array": [1, "2", 3.4] as Arr,
+                                                   "bool": true,
+                                                   "num": 1234,
+                                                   "string": "sup",
+                                                   "float": 1.234,
+                                                   "null": Null()]
+                                                 as Obj]
+                                 as Obj]
+                        ))
         
         let testData: Obj? = value?.get(path: "data", "testData")
         expect(testData).notTo(beNil())
@@ -114,14 +139,16 @@ class ClientTests: FaunaDBTests {
     
         //MARK: Issue a batched query
         let classRef = Ref("classes/spells")
-        let expr1 = Create(ref: classRef, params: ["data": ["queryTest1": "randomText1"] as Obj])
-        let expr2 = Create(ref: classRef, params: ["data": ["queryTest2": "randomText2"] as Obj])
+        let randomText1 = String(randomWithLength: 8)
+        let randomText2 = String(randomWithLength: 8)
+        let expr1 = Create(ref: classRef, params: ["data": ["queryTest1": randomText1] as Obj])
+        let expr2 = Create(ref: classRef, params: ["data": ["queryTest2": randomText2] as Obj])
         
-        value = await(expr: Arr(expr1.value, expr2.value))
+        value = await(Arr(expr1.value, expr2.value))
         let arr: Arr? = value?.get()
         expect(arr?.count) == 2
-        expect(arr?[0].get(path: "data", "queryTest1")) == "randomText1"
-        expect(arr?[1].get(path: "data", "queryTest2")) == "randomText2"
+        expect(arr?[0].get(path: "data", "queryTest1")) == randomText1
+        expect(arr?[1].get(path: "data", "queryTest2")) == randomText2
         
         
         //MARK: "issue a paginated query"
@@ -129,45 +156,49 @@ class ClientTests: FaunaDBTests {
         
         let randomClassName = String(randomWithLength: 8)
         
-        value = await(expr: Create(ref: Ref("classes"), params: ["name": randomClassName]))
+        value = await(Create(ref: Ref("classes"), params: ["name": randomClassName]))
         expect(value).notTo(beNil())
         
-        let classRef2: Ref? = value?.get(field: Fields.ref)
-        expect(classRef2) == Ref("classes/" + randomClassName)
+        let randomClassRef: Ref? = value?.get(field: Fields.ref)
+        expect(randomClassRef) == Ref("classes/" + randomClassName)
         
         
-        value = await(expr: Create(ref: Ref("indexes"), params: ["name": randomClassName + "_class_index", "source": classRef, "active": true, "unique": false]))
+        value = await(Create(ref: Ref("indexes"),
+                    params:   ["name": "\(randomClassName)_class_index",
+                             "source": randomClassRef!,
+                             "active": true,
+                             "unique": false]))
         expect(value).notTo(beNil())
         let randomClassIndex: Ref? = value?.get(field: Fields.ref)
-        expect(randomClassIndex) == Ref("indexes/" + randomClassName + "_class_index")
+        expect(randomClassIndex) == Ref("indexes/\(randomClassName)_class_index")
 
         
-        value = await(expr: Create(ref: Ref("indexes"), params: ["name": randomClassName + "_test_index", "source": classRef, "active": true, "unique": false, "terms": [["path": "data.queryTest1"] as Obj] as Arr]))
+        value = await(Create(ref: Ref("indexes"), params: ["name": "\(randomClassName)_test_index", "source": randomClassRef!, "active": true, "unique": false, "terms": [["path": "data.queryTest1"] as Obj] as Arr]))
         expect(value).notTo(beNil())
         let testIndex: Ref? = value?.get(field: Fields.ref)
-        expect(testIndex) == Ref("indexes/" + randomClassName + "_test_index")
+        expect(testIndex) == Ref("indexes/\(randomClassName)_test_index")
         
 
-        let randomText1 = String(randomWithLength: 8)
-        let randomText2 = String(randomWithLength: 8)
+//        let randomText1 = String(randomWithLength: 8)
+//        let randomText2 = String(randomWithLength: 8)
         let randomText3 = String(randomWithLength: 8)
         
-        let create1Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText1] as Obj]))
+        let create1Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText1] as Obj]))
         expect(create1Value).notTo(beNil())
-        let create2Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText2] as Obj]))
+        let create2Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText2] as Obj]))
         expect(create2Value).notTo(beNil())
-        let create3Value = await(expr: Create(ref: classRef, params: ["data": ["queryTest1": randomText3] as Obj]))
+        let create3Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText3] as Obj]))
         expect(create3Value).notTo(beNil())
         
         
-        let queryMatchValue = await(expr: Paginate(resource: Match(index: testIndex!, terms: randomText1)))
+        let queryMatchValue = await(Paginate(resource: Match(index: testIndex!, terms: randomText1)))
         expect(queryMatchValue).notTo(beNil())
         
 
     }
     
     // Helper
-    private func await(expr expr: Expr) -> Value? {
+    private func await(expr: Expr) -> Value? {
         var res: Value?
         waitUntil(timeout: 5) { [weak self] done in
             self?.client.query(expr) { result in

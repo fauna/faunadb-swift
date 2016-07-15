@@ -42,7 +42,7 @@ class SetUpFaunaController: UIViewController {
                 .flatMap { _ in
                     return Create(ref: Ref("keys"), params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
                 }
-                .mapWithField(["secret"])
+                .mapWithField("secret")
                 .doOnNext { (secret: String) in
                     faunaClient = Client(secret: secret, observers: [Logger()])
                 }
