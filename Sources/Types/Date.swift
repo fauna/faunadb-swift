@@ -48,5 +48,3 @@ extension Date: Encodable {
         return ["@date": "\(year)-\(monthStr)-\(dayStr)"]
     }
 }
-
-

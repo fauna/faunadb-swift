@@ -105,3 +105,32 @@ extension String{
         
     }
 }
+
+
+extension FaunaDB.Error {
+    
+    public func equalType(other: FaunaDB.Error) -> Bool {
+        switch (self, other) {
+        case (.UnavailableException(_, _), .UnavailableException(_, _)):
+            return true
+        case (.BadRequestException(_, _), .BadRequestException(_, _)):
+            return true
+        case (.NotFoundException(_, _), .NotFoundException(_, _)):
+            return true
+        case (.UnauthorizedException(_, _), .UnauthorizedException(_, _)):
+            return true
+        case (.UnknownException(_, _, _), .UnknownException(_, _, _)):
+            return true
+        case (.InternalException(_, _, _), .InternalException(_, _, _)):
+            return true
+        case (.NetworkException(_, _, _), .NetworkException(_, _, _)):
+            return true
+        case (.DriverException(_, _), .DriverException(_, _)):
+            return true
+        case (.UnparsedDataException(_, _), .UnparsedDataException(_, _)):
+            return true
+        default:
+            return false
+        }
+    }
+}

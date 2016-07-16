@@ -70,13 +70,13 @@ struct Mapper {
         case _ as NSNull:
             return Null()
         case let value as [AnyObject]:
-            guard let result = Arr(json: value) else { throw Error.UnparsedData(data: value, msg: "Unparseable data to Arr") }
+            guard let result = Arr(json: value) else { throw Error.UnparsedDataException(data: value, msg: "Unparseable data to Arr") }
             return result
         case let value as [String: AnyObject]:
-            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? Obj(json: value)  else { throw Error.UnparsedData(data: value, msg: "Unparseable data") }
+            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? SetRef(json: value) ?? Obj(json: value)  else { throw Error.UnparsedDataException(data: value, msg: "Unparseable data") }
             return result
         default:
-            throw Error.UnparsedData(data: data, msg: "Unparseable data")
+            throw Error.UnparsedDataException(data: data, msg: "Unparseable data")
         }
     }
 }

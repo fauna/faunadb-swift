@@ -57,4 +57,3 @@ extension Timestamp {
         return dateFormatter.stringFromDate(self)
     }
 }
-

@@ -40,9 +40,6 @@ class ClientExceptionsTests: FaunaDBTests {
         expect(dbRef).toEventually(equal(Ref("databases/\(testDbName)")))
         expect(secret).toNotEventually(beNil())
         
-       
-        
-        
         waitUntil(timeout: 3){ [weak self] done in
             self?.client.query(Create(ref: Ref("classes"), params: ["name": "spells"])){ _ in
                 done()
@@ -80,7 +77,6 @@ class ClientExceptionsTests: FaunaDBTests {
             }
         }
         
-    
         // MARK: BadRequestException
         waitUntil(timeout: 3) { [weak self] done in
             self?.client.query("Hi") { result in
@@ -92,7 +88,6 @@ class ClientExceptionsTests: FaunaDBTests {
                 done()
             }
         }
-
     }
     
     func testUnauthorized(){

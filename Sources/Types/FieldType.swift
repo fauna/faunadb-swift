@@ -7,38 +7,40 @@
 
 import Foundation
 
-protocol FieldType {
+public protocol FieldType {
     associatedtype T: DecodableValue
+    
+    var path: [PathComponentType] { get }
+
     func get(value: Value) throws -> T
     func getOptional(value: Value) -> T?
+    func getArray(value: Value) throws -> [T]
+    func getOptionalArray(value: Value) -> [T]?
+    
+    init(_ array: [PathComponentType])
 }
 
-public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, ArrayLiteralConvertible, IntegerLiteralConvertible, StringLiteralConvertible {
-    
-    var path: [PathComponentType]
-    
-    public init(_ array: [PathComponentType]){
-        path = array
-    }
-    
-    public init(_ filePaths: PathComponentType...){
-        self.init(filePaths)
-    }
-    
-    public init<U: Value>(other: Field<U>){
-        self.init(other.path)
-    }
 
-    public func get(value: Value) throws -> T {
-        let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
-            return try path.subValue(partialValue)
-        }
-        guard let typedValue = T.decode(result) else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
-        return typedValue
-    }
-    
+extension FieldType {
     public func getOptional(value: Value) -> T? {
         return try? get(value)
+    }
+    
+    public func getOptionalArray(value: Value) -> [T]? {
+        return try? getArray(value)
+    }
+    
+    // Mark: Convenience method
+    
+    /**
+     Creates a field extractor composed with another nested field
+     
+     - parameter other: nested field to compose with
+     
+     - returns: a new field extractor with the nested field
+     */
+    public func at<U: Value>(other: Field<U>) -> Field<U>{
+        return Field<U>(path + other.path)
     }
     
     // MARK: ArrayLiteralConvertible
@@ -66,18 +68,40 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
     public init(unicodeScalarLiteral value: String){
         self.init(stringLiteral: value)
     }
+}
+
+public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, ArrayLiteralConvertible, IntegerLiteralConvertible, StringLiteralConvertible {
     
-    // Mark: Convenience method
+    public let path: [PathComponentType]
     
-    /**
-     Creates a field extractor composed with another nested field
-     
-     - parameter other: nested field to compose with
-     
-     - returns: a new field extractor with the nested field
-     */
-    public func at<U: Value>(other: Field<U>) -> Field<U>{
-        return Field<U>(path + other.path)
+    public init(_ array: [PathComponentType]){
+        path = array
+    }
+    
+    public init(_ filePaths: PathComponentType...){
+        self.init(filePaths)
+    }
+    
+    public init<U: Value>(other: Field<U>){
+        self.init(other.path)
+    }
+
+    public func get(value: Value) throws -> T {
+        let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
+            return try path.subValue(partialValue)
+        }
+        guard let typedValue = T.decode(result) else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
+        return typedValue
+    }
+
+    public func getArray(value: Value) throws -> [T] {
+        let arr: Arr = try value.get(field: Field<Arr>(path))
+        return try arr.map {
+            guard let item = T.decode($0) else {
+                throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: [])
+            }
+            return item
+        }
     }
 }
 
