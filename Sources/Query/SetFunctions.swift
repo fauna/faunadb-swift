@@ -23,7 +23,7 @@ public struct Match: Expr {
      - returns: a Match expression.
      */
     public init(index: Ref, terms: Expr...){
-        var obj: Obj = ["match": index.value]
+        var obj: Obj = ["match": index]
         obj["terms"] = terms.count > 0 ? varargs(terms) : nil
         value = fn(obj)
     }

@@ -12,20 +12,51 @@ import Nimble
 class FaunaDBTests: XCTestCase {
 
     static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
+
+    lazy var client: Client = {
+        return Client(secret: FaunaDBTests.secret)
+    }()
+    
+    let testDbName = "faunadb-swift-test-\(arc4random())"
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // This method is called before the invocation of each test method in the class.
+        Nimble.AsyncDefaults.Timeout = 5.SEC
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
+    
+    // MARK: Helpers
+    
+    func await(expr: ValueConvertible) -> Value? {
+        var res: Value?
+        waitUntil(timeout: 5) { [weak self] done in
+            self?.client.query(expr) { result in
+                res = try? result.dematerialize()
+                done()
+            }
+        }
+        return res
+    }
+    
+    func awaitError(expr: Expr) -> FaunaDB.Error? {
+        var res: FaunaDB.Error?
+        waitUntil(timeout: 5) { [weak self] done in
+            self?.client.query(expr) { result in
+                res = result.error
+                done()
+            }
+        }
+        return res
+    }
       
 }
 
-func XCTAssertThrowss<T: ErrorType where T: Equatable>(error: T, block: () throws -> ()) {
+func XCTAssertThrows<T: ErrorType where T: Equatable>(error: T, block: () throws -> ()) {
     do {
         try block()
     }
@@ -90,7 +121,6 @@ extension CollectionType where Index.Distance == Int{
             }
             return sampleElements
         }
-        
         return nil
     }
     
@@ -103,6 +133,10 @@ extension String{
     public init(randomWithLength length: Int) {
         self.init("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".characters.sample(size: length)!)
         
+    }
+    
+    public init(randomNumWithLength length: Int) {
+        self.init(["123456789".characters.sample!] + "0123456789".characters.sample(size: length - 1)!)
     }
 }
 
@@ -134,3 +168,4 @@ extension FaunaDB.Error {
         }
     }
 }
+

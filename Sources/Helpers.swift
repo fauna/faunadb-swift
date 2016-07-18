@@ -40,9 +40,9 @@ func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(coll
 func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(collection: C) -> Value{
     switch  collection.count {
     case 1:
-        return collection.first!.value
+        return collection.first!
     default:
-        return Arr(collection.map { $0.value })
+        return Arr(collection.map { $0 })
     }
     
 }

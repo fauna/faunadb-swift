@@ -42,7 +42,7 @@ public final class Client {
 extension Client {
 
     public func query(@autoclosure expr: (()-> ValueConvertible), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
-        let jsonData = try! toData(expr().toJSON())
+        let jsonData = try! Client.toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
@@ -141,7 +141,7 @@ extension Client {
         return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([])
     }
     
-    private func toData(object: AnyObject) throws -> NSData {
+    static func toData(object: AnyObject) throws -> NSData {
         if object is [AnyObject] || object is [String: AnyObject] {
             return try NSJSONSerialization.dataWithJSONObject(object, options: [])
         }

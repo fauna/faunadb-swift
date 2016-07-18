@@ -247,9 +247,9 @@ public struct GT: Expr {
     public let value: Value
     
     /**
-     *  `GT` returns true if each specified value compares as greater than the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
+     `GT` returns true if each specified value compares as greater than the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
+     
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
      
      - parameter terms: number or expression that evalues to a number.
      

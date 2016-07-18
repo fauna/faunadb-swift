@@ -53,7 +53,7 @@ class FieldTests: FaunaDBTests {
         
         // let's see what happens if we use a wrong Value
         let obj: Obj = ["name": "my_db_name"]
-        XCTAssertThrowss(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try field.get(obj) }
+        XCTAssertThrows(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try field.get(obj) }
         
         var arr2 = arr
         arr2.append(["key": Ref("classes")] as Obj)

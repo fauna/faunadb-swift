@@ -75,3 +75,8 @@ extension Null: Encodable {
     }
 }
 
+extension Null: Equatable {}
+
+public func ==(lhs: Null, rhs: Null) -> Bool {
+    return true
+}

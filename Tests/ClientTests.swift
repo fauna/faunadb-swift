@@ -12,18 +12,7 @@ import Result
 
 
 class ClientTests: FaunaDBTests {
-    
-    lazy var client: Client = {
-        return Client(secret: FaunaDBTests.secret)
-    }()
-    
-    let testDbName = "faunadb-swift-test-\(arc4random())"
-    
-    override func setUp() {
-        super.setUp()
-        Nimble.AsyncDefaults.Timeout = 5.SEC
-    }
-    
+        
     private func setupFaunaDB(){
 
         var value: Value?
@@ -316,33 +305,216 @@ class ClientTests: FaunaDBTests {
         expect(value).notTo(beNil())
         let set: SetRef? = value?.get()
 
-        expect(Ref("indexes/spells_by_element")) == set?.value.get(path: "match")
-        expect("arcane") == set?.value.get(path: "terms")
+        expect(Ref("indexes/spells_by_element")) == set?.parameters.get(path: "match")
+        expect("arcane") == set?.parameters.get(path: "terms")
     }
     
-    
-    
-    // MARK: Helpers
-    
-    private func await(expr: ValueConvertible) -> Value? {
-        var res: Value?
-        waitUntil(timeout: 5) { [weak self] done in
-            self?.client.query(expr) { result in
-                res = try? result.dematerialize()
-                done()
-            }
-        }
-        return res
+    func testBasicForms() {
+        setupFaunaDB()
+        
+        let letR = await(Let(1, 2) { x, _ in x })
+        expect(Double(1)) == letR?.get()
+        
+        let ifR = await(If(pred: true, then: "was true", else: "was false"))
+        expect("was true") == ifR?.get()
+
+        let randomRef: Ref = Ref("classes/spells/" + String(randomNumWithLength: 4))
+        let doR = await(
+            Do(exprs: Create(ref: randomRef,
+                          params: ["data": ["name": "Magic Missile"] as Obj]),
+                      Get(ref: randomRef))
+        )
+        expect(randomRef) == doR?.get(field: Fields.ref)
+   
+
+        let objectR = await(["name": "Hen Wen", "age": 123] as Obj)
+        expect(objectR?.get(path:"name")) == "Hen Wen"
+        expect(objectR?.get(path: "age")) == Double(123)
     }
     
-    private func awaitError(expr: Expr) -> FaunaDB.Error? {
-        var res: FaunaDB.Error?
-        waitUntil(timeout: 5) { [weak self] done in
-            self?.client.query(expr) { result in
-                res = result.error
-                done()
+    func testCollections(){
+        setupFaunaDB()
+        
+        let mapR = await(
+            Map(collection: [1, 2, 3] as Arr) { x in Add(terms: x, 1) }
+        )
+        expect(mapR?.get()) == [2.0, 3.0, 4.0]
+        
+
+        let foreachR = await(
+            Foreach(collection:  ["Fireball Level 1", "Fireball Level 2"].value) { spell in
+                Create(ref: Ref("classes/spells"), params: ["data": ["name": spell.value] as Obj])
             }
+        )
+        expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]
+        
+        let filterR = await(
+            Filter(collection: [1, 2, 11, 12].value) {
+                GT(terms: $0, 10)
+            }
+        )
+        expect(filterR?.get()) == [11.0, 12.0]
+    }
+    
+    func testResourceModification() {
+        setupFaunaDB()
+        
+        let createR = await(
+            Create(ref: Ref("classes/spells"),
+                params: ["data": ["name": "Magic Missile",
+                                  "element": "arcane",
+                                  "cost": Double(10)]
+                                  as Obj]
+            )
+        )
+        expect(createR?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
+        expect(createR?.get(path: "data", "name")) == "Magic Missile"
+        expect(createR?.get(path: "data", "element")) == "arcane"
+        expect(createR?.get(path: "data", "cost")) == 10.0
+        
+        
+        let updateR = await(
+            try! Update(ref: createR!.get(field: Fields.ref),
+                params: ["data": ["name": "Faerie Fire",
+                                  "cost": Null()] as Obj])
+        )
+        let updateRef: Ref? = updateR?.get(field: Fields.ref)
+        expect(updateRef) == createR?.get(field: Fields.ref)
+        expect(updateR?.get(path: "data", "name")) == "Faerie Fire"
+        expect(updateR?.get(path: "data", "element")) == "arcane"
+        let nullCost: Double? = updateR?.get(path: "data", "cost")
+        expect(nullCost).to(beNil())
+        
+        
+        let replaceR = await(
+            Replace(ref: try! createR!.get(path: "ref"),
+                                  params: ["data": ["name": "Volcano",
+                                                 "element": ["fire", "earth"] as Arr,
+                                                    "cost": 10.0] as Obj])
+        )
+        let replaceRef: Ref? = replaceR?.get(field: Fields.ref)
+        expect(replaceRef) == createR?.get(field: Fields.ref)
+        expect(replaceR?.get(path: "data", "name")) == "Volcano"
+        expect(replaceR?.get(path: "data", "element")) == ["fire", "earth"]
+        expect(replaceR?.get(path: "data", "cost")) == 10.0
+        
+        
+        let insertR = await(
+            Insert(
+                    ref: try! createR!.get(path: "ref"),
+                    ts: Timestamp(timeIntervalSince1970: 1),
+                action: Action.Create,
+                params: ["data": ["cooldown": 5.0] as Obj]
+            )
+        )
+        let insertRef: Ref? = insertR?.get(field: Fields.ref)
+        expect(insertRef) == createR?.get(field: Fields.ref)
+        expect(insertR?.get(path: "data")) == ["cooldown": 5.0] as Obj
+        
+        let removeR = await(
+            Remove(ref: try! createR!.get(path: "ref"),
+                    ts: Timestamp(timeIntervalSince1970: 2),
+                action: Action.Delete)
+        )
+        expect(removeR as? Null) == Null()
+        
+        
+        let deleteR = await(
+            Delete(ref: try! createR!.get(path: "ref"))
+        )
+        expect(deleteR).notTo(beNil())
+        let notFoundError = awaitError(Get(ref: try! createR!.get(path: "ref")))
+        expect(notFoundError?.equalType(Error.NotFoundException(response: nil, errors: []))) == true
+    }
+    
+    struct Ev: DecodableValue {
+        let ref: Ref
+        let ts: Double
+        let action: String
+        
+        static func decode(value: Value) -> Ev?{
+            return try? Ev(ref: value.get(path: "resource"), ts: value.get(path: "ts"), action: value.get(path: "action"))
         }
-        return res
+    }
+
+    func testSets() {
+        setupFaunaDB()
+        
+        let create1R = await(
+            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Magic Missile",
+                                                                 "element": "arcane",
+                                                                 "cost": 10.0] as Obj])
+        )
+        expect(create1R).notTo(beNil())
+        let create1Ref: Ref = try! create1R!.get(path: "ref")
+        
+        let create2R = await(
+            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Fireball",
+                                                                 "element": "fire",
+                                                                 "cost": 10.0] as Obj])
+        )
+        expect(create2R).notTo(beNil())
+        let create2Ref: Ref = try! create2R!.get(path: "ref")
+        
+        let create3R = await(
+            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Faerie Fire",
+                                                                 "element": ["arcane", "nature"] as Arr,
+                                                                 "cost": 10.0] as Obj])
+        )
+        expect(create3R).notTo(beNil())
+        let create3Ref: Ref = try! create3R!.get(path: "ref")
+        
+        let create4R = await(
+            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Summon Animal Companion",
+                                                              "element": "nature",
+                                                                 "cost": 10.0] as Obj])
+        )
+        expect(create4R).notTo(beNil())
+        let create4Ref: Ref = try! create4R!.get(path: "ref")
+        
+        
+        let matchR = await(Paginate(resource: Match(index: Ref("indexes/spells_by_element"), terms: "arcane")))
+        expect(matchR?.get(path: "data") as [Ref]?).to(contain(create1Ref))
+        
+        let matchEventsR = await(
+            Paginate(resource: Match(index: Ref("indexes/spells_by_element"),
+                                     terms: "arcane"),
+                       events: true)
+        )
+        let pageEv: [Ev] = try! matchEventsR!.get(path: "data")
+        expect(pageEv.map { $0.ref }).to(contain(create1Ref))
+
+        
+        let unionR = await(
+            Paginate(resource: Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
+                                           Match(index: Ref("indexes/spells_by_element"), terms: "fire")))
+        
+        )
+        expect(unionR?.get(path: "data") as [Ref]?).to(contain(create1Ref, create2Ref))
+        
+        
+        let unionEventsR = await(
+            Paginate(resource: Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
+                                           Match(index: Ref("indexes/spells_by_element"), terms: "fire")),
+                       events: true)
+        
+        )
+        let unionEventsPageEv: [Ev] = try! unionEventsR!.get(path: "data")
+        expect(unionEventsPageEv.filter { $0.action == "create" }.map { $0.ref }).to(contain(create1Ref, create2Ref))
+
+
+        let intersectionR = await(
+            Paginate(resource: Intersection(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
+                                                  Match(index: Ref("indexes/spells_by_element"), terms: "nature")))
+        )
+        let refs: [Ref]? = intersectionR?.get(path: "data")
+        expect(refs).to(contain(create3Ref))
+
+        let differenceR = await(
+            Paginate(resource: Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "nature"),
+                                                Match(index: Ref("indexes/spells_by_element"), terms: "arcane")))
+        )
+        expect(differenceR?.get(path: "data") as [Ref]?).to(contain(create4Ref))
     }
 }
+

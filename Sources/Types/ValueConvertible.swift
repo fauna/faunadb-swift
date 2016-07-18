@@ -29,7 +29,7 @@ extension ValueConvertible {
         return try field.getArray(value)
     }
     
-    public func get<T: DecodableValue where T.DecodedType == T>(path path: PathComponentType...) throws -> [T]?{
+    public func get<T: DecodableValue where T.DecodedType == T>(path path: PathComponentType...) -> [T]?{
         return try? get(field: Field<T>(path))
     }
     
