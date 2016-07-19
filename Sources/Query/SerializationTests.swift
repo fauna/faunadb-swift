@@ -20,11 +20,11 @@ class SerializationTests: FaunaDBTests {
     func testArr(){
         
         // MARK: Arr
-        let arr: [Any] = [3, "test", Null()]
-        expectToJson(arr) ==  "[3,\"test\",null]"
+        let arr: [Any] = [3, "test", Null(), 2.4]
+        expectToJson(arr) ==  "[3,\"test\",null,2.4]"
         
-        let arr2: Arr = [3, "test", Null()]
-        expectToJson(arr2) == "[3,\"test\",null]"
+        let arr2: Arr = [3, "test", Null(), 2.4]
+        expectToJson(arr2) == "[3,\"test\",null,2.4]"
         
         let intArr = [1, 2, 3]
         expectToJson(intArr) == "[1,2,3]"

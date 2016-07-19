@@ -15,14 +15,6 @@ extension Int: Encodable {
     }
 }
 
-extension Float: ScalarValue{}
-extension Float: Encodable {
-    
-    func toJSON() -> AnyObject {
-        return self
-    }
-}
-
 extension Double: ScalarValue{}
 extension Double: Encodable {
     

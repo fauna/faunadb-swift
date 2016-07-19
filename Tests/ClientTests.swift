@@ -619,12 +619,13 @@ class ClientTests: FaunaDBTests {
         
         let secret: String? = await(
             Login(ref: createRef!, params: ["password": "abcdefg"])
-        )?.get()
+            )?.get(path: "secret")
         expect(secret).toNot(beNil())
 
+        client = Client(secret: secret!, observers: [Logger()])
         
         let logoutR: Bool? = await(
-            Logout(invalidateAll: If(pred: true, then: false, else: true))
+            Logout(invalidateAll: false)
         )?.get()
         
         expect(logoutR) == true
