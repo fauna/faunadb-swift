@@ -78,14 +78,10 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
         path = array
     }
     
-    public init(_ filePaths: PathComponentType...){
-        self.init(filePaths)
+    public init(_ path: PathComponentType...){
+        self.init(path)
     }
     
-    public init<U: Value>(other: Field<U>){
-        self.init(other.path)
-    }
-
     public func get(value: Value) throws -> T {
         let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
             return try path.subValue(partialValue)

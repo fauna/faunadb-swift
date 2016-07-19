@@ -79,15 +79,40 @@ class FieldTests: FaunaDBTests {
         
         
         //MARK: DecodableValue
+        let blogField = Field<BlogPost>(0, "data")
         
-        let blogPostValue: Obj = ["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": ["DB", "Performance"] as Arr]
-        
-        let post: BlogPost? = blogPostValue.get()
-        
+        let blogPostData = ["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": ["DB", "Performance"] as Arr] as Obj
+        let objContainingPost: Arr = [["data" : blogPostData] as Obj]
+    
+        let post: BlogPost? = objContainingPost.get(path: 0, "data")
         expect(post?.name) == "My Blog Post"
         expect(post?.author) == "FaunaDB Inc"
         expect(post?.content) == "My Content"
         
+        // checking non-collection item using Field instance.
+        let post2: BlogPost? = blogField.getOptional(objContainingPost)
+        expect(post2?.name) == "My Blog Post"
+        expect(post2?.author) == "FaunaDB Inc"
+        expect(post2?.content) == "My Content"
+        
+        
+        let post3: BlogPost = try! blogField.get(objContainingPost)
+        expect(post3.name) == "My Blog Post"
+        expect(post3.author) == "FaunaDB Inc"
+        expect(post3.content) == "My Content"
+        
+        // check decoding an array of a DecodableValue
+        let blogPostArr: Arr = [["data": [blogPostData, blogPostData, blogPostData, blogPostData, blogPostData] as Arr] as Obj]
+        let postArray: [BlogPost]? = blogPostArr.get(path: 0, "data")
+        expect(postArray?.count) == 5
+        
+        // check collections using Fields
+        
+        let postArray2: [BlogPost]? = blogField.getOptionalArray(blogPostArr)
+        expect(postArray2?.count) == 5
+
+        let postArray3: [BlogPost] = try! blogField.getArray(blogPostArr)
+        expect(postArray3.count) == 5
     }
 }
 
