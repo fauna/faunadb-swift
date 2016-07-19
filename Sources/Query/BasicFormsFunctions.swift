@@ -1,5 +1,5 @@
 //
-//  BasicForms.swift
+//  BasicFormsFunctions.swift
 //  FaunaDB
 //
 //  Copyright © 2016 Fauna, Inc. All rights reserved.

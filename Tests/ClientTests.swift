@@ -24,14 +24,13 @@ class ClientTests: FaunaDBTests {
         )
         expect(value).notTo(beNil())
         
-        let dbRef: Ref = try! value!.get(field: Fields.ref)
+        let dbRef: Ref? = value?.get(field: Fields.ref)
         expect(dbRef) == Ref("databases/\(testDbName)")
         
         // Get a new key
         value = await(
             Create(ref: Ref("keys"),
-                params: ["database": dbRef,
-                    "role": "server"])
+                params: ["database": dbRef!, "role": "server"])
         )
         expect(value).notTo(beNil())
         
@@ -52,11 +51,10 @@ class ClientTests: FaunaDBTests {
         // Create an index
         value = await(
             Create(ref: Ref("indexes"),
-                params:
-                ["name": "spells_by_element",
-                    "source": Ref("classes/spells"),
-                    "terms": [["path": "data.element"] as Obj] as Arr,
-                    "active": true])
+                params: ["name": "spells_by_element",
+                         "source": Ref("classes/spells"),
+                         "terms": [["path": "data.element"] as Obj] as Arr,
+                         "active": true])
         )
         expect(value).notTo(beNil())
     }
@@ -515,6 +513,126 @@ class ClientTests: FaunaDBTests {
                                                 Match(index: Ref("indexes/spells_by_element"), terms: "arcane")))
         )
         expect(differenceR?.get(path: "data") as [Ref]?).to(contain(create4Ref))
+    }
+    
+    func testMiscellaneous() {
+        let equalsR = await(
+            Equals(terms: "fire", "fire")
+        )
+        expect(equalsR?.get()) == true
+        
+        
+        let concatR = await(
+            Concat(strList: ["Magic", "Missile"] as Arr)
+        )
+        expect(concatR?.get()) == "MagicMissile"
+        
+        
+        let concatR2 = await(
+            Concat(strList: ["Magic", "Missile"] as Arr,
+                 separator: " ")
+        )
+        expect(concatR2?.get()) == "Magic Missile"
+        
+        
+        let containsR = await(
+            Contains(pathComponents: "favorites", "foods",
+                             inExpr: ["favorites": ["foods": ["crunchings", "munchings"] as Arr] as Obj] as Obj)
+        )
+        expect(containsR?.get()) == true
+        
+        
+        let containsR2 = await(
+            Contains(path: ["favorites", "foods"] as Arr,
+                inExpr: ["favorites": ["foods": ["crunchings", "munchings"] as Arr] as Obj] as Obj)
+        )
+        expect(containsR2?.get()) == true
+        
+        
+        let selectR = await(
+            Select(pathComponents: "favorites", "foods", 1, from: ["favorites": ["foods": ["crunchings", "munchings", "lunchings"] as Arr] as Obj] as Obj)
+        )
+        expect(selectR?.get()) == "munchings"
+        
+        let addR = await(
+            Add(terms:100.0, 10.0)
+        )
+        expect(addR?.get()) == 110.0
+
+        let multiplyR = await(
+            Multiply(terms:100.0, 10.0)
+        )
+        expect(multiplyR?.get()) == 1000.0
+        
+        let subtractR = await(
+            Subtract(terms:100.0, 10.0)
+        )
+        expect(subtractR?.get()) == 90.0
+
+        let divideR = await(
+            Divide(terms:100.0, 10.0)
+        )
+        expect(divideR?.get()) == 10.0
+
+        let moduloR = await(
+            Modulo(terms:101.0, 10.0)
+        )
+        expect(moduloR?.get()) == 1.0
+        
+        let andR = await(
+            And(terms:true, false)
+        )
+        expect(andR?.get()) == false
+        
+        let orR = await(
+            Or(terms:true, false)
+        )
+        expect(orR?.get()) == true
+        
+        let notR = await(
+            Not(boolExpr:false)
+        )
+        expect(notR?.get()) == true
+    }
+    
+    func testDateAndTime(){
+        
+        let timeR = await(Time("1970-01-01T00:00:00-04:00"))
+        expect(timeR?.get()) == Timestamp(iso8601: "1970-01-01T00:00:00-04:00")
+
+        let epochR = await(Epoch(offset: 30, unit: TimeUnit.second))
+        expect(epochR?.get()) == Timestamp(timeIntervalSince1970: 30)
+
+        let dateR = await(DateFn(iso8601: "1970-01-02"))
+        expect(dateR?.get()) == Date(iso8601: "1970-01-02")
+    }
+
+
+    func  testAuthentication() {
+        setupFaunaDB()
+        
+        let createR = await(
+            Create(ref: Ref("classes/spells"), params: ["credentials": ["password": "abcdefg"] as Obj])
+        )
+        let createRef: Ref? = createR?.get(path: "ref")
+        expect(createRef).toNot(beNil())
+        
+        let secret: String? = await(
+            Login(ref: createRef!, params: ["password": "abcdefg"])
+        )?.get()
+        expect(secret).toNot(beNil())
+
+        
+        let logoutR: Bool? = await(
+            Logout(invalidateAll: If(pred: true, then: false, else: true))
+        )?.get()
+        
+        expect(logoutR) == true
+
+        let identifyR = await(
+            Identify(ref: createRef!, password: "abcdefg")
+        )
+        expect(identifyR?.get()) == true
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2816488D1D3EA163002F1BEE /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
 		283EB4EB1D26FB6000E59EBA /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
 		283EB4ED1D26FB6600E59EBA /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */; };
 		283EB4EE1D26FB6900E59EBA /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
@@ -16,7 +17,7 @@
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
 		287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */; };
-		287ED58B1D308ED6000E7BC6 /* TimeAndDateFuntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */; };
+		287ED58B1D308ED6000E7BC6 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
 		287ED58D1D33DF80000E7BC6 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
 		28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
 		288614181D0AF605007FB922 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; };
@@ -24,7 +25,7 @@
 		288614401D0AFBC1007FB922 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		288614411D0AFBC1007FB922 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2886144F1D0C8CF7007FB922 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
-		2886147C1D0F6E50007FB922 /* MiscFuntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFuntions.swift */; };
+		2886147C1D0F6E50007FB922 /* MiscFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFunctions.swift */; };
 		288F0F781D0FA41D00079435 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
 		28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
 		28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
@@ -46,7 +47,7 @@
 		28F888521D3710C3005782E4 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
 		28F888541D3710E6005782E4 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
 		28F99C881D1061440016F809 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
-		28F99CAB1D10655E0016F809 /* BasicForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicForms.swift */; };
+		28F99CAB1D10655E0016F809 /* BasicFormsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */; };
 		28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAC1D1065E20016F809 /* ReadFunctions.swift */; };
 		28F99CAF1D10C5AA0016F809 /* SyntacticSugars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */; };
 /* End PBXBuildFile section */
@@ -272,19 +273,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationFunctions.swift; path = Query/AuthenticationFunctions.swift; sourceTree = "<group>"; };
 		287AB3471D0726930002B487 /* PathComponentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = PathComponentType.swift; path = Types/PathComponentType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		287AB3671D0766970002B487 /* FieldType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldType.swift; path = Types/FieldType.swift; sourceTree = "<group>"; };
 		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
-		287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeAndDateFuntions.swift; path = Query/TimeAndDateFuntions.swift; sourceTree = "<group>"; };
+		287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeAndDateFunctions.swift; path = Query/TimeAndDateFunctions.swift; sourceTree = "<group>"; };
 		287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFunctions.swift; path = Query/StringFunctions.swift; sourceTree = "<group>"; };
 		28858D2A1D11C49400532DE7 /* WriteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = WriteFunctions.swift; path = Query/WriteFunctions.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		288614161D0AF605007FB922 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		288614171D0AF605007FB922 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientExceptionsTests.swift; path = Tests/ClientExceptionsTests.swift; sourceTree = SOURCE_ROOT; };
 		2886144E1D0C8CF7007FB922 /* SetRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetRef.swift; path = Types/SetRef.swift; sourceTree = "<group>"; };
-		2886147B1D0F6E50007FB922 /* MiscFuntions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiscFuntions.swift; path = Query/MiscFuntions.swift; sourceTree = "<group>"; };
+		2886147B1D0F6E50007FB922 /* MiscFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiscFunctions.swift; path = Query/MiscFunctions.swift; sourceTree = "<group>"; };
 		288F0F771D0FA41D00079435 /* SetFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetFunctions.swift; path = Query/SetFunctions.swift; sourceTree = "<group>"; };
 		28A1B1AD1D25C616006AA400 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Helpers.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		28A398871D341BE300F7D51B /* SerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializationTests.swift; path = Sources/Query/SerializationTests.swift; sourceTree = SOURCE_ROOT; };
@@ -317,7 +319,7 @@
 		28F888511D3710C3005782E4 /* ValueConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueConvertible.swift; path = Types/ValueConvertible.swift; sourceTree = "<group>"; };
 		28F888531D3710E6005782E4 /* DecodableValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DecodableValue.swift; path = Types/DecodableValue.swift; sourceTree = "<group>"; };
 		28F99C871D1061440016F809 /* CollectionFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionFunctions.swift; path = Query/CollectionFunctions.swift; sourceTree = "<group>"; };
-		28F99CAA1D10655E0016F809 /* BasicForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicForms.swift; path = Query/BasicForms.swift; sourceTree = "<group>"; };
+		28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicFormsFunctions.swift; path = Query/BasicFormsFunctions.swift; sourceTree = "<group>"; };
 		28F99CAC1D1065E20016F809 /* ReadFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadFunctions.swift; path = Query/ReadFunctions.swift; sourceTree = "<group>"; };
 		28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SyntacticSugars.swift; path = Query/SyntacticSugars.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
@@ -374,15 +376,16 @@
 			isa = PBXGroup;
 			children = (
 				28DCFF4F1CFF910100A813D3 /* Expr.swift */,
-				28F99CAA1D10655E0016F809 /* BasicForms.swift */,
-				2886147B1D0F6E50007FB922 /* MiscFuntions.swift */,
 				28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */,
+				28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */,
+				2886147B1D0F6E50007FB922 /* MiscFunctions.swift */,
 				28F99C871D1061440016F809 /* CollectionFunctions.swift */,
 				288F0F771D0FA41D00079435 /* SetFunctions.swift */,
 				28F99CAC1D1065E20016F809 /* ReadFunctions.swift */,
 				28858D2A1D11C49400532DE7 /* WriteFunctions.swift */,
-				287ED58A1D308ED6000E7BC6 /* TimeAndDateFuntions.swift */,
+				287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */,
 				287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */,
+				2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */,
 			);
 			name = Query;
 			sourceTree = "<group>";
@@ -886,13 +889,14 @@
 				28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */,
 				28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */,
 				28DCFF4B1CFF909100A813D3 /* Scalars.swift in Sources */,
-				287ED58B1D308ED6000E7BC6 /* TimeAndDateFuntions.swift in Sources */,
+				287ED58B1D308ED6000E7BC6 /* TimeAndDateFunctions.swift in Sources */,
 				28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */,
 				28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */,
+				2816488D1D3EA163002F1BEE /* AuthenticationFunctions.swift in Sources */,
 				28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */,
-				2886147C1D0F6E50007FB922 /* MiscFuntions.swift in Sources */,
+				2886147C1D0F6E50007FB922 /* MiscFunctions.swift in Sources */,
 				28F99CAF1D10C5AA0016F809 /* SyntacticSugars.swift in Sources */,
-				28F99CAB1D10655E0016F809 /* BasicForms.swift in Sources */,
+				28F99CAB1D10655E0016F809 /* BasicFormsFunctions.swift in Sources */,
 				28DCFF371CFE050E00A813D3 /* Client.swift in Sources */,
 				28E9D8631D08EE8700A511AA /* Timestamp.swift in Sources */,
 				287AB3481D0726930002B487 /* PathComponentType.swift in Sources */,
