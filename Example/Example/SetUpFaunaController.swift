@@ -69,7 +69,7 @@ class SetUpFaunaController: UIViewController {
         if (create){
             return
                 (1...100).map { int in
-                    return BlogPost(name: "Blog Post \(int)", author: "Martin B",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
+                    return BlogPost(name: "Blog Post \(int)", author: "FaunaDB",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
                     }.mapFauna { blogValue in
                         Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
                     }.rx_query()

@@ -108,10 +108,34 @@ class FieldTests: FaunaDBTests {
         expect(fieldLiteralR).toNot(beNil())
         
         
-        let _: (Value throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
-        let _: (Value throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
-        let _: (Value throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-        let _: (Value throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        let zip1T: (Value throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
+        let zip2T: (Value throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
+        let zip3T: (Value throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let zip4T: (Value throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        
+        
+        let zip1TR: (Int, Int) = try! arr.get(fieldComposition: zip1T)
+        let zip2TR: (Int, Int, String) = try! arr.get(fieldComposition: zip2T)
+        let zip3TR: (Int, Int, String, Obj) = try! arr.get(fieldComposition: zip3T)
+        let zip4TR: (Int, Int, String, Obj, String) = try! arr.get(fieldComposition: zip4T)
+        expect(zip1TR == zip1R!).to(beTrue())
+        expect(zip2TR == zip2R!).to(beTrue())
+        expect(zip3TR == zip3R!).to(beTrue())
+        expect(zip4TR == zip4R!).to(beTrue())
+        
+        
+        let zip1FR: (Int, Int)? = arr.get(field1: 0, field2: 2)
+        let zip2FR: (Int, Int, String)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"])
+        let zip3FR: (Int, Int, String, Obj)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let zip4FR: (Int, Int, String, Obj, String)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        expect(zip1FR).toNot(beNil())
+        expect(zip2FR).toNot(beNil())
+        expect(zip3FR).toNot(beNil())
+        expect(zip4FR).toNot(beNil())
+        expect(zip1FR! == zip1R!).to(beTrue())
+        expect(zip2FR! == zip2R!).to(beTrue())
+        expect(zip3FR! == zip3R!).to(beTrue())
+        expect(zip4FR! == zip4R!).to(beTrue())
     }
     
     
@@ -181,9 +205,21 @@ class FieldTests: FaunaDBTests {
         
         let postArray2: [BlogPost]? = blogField.getOptionalArray(blogPostArr)
         expect(postArray2?.count) == 5
+        let postArray2C: [BlogPost]? = blogPostArr.get(field: [0, "data"])
+        expect(postArray2C?.count) == 5
         
         let postArray3: [BlogPost] = try! blogField.getArray(blogPostArr)
         expect(postArray3.count) == 5
+        
+        
+    }
+    
+    func testFieldFromAValueConvertible(){
+        
+        let blogPost = BlogPost(name: "My Blogpost", author: "FaunaDB", content: "My content")
+        expect(blogPost.get(field: "name")) == "My Blogpost"
+        expect(blogPost.get(path: "author")) == "FaunaDB"
+        expect(blogPost.get(field: Field("content"))) == "My content"
     }
 }
 

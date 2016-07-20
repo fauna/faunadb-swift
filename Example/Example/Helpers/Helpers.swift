@@ -1,10 +1,10 @@
 //
 //  Helpers.swift
-//  Example
+//  FaunaDB
 //
-//  Created by Martin Barreto on 7/4/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
+
 
 import FaunaDB
 import RxSwift

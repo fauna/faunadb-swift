@@ -1,10 +1,10 @@
 //
 //  RxViewController.swift
-//  Example
+//  FaunaDB
 //
-//  Created by Martin Barreto on 6/9/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
+
 
 import Foundation
 import FaunaDB
