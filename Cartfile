@@ -1,2 +1,2 @@
-github "antitypical/Result" "2.1.2"
-github "ReactiveX/RxSwift"
+github "antitypical/Result" ~> 2.0
+github "ReactiveX/RxSwift" "2.6.0"

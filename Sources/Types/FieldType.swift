@@ -93,9 +93,7 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
     public func getArray(value: Value) throws -> [T] {
         let arr: Arr = try value.get(field: Field<Arr>(path))
         return try arr.map {
-            guard let item = T.decode($0) else {
-                throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: [])
-            }
+            guard let item = T.decode($0) else { throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: []) }
             return item
         }
     }
@@ -103,20 +101,36 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
 
 public struct FieldComposition {
     
-    public static func zip<A: DecodableValue, B: DecodableValue>(field1: Field<A>, field2: Field<B>) -> (Value throws -> (A, B)){
+    public static func zip<A: DecodableValue, B: DecodableValue>(field1 field1: Field<A>, field2: Field<B>) -> (Value throws -> (A, B)){
         return { try (field1.get($0), field2.get($0)) }
     }
     
-    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>) -> (Value throws  -> (A, B, C)){
+    public static func zip<A: DecodableValue, B: DecodableValue>(field1 field1: Field<A>, field2: Field<B>) -> (Value  -> (A, B)?){
+        return { try? (field1.get($0), field2.get($0)) }
+    }
+    
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>) -> (Value throws -> (A, B, C)){
         return { try (field1.get($0), field2.get($0), field3.get($0)) }
     }
     
-    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>) -> (Value throws  -> (A, B, C, D)){
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>) -> (Value -> (A, B, C)?){
+        return { try? (field1.get($0), field2.get($0), field3.get($0)) }
+    }
+    
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>) -> (Value throws -> (A, B, C, D)){
         return { try (field1.get($0), field2.get($0), field3.get($0), field4.get($0)) }
     }
     
-    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue, E: DecodableValue>(field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>, field5: Field<E>) -> (Value throws  -> (A, B, C, D, E)){
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>) -> (Value -> (A, B, C, D)?){
+        return { try? (field1.get($0), field2.get($0), field3.get($0), field4.get($0)) }
+    }
+    
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue, E: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>, field5: Field<E>) -> (Value throws  -> (A, B, C, D, E)){
         return { try (field1.get($0), field2.get($0), field3.get($0), field4.get($0), field5.get($0)) }
+    }
+    
+    public static func zip<A: DecodableValue, B: DecodableValue, C: DecodableValue, D: DecodableValue, E: DecodableValue>(field1 field1: Field<A>, field2: Field<B>, field3: Field<C>, field4: Field<D>, field5: Field<E>) -> (Value -> (A, B, C, D, E)?){
+        return { try? (field1.get($0), field2.get($0), field3.get($0), field4.get($0), field5.get($0)) }
     }
 }
 

@@ -43,10 +43,6 @@ public struct Null: ScalarValue {
     public init(){}
 }
 
-extension Null: NilLiteralConvertible{
-    public init(nilLiteral: ()){}
-}
-
 extension Null: CustomDebugStringConvertible, CustomStringConvertible {
     
     public var description: String {

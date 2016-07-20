@@ -15,6 +15,11 @@ class SerializationTests: FaunaDBTests {
         
         // MARK: Ref
         expectToJson(Ref("some/ref")) == "{\"@ref\":\"some\\/ref\"}"
+        
+        let classRef = Ref("classes/technology")
+        expectToJson(Ref(ref: classRef, id: "1234")) == "{\"@ref\":\"classes\\/technology\\/1234\"}"
+        
+        expect(classRef.description) == classRef.debugDescription
     }
     
     func testArr(){
@@ -23,9 +28,22 @@ class SerializationTests: FaunaDBTests {
         let arr: [Any] = [3, "test", Null(), 2.4]
         expectToJson(arr) ==  "[3,\"test\",null,2.4]"
         
-        let arr2: Arr = [3, "test", Null(), 2.4]
+        var arr2: Arr = [3, "test", Null(), 2.4]
+        let arr2Copy =  arr2
+        expect(arr2 == arr2Copy).to(beTrue())
         expectToJson(arr2) == "[3,\"test\",null,2.4]"
-        
+        arr2.replaceRange(1..<3, with: ["FaunaDB"])
+        expectToJson(arr2) == "[3,\"FaunaDB\",2.4]"
+        arr2[0] = 33
+        expectToJson(arr2) == "[33,\"FaunaDB\",2.4]"
+        arr2.removeAll()
+        expectToJson(arr2) == "[]"
+        arr2.reserveCapacity(100)
+        expect(arr2.description) == arr2.debugDescription
+        expect(arr2.description).to(beginWith("Arr("))
+        expect(arr2.description).to(endWith(")"))
+        expect(arr2 == arr2Copy).to(beFalse())
+
         let intArr = [1, 2, 3]
         expectToJson(intArr) == "[1,2,3]"
         
@@ -73,7 +91,7 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testArrWithObj() {
-        let arr: Arr = [[["test":"value"] as Obj, 2323, true] as Arr, "hi", ["test": "yo","test2": nil as Null] as Obj]
+        let arr: Arr = [[["test":"value"] as Obj, 2323, true] as Arr, "hi", ["test": "yo","test2": Null()] as Obj]
         expectToJson(arr) == "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]"
     }
     
@@ -358,7 +376,7 @@ class SerializationTests: FaunaDBTests {
         var count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))
         expectToJson(count) == "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         
-        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
+        count = Count(set: Match(index: Ref("indexes/spells_by_element") as Expr, terms: "fire"),
                       countEvents: true)
         expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
         

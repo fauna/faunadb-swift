@@ -43,22 +43,91 @@ extension BlogPost: DecodableValue {
 
 class FieldTests: FaunaDBTests {
 
-    func testField() {
-        
-        let field = Field<Int>(0)
+    
+    func testStandaloneField() {
+        let arrField = Field<Int>(0)
         
         let arr: Arr = [3, "Hi", Ref("classes/my_class")]
-        let myInt = try! field.get(arr)
-        expect(myInt) ==  3
+        let arrInt = try? arrField.get(arr)
+        expect(arrInt) ==  3
+        expect(try! arrField.get(arr)) == 3
         
-        // let's see what happens if we use a wrong Value
+        let objField = Field<Int>("data", 0)
+        let obj: Obj = ["data" : [3, "Hi", Ref("classes/my_class")] as Arr]
+        let objInt = try? objField.get(obj)
+        expect(objInt) ==  3
+        expect(try! arrField.get(arr)) == 3
+        
+    }
+    
+    
+    func testFieldErrors() {
+        let arrField = Field<Int>(0)
+        let objField = Field<Int>("data")
         let obj: Obj = ["name": "my_db_name"]
-        XCTAssertThrows(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try field.get(obj) }
+        var arr: Arr = [1, 2, 3]
         
-        var arr2 = arr
-        arr2.append(["key": Ref("classes")] as Obj)
+        XCTAssertThrows(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try arrField.get(obj) }
+        XCTAssertThrows(FieldPathError.UnexpectedType(value: arr, expectedType: Obj.self, path: ["data"])) { try objField.get(arr) }
+        
+        arr.removeAll()
+        XCTAssertThrows(FieldPathError.NotFound(value: arr, path: [9])) { try Field<Int>(9).get(arr) }
+        XCTAssertThrows(FieldPathError.NotFound(value: obj, path: ["data"])) { try objField.get(obj) }
+    }
+    
+    func testFieldComposition() {
+        let obj: Obj = ["name": "my_db_name"]
+        let arr: Arr = [0, 1, 2, obj, "FaunaDB"]
+        
+        let zip1: (Value -> (Int, Int)?) = FieldComposition.zip(field1: 0, field2: 2)
+        let zip2: (Value -> (Int, Int, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
+        let zip3: (Value -> (Int, Int, String, Obj)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let zip4: (Value -> (Int, Int, String, Obj, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        
+        let zip1R = zip1(arr)
+        let zip2R = zip2(arr)
+        let zip3R = zip3(arr)
+        let zip4R = zip4(arr)
+        
+        expect(zip1R).toNot(beNil())
+        expect(zip2R).toNot(beNil())
+        expect(zip3R).toNot(beNil())
+        expect(zip4R).toNot(beNil())
+        expect((0, 2) == zip1R!).to(beTrue())
+        expect((0, 2, "my_db_name") == zip2R!).to(beTrue())
+        expect((0, 2, "my_db_name", obj) == zip3R!).to(beTrue())
+        expect((0, 2, "my_db_name", obj) == zip3R!).to(beTrue())
+        expect((0, 2, "my_db_name", obj, "FaunaDB") == zip4R!).to(beTrue())
+        
+        
+        var fieldLiteralR: Field<Int>? = "data"
+        expect(fieldLiteralR).toNot(beNil())
+        fieldLiteralR = 3
+        expect(fieldLiteralR).toNot(beNil())
+        fieldLiteralR = ["data", 3]
+        expect(fieldLiteralR).toNot(beNil())
+        
+        
+        let _: (Value throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
+        let _: (Value throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
+        let _: (Value throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let _: (Value throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+    }
+    
+    
+    func testAtMehod() {
+        let field = Field<Int>("data", 3, "fauna")
+        let field2 = field.at(Field<String>("FaunaDB"))
+        expect(field2.path.count) == 4
+        expect(field2.path[3] as? String) == "FaunaDB"
+    }
+    
+    
+    func testField(){
+        var arr: Arr = [1, 2, 3]
+        arr.append(["key": Ref("classes")] as Obj)
         let field2 = Field<Ref>(3, "key")
-        let ref = try! field2.get(arr2)
+        let ref = try! field2.get(arr)
         expect(ref) == Ref("classes")
         
         let homogeneousArray = [1, 2, 3]
@@ -76,14 +145,16 @@ class FieldTests: FaunaDBTests {
         let complexArr = [3, 5, ["test": ["test2": ["test3": [1,2,3]]]]]
         let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
         expect(int2) ==  1
-        
-        
+    }
+    
+    
+    func testFieldUsingACustomDecodableValue(){
         //MARK: DecodableValue
         let blogField = Field<BlogPost>(0, "data")
         
         let blogPostData = ["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": ["DB", "Performance"] as Arr] as Obj
         let objContainingPost: Arr = [["data" : blogPostData] as Obj]
-    
+        
         let post: BlogPost? = objContainingPost.get(path: 0, "data")
         expect(post?.name) == "My Blog Post"
         expect(post?.author) == "FaunaDB Inc"
@@ -110,7 +181,7 @@ class FieldTests: FaunaDBTests {
         
         let postArray2: [BlogPost]? = blogField.getOptionalArray(blogPostArr)
         expect(postArray2?.count) == 5
-
+        
         let postArray3: [BlogPost] = try! blogField.getArray(blogPostArr)
         expect(postArray3.count) == 5
     }

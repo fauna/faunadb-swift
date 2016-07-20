@@ -510,7 +510,7 @@ class ClientTests: FaunaDBTests {
 
         let differenceR = await(
             Paginate(resource: Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "nature"),
-                                                Match(index: Ref("indexes/spells_by_element"), terms: "arcane")))
+                                                Distinct(set:Match(index: Ref("indexes/spells_by_element"), terms: "arcane"))))
         )
         expect(differenceR?.get(path: "data") as [Ref]?).to(contain(create4Ref))
     }
@@ -621,7 +621,7 @@ class ClientTests: FaunaDBTests {
             Login(ref: createRef!, params: ["password": "abcdefg"])
             )?.get(path: "secret")
         expect(secret).toNot(beNil())
-
+        let oldSecret = client.secret
         client = Client(secret: secret!, observers: [Logger()])
         
         let logoutR: Bool? = await(
@@ -630,6 +630,9 @@ class ClientTests: FaunaDBTests {
         
         expect(logoutR) == true
 
+        
+        client = Client(secret: oldSecret, observers: [Logger()])
+        
         let identifyR = await(
             Identify(ref: createRef!, password: "abcdefg")
         )
