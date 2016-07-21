@@ -17,6 +17,11 @@ public struct Arr: Value {
         guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
         array = arr
     }
+    
+    public init<C: SequenceType where C.Generator.Element: Value>(sequence: C){
+        self.init()
+        array.appendContentsOf(sequence.map { $0 as Value})
+    }
 }
 
 extension Arr: ArrayLiteralConvertible {
@@ -97,21 +102,6 @@ public func ==(lhs: Arr, rhs: Arr) -> Bool {
         guard e1.isEquals(e2) else { return false }
     }
     return true
-}
-
-extension Array: ValueConvertible {
-    
-    public var value: Value {
-        return Arr(            
-            filter { item in
-                return item is Value || item is ValueConvertible || item is NSObject
-            }.map { item in
-                let value = item as? Value
-                let valueConvertibleValue = (item as? ValueConvertible)?.value
-                let objectValue = (item as? NSObject)?.value()
-                return objectValue ?? value ?? valueConvertibleValue!
-            })
-    }
 }
 
 

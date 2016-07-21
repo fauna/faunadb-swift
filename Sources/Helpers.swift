@@ -16,7 +16,6 @@ extension NSNumber {
     func isDoubleNumber() -> Bool{
         return CFNumberGetType(self) == CFNumberType.DoubleType || CFNumberGetType(self) == CFNumberType.Float64Type
     }
-    
 }
 
 func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C) -> Value{
@@ -77,46 +76,6 @@ struct Mapper {
             return result
         default:
             throw Error.UnparsedDataException(data: data, msg: "Unparseable data")
-        }
-    }
-}
-
-
-extension NSObject {
-    
-    func value() -> Value {
-        switch  self {
-        case let str as NSString:
-            return str as String
-        case let int as NSNumber:
-            if int.isDoubleNumber() {
-                return int as Double
-            }
-            else if int.isBoolNumber() {
-                return int as Bool
-            }
-            else {
-                return int as Int
-            }
-        case let date as NSDate:
-            return date
-        case let dateComponents as NSDateComponents:
-            return dateComponents
-        case let nsArray as NSArray:
-            var result: Arr = []
-            for item in nsArray {
-                result.append((item as! NSObject).value())
-            }
-            return result
-        case let nsDictionary as NSDictionary:
-            var result: Obj = [:]
-            for item in nsDictionary {
-                result[item.key as! String] = (item.value as! NSObject).value()
-            }
-            return result
-        default:
-            assertionFailure()
-            return ""
         }
     }
 }

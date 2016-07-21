@@ -25,9 +25,6 @@ class SerializationTests: FaunaDBTests {
     func testArr(){
         
         // MARK: Arr
-        let arr: [Any] = [3, "test", Null(), 2.4]
-        expectToJson(arr) ==  "[3,\"test\",null,2.4]"
-        
         var arr2: Arr = [3, "test", Null(), 2.4]
         let arr2Copy =  arr2
         expect(arr2 == arr2Copy).to(beTrue())
@@ -45,49 +42,40 @@ class SerializationTests: FaunaDBTests {
         expect(arr2 == arr2Copy).to(beFalse())
 
         let intArr = [1, 2, 3]
-        expectToJson(intArr) == "[1,2,3]"
+        expectToJson(Arr(sequence: intArr)) == "[1,2,3]"
         
         let strArray = ["Hi", "Hi2", "Hi3"]
-        expectToJson(strArray) == "[\"Hi\",\"Hi2\",\"Hi3\"]"
+        expectToJson(Arr(sequence: strArray)) == "[\"Hi\",\"Hi2\",\"Hi3\"]"
         
         let timestampArray = [Timestamp(timeIntervalSince1970: 0)]
-        expectToJson(timestampArray) == "[{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
+        expectToJson(Arr(sequence: timestampArray)) == "[{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
         
         let refArray = [Ref("some/ref")]
-        expectToJson(refArray) == "[{\"@ref\":\"some\\/ref\"}]"
+        expectToJson(Arr(sequence: refArray)) == "[{\"@ref\":\"some\\/ref\"}]"
         
-        let nsObjcetArr: [NSObject] = [3, "test", Timestamp(timeIntervalSince1970: 0)]
-        expectToJson(nsObjcetArr) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
+        let valueArr: [Value] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
+        expectToJson(Arr(sequence: valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
         
-        let nsObjcetArr2: [NSObject] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
-        expectToJson(nsObjcetArr2) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
+        let complexValue = [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5] as Arr] as Arr
         
-        let complexValue = [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5]]
         expectToJson(complexValue) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5,[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]]"
         
-        expectToJson([3, 4, 5, 6, [3, 5, 6, 7]]) == "[3,4,5,6,[3,5,6,7]]"
+        expectToJson([3, 4, 5, 6, [3, 5, 6, 7] as Arr] as Arr) == "[3,4,5,6,[3,5,6,7]]"
     }
     
     func testObj() {
         
         // MARK: Obj
-        let obj: [String: Value] = ["test": 1, "test2": Ref("some/ref")]
+        let obj: Obj = ["test": 1, "test2": Ref("some/ref")]
         expectToJson(obj) == "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}"
         
-        let obj2: Obj = ["test": 1, "test2": Ref("some/ref")]
-        expectToJson(obj2) == "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}"
+        var obj2: Obj = [:]
+        obj2["test"] = 1
+        obj2["test2"] =  Ref("some/ref")
+        expect(obj2) == obj
         
-        var obj3: Obj = [:]
-        obj3["test"] = 1
-        obj3["test2"] =  Ref("some/ref")
-        expect(obj3) == obj2
-        
-        XCTAssertTrue(obj3.isEquals(obj.value))
-        
-        // [String: NSObject]
-        let obj4 = ["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)]
-        expectToJson(obj4) == "{\"object\":{\"key3\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"key\":3,\"key2\":\"test\"}}"
-        
+        let obj3: Obj = ["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)]
+        expectToJson(obj3) == "{\"object\":{\"key2\":\"test\",\"key\":3,\"key3\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}}"
     }
     
     func testArrWithObj() {

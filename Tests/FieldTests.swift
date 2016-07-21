@@ -29,8 +29,10 @@ struct BlogPost {
 extension BlogPost: ValueConvertible {
     
     var value: Value {
-        let data: [String: Any] = ["name": name, "author": author, "content": content, "tags": tags]
-        return data.value
+        return [  "name": name,
+                "author": author,
+               "content": content,
+                  "tags": Arr(sequence: tags)] as Obj
     }
 }
 
@@ -154,19 +156,19 @@ class FieldTests: FaunaDBTests {
         let ref = try! field2.get(arr)
         expect(ref) == Ref("classes")
         
-        let homogeneousArray = [1, 2, 3]
+        let homogeneousArray = [1, 2, 3] as Arr
         let int: Int = try! homogeneousArray.get(path: 0)
         expect(int) ==  1
         
-        let homogeneousArray2 = ["Hi", "Hi2"]
+        let homogeneousArray2 = ["Hi", "Hi2"] as Arr
         let string: String = try! homogeneousArray2.get(path: 1)
         expect(string) == "Hi2"
         
-        let homogeneousArray3 = [Timestamp()]
+        let homogeneousArray3 = [Timestamp()] as Arr
         let timestamp: Timestamp? = homogeneousArray3.get(path: 0)
         expect(timestamp).notTo(beNil())
         
-        let complexArr = [3, 5, ["test": ["test2": ["test3": [1,2,3]]]]]
+        let complexArr: Arr = [3, 5, ["test": ["test2": ["test3": Arr(sequence: [1,2,3] as [Int])] as Obj] as Obj] as Obj]
         let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
         expect(int2) ==  1
     }

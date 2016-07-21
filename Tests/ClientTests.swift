@@ -155,7 +155,7 @@ class ClientTests: FaunaDBTests {
         expect(arr?[0].get(path: "data", "queryTest1")) == randomText1
         expect(arr?[1].get(path: "data", "queryTest2")) == randomText2
         
-        let value2 = await([expr1.value, expr2.value])
+        let value2 = await([expr1.value, expr2.value] as Arr)
         let arr2: Arr? = value2?.get()
         expect(arr2?.count) == 2
         expect(arr2?[0].get(path: "data", "queryTest1")) == randomText1
@@ -340,14 +340,14 @@ class ClientTests: FaunaDBTests {
         
 
         let foreachR = await(
-            Foreach(collection:  ["Fireball Level 1", "Fireball Level 2"].value) { spell in
+            Foreach(collection:  ["Fireball Level 1", "Fireball Level 2"] as Arr) { spell in
                 Create(ref: Ref("classes/spells"), params: ["data": ["name": spell.value] as Obj])
             }
         )
         expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]
         
         let filterR = await(
-            Filter(collection: [1, 2, 11, 12].value) {
+            Filter(collection: [1, 2, 11, 12] as Arr) {
                 GT(terms: $0, 10)
             }
         )
