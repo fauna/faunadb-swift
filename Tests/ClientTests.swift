@@ -53,7 +53,7 @@ class ClientTests: FaunaDBTests {
             Create(ref: Ref("indexes"),
                 params: ["name": "spells_by_element",
                          "source": Ref("classes/spells"),
-                         "terms": [["path": "data.element"] as Obj] as Arr,
+                         "terms": [["field": "data.element"] as Obj] as Arr,
                          "active": true])
         )
         expect(value).notTo(beNil())
@@ -195,7 +195,7 @@ class ClientTests: FaunaDBTests {
                                   "source": randomClassRef!,
                                   "active": true,
                                   "unique": false,
-                                   "terms": [["path": "data.queryTest1"] as Obj] as Arr])
+                                   "terms": [["field": "data.queryTest1"] as Obj] as Arr])
         )
         expect(value).notTo(beNil())
         let testIndex: Ref? = value?.get(field: Fields.ref)
@@ -277,7 +277,7 @@ class ClientTests: FaunaDBTests {
             Create(ref: Ref("indexes"),
                 params: [ "name": randomClassName + "_by_unique_test",
                           "source": classRef!,
-                          "terms": [["path": "data.uniqueTest1"] as Obj] as Arr,
+                          "terms": [["field": "data.uniqueTest1"] as Obj] as Arr,
                           "unique": true,
                           "active": true])
         )

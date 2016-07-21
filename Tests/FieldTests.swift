@@ -205,12 +205,12 @@ class FieldTests: FaunaDBTests {
         
         // check collections using Fields
         
-        let postArray2: [BlogPost]? = blogField.getOptionalArray(blogPostArr)
+        let postArray2: [BlogPost]? = blogField.collectOptional(blogPostArr)
         expect(postArray2?.count) == 5
         let postArray2C: [BlogPost]? = blogPostArr.get(field: [0, "data"])
         expect(postArray2C?.count) == 5
         
-        let postArray3: [BlogPost] = try! blogField.getArray(blogPostArr)
+        let postArray3: [BlogPost] = try! blogField.collect(blogPostArr)
         expect(postArray3.count) == 5
         
         

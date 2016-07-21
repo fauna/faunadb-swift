@@ -25,7 +25,7 @@ extension ValueConvertible {
     }
     
     public func get<T: DecodableValue where T.DecodedType == T>(field field: Field<T>) throws -> [T]{
-        return try field.getArray(value)
+        return try field.collect(value)
     }
     
     public func get<T: DecodableValue where T.DecodedType == T>(path path: PathComponentType...) -> [T]?{
@@ -33,7 +33,7 @@ extension ValueConvertible {
     }
     
     public func get<T: DecodableValue where T.DecodedType == T>(field field: Field<T>) -> [T]?{
-        return try? field.getArray(value)
+        return try? field.collect(value)
     }
 }
 

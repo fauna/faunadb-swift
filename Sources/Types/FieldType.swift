@@ -14,8 +14,8 @@ public protocol FieldType {
 
     func get(value: Value) throws -> T
     func getOptional(value: Value) -> T?
-    func getArray(value: Value) throws -> [T]
-    func getOptionalArray(value: Value) -> [T]?
+    func collect(value: Value) throws -> [T]
+    func collectOptional(value: Value) -> [T]?
     
     init(_ array: [PathComponentType])
 }
@@ -26,8 +26,8 @@ extension FieldType {
         return try? get(value)
     }
     
-    public func getOptionalArray(value: Value) -> [T]? {
-        return try? getArray(value)
+    public func collectOptional(value: Value) -> [T]? {
+        return try? collect(value)
     }
     
     // Mark: Convenience method
@@ -90,7 +90,7 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
         return typedValue
     }
 
-    public func getArray(value: Value) throws -> [T] {
+    public func collect(value: Value) throws -> [T] {
         let arr: Arr = try value.get(field: Field<Arr>(path))
         return try arr.map {
             guard let item = T.decode($0) else { throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: []) }
