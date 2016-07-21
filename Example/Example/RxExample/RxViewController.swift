@@ -35,6 +35,12 @@ struct BlogPost {
     var fId: String?
 }
 
+extension BlogPost: DecodableValue {
+    static func decode(value: Value) -> BlogPost? {
+        return try? self.init(name: value.get(path: "name"), author: value.get(path: "author"), content: value.get(path: "content"), tags: value.get(path: "tags") ?? [])
+    }
+}
+
 extension BlogPost: FaunaModel {
 
     
@@ -44,15 +50,15 @@ extension BlogPost: FaunaModel {
     }
     
     static var classRef: Ref { return Ref("classes/posts") }
-    
-    init(data: Obj) {
-        // 0 is ts
-        self.name = try! data.get(path: "name")
-        self.author = try! data.get(path: "author")
-        self.content = try! data.get(path: "content")
-        let arrTags: Arr? = data.get(path: "tags")
-        self.tags = arrTags?.map { $0 as! String } ?? []
-    }
+//    
+//    init(data: Obj) {
+//        // 0 is ts
+//        self.name = try!
+//        self.author = try! data.get(path: "author")
+//        self.content = try! data.get(path: "content")
+//        let arrTags: Arr? = data.get(path: "tags")
+//        self.tags = arrTags?.map { $0 as! String } ?? []
+//    }
 }
 
 

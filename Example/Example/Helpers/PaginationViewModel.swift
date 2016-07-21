@@ -4,14 +4,14 @@ import RxCocoa
 import FaunaDB
 
 public protocol PaginateType {
-    associatedtype Element: FaunaModel
+    associatedtype Element: DecodableValue
     var match: Expr { get }
     var cursor: Cursor? { get }
     
     init(match: Expr, cursor: Cursor?)
 }
 
-public struct Paginate<T: FaunaModel>: PaginateType {
+public struct Paginate<T: DecodableValue where T.DecodedType == T>: PaginateType {
     public typealias Element = T
     public var match: Expr {
         didSet { cursor = nil }
@@ -50,7 +50,7 @@ extension PaginationResponseType {
     }
 }
 
-public struct PaginationResponse<E: FaunaModel>: PaginationResponseType {
+public struct PaginationResponse<E: DecodableValue where E.DecodedType == E>: PaginationResponseType {
     
     public let elements: [E]
     public let previousPage: Cursor?
@@ -78,7 +78,7 @@ public protocol PaginationRequestType {
     func paginateWithCursor(Cursor: Cursor) -> Self
 }
 
-public struct PaginationRequest<E: FaunaModel>: PaginationRequestType {
+public struct PaginationRequest<E: DecodableValue where E.DecodedType == E>: PaginationRequestType {
     
     public typealias Response = PaginationResponse<E>
     
@@ -90,7 +90,7 @@ public struct PaginationRequest<E: FaunaModel>: PaginationRequestType {
     }
 }
 
-extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
+extension PaginationRequestType where Response.Paginate.Element: DecodableValue, Response.Paginate.Element.DecodedType == Response.Paginate.Element{
     
     /**
      Returns an `Observable` of [Response] for the PaginationRequestType instance. If something goes wrong a Error error is propagated through the result sequence.
@@ -112,7 +112,11 @@ extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
                 let nextCursor = cursorData.map { Cursor.After(expr: $0)}
                 cursorData = value.get(path: "before")
                 let beforeCursor = cursorData.map { Cursor.Before(expr: $0)}
-                let elements = data.map { Response.Paginate.Element.init(data: try! $0.get(path: "data")) }
+                
+                let elements: [Response.Paginate.Element] = data.map { rawData in
+                    let obj: Obj = try! rawData.get(path: "data")
+                    return Response.Paginate.Element.decode(obj)!
+                }
                 return Observable.just(Response.init(elements: elements, previousPage: beforeCursor, nextPage: nextCursor, paginate: myPage))
             }
         }
@@ -129,8 +133,8 @@ extension PaginationRequestType where Response.Paginate.Element: FaunaModel {
 }
 
 
-/// Reactive View Model helper to load list of FaunaModel items.
-public class PaginationViewModel<PaginationRequest: PaginationRequestType where PaginationRequest.Response.Paginate.Element: FaunaModel> {
+/// Reactive View Model helper to load list of DecodableValue items.
+public class PaginationViewModel<PaginationRequest: PaginationRequestType where PaginationRequest.Response.Paginate.Element: DecodableValue, PaginationRequest.Response.Paginate.Element.DecodedType == PaginationRequest.Response.Paginate.Element> {
     
     /// pagination request
     var paginationRequest: PaginationRequest
