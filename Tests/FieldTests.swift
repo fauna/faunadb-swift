@@ -32,7 +32,7 @@ extension BlogPost: ValueConvertible {
         return [  "name": name,
                 "author": author,
                "content": content,
-                  "tags": Arr(sequence: tags)] as Obj
+                  "tags": Arr(tags)] as Obj
     }
 }
 
@@ -168,7 +168,7 @@ class FieldTests: FaunaDBTests {
         let timestamp: Timestamp? = homogeneousArray3.get(path: 0)
         expect(timestamp).notTo(beNil())
         
-        let complexArr: Arr = [3, 5, ["test": ["test2": ["test3": Arr(sequence: [1,2,3] as [Int])] as Obj] as Obj] as Obj]
+        let complexArr: Arr = [3, 5, ["test": ["test2": ["test3": Arr([1,2,3])] as Obj] as Obj] as Obj]
         let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
         expect(int2) ==  1
     }

@@ -41,20 +41,16 @@ class SerializationTests: FaunaDBTests {
         expect(arr2.description).to(endWith(")"))
         expect(arr2 == arr2Copy).to(beFalse())
 
-        let intArr = [1, 2, 3]
-        expectToJson(Arr(sequence: intArr)) == "[1,2,3]"
+        expectToJson(Arr([1, 2, 3])) == "[1,2,3]"
         
-        let strArray = ["Hi", "Hi2", "Hi3"]
-        expectToJson(Arr(sequence: strArray)) == "[\"Hi\",\"Hi2\",\"Hi3\"]"
+        expectToJson(Arr(["Hi", "Hi2", "Hi3"])) == "[\"Hi\",\"Hi2\",\"Hi3\"]"
         
-        let timestampArray = [Timestamp(timeIntervalSince1970: 0)]
-        expectToJson(Arr(sequence: timestampArray)) == "[{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
+        expectToJson(Arr([Timestamp(timeIntervalSince1970: 0)])) == "[{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
         
-        let refArray = [Ref("some/ref")]
-        expectToJson(Arr(sequence: refArray)) == "[{\"@ref\":\"some\\/ref\"}]"
+        expectToJson(Arr([Ref("some/ref")])) == "[{\"@ref\":\"some\\/ref\"}]"
         
         let valueArr: [Value] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
-        expectToJson(Arr(sequence: valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
+        expectToJson(Arr(valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
         
         let complexValue = [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5] as Arr] as Arr
         

@@ -18,7 +18,7 @@ public struct Arr: Value {
         array = arr
     }
     
-    public init<C: SequenceType where C.Generator.Element: Value>(sequence: C){
+    public init<C: SequenceType where C.Generator.Element: Value>(_ sequence: C){
         self.init()
         array.appendContentsOf(sequence.map { $0 as Value})
     }
