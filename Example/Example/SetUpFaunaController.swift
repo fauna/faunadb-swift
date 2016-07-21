@@ -52,7 +52,7 @@ class SetUpFaunaController: UIViewController {
                 .flatMap { _ in
                     return Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
                         "source": BlogPost.classRef,
-                        "terms": [["field": ["data", "tags"] as Arr] as Obj] as Arr,
+                        "terms": [["field": Arr(["data", "tags"])] as Obj] as Arr,
                         "values": [] as Arr
                         ]).rx_query()
             }

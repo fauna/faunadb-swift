@@ -30,7 +30,7 @@ class ClientExceptionsTests: FaunaDBTests {
         value = await(Create(ref: Ref("indexes"),
                           params: ["name": "spells_by_element",
                         "source": Ref("classes/spells"),
-                         "terms": [["field": "data.element"] as Obj] as Arr,
+                         "terms": [["field": Arr(["data", "element"])] as Obj] as Arr,
                         "active": true]))
         expect(value).notTo(beNil())
     }

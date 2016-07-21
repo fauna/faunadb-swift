@@ -79,7 +79,7 @@ client.rx_query(Create(ref: Ref("databases"), params: ["name": "db_name"] as Obj
     .flatMap { _ in
         return client.rx_query(Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
             "source": Ref("classes/posts"),
-            "terms": [["field": ["data", "tags"] as Arr] as Obj] as Arr,
+            "terms": [["field": Arr(["data", "tags"])] as Obj] as Arr,
             "values": [] as Arr
             ]))
     }
