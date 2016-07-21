@@ -45,8 +45,7 @@ let str: String = "Fauna DB!"
  Null
  */
 
-let nilValue: Null = nil
-let anotherNilValue = Null()
+let nilValue = Null()
 
 
 /*:
@@ -141,4 +140,6 @@ let dateVale:Date = Date(day: 18, month: 07, year: 1984)
 let dateVale2:Date = NSDateComponents(day: 18, month: 07, year: 1984)
 
 
-//: [Ne
+
+
+//: [Next](@next)

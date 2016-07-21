@@ -33,7 +33,7 @@ let blogPost: ValueConvertible = BlogPost(name: "My first bloigpost", author: "F
 > Notice that we can transverse values using any ValueConvertible type, any Value type or eventually any custom `ValueConvertible` type.
  */
 
-let arr: Arr = try blogPost.get("tags")
+let arr: Arr = try blogPost.get(path: "tags")
 
 
-//: [Next](@ne
+//: [Next](@next)

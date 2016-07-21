@@ -46,17 +46,21 @@ client.query(Create(ref: Ref("databases"), params: ["name": "db_name"])) { resul
 }
 
 /*:
- > Client provides another query func that has 2 closures as arguments, one for error handling and another for that handles the successful case.
+ > It's up to you to extend client and provide a more convenience way to perform fauna queries. For instance we can extend Client to provides another query func that takes 2 closures as arguments, one for error handling and another for that handles the successful case.
  > trailing form can also be used in the last closure argument.
- */
+ 
 
-client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]),
-              failure: { error in
-                            print(error)
-                        },
-              success:  { value in
-                        // do something with value
-                        })
+ ```
+ client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), failure: { error in
+    print(error)
+ },
+ success:  { value in
+    // do something with value
+ })
+ 
+```
+ 
+ */
 
 
 /*:
@@ -126,4 +130,9 @@ client.query({
         }
     }) { result in
         // do something with the result.
+    }
+
+
+
+//: [Next](@next)
  
