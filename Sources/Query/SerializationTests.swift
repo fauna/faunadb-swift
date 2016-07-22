@@ -72,6 +72,14 @@ class SerializationTests: FaunaDBTests {
         
         let obj3: Obj = ["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)]
         expectToJson(obj3) == "{\"object\":{\"key2\":\"test\",\"key\":3,\"key3\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}}"
+        
+        
+        let obj4 = Obj(["key1": 1, "key2": 2])
+        expectToJson(obj4) == "{\"object\":{\"key1\":1,\"key2\":2}}"
+        
+        let obj5 = Obj(["key1": 1, "key2": "faunaDB"])
+        expectToJson(obj5) == "{\"object\":{\"key1\":1,\"key2\":\"faunaDB\"}}"
+        
     }
     
     func testArrWithObj() {

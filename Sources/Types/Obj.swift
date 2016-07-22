@@ -25,8 +25,18 @@ public struct Obj: Value, DictionaryLiteralConvertible {
     }
     
     public init(_ elements: (String, Value)...){
-        var dictionary = [String:Value]()
+        var dictionary = [String: Value]()
         elements.forEach { key, value in dictionary[key] = value }
+        self.dictionary = dictionary
+    }
+    
+    public init<V: Value>(_ dictionary: [String: V]){
+        var res = [String: Value]()
+        dictionary.forEach { k, v in res[k] = v }
+        self.dictionary = res
+    }
+    
+    public init(_ dictionary: [String: Value]){
         self.dictionary = dictionary
     }
     
