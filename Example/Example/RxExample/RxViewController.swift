@@ -12,48 +12,13 @@ import RxFaunaDB
 import RxSwift
 import RxCocoa
 
-struct BlogPost {
-    let name: String
-    let author: String
-    let content: String
-    let tags: [String]
-    
-    init(name:String, author: String, content: String, tags: [String] = []){
-        self.name = name
-        self.author = author
-        self.content = content
-        self.tags = tags
-    }
-    
-    var fId: String?
-}
-
-extension BlogPost: DecodableValue {
-    static func decode(value: Value) -> BlogPost? {
-        return try? self.init(name: value.get(path: "name"),
-                            author: value.get(path: "author"),
-                           content: value.get(path: "content"),
-                              tags: value.get(path: "tags") ?? [])
-    }
-}
-
-extension BlogPost: FaunaModel {
-
-    
-    var value: Value {
-        return Obj(["name": name, "author": author, "content": content, "tags": Arr(tags)])
-    }
-    
-    static var classRef: Ref { return Ref("classes/posts") }
-}
-
-
 class RxViewController: UIViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     let refreshControl = UIRefreshControl()
     
     private lazy var emptyStateLabel: UILabel = {
@@ -71,7 +36,11 @@ class RxViewController: UIViewController {
                                                         cursor: nil)))
         }()
     
-    override func viewDidLoad() {        
+    
+    override func viewDidLoad(){
+        
+        super.viewDidLoad()
+        
         tableView.backgroundView = emptyStateLabel
         tableView.keyboardDismissMode = .OnDrag
         tableView.addSubview(self.refreshControl)
@@ -148,8 +117,31 @@ class RxViewController: UIViewController {
         viewModel.emptyState
             .driveNext { [weak self] emptyState in self?.emptyStateLabel.hidden = !emptyState }
             .addDisposableTo(disposeBag)
-
+        
+        
+        tableView
+        .rx_itemDeleted
+            .flatMap { [weak self] (indexPath: NSIndexPath) -> Observable<Value> in
+            var elements = self?.viewModel.elements.value ?? []
+            let blogpost = elements.removeAtIndex(indexPath.row)
+            Observable.just(elements).bindTo(self!.viewModel.elements).addDisposableTo(self!.disposeBag)
+            return blogpost.fDelete()!.rx_query()
+        }
+        .subscribeNext { (value: Value) in
+        
+        }
+        .addDisposableTo(disposeBag)
+        
+        editButton
+        .rx_tap
+        .subscribeNext { [weak self] in
+            self?.tableView.editing = !(self?.tableView.editing ?? false)
+            self?.editButton.title = self?.editButton.title == "Edit" ? "Cancel" : "Edit"
+        }
+        .addDisposableTo(disposeBag)
     }
+    
+    
     
 }
 
