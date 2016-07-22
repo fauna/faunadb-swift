@@ -32,7 +32,7 @@ class FaunaDBTests: XCTestCase {
     
     // MARK: Helpers
     
-    func await(expr: ValueConvertible) -> Value? {
+    func await(expr: Expr) -> Value? {
         var res: Value?
         waitUntil(timeout: 5) { [weak self] done in
             self?.client.query(expr) { result in

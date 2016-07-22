@@ -41,7 +41,7 @@ public final class Client {
 
 extension Client {
 
-    public func query(@autoclosure expr: (()-> ValueConvertible), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
+    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
         let jsonData = try! Client.toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {

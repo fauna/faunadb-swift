@@ -53,7 +53,7 @@ extension ValueConvertible {
     }
 }
 
-extension ValueConvertible {
+extension Expr {
     
     public func rx_query() -> Observable<Value> {
         return self.client.rx_query(self)
