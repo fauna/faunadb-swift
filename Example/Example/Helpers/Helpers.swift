@@ -40,15 +40,12 @@ extension FaunaModel {
         return Replace(ref: refId, params: ["data": value])
     }
     
-    var refId: Ref? {
-        return fId.map { Ref(ref: Self.classRef, id: $0) }
-    }
 }
 
 public protocol FaunaModel: ValueConvertible {
     var client: Client { get }
     static var classRef: Ref { get }
-    var fId: String? { get set }
+    var refId: Ref? { get }
 }
 
 extension ValueConvertible {

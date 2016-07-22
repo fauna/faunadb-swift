@@ -13,23 +13,27 @@ struct BlogPost {
     let author: String
     let content: String
     let tags: [String]
+    let refId: Ref?
     
-    init(name:String, author: String, content: String, tags: [String] = []){
+    init(name:String, author: String, content: String, tags: [String] = [], refId: Ref? = nil){
         self.name = name
         self.author = author
         self.content = content
         self.tags = tags
+        self.refId = refId
     }
     
-    var fId: String?
+    
 }
 
 extension BlogPost: DecodableValue {
     static func decode(value: Value) -> BlogPost? {
-        return try? self.init(name: value.get(path: "name"),
-                              author: value.get(path: "author"),
-                              content: value.get(path: "content"),
-                              tags: value.get(path: "tags") ?? [])
+        guard let refId: Ref = value.get(path: "ref") else { return nil }
+        return try? self.init(name: value.get(path: "data", "name"),
+                                               author: value.get(path: "data", "author"),
+                                               content: value.get(path: "data", "content"),
+                                               tags: value.get(path: "data", "tags") ?? [],
+                                               refId: refId)
     }
 }
 

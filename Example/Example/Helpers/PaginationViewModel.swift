@@ -101,10 +101,7 @@ extension PaginationRequestType where Response.Paginate.Element: DecodableValue,
         let myPage = paginate
         return Map(collection: FaunaDB.Paginate(resource: paginate.match,
                                                   cursor: paginate.cursor),
-                       lambda: Lambda(){ expr in
-                            Get(ref: expr)
-                        })
-            
+                       lambda: Lambda(){ Obj(["ref": $0.value, "data": Get(ref: $0).value]) })
                 .rx_query()
             .flatMap { value -> Observable<Response> in
                 let data:Arr = try! value.get(path: "data")
