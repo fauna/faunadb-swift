@@ -8,4 +8,10 @@
 import Foundation
 import FaunaDB
 
+class ViewController: UIViewController {
+    
+    
+    
+}
+
 

@@ -11,6 +11,10 @@ import RxSwift
 
 import Foundation
 
+var faunaClient: Client = {
+    return Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
+}()
+
 extension FaunaModel {
     
     func fCreate() -> Create {

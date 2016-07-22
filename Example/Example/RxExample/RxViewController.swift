@@ -12,13 +12,6 @@ import RxFaunaDB
 import RxSwift
 import RxCocoa
 
-
-var faunaClient: Client = {
-    return Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
-}()
-
-
-
 struct BlogPost {
     let name: String
     let author: String
@@ -37,7 +30,10 @@ struct BlogPost {
 
 extension BlogPost: DecodableValue {
     static func decode(value: Value) -> BlogPost? {
-        return try? self.init(name: value.get(path: "name"), author: value.get(path: "author"), content: value.get(path: "content"), tags: value.get(path: "tags") ?? [])
+        return try? self.init(name: value.get(path: "name"),
+                            author: value.get(path: "author"),
+                           content: value.get(path: "content"),
+                              tags: value.get(path: "tags") ?? [])
     }
 }
 
@@ -45,25 +41,16 @@ extension BlogPost: FaunaModel {
 
     
     var value: Value {
-        let data: [String: Any] = ["name": name, "author": author, "content": content, "tags": tags]
-        return data.value
+        return Obj(["name": name, "author": author, "content": content, "tags": Arr(tags)])
     }
     
     static var classRef: Ref { return Ref("classes/posts") }
-//    
-//    init(data: Obj) {
-//        // 0 is ts
-//        self.name = try!
-//        self.author = try! data.get(path: "author")
-//        self.content = try! data.get(path: "content")
-//        let arrTags: Arr? = data.get(path: "tags")
-//        self.tags = arrTags?.map { $0 as! String } ?? []
-//    }
 }
 
 
 class RxViewController: UIViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -80,7 +67,7 @@ class RxViewController: UIViewController {
     
     lazy var viewModel: PaginationViewModel<PaginationRequest<BlogPost>> = { [unowned self] in
         return PaginationViewModel(paginationRequest: PaginationRequest(paginate: Paginate<BlogPost>(
-                                                        match: Match(index: Ref("indexes/posts_by_tags_with_title"), terms: "travel"),
+                                                        match: Match(index: Ref("indexes/posts_by_tags"), terms: "travel"),
                                                         cursor: nil)))
         }()
     
@@ -90,10 +77,26 @@ class RxViewController: UIViewController {
         tableView.addSubview(self.refreshControl)
         emptyStateLabel.text = "No blog post found"
         
+        searchBar.rx_text
+            .throttle(0.25, scheduler: MainScheduler.instance)
+            .map { [weak self] searchStr in
+                if let text = self?.searchBar.text where text.isEmpty == false {
+                    return Intersection(sets: Match(index: Ref("indexes/posts_by_tags"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel"),
+                                              Match(index: Ref("indexes/posts_by_name"), terms: text))
+                }
+                return Match(index: Ref("indexes/posts_by_tags"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel")
+            }
+            .bindTo(viewModel.matchTrigger)
+            .addDisposableTo(disposeBag)
         
         segmentedControl.rx_valueChanged
             .map { [weak self] in
-                return Match(index: Ref("indexes/posts_by_tags_with_title"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel") }
+                if let text = self?.searchBar.text where text.isEmpty == false {
+                    return Intersection(sets: Match(index: Ref("indexes/posts_by_tags"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel"),
+                        Match(index: Ref("indexes/posts_by_name"), terms: text))
+                }
+                return Match(index: Ref("indexes/posts_by_tags"), terms: self?.segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel")
+            }
             .bindTo(viewModel.matchTrigger)
             .addDisposableTo(disposeBag)
         

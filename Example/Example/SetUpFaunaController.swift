@@ -50,11 +50,15 @@ class SetUpFaunaController: UIViewController {
                     return Create(ref: Ref("classes"), params: ["name": "posts"]).rx_query()
                 }
                 .flatMap { _ in
-                    return Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
-                        "source": BlogPost.classRef,
-                        "terms": [["field": Arr(["data", "tags"])] as Obj] as Arr,
-                        "values": [] as Arr
-                        ]).rx_query()
+                    return Do(exprs: Create(ref: Ref("indexes"), params: ["name": "posts_by_tags",
+                                            "source": BlogPost.classRef,
+                                            "terms": [["field": Arr(["data", "tags"])] as Obj] as Arr,
+                                            "values": Arr()]),
+                                      Create(ref: Ref("indexes"), params: ["name": "posts_by_name",
+                                            "source": BlogPost.classRef,
+                                            "terms": [["field": Arr(["data", "name"])] as Obj] as Arr,
+                                            "values": Arr()])
+                            ).rx_query()
             }
         }
         return Create(ref: Ref("keys"), params: ["database": Ref("databases/\(dbName)"), "role": "server"]).rx_query()
