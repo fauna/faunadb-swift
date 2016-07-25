@@ -83,8 +83,8 @@ client.rx_query(Create(ref: Ref("databases"), params: ["name": "db_name"] as Obj
     .flatMap { _ in
         return client.rx_query(Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
             "source": Ref("classes/posts"),
-            "terms": [["field": Arr(["data", "tags"])] as Obj] as Arr,
-            "values": [] as Arr
+            "terms": Arr(["field": Arr("data", "tags")] as Obj),
+            "values": Arr()
             ]))
     }
     .subscribe()
@@ -118,17 +118,20 @@ extension BlogPost: ValueConvertible {
     }
 }
 
+
 /*:
  > Now we can use BlogPost type to create instances into fauna db. Let's create many blogpost usign map expression and mapFauna syntactic sugar.
  */
 client.query({
-        return (1...100).map { int in
-            let stringIndex = String(int)
-            return BlogPost(name: "Blog Post \(stringIndex)", author: "Fauna DB",  content: "bloig post content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
-        }.mapFauna { blogValue in
-            return Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
-        }
-    }) { result in
+    let blogPosts: [BlogPost] =  (1...100).map { int in
+        let blogName = "Blog Post \(String(int))"
+        let tags: [String] = int % 2 == 0 ? ["philosophy", "travel"] : ["travel"]
+        return BlogPost(name: blogName, author: "Fauna DB",  content: "bloig post content", tags: tags)
+    }
+    return blogPosts.mapFauna { (blogValue: ValueConvertible) in
+        return Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
+    }
+}()) { result in
         // do something with the result.
     }
 

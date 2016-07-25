@@ -22,16 +22,9 @@ public struct Arr: Value {
         self.init()
         array.appendContentsOf(sequence.map { $0 as Value})
     }
-}
-
-extension Arr: ArrayLiteralConvertible {
     
     public init(_ elements: Value...){
-        array = elements
-    }
-    
-    public init(arrayLiteral elements: Value...){
-        array = elements
+        self.init(elements)
     }
 }
 

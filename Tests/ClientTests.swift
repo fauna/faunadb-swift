@@ -53,7 +53,7 @@ class ClientTests: FaunaDBTests {
             Create(ref: Ref("indexes"),
                 params: ["name": "spells_by_element",
                          "source": Ref("classes/spells"),
-                         "terms": [["field":  Arr(["data", "element"])] as Obj] as Arr,
+                         "terms": Arr(["field":  Arr("data", "element")] as Obj),
                          "active": true])
         )
         expect(value).notTo(beNil())
@@ -79,10 +79,10 @@ class ClientTests: FaunaDBTests {
         let objResult: Obj? = value?.get()
         expect(objResult) == ["foo": "bar"]
         
-        value = await([1, 2, "foo"] as Arr)
+        value = await(Arr(1, 2, "foo"))
         expect(value).notTo(beNil())
         let arrResult: Arr? = value?.get()
-        expect(arrResult) == [Double(1), Double(2), "foo"]
+        expect(arrResult) == Arr(Double(1), Double(2), "foo")
         
         value = await("qux")
         expect(value).notTo(beNil())
@@ -118,7 +118,7 @@ class ClientTests: FaunaDBTests {
         
         value = await(
             Create(ref: Ref("classes/spells"),
-                params:  ["data": [ "testData" : [ "array": [1, "2", 3.4] as Arr,
+                params:  ["data": [ "testData" : [ "array": Arr(1, "2", 3.4),
                     "bool": true,
                     "num": 1234,
                     "string": "sup",
@@ -155,7 +155,7 @@ class ClientTests: FaunaDBTests {
         expect(arr?[0].get(path: "data", "queryTest1")) == randomText1
         expect(arr?[1].get(path: "data", "queryTest2")) == randomText2
         
-        let value2 = await([expr1.value, expr2.value] as Arr)
+        let value2 = await(Arr(expr1.value, expr2.value))
         let arr2: Arr? = value2?.get()
         expect(arr2?.count) == 2
         expect(arr2?[0].get(path: "data", "queryTest1")) == randomText1
@@ -195,7 +195,7 @@ class ClientTests: FaunaDBTests {
                                   "source": randomClassRef!,
                                   "active": true,
                                   "unique": false,
-                                   "terms": [["field": Arr(["data", "queryTest1"])] as Obj] as Arr])
+                                   "terms": Arr(["field": Arr(["data", "queryTest1"])] as Obj)])
         )
         expect(value).notTo(beNil())
         let testIndex: Ref? = value?.get(field: Fields.ref)
@@ -277,7 +277,7 @@ class ClientTests: FaunaDBTests {
             Create(ref: Ref("indexes"),
                 params: [ "name": randomClassName + "_by_unique_test",
                           "source": classRef!,
-                          "terms": [["field": Arr(["data", "uniqueTest1"])] as Obj] as Arr,
+                          "terms": Arr(["field": Arr(["data", "uniqueTest1"])] as Obj),
                           "unique": true,
                           "active": true])
         )
@@ -334,20 +334,20 @@ class ClientTests: FaunaDBTests {
         setupFaunaDB()
         
         let mapR = await(
-            Map(collection: [1, 2, 3] as Arr) { x in Add(terms: x, 1) }
+            Map(collection: Arr(1, 2, 3)) { x in Add(terms: x, 1) }
         )
         expect(mapR?.get()) == [2.0, 3.0, 4.0]
         
 
         let foreachR = await(
-            Foreach(collection:  ["Fireball Level 1", "Fireball Level 2"] as Arr) { spell in
+            Foreach(collection:  Arr("Fireball Level 1", "Fireball Level 2")) { spell in
                 Create(ref: Ref("classes/spells"), params: ["data": ["name": spell.value] as Obj])
             }
         )
         expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]
         
         let filterR = await(
-            Filter(collection: [1, 2, 11, 12] as Arr) {
+            Filter(collection: Arr(1, 2, 11, 12)) {
                 GT(terms: $0, 10)
             }
         )
@@ -387,7 +387,7 @@ class ClientTests: FaunaDBTests {
         let replaceR = await(
             Replace(ref: try! createR!.get(path: "ref"),
                                   params: ["data": ["name": "Volcano",
-                                                 "element": ["fire", "earth"] as Arr,
+                                                 "element": Arr("fire", "earth"),
                                                     "cost": 10.0] as Obj])
         )
         let replaceRef: Ref? = replaceR?.get(field: Fields.ref)
@@ -456,7 +456,7 @@ class ClientTests: FaunaDBTests {
         
         let create3R = await(
             Create(ref: Ref("classes/spells"), params: ["data": ["name": "Faerie Fire",
-                                                                 "element": ["arcane", "nature"] as Arr,
+                                                                 "element": Arr("arcane", "nature"),
                                                                  "cost": 10.0] as Obj])
         )
         expect(create3R).notTo(beNil())
@@ -523,13 +523,13 @@ class ClientTests: FaunaDBTests {
         
         
         let concatR = await(
-            Concat(strList: ["Magic", "Missile"] as Arr)
+            Concat(strList: Arr("Magic", "Missile"))
         )
         expect(concatR?.get()) == "MagicMissile"
         
         
         let concatR2 = await(
-            Concat(strList: ["Magic", "Missile"] as Arr,
+            Concat(strList: Arr("Magic", "Missile"),
                  separator: " ")
         )
         expect(concatR2?.get()) == "Magic Missile"
@@ -537,20 +537,20 @@ class ClientTests: FaunaDBTests {
         
         let containsR = await(
             Contains(pathComponents: "favorites", "foods",
-                             inExpr: ["favorites": ["foods": ["crunchings", "munchings"] as Arr] as Obj] as Obj)
+                             inExpr: ["favorites": ["foods": Arr("crunchings", "munchings")] as Obj] as Obj)
         )
         expect(containsR?.get()) == true
         
         
         let containsR2 = await(
-            Contains(path: ["favorites", "foods"] as Arr,
-                inExpr: ["favorites": ["foods": ["crunchings", "munchings"] as Arr] as Obj] as Obj)
+            Contains(path: Arr("favorites", "foods"),
+                inExpr: ["favorites": ["foods": Arr("crunchings", "munchings")] as Obj] as Obj)
         )
         expect(containsR2?.get()) == true
         
         
         let selectR = await(
-            Select(pathComponents: "favorites", "foods", 1, from: ["favorites": ["foods": ["crunchings", "munchings", "lunchings"] as Arr] as Obj] as Obj)
+            Select(pathComponents: "favorites", "foods", 1, from: ["favorites": ["foods": Arr("crunchings", "munchings", "lunchings")] as Obj] as Obj)
         )
         expect(selectR?.get()) == "munchings"
         

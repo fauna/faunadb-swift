@@ -54,15 +54,9 @@ let nilValue = Null()
 
 var arrVar = Arr(2, 4, "Hi")
 
-/*:
- Arr conforms to ArrayLiteralConvertible which means we can initialise an Arr using array literal form.
- */
-
-let arr: Arr = [int, decimal, str, bool]
-let arr1:Arr = [1, 3, "Hi", true, 3.141562]
 
 /*:
- Arr also conforms to CollectionType standar library protocol so we have a bunch of useful collection methods and properties available to work with Fauna arr. Let's see some examples...
+ Arr conforms to CollectionType standar library protocol so we have a bunch of useful collection methods and properties available to work with Fauna arr. Let's see some examples...
  */
 
 var mutableArr = Arr(1,2,3)

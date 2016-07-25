@@ -25,7 +25,7 @@ class SerializationTests: FaunaDBTests {
     func testArr(){
         
         // MARK: Arr
-        var arr2: Arr = [3, "test", Null(), 2.4]
+        var arr2 = Arr(3, "test", Null(), 2.4)
         let arr2Copy =  arr2
         expect(arr2 == arr2Copy).to(beTrue())
         expectToJson(arr2) == "[3,\"test\",null,2.4]"
@@ -52,11 +52,11 @@ class SerializationTests: FaunaDBTests {
         let valueArr: [Value] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
         expectToJson(Arr(valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
         
-        let complexValue = [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, [3, "test", Timestamp(timeIntervalSince1970: 0), 3.5] as Arr] as Arr
+        let complexValue = Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5))
         
         expectToJson(complexValue) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5,[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]]"
         
-        expectToJson([3, 4, 5, 6, [3, 5, 6, 7] as Arr] as Arr) == "[3,4,5,6,[3,5,6,7]]"
+        expectToJson(Arr(3, 4, 5, 6, Arr(3, 5, 6, 7))) == "[3,4,5,6,[3,5,6,7]]"
     }
     
     func testObj() {
@@ -83,7 +83,7 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testArrWithObj() {
-        let arr: Arr = [[["test":"value"] as Obj, 2323, true] as Arr, "hi", ["test": "yo","test2": Null()] as Obj]
+        let arr = Arr(Arr(["test":"value"] as Obj, 2323, true), "hi", ["test": "yo","test2": Null()] as Obj)
         expectToJson(arr) == "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]"
     }
     
@@ -129,8 +129,8 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Concat
         
-        expectToJson(Concat(strList: ["Hen", "Wen"] as Arr)) == "{\"concat\":[\"Hen\",\"Wen\"]}"
-        expectToJson(Concat(strList: ["Hen", "Wen"] as Arr, separator: " ")) == "{\"concat\":[\"Hen\",\"Wen\"],\"separator\":\" \"}"
+        expectToJson(Concat(strList: Arr("Hen", "Wen"))) == "{\"concat\":[\"Hen\",\"Wen\"]}"
+        expectToJson(Concat(strList: Arr("Hen", "Wen"), separator: " ")) == "{\"concat\":[\"Hen\",\"Wen\"],\"separator\":\" \"}"
         
         //MARK: Casefold
         
@@ -185,7 +185,7 @@ class SerializationTests: FaunaDBTests {
         
         var replaceSpell = spell
         replaceSpell["name"] = "Mountain's Thunder"
-        replaceSpell["element"] = ["air", "earth"] as Arr
+        replaceSpell["element"] = Arr("air", "earth")
         replaceSpell["cost"] = 10
         var replace = Replace(ref: Ref("classes/spells/123456"),
                               params: ["data": replaceSpell])
@@ -193,11 +193,11 @@ class SerializationTests: FaunaDBTests {
         
         
         replace = Replace(ref: Ref("classes/spells/123456"),
-                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj])
+                          params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj])
         expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
         
         replace = Replace(ref: Ref("classes/spells/123456"),
-                          params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj])
+                          params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj])
         expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
         
         //MARK: Delete
@@ -223,7 +223,7 @@ class SerializationTests: FaunaDBTests {
         insert = Insert(ref: Ref("classes/spells/123456"),
                         ts: Timestamp(timeIntervalSince1970: 0),
                         action: Action.Create,
-                        params: ["data": ["name": "Mountain's Thunder", "element": ["air", "earth"] as Arr, "cost": 10] as Obj] as Obj)
+                        params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj] as Obj)
         
         expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
         
@@ -246,7 +246,7 @@ class SerializationTests: FaunaDBTests {
         //MARK: Map
         
         Var.resetIndex()
-        var map = Map(collection: [1,2,3] as Arr,
+        var map = Map(collection: Arr(1,2,3),
                       lambda: Lambda(vars: Var("munchings"), expr: Var("munchings")))
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}"
         
@@ -257,7 +257,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
-        map = ([1,2,3] as Arr).mapFauna { $0 }
+        map = (Arr(1,2,3)).mapFauna { $0 }
         expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
@@ -276,7 +276,7 @@ class SerializationTests: FaunaDBTests {
         //MARK: Foreach
         
         Var.resetIndex()
-        var foreach = Foreach(collection: [Ref("another/ref/1"), Ref("another/ref/2")] as Arr,
+        var foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2")),
                               lambda: Lambda(vars: Var("refData"),
                                 expr: Create(ref: Ref("some/ref"),
                                     params: ["data": ["some": Var("refData").value] as Obj]
@@ -290,7 +290,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
-        foreach = (([Ref("another/ref/1"), Ref("another/ref/2")] as Arr)).forEachFauna {
+        foreach = ((Arr(Ref("another/ref/1"), Ref("another/ref/2")))).forEachFauna {
             Create(ref: Ref("some/ref"),
                 params: ["data": ["some": $0.value] as Obj])
         }
@@ -313,7 +313,7 @@ class SerializationTests: FaunaDBTests {
         //MARK: Filter
         
         Var.resetIndex()
-        var filter = Filter(collection: [1,2,3] as Arr, lambda: Lambda(lambda: { i in Equals(terms: 1, i) }))
+        var filter = Filter(collection: Arr(1,2,3), lambda: Lambda(lambda: { i in Equals(terms: 1, i) }))
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
@@ -321,7 +321,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
-        filter = ([1,2,3] as Arr).filterFauna { i in  Equals(terms: 1, i) }
+        filter = (Arr(1,2,3)).filterFauna { i in  Equals(terms: 1, i) }
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
@@ -333,7 +333,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
-        filter = Filter(collection: [1,"Hi",3] as Arr,
+        filter = Filter(collection: Arr(1,"Hi",3),
                         lambda: Lambda(lambda: { i in
                             Equals(terms: 1, i)
                         })
@@ -342,35 +342,35 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Take
         
-        let take = Take(count: 2, collection: [1, 2, 3] as Arr)
+        let take = Take(count: 2, collection: Arr(1, 2, 3))
         expectToJson(take) == "{\"collection\":[1,2,3],\"take\":2}"
         
         
-        let take2 = Take(count: 2 as Expr, collection: [1, 2, 3] as Arr)
+        let take2 = Take(count: 2 as Expr, collection: Arr(1, 2, 3))
         expectToJson(take2) == "{\"collection\":[1,2,3],\"take\":2}"
         
-        let take3 = Take(count: 2, collection: [1, "Hi", 3] as Arr)
+        let take3 = Take(count: 2, collection: Arr(1, "Hi", 3))
         expectToJson(take3) == "{\"collection\":[1,\"Hi\",3],\"take\":2}"
         
         //MARK: Drop
         
-        let drop = Drop(count: 2, collection: [1,2,3] as Arr)
+        let drop = Drop(count: 2, collection: Arr(1,2,3))
         expectToJson(drop) == "{\"collection\":[1,2,3],\"drop\":2}"
         
-        let drop2 = Drop(count: 2 as Expr, collection: [1, 2, 3] as Arr)
+        let drop2 = Drop(count: 2 as Expr, collection: Arr(1, 2, 3))
         expectToJson(drop2) == "{\"collection\":[1,2,3],\"drop\":2}"
         
-        let drop3 = Drop(count: 2, collection: [1, "Hi", 3] as Arr)
+        let drop3 = Drop(count: 2, collection: Arr(1, "Hi", 3))
         expectToJson(drop3) == "{\"collection\":[1,\"Hi\",3],\"drop\":2}"
         
         //MARK: Prepend
         
-        let prepend = Prepend(elements: [1,2,3] as Arr, toCollection: [4,5,6] as Arr)
+        let prepend = Prepend(elements: Arr(1,2,3), toCollection: Arr(4,5,6))
         expectToJson(prepend) == "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}"
         
         //MARK: Append
         
-        let append = Append(elements: [4,5,6] as Arr, toCollection: [1,2,3] as Arr)
+        let append = Append(elements: Arr(4,5,6), toCollection: Arr(1,2,3))
         expectToJson(append) == "{\"collection\":[4,5,6],\"append\":[1,2,3]}"
         
     }
@@ -452,9 +452,7 @@ class SerializationTests: FaunaDBTests {
         
         var contains = Contains(pathComponents: "favorites", "foods", inExpr:  ["favorites":
             ["foods":
-                ["crunchings",
-                 "munchings",
-                 "lunchings"] as Arr]
+                Arr("crunchings", "munchings", "lunchings")]
                 as Obj] as Obj)
         
         expectToJson(contains) == "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
@@ -462,9 +460,7 @@ class SerializationTests: FaunaDBTests {
         
         contains = Contains(path: "favorites", inExpr:  ["favorites":
             ["foods":
-                ["crunchings",
-                    "munchings",
-                    "lunchings"] as Arr]
+                Arr("crunchings", "munchings", "lunchings")]
                 as Obj] as Obj)
         
         expectToJson(contains) == "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
@@ -474,19 +470,17 @@ class SerializationTests: FaunaDBTests {
         var select = Select(pathComponents: "favorites", "foods", 1, from:
             ["favorites":
                 ["foods":
-                    ["crunchings",
+                    Arr("crunchings",
                         "munchings",
-                        "lunchings"] as Arr
+                        "lunchings")
                 ] as Obj
             ] as Obj)
         expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
         
-        select = Select(path: ["favorites", "foods", 1] as Arr, from:
+        select = Select(path: Arr("favorites", "foods", 1), from:
             ["favorites":
                 ["foods":
-                    ["crunchings",
-                        "munchings",
-                        "lunchings"] as Arr
+                    Arr("crunchings", "munchings", "lunchings")
                 ] as Obj
             ] as Obj)
         expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
@@ -577,7 +571,7 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         letExpr = Let(1) { x in
-            [x.value, 4] as Arr
+            Arr(x.value, 4)
         }
         expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
         

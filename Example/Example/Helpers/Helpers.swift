@@ -146,4 +146,10 @@ extension Array: ValueConvertible {
     }
 }
 
+extension Arr: ArrayLiteralConvertible {
+        
+    public init(arrayLiteral elements: Value...){
+        self.init(elements)
+    }
+}
 

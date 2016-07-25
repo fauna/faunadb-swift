@@ -92,7 +92,7 @@ class DeserializationTests: FaunaDBTests {
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         let date = Date(iso8601: "1970-01-03")
         XCTAssertNotNil(date)
-        let arr: Arr = [Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
+        let arr = Arr(Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN))
         XCTAssert(deseralizedValue.isEquals(arr))
     }
 }
