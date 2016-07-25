@@ -102,7 +102,7 @@ class SetUpFaunaController: UITableViewController {
         return (1...100).map {
             BlogPost(name: "Blog Post \($0)", author: "FaunaDB",  content: "content", tags: $0 % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
         }.mapFauna { blogValue in
-            Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
+            Create(ref: Ref("classes/posts"), params: ["data": blogValue])
         }.rx_query()
     }
  }
@@ -152,7 +152,7 @@ extension SetUpFaunaController{
             (1...100).map { int in
                 return BlogPost(name: "Blog Post \(int)", author: "FaunaDB",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
                 }.mapFauna { blogValue in
-                    Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
+                    Create(ref: Ref("classes/posts"), params: ["data": blogValue])
                 }
         }()) { result in
             callback(result)

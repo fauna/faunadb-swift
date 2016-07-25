@@ -49,7 +49,7 @@ class SerializationTests: FaunaDBTests {
         
         expectToJson(Arr([Ref("some/ref")])) == "[{\"@ref\":\"some\\/ref\"}]"
         
-        let valueArr: [Value] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
+        let valueArr: [ValueConvertible] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
         expectToJson(Arr(valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
         
         let complexValue = Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5))
@@ -279,34 +279,34 @@ class SerializationTests: FaunaDBTests {
         var foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2")),
                               lambda: Lambda(vars: Var("refData"),
                                 expr: Create(ref: Ref("some/ref"),
-                                    params: Obj(["data": Obj(["some": Var("refData").value])])
+                                    params: Obj(["data": Obj(["some": Var("refData")])])
                                 )))
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}"
         
         Var.resetIndex()
         foreach = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna { ref in
-            Create(ref: Ref("some/ref"), params: Obj(["data": Obj(["some": ref.value])]))
+            Create(ref: Ref("some/ref"), params: Obj(["data": Obj(["some": ref])]))
         }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
         foreach = ((Arr(Ref("another/ref/1"), Ref("another/ref/2")))).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: Obj(["data": Obj(["some": $0.value])]))
+                params: Obj(["data": Obj(["some": $0])]))
         }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
         foreach = ([Ref("another/ref/1"), Ref("another/ref/2")] as [Expr]).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: Obj(["data": Obj(["some": $0.value])]))
+                params: Obj(["data": Obj(["some": $0])]))
             }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
             
         Var.resetIndex()
         foreach = ([Ref("another/ref/1"), Ref("another/ref/2")] as [ValueConvertible]).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: Obj(["data": Obj(["some": $0.value])]))
+                params: Obj(["data": Obj(["some": $0])]))
             }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
@@ -571,7 +571,7 @@ class SerializationTests: FaunaDBTests {
         
         Var.resetIndex()
         letExpr = Let(1) { x in
-            Arr(x.value, 4)
+            Arr(x, 4)
         }
         expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
         
@@ -629,7 +629,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(lambda1) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}"
         
         Var.resetIndex()
-        let lambda2 = Lambda { a, b in Arr([b.value , a.value]) }
+        let lambda2 = Lambda { a, b in Arr(b , a) }
         expectToJson(lambda2) == "{\"expr\":[{\"var\":\"v2\"},{\"var\":\"v1\"}],\"lambda\":[\"v1\",\"v2\"]}"
         
         Var.resetIndex()

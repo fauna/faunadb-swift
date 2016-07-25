@@ -36,8 +36,8 @@ public struct Get: Expr{
     public init(ref: Expr, ts: Expr? = nil){
 
         value = {
-            var obj = Obj(fnCall: ["get":ref.value])
-            obj["ts"] = ts?.value
+            var obj = Obj(fnCall: ["get":ref])
+            obj["ts"] = ts
             return obj
         }()
     }
@@ -73,8 +73,8 @@ public struct Exists: Expr {
      */
     public init(ref: Expr, ts: Expr? = nil){
         value = {
-            var obj = Obj(fnCall: ["exists": ref.value])
-            obj["ts"] = ts?.value
+            var obj = Obj(fnCall: ["exists": ref])
+            obj["ts"] = ts
             return obj
         }()
     }
@@ -109,10 +109,10 @@ public struct Count: Expr {
      */
     public init(set: Expr, countEvents: Expr){
         if let bool = countEvents.value as? Bool where bool == false{
-            value = Obj(fnCall:["count": set.value])
+            value = Obj(fnCall:["count": set])
         }
         else{
-            value = Obj(fnCall:["count": set.value, "events": countEvents.value])
+            value = Obj(fnCall:["count": set, "events": countEvents])
         }
     }
 }
@@ -164,19 +164,19 @@ public struct Paginate: Expr {
      */
     public init(_ resource: Expr, cursor: Cursor? = nil, ts: Expr? = nil, size: Expr? = nil, events: Expr? = nil, sources: Expr? = nil){
         value = {
-            var obj = Obj(fnCall: ["paginate": resource.value])
+            var obj = Obj(fnCall: ["paginate": resource])
             if let cursor = cursor {
                 switch cursor {
                 case .Before(let expr):
-                    obj["before"] = expr.value
+                    obj["before"] = expr
                 case .After(let expr):
-                    obj["after"] = expr.value
+                    obj["after"] = expr
                 }
             }
-            obj["ts"] = ts?.value
-            obj["size"] = size?.value
-            let _ = events.map {  obj["events"] = $0.value }
-            let _ = sources.map { obj["sources"] = $0.value }
+            obj["ts"] = ts
+            obj["size"] = size
+            let _ = events.map {  obj["events"] = $0 }
+            let _ = sources.map { obj["sources"] = $0 }
             return obj
         }()
     }

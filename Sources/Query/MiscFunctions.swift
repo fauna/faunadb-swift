@@ -57,7 +57,7 @@ public struct Contains: Expr {
      - returns: A contains expression.
      */
     public init(pathComponents: PathComponentType..., inExpr: Expr){
-        value = Obj(fnCall:["contains": varargs(pathComponents), "in": inExpr.value])
+        value = Obj(fnCall:["contains": varargs(pathComponents), "in": inExpr])
     }
 
     /**
@@ -71,7 +71,7 @@ public struct Contains: Expr {
      - returns: A contains expression.
      */
     public init(path: Expr, inExpr: Expr){
-        value = Obj(fnCall:["contains": path.value, "in": inExpr.value])
+        value = Obj(fnCall:["contains": path, "in": inExpr])
     }
 }
 
@@ -93,8 +93,8 @@ public struct Select: Expr {
     public init(pathComponents: PathComponentType..., from: Expr, defaultValue: Expr? = nil){
         
         value = {
-            var obj = Obj(fnCall: ["select": varargs(pathComponents), "from": from.value])
-            obj["default"] = defaultValue?.value
+            var obj = Obj(fnCall: ["select": varargs(pathComponents), "from": from])
+            obj["default"] = defaultValue
             return obj
         }()
     }
@@ -112,8 +112,8 @@ public struct Select: Expr {
      */
     public init(path: Expr, from: Expr, defaultValue: Expr? = nil){
         value = {
-            var obj = Obj(fnCall: ["select": path.value, "from": from.value])
-            obj["default"] = defaultValue?.value
+            var obj = Obj(fnCall: ["select": path, "from": from])
+            obj["default"] = defaultValue
             return obj
         }()
     }
@@ -337,7 +337,7 @@ public struct Not: Expr {
      - returns: A Add expression.
      */
     public init(boolExpr expr: Expr){
-        value = Obj(fnCall:["not": expr.value])
+        value = Obj(fnCall:["not": expr])
     }
 }
 

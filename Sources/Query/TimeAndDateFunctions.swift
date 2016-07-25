@@ -21,7 +21,7 @@ public struct Time: Expr {
      - returns: A time exoression.
      */
     public init(_ expr: Expr){
-        value = Obj(fnCall: ["time": expr.value])
+        value = Obj(fnCall: ["time": expr])
     }
 }
 
@@ -61,7 +61,7 @@ public struct Epoch: Expr {
      */
 
     public init(offset: Expr, unit: Expr) {
-        value = Obj(fnCall: ["epoch": offset.value, "unit": unit.value])
+        value = Obj(fnCall: ["epoch": offset, "unit": unit])
     }
 }
 

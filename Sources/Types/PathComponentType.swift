@@ -10,7 +10,7 @@ import Result
 
 public enum FieldPathError: ErrorType, Equatable {
     case NotFound(value: Value, path: [PathComponentType])
-    case UnexpectedType(value: Value, expectedType: Any.Type, path: [PathComponentType])
+    case UnexpectedType(value: ValueConvertible, expectedType: Any.Type, path: [PathComponentType])
 }
 
 
@@ -19,7 +19,7 @@ public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
     case (.NotFound(let value1, let path1), .NotFound(let value2, let path2)):
         return path1 == path2 && value1.isEquals(value2)
     case (.UnexpectedType(let value1, let expectedType1, let path1), .UnexpectedType(let value2, let expectedType2, let path2)):
-        return path1 == path2 && expectedType1 == expectedType2 && value1.isEquals(value2)
+        return path1 == path2 && expectedType1 == expectedType2 && value1.value.isEquals(value2.value)
     default:
         return false
     }
@@ -27,7 +27,7 @@ public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
 }
 
 public protocol PathComponentType: CustomStringConvertible, CustomDebugStringConvertible, Value {
-    func subValue(v: Value) throws -> Value
+    func subValue(v: Value) throws -> ValueConvertible
     func isEqual(other: PathComponentType) -> Bool
 }
 
@@ -67,12 +67,12 @@ extension PathComponentType {
             return false
         }
     }
-}
 
+}
 
 extension String: PathComponentType {
     
-    public func subValue(v: Value) throws -> Value {
+    public func subValue(v: Value) throws -> ValueConvertible {
         switch v{
         case let obj as Obj:
             guard let objValue = obj[self] else { throw FieldPathError.NotFound(value: v, path: [self]) }
@@ -86,7 +86,7 @@ extension String: PathComponentType {
 }
 
 extension Int: PathComponentType {
-    public func subValue(v: Value) throws -> Value {
+    public func subValue(v: Value) throws -> ValueConvertible {
         switch v{
         case let arr as Arr:
             guard arr.count > self  else { throw FieldPathError.NotFound(value: v, path: [self]) }

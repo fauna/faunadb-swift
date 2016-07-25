@@ -41,7 +41,7 @@ public struct Match: Expr {
      */
     public init(index: Expr, terms: Expr...){
         value = {
-            var obj = Obj(fnCall:["match": index.value])
+            var obj = Obj(fnCall:["match": index])
             obj["terms"] = terms.count > 0 ? varargs(terms) : nil
             return obj
         }()
@@ -113,7 +113,7 @@ public struct Distinct: Expr {
      - returns: A Distinct expression.
      */
     public init(set: Expr){
-        value = Obj(fnCall:["distinct": set.value])
+        value = Obj(fnCall:["distinct": set])
     }
 }
 
@@ -132,6 +132,6 @@ public struct Join: Expr {
      - returns: A `Join` expression.
      */
     public init(sourceSet: Expr, with: Expr){
-        value = Obj(fnCall:["join": sourceSet.value, "with": with.value])
+        value = Obj(fnCall:["join": sourceSet, "with": with])
     }
 }
