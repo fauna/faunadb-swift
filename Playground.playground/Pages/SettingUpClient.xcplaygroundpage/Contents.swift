@@ -23,7 +23,7 @@ let client = Client(secret: ourClientSecret, observers: [Logger()])
 Now we can perform queries using our fauna client.
  */
 
-client.query(Create(ref: Ref("databases"),  params: ["name": "blog_db"])){ result in
+client.query(Create(ref: Ref("databases"),  params: Obj(["name": "blog_db"]))){ result in
     switch result {
     case .Success(let value):
         break

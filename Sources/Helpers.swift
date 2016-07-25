@@ -79,9 +79,3 @@ struct Mapper {
         }
     }
 }
-
-func fn(obj: Obj) -> Obj{
-    var obj = obj
-    obj.fn = true
-    return obj
-}

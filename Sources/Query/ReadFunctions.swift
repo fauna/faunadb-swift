@@ -34,9 +34,12 @@ public struct Get: Expr{
      - returns: a Get expression.
      */
     public init(ref: Expr, ts: Expr? = nil){
-        var obj: Obj = ["get":ref.value]
-        obj["ts"] = ts?.value
-        value = fn(obj)
+
+        value = {
+            var obj = Obj(fnCall: ["get":ref.value])
+            obj["ts"] = ts?.value
+            return obj
+        }()
     }
 }
 
@@ -69,9 +72,11 @@ public struct Exists: Expr {
      - returns: A Exists expression.
      */
     public init(ref: Expr, ts: Expr? = nil){
-        var obj: Obj = ["exists": ref.value]
-        obj["ts"] = ts?.value
-        value = fn(obj)
+        value = {
+            var obj = Obj(fnCall: ["exists": ref.value])
+            obj["ts"] = ts?.value
+            return obj
+        }()
     }
 }
 
@@ -104,10 +109,10 @@ public struct Count: Expr {
      */
     public init(set: Expr, countEvents: Expr){
         if let bool = countEvents.value as? Bool where bool == false{
-            value = fn(["count": set.value])
+            value = Obj(fnCall:["count": set.value])
         }
         else{
-            value = fn(["count": set.value, "events": countEvents.value])
+            value = Obj(fnCall:["count": set.value, "events": countEvents.value])
         }
     }
 }
@@ -158,20 +163,22 @@ public struct Paginate: Expr {
      - returns: A Paginate expression.
      */
     public init(_ resource: Expr, cursor: Cursor? = nil, ts: Expr? = nil, size: Expr? = nil, events: Expr? = nil, sources: Expr? = nil){
-        var obj = ["paginate": resource.value] as Obj
-        if let cursor = cursor {
-            switch cursor {
-            case .Before(let expr):
-                obj["before"] = expr.value
-            case .After(let expr):
-                obj["after"] = expr.value
+        value = {
+            var obj = Obj(fnCall: ["paginate": resource.value])
+            if let cursor = cursor {
+                switch cursor {
+                case .Before(let expr):
+                    obj["before"] = expr.value
+                case .After(let expr):
+                    obj["after"] = expr.value
+                }
             }
-        }
-        obj["ts"] = ts?.value
-        obj["size"] = size?.value
-        let _ = events.map {  obj["events"] = $0.value }
-        let _ = sources.map { obj["sources"] = $0.value }
-        value = fn(obj)
+            obj["ts"] = ts?.value
+            obj["size"] = size?.value
+            let _ = events.map {  obj["events"] = $0.value }
+            let _ = sources.map { obj["sources"] = $0.value }
+            return obj
+        }()
     }
 
 }

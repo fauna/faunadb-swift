@@ -62,15 +62,15 @@ class SerializationTests: FaunaDBTests {
     func testObj() {
         
         // MARK: Obj
-        let obj: Obj = ["test": 1, "test2": Ref("some/ref")]
+        let obj = Obj(["test": 1, "test2": Ref("some/ref")])
         expectToJson(obj) == "{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}"
         
-        var obj2: Obj = [:]
+        var obj2 = Obj([:])
         obj2["test"] = 1
         obj2["test2"] =  Ref("some/ref")
         expect(obj2) == obj
         
-        let obj3: Obj = ["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)]
+        let obj3 = Obj(["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)])
         expectToJson(obj3) == "{\"object\":{\"key2\":\"test\",\"key\":3,\"key3\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}}"
         
         
@@ -83,7 +83,7 @@ class SerializationTests: FaunaDBTests {
     }
     
     func testArrWithObj() {
-        let arr = Arr(Arr(["test":"value"] as Obj, 2323, true), "hi", ["test": "yo","test2": Null()] as Obj)
+        let arr = Arr(Arr(Obj(["test":"value"]), 2323, true), "hi", Obj(["test": "yo","test2": Null()]))
         expectToJson(arr) == "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]"
     }
     
@@ -153,32 +153,32 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Create
         
-        let spell: Obj = ["name": "Mountainous Thunder", "element": "air", "cost": 15]
+        let spell = Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])
         var create = Create(ref: Ref("classes/spells"),
-                            params: ["data": spell])
+                            params: Obj(["data": spell]))
         expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
         
         create = Create(ref: Ref("classes/spells"),
-                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15] as Obj] as Obj)
+                        params: Obj(["data": Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])]))
         expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
         
         create = Create(ref: Ref("classes/spells"),
-                        params: ["data": ["name": "Mountainous Thunder", "element": "air", "cost": 15] as Obj] as Obj)
+                        params: Obj(["data": Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])]))
         expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}"
         
         
         //MARK: Update
         
         var update = Update(ref: Ref("classes/spells/123456"),
-                            params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+                            params: Obj(["data": Obj(["name": "Mountain's Thunder", "cost": Null()])]))
         expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
         
         update = Update(ref: Ref("classes/spells/123456") as Expr,
-                        params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj] as Obj)
+                        params: Obj(["data": Obj(["name": "Mountain's Thunder", "cost": Null()])]))
         expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
         
         update = Update(ref: Ref("classes/spells/123456"),
-                        params: ["data": ["name": "Mountain's Thunder", "cost": Null()] as Obj])
+                        params: Obj(["data": Obj(["name": "Mountain's Thunder", "cost": Null()])]))
         expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
         
         //MARK: Replace
@@ -188,16 +188,16 @@ class SerializationTests: FaunaDBTests {
         replaceSpell["element"] = Arr("air", "earth")
         replaceSpell["cost"] = 10
         var replace = Replace(ref: Ref("classes/spells/123456"),
-                              params: ["data": replaceSpell])
+                              params: Obj(["data": replaceSpell]))
         expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
         
         
         replace = Replace(ref: Ref("classes/spells/123456"),
-                          params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj])
+                          params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
         expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
         
         replace = Replace(ref: Ref("classes/spells/123456"),
-                          params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj])
+                          params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
         expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}"
         
         //MARK: Delete
@@ -215,7 +215,7 @@ class SerializationTests: FaunaDBTests {
         var insert = Insert(ref: Ref("classes/spells/123456"),
                             ts: Timestamp(timeIntervalSince1970: 0),
                             action: .Create,
-                            params: ["data": replaceSpell])
+                            params: Obj(["data": replaceSpell]))
         
         expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
         
@@ -223,7 +223,7 @@ class SerializationTests: FaunaDBTests {
         insert = Insert(ref: Ref("classes/spells/123456"),
                         ts: Timestamp(timeIntervalSince1970: 0),
                         action: Action.Create,
-                        params: ["data": ["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10] as Obj] as Obj)
+                        params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
         
         expectToJson(insert) == "{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
         
@@ -279,34 +279,34 @@ class SerializationTests: FaunaDBTests {
         var foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2")),
                               lambda: Lambda(vars: Var("refData"),
                                 expr: Create(ref: Ref("some/ref"),
-                                    params: ["data": ["some": Var("refData").value] as Obj]
+                                    params: Obj(["data": Obj(["some": Var("refData").value])])
                                 )))
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}"
         
         Var.resetIndex()
         foreach = [Ref("another/ref/1"), Ref("another/ref/2")].forEachFauna { ref in
-            Create(ref: Ref("some/ref"), params: ["data": ["some": ref.value] as Obj])
+            Create(ref: Ref("some/ref"), params: Obj(["data": Obj(["some": ref.value])]))
         }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
         foreach = ((Arr(Ref("another/ref/1"), Ref("another/ref/2")))).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: ["data": ["some": $0.value] as Obj])
+                params: Obj(["data": Obj(["some": $0.value])]))
         }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
         Var.resetIndex()
         foreach = ([Ref("another/ref/1"), Ref("another/ref/2")] as [Expr]).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: ["data": ["some": $0.value] as Obj])
+                params: Obj(["data": Obj(["some": $0.value])]))
             }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
             
         Var.resetIndex()
         foreach = ([Ref("another/ref/1"), Ref("another/ref/2")] as [ValueConvertible]).forEachFauna {
             Create(ref: Ref("some/ref"),
-                params: ["data": ["some": $0.value] as Obj])
+                params: Obj(["data": Obj(["some": $0.value])]))
             }
         expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
         
@@ -450,39 +450,39 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Contains
         
-        var contains = Contains(pathComponents: "favorites", "foods", inExpr:  ["favorites":
-            ["foods":
+        var contains = Contains(pathComponents: "favorites", "foods", inExpr:  Obj(["favorites":
+            Obj(["foods":
                 Arr("crunchings", "munchings", "lunchings")]
-                as Obj] as Obj)
+                )]))
         
         expectToJson(contains) == "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
         
         
-        contains = Contains(path: "favorites", inExpr:  ["favorites":
-            ["foods":
+        contains = Contains(path: "favorites", inExpr: Obj(["favorites":
+            Obj(["foods":
                 Arr("crunchings", "munchings", "lunchings")]
-                as Obj] as Obj)
+                )]))
         
         expectToJson(contains) == "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
         
         //MARK: Select
         
         var select = Select(pathComponents: "favorites", "foods", 1, from:
-            ["favorites":
-                ["foods":
+            Obj(["favorites":
+                Obj(["foods":
                     Arr("crunchings",
                         "munchings",
                         "lunchings")
-                ] as Obj
-            ] as Obj)
+                ])
+            ]))
         expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
         
         select = Select(path: Arr("favorites", "foods", 1), from:
-            ["favorites":
-                ["foods":
+            Obj(["favorites":
+                Obj(["foods":
                     Arr("crunchings", "munchings", "lunchings")
-                ] as Obj
-            ] as Obj)
+                ])
+            ]))
         expectToJson(select) == "{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
         
         
@@ -576,7 +576,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
         
         Var.resetIndex()
-        letExpr = Let(1, "Hi!", Create(ref: Ref("databases"), params: ["name": "blog_db"])) { x, y, z in
+        letExpr = Let(1, "Hi!", Create(ref: Ref("databases"), params: Obj(["name": "blog_db"]))) { x, y, z in
             Do(exprs: x, y, x, y, z)
         }
         expectToJson(letExpr) == "{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"
@@ -618,7 +618,7 @@ class SerializationTests: FaunaDBTests {
         
         //MARK: Do
         
-        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: ["data": ["name": "Hen Wen"] as Obj]),
+        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: Obj(["data": Obj(["name": "Hen Wen"])])),
                         Get(ref: Ref("some/ref/1")))
         expectToJson(doForm) == "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}"
         

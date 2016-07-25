@@ -20,7 +20,7 @@ class ClientTests: FaunaDBTests {
         // Create a database
         value = await(
             Create(ref: Ref("databases"),
-                params: ["name": testDbName])
+                params: Obj(["name": testDbName]))
         )
         expect(value).notTo(beNil())
         
@@ -30,7 +30,7 @@ class ClientTests: FaunaDBTests {
         // Get a new key
         value = await(
             Create(ref: Ref("keys"),
-                params: ["database": dbRef!, "role": "server"])
+                params: Obj(["database": dbRef!, "role": "server"]))
         )
         expect(value).notTo(beNil())
         
@@ -43,7 +43,7 @@ class ClientTests: FaunaDBTests {
         // Create spells class
         value = await(
             Create(ref: Ref("classes"),
-                params: ["name": "spells"])
+                params: Obj(["name": "spells"]))
         )
         expect(value).notTo(beNil())
         
@@ -51,10 +51,10 @@ class ClientTests: FaunaDBTests {
         // Create an index
         value = await(
             Create(ref: Ref("indexes"),
-                params: ["name": "spells_by_element",
+                params: Obj(["name": "spells_by_element",
                          "source": Ref("classes/spells"),
-                         "terms": Arr(["field":  Arr("data", "element")] as Obj),
-                         "active": true])
+                         "terms": Arr(Obj(("field",  Arr("data", "element")))),
+                         "active": true]))
         )
         expect(value).notTo(beNil())
     }
@@ -74,10 +74,10 @@ class ClientTests: FaunaDBTests {
         
         // MARK: echo values
         var value: Value?
-        value = await(["foo": "bar"] as Obj)
+        value = await(Obj(["foo": "bar"]))
         expect(value).notTo(beNil())
         let objResult: Obj? = value?.get()
-        expect(objResult) == ["foo": "bar"]
+        expect(objResult) == Obj(("foo", "bar"))
         
         value = await(Arr(1, 2, "foo"))
         expect(value).notTo(beNil())
@@ -100,7 +100,7 @@ class ClientTests: FaunaDBTests {
         
         value = await(
             Create(ref: Ref("classes/spells"),
-                params: ["data": ["testField": "testValue"] as Obj])
+                params: Obj(["data": Obj(["testField": "testValue"])]))
         )
         expect(value).notTo(beNil())
         
@@ -118,14 +118,14 @@ class ClientTests: FaunaDBTests {
         
         value = await(
             Create(ref: Ref("classes/spells"),
-                params:  ["data": [ "testData" : [ "array": Arr(1, "2", 3.4),
+                params:  Obj(["data": Obj([ "testData" : Obj([ "array": Arr(1, "2", 3.4),
                     "bool": true,
                     "num": 1234,
                     "string": "sup",
                     "float": 1.234,
-                    "null": Null()]
-                    as Obj]
-                    as Obj]
+                    "null": Null()])
+                    ])
+                ])
             ))
         
         let testData: Obj? = value?.get(path: "data", "testData")
@@ -146,8 +146,8 @@ class ClientTests: FaunaDBTests {
         let classRef = Ref("classes/spells")
         let randomText1 = String(randomWithLength: 8)
         let randomText2 = String(randomWithLength: 8)
-        let expr1 = Create(ref: classRef, params: ["data": ["queryTest1": randomText1] as Obj])
-        let expr2 = Create(ref: classRef, params: ["data": ["queryTest2": randomText2] as Obj])
+        let expr1 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest1": randomText1])]))
+        let expr2 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest2": randomText2])]))
         
         let value = await(Arr(expr1.value, expr2.value))
         let arr: Arr? = value?.get()
@@ -172,7 +172,7 @@ class ClientTests: FaunaDBTests {
         let randomClassName = String(randomWithLength: 8)
         var value: Value?
         value = await(Create(ref: Ref("classes"),
-                          params: ["name": randomClassName])
+                          params: Obj(["name": randomClassName]))
         )
         expect(value).notTo(beNil())
         
@@ -181,21 +181,21 @@ class ClientTests: FaunaDBTests {
         
         
         value = await(Create(ref: Ref("indexes"),
-                    params:   ["name": "\(randomClassName)_class_index",
-                             "source": randomClassRef!,
-                             "active": true,
-                             "unique": false]))
+                    params: Obj( ["name": "\(randomClassName)_class_index",
+                                "source": randomClassRef!,
+                                "active": true,
+                                "unique": false])))
         expect(value).notTo(beNil())
         let randomClassIndex: Ref? = value?.get(field: Fields.ref)
         expect(randomClassIndex) == Ref("indexes/\(randomClassName)_class_index")
 
         
         value = await(Create(ref: Ref("indexes"),
-                           params: ["name": "\(randomClassName)_test_index",
+                           params: Obj(["name": "\(randomClassName)_test_index",
                                   "source": randomClassRef!,
                                   "active": true,
                                   "unique": false,
-                                   "terms": Arr(["field": Arr(["data", "queryTest1"])] as Obj)])
+                                   "terms": Arr(Obj(["field": Arr("data", "queryTest1")]))]))
         )
         expect(value).notTo(beNil())
         let testIndex: Ref? = value?.get(field: Fields.ref)
@@ -206,11 +206,11 @@ class ClientTests: FaunaDBTests {
         let randomText2 = String(randomWithLength: 8)
         let randomText3 = String(randomWithLength: 8)
         
-        let create1Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText1] as Obj]))
+        let create1Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText1])])))
         expect(create1Value).notTo(beNil())
-        let create2Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText2] as Obj]))
+        let create2Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText2])])))
         expect(create2Value).notTo(beNil())
-        let create3Value = await(Create(ref: randomClassRef!, params: ["data": ["queryTest1": randomText3] as Obj]))
+        let create3Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText3])])))
         expect(create3Value).notTo(beNil())
         
         
@@ -266,7 +266,7 @@ class ClientTests: FaunaDBTests {
         let randomClassName = String(randomWithLength: 8)
         let value = await(
             Create(ref: Ref("classes"),
-                params: ["name": randomClassName])
+                params: Obj(["name": randomClassName]))
         )
         expect(value).notTo(beNil())
         let classRef: Ref? = value?.get(field: Fields.ref)
@@ -275,17 +275,17 @@ class ClientTests: FaunaDBTests {
         
         let uniqueIndexRes = await(
             Create(ref: Ref("indexes"),
-                params: [ "name": randomClassName + "_by_unique_test",
-                          "source": classRef!,
-                          "terms": Arr(["field": Arr(["data", "uniqueTest1"])] as Obj),
-                          "unique": true,
-                          "active": true])
+                params: Obj([ "name": randomClassName + "_by_unique_test",
+                            "source": classRef!,
+                             "terms": Arr(Obj(["field": Arr("data", "uniqueTest1")])),
+                            "unique": true,
+                            "active": true]))
         )
         expect(uniqueIndexRes).notTo(beNil())
         
         let randomText = String(randomWithLength: 8)
         let create: Create = Create(ref: classRef!,
-                            params: ["data": ["uniqueTest1": randomText] as Obj])
+                            params: Obj(["data": Obj(["uniqueTest1": randomText])]))
         let cretate = await(create)
         expect(cretate).notTo(beNil())
         let error = awaitError(create)
@@ -319,13 +319,13 @@ class ClientTests: FaunaDBTests {
         let randomRef: Ref = Ref("classes/spells/" + String(randomNumWithLength: 4))
         let doR = await(
             Do(exprs: Create(ref: randomRef,
-                          params: ["data": ["name": "Magic Missile"] as Obj]),
+                          params: Obj(["data": Obj(["name": "Magic Missile"])])),
                       Get(ref: randomRef))
         )
         expect(randomRef) == doR?.get(field: Fields.ref)
    
 
-        let objectR = await(["name": "Hen Wen", "age": 123] as Obj)
+        let objectR = await(Obj(["name": "Hen Wen", "age": 123]))
         expect(objectR?.get(path:"name")) == "Hen Wen"
         expect(objectR?.get(path: "age")) == Double(123)
     }
@@ -341,7 +341,7 @@ class ClientTests: FaunaDBTests {
 
         let foreachR = await(
             Foreach(collection:  Arr("Fireball Level 1", "Fireball Level 2")) { spell in
-                Create(ref: Ref("classes/spells"), params: ["data": ["name": spell.value] as Obj])
+                Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": spell.value])]))
             }
         )
         expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]
@@ -359,10 +359,11 @@ class ClientTests: FaunaDBTests {
         
         let createR = await(
             Create(ref: Ref("classes/spells"),
-                params: ["data": ["name": "Magic Missile",
-                                  "element": "arcane",
-                                  "cost": Double(10)]
-                                  as Obj]
+                params: Obj(["data": Obj([ "name": "Magic Missile",
+                                        "element": "arcane",
+                                           "cost": Double(10)]
+                                    )
+                        ])
             )
         )
         expect(createR?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
@@ -373,8 +374,8 @@ class ClientTests: FaunaDBTests {
         
         let updateR = await(
             try! Update(ref: createR!.get(field: Fields.ref),
-                params: ["data": ["name": "Faerie Fire",
-                                  "cost": Null()] as Obj])
+                params: Obj(["data": Obj(["name": "Faerie Fire",
+                                  "cost": Null()])]))
         )
         let updateRef: Ref? = updateR?.get(field: Fields.ref)
         expect(updateRef) == createR?.get(field: Fields.ref)
@@ -386,9 +387,9 @@ class ClientTests: FaunaDBTests {
         
         let replaceR = await(
             Replace(ref: try! createR!.get(path: "ref"),
-                                  params: ["data": ["name": "Volcano",
+                                  params: Obj(["data": Obj(["name": "Volcano",
                                                  "element": Arr("fire", "earth"),
-                                                    "cost": 10.0] as Obj])
+                                                    "cost": 10.0])]))
         )
         let replaceRef: Ref? = replaceR?.get(field: Fields.ref)
         expect(replaceRef) == createR?.get(field: Fields.ref)
@@ -402,12 +403,12 @@ class ClientTests: FaunaDBTests {
                     ref: try! createR!.get(path: "ref"),
                     ts: Timestamp(timeIntervalSince1970: 1),
                 action: Action.Create,
-                params: ["data": ["cooldown": 5.0] as Obj]
+                params: Obj(["data": Obj(["cooldown": 5.0])])
             )
         )
         let insertRef: Ref? = insertR?.get(field: Fields.ref)
         expect(insertRef) == createR?.get(field: Fields.ref)
-        expect(insertR?.get(path: "data")) == ["cooldown": 5.0] as Obj
+        expect(insertR?.get(path: "data")) == Obj(["cooldown": 5.0])
         
         let removeR = await(
             Remove(ref: try! createR!.get(path: "ref"),
@@ -439,33 +440,33 @@ class ClientTests: FaunaDBTests {
         setupFaunaDB()
         
         let create1R = await(
-            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Magic Missile",
+            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Magic Missile",
                                                                  "element": "arcane",
-                                                                 "cost": 10.0] as Obj])
+                                                                 "cost": 10.0])]))
         )
         expect(create1R).notTo(beNil())
         let create1Ref: Ref = try! create1R!.get(path: "ref")
         
         let create2R = await(
-            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Fireball",
+            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Fireball",
                                                                  "element": "fire",
-                                                                 "cost": 10.0] as Obj])
+                                                                 "cost": 10.0])]))
         )
         expect(create2R).notTo(beNil())
         let create2Ref: Ref = try! create2R!.get(path: "ref")
         
         let create3R = await(
-            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Faerie Fire",
+            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Faerie Fire",
                                                                  "element": Arr("arcane", "nature"),
-                                                                 "cost": 10.0] as Obj])
+                                                                 "cost": 10.0])]))
         )
         expect(create3R).notTo(beNil())
         let create3Ref: Ref = try! create3R!.get(path: "ref")
         
         let create4R = await(
-            Create(ref: Ref("classes/spells"), params: ["data": ["name": "Summon Animal Companion",
+            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Summon Animal Companion",
                                                               "element": "nature",
-                                                                 "cost": 10.0] as Obj])
+                                                                 "cost": 10.0])]))
         )
         expect(create4R).notTo(beNil())
         let create4Ref: Ref = try! create4R!.get(path: "ref")
@@ -537,20 +538,20 @@ class ClientTests: FaunaDBTests {
         
         let containsR = await(
             Contains(pathComponents: "favorites", "foods",
-                             inExpr: ["favorites": ["foods": Arr("crunchings", "munchings")] as Obj] as Obj)
+                             inExpr: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings")])]))
         )
         expect(containsR?.get()) == true
         
         
         let containsR2 = await(
             Contains(path: Arr("favorites", "foods"),
-                inExpr: ["favorites": ["foods": Arr("crunchings", "munchings")] as Obj] as Obj)
+                inExpr: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings")])]))
         )
         expect(containsR2?.get()) == true
         
         
         let selectR = await(
-            Select(pathComponents: "favorites", "foods", 1, from: ["favorites": ["foods": Arr("crunchings", "munchings", "lunchings")] as Obj] as Obj)
+            Select(pathComponents: "favorites", "foods", 1, from: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings", "lunchings")])]))
         )
         expect(selectR?.get()) == "munchings"
         
@@ -624,13 +625,13 @@ class ClientTests: FaunaDBTests {
         setupFaunaDB()
         
         let createR = await(
-            Create(ref: Ref("classes/spells"), params: ["credentials": ["password": "abcdefg"] as Obj])
+            Create(ref: Ref("classes/spells"), params: Obj(["credentials": Obj(["password": "abcdefg"])]))
         )
         let createRef: Ref? = createR?.get(path: "ref")
         expect(createRef).toNot(beNil())
         
         let secret: String? = await(
-            Login(ref: createRef!, params: ["password": "abcdefg"])
+            Login(ref: createRef!, params: Obj(["password": "abcdefg"]))
             )?.get(path: "secret")
         expect(secret).toNot(beNil())
         let oldSecret = client.secret

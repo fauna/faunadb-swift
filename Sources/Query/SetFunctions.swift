@@ -23,9 +23,11 @@ public struct Match: Expr {
      - returns: a Match expression.
      */
     public init(index: Ref, terms: Expr...){
-        var obj: Obj = ["match": index]
-        obj["terms"] = terms.count > 0 ? varargs(terms) : nil
-        value = fn(obj)
+        value = {
+            var obj = Obj(fnCall: ["match": index])
+            obj["terms"] = terms.count > 0 ? varargs(terms) : nil
+            return obj
+        }()
     }
     
     /**
@@ -38,9 +40,11 @@ public struct Match: Expr {
      - returns: a Match expression.
      */
     public init(index: Expr, terms: Expr...){
-        var obj: Obj = ["match": index.value]
-        obj["terms"] = terms.count > 0 ? varargs(terms) : nil
-        value = fn(obj)
+        value = {
+            var obj = Obj(fnCall:["match": index.value])
+            obj["terms"] = terms.count > 0 ? varargs(terms) : nil
+            return obj
+        }()
     }
 }
 
@@ -58,7 +62,7 @@ public struct Union: Expr {
      - returns: An Union Expression.
      */
     public init(sets: Expr...){
-        value = fn(["union": varargs(sets)])
+        value = Obj(fnCall:["union": varargs(sets)])
     }
 }
 
@@ -75,7 +79,7 @@ public struct Intersection: Expr {
      - returns: An Intersection expression.
      */
     public init(sets: Expr...){
-        value = fn(["intersection": varargs(sets)])
+        value = Obj(fnCall:["intersection": varargs(sets)])
     }
 }
 
@@ -92,7 +96,7 @@ public struct Difference: Expr {
      - returns: An Intersection expression.
      */
     public init(sets: Expr...){
-        value = fn(["difference": varargs(sets)])
+        value = Obj(fnCall:["difference": varargs(sets)])
     }
 }
 
@@ -109,7 +113,7 @@ public struct Distinct: Expr {
      - returns: A Distinct expression.
      */
     public init(set: Expr){
-        value = fn(["distinct": set.value])
+        value = Obj(fnCall:["distinct": set.value])
     }
 }
 
@@ -128,6 +132,6 @@ public struct Join: Expr {
      - returns: A `Join` expression.
      */
     public init(sourceSet: Expr, with: Expr){
-        value = fn(["join": sourceSet.value, "with": with.value])
+        value = Obj(fnCall:["join": sourceSet.value, "with": with.value])
     }
 }

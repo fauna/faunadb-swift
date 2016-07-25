@@ -86,13 +86,13 @@ extension NSObject {
         case let dateComponents as NSDateComponents:
             return dateComponents
         case let nsArray as NSArray:
-            var result: Arr = []
+            var result = Arr()
             for item in nsArray {
                 result.append((item as! NSObject).value())
             }
             return result
         case let nsDictionary as NSDictionary:
-            var result: Obj = [:]
+            var result = Obj()
             for item in nsDictionary {
                 result[item.key as! String] = (item.value as! NSObject).value()
             }
@@ -150,6 +150,15 @@ extension Arr: ArrayLiteralConvertible {
         
     public init(arrayLiteral elements: Value...){
         self.init(elements)
+    }
+}
+
+extension Obj: DictionaryLiteralConvertible {
+    
+    public init(dictionaryLiteral elements: (String, Value)...){
+        var dictionary = [String: Value]()
+        elements.forEach { key, value in dictionary[key] = value }
+        self.init(dictionary)
     }
 }
 

@@ -17,7 +17,7 @@ var client = Client(secret: ourClientSecret, observers: [Logger()])
  > It's up to you extend Client to provide other convenience query methods.
  */
 
-client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
+client.query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"])), completion: { (result: Result<Value, Error>) in
     if case .Failure(let error) = result {
         // handle error
     }
@@ -28,7 +28,7 @@ client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), complet
 > if we don't want to handle errors we can do..
 */
 
-client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), completion: { (result: Result<Value, Error>) in
+client.query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"])), completion: { (result: Result<Value, Error>) in
     guard let value = try? result.dematerialize() else { return }
     //do whatever you want with the value
     
@@ -38,7 +38,7 @@ client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), complet
 Normally you can rely on swift type inference and remove type information to make the code simpler and more readable. Also trailing closure makes the code cleaner.
 */
 
-client.query(Create(ref: Ref("databases"), params: ["name": "db_name"])) { result in
+client.query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"]))) { result in
     if case .Failure(let errr) = result {
         // handle error
     }
@@ -51,7 +51,7 @@ client.query(Create(ref: Ref("databases"), params: ["name": "db_name"])) { resul
  
 
  ```
- client.query(Create(ref: Ref("databases"), params: ["name": "db_name"]), failure: { error in
+ client.query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"])), failure: { error in
     print(error)
  },
  success:  { value in
@@ -72,20 +72,20 @@ import RxSwift
 import RxFaunaDB
 
 
-client.rx_query(Create(ref: Ref("databases"), params: ["name": "db_name"] as Obj))
+client.rx_query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"])))
     .mapWithField(["secret"])
     .doOnNext { (secret: String) in
         client = Client(secret: secret, observers: [Logger()])
     }
     .flatMap { _ in
-        return client.rx_query(Create(ref: Ref("classes"), params: ["name": "posts"]))
+        return client.rx_query(Create(ref: Ref("classes"), params: Obj(["name": "posts"])))
     }
     .flatMap { _ in
-        return client.rx_query(Create(ref: Ref("indexes"), params: ["name": "posts_by_tags_with_title",
+        return client.rx_query(Create(ref: Ref("indexes"), params: Obj(["name": "posts_by_tags_with_title",
             "source": Ref("classes/posts"),
-            "terms": Arr(["field": Arr("data", "tags")] as Obj),
+            "terms": Arr(Obj(["field": Arr("data", "tags")])),
             "values": Arr()
-            ]))
+            ])))
     }
     .subscribe()
 
@@ -114,7 +114,7 @@ struct BlogPost {
 extension BlogPost: ValueConvertible {
     
     var value: Value {
-        return (["name": name, "author": author, "content": content, "tags": Arr(tags.map {$0 as Value})] as Obj)
+        return Obj(["name": name, "author": author, "content": content, "tags": Arr(tags.map {$0 as Value})])
     }
 }
 
@@ -129,7 +129,7 @@ client.query({
         return BlogPost(name: blogName, author: "Fauna DB",  content: "bloig post content", tags: tags)
     }
     return blogPosts.mapFauna { (blogValue: ValueConvertible) in
-        return Create(ref: Ref("classes/posts"), params: ["data": blogValue.value])
+        return Create(ref: Ref("classes/posts"), params: Obj(["data": blogValue.value]))
     }
 }()) { result in
         // do something with the result.

@@ -90,11 +90,11 @@ anArr = anArr + array
  */
 
 /*:
- Similar to Arr type, Obj type conforms to DictionaryLiteralConvertible and CollectionType.
+ Similar to Arr type, Obj type conforms to CollectionType.
  */
 
-let objectValue: Obj = ["@name": "Hen Wen", "age": 110]
-var objectValue2: Obj = ["@obj": objectValue]
+let objectValue = Obj(["@name": "Hen Wen", "age": 110])
+var objectValue2 = Obj(["@obj": objectValue])
 
 objectValue2["newKey"] = Date(day: 18, month: 07, year: 1984)
 

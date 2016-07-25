@@ -21,7 +21,7 @@ public struct Time: Expr {
      - returns: A time exoression.
      */
     public init(_ expr: Expr){
-        value = fn(["time": expr.value])
+        value = Obj(fnCall: ["time": expr.value])
     }
 }
 
@@ -61,7 +61,7 @@ public struct Epoch: Expr {
      */
 
     public init(offset: Expr, unit: Expr) {
-         value = fn(["epoch": offset.value, "unit": unit.value])
+        value = Obj(fnCall: ["epoch": offset.value, "unit": unit.value])
     }
 }
 
@@ -73,7 +73,7 @@ public struct DateFn: Expr {
      * `Date` constructs a date special type from an ISO 8601 date string.
      */
     public init(iso8601: String){
-        value = fn(["date": iso8601])
+        value = Obj(fnCall:["date": iso8601])
     }
     
 }

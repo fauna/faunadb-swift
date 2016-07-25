@@ -23,7 +23,7 @@ struct BlogPost {
 extension BlogPost: ValueConvertible {
     
     var value: Value {
-        return (["name": name, "author": author, "content": content, "tags": Arr(tags.map {$0 as Value})] as Obj)
+        return Obj(["name": name, "author": author, "content": content, "tags": Arr(tags.map {$0 as Value})])
     }
 }
 

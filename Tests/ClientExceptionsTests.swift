@@ -16,24 +16,24 @@ class ClientExceptionsTests: FaunaDBTests {
     private func setupFaunaDB(){
         
         let create = Create(ref: Ref("databases"),
-                            params: ["name": testDbName])
+                            params: Obj(["name": testDbName]))
         let dbRef: Ref? = await(create)?.get(field: Fields.ref)
         expect(dbRef) == Ref("databases/\(testDbName)")
-        let secret: String? = await(Create(ref: Ref("keys"), params: ["database": dbRef!, "role": "server"]))?.get(path: "secret")
+        let secret: String? = await(Create(ref: Ref("keys"), params: Obj(["database": dbRef!, "role": "server"])))?.get(path: "secret")
         expect(secret).notTo(beNil())
         
         client = Client(secret: secret!)
         
         var value: Value?
-        value = await(Create(ref: Ref("classes"), params: ["name": "spells"]))
+        value = await(Create(ref: Ref("classes"), params: Obj(["name": "spells"])))
         expect(value).notTo(beNil())
         value = await(Create(ref: Ref("indexes"),
-                          params: ["name": "spells_by_element",
+                          params: Obj(["name": "spells_by_element",
                         "source": Ref("classes/spells"),
                          "terms": Arr(
                                     Obj(("field", Arr("data", "element")))
                                   ),
-                        "active": true]))
+                        "active": true])))
         expect(value).notTo(beNil())
     }
     

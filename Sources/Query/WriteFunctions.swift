@@ -62,7 +62,7 @@ public struct Create: Expr {
      - returns: A Create expression.
      */
     public init(ref: Expr, params: Expr){
-        value = fn(["create": ref.value, "params": params.value])
+        value = Obj(fnCall:["create": ref.value, "params": params.value])
     }
     
 }
@@ -108,7 +108,7 @@ public struct Update: Expr {
      - returns: An Update expression.
      */
     public init(ref: Expr, params: Expr){
-        value = fn(["update": ref.value, "params": params.value])
+        value = Obj(fnCall:["update": ref.value, "params": params.value])
     }
 }
 
@@ -153,7 +153,7 @@ public struct Replace: Expr{
      - returns: A Replace expression.
      */
     public init(ref: Expr, params: Expr){
-        value = fn(["replace": ref.value, "params": params.value])
+        value = Obj(fnCall:["replace": ref.value, "params": params.value])
     }
     
 }
@@ -184,7 +184,7 @@ public struct Delete: Expr {
      - returns: A Delete expression.
      */
     public init(ref: Expr){
-        value = fn(["delete": ref.value])
+        value = Obj(fnCall:["delete": ref.value])
     }
     
 }
@@ -221,7 +221,7 @@ public struct Insert: Expr {
      - returns: An Insert expression.
      */
     public init(ref: Expr, ts: Expr, action: Expr, params: Expr){
-        value = fn(["insert": ref.value, "ts": ts.value, "action": action.value, "params": params.value])
+        value = Obj(fnCall:["insert": ref.value, "ts": ts.value, "action": action.value, "params": params.value])
     }
 }
 
@@ -255,7 +255,7 @@ public struct Remove: Expr {
      - returns: A Remove expression.
      */
     public init(ref: Expr, ts: Expr, action: Expr){
-        value = fn(["remove": ref.value, "ts": ts.value, "action": action.value])
+        value = Obj(fnCall:["remove": ref.value, "ts": ts.value, "action": action.value])
     }
     
 }

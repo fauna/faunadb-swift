@@ -44,7 +44,7 @@ public struct Var: Expr {
 
 extension Var {
     public var value: Value {
-        return fn(["var": name])
+        return Obj(fnCall:["var": name])
     }
 }
 
@@ -63,9 +63,9 @@ public struct Let: Expr {
      - returns: A Let expression.
      */
     public init(bindings:[(String, Expr)], in: Expr){
-        var bindingsData = Obj()
+        var bindingsData = Obj(fnCall:[:])
         bindings.forEach { key, value in  bindingsData[key] = value.value  }
-        value = fn(["let": fn(bindingsData), "in": `in`.value])
+        value = Obj(fnCall:["let": bindingsData, "in": `in`.value])
     }
     
     /**
@@ -273,7 +273,7 @@ public struct If: Expr {
      - returns: An If expression.
      */
     public init(pred: Expr, @autoclosure `then`: (()-> Expr), @autoclosure `else`: (()-> Expr)){
-        value = fn(["if": pred.value, "then": `then`().value, "else": `else`().value])
+        value = Obj(fnCall:["if": pred.value, "then": `then`().value, "else": `else`().value])
     }
 }
 
@@ -291,7 +291,7 @@ public struct Do: Expr{
      - returns: A Do expression.
      */
     public init(exprs: Expr...){
-        value = fn(["do": varargs(exprs)])
+        value = Obj(fnCall:["do": varargs(exprs)])
     }
     
 }
@@ -312,7 +312,7 @@ public struct Lambda: Expr {
      - returns: A Let expression.
      */
     public init(vars: Var..., expr: Expr){
-        value = fn(["expr": expr.value, "lambda": varargs(vars.map { $0.name })])
+        value = Obj(fnCall:["expr": expr.value, "lambda": varargs(vars.map { $0.name })])
     }
 
     /**

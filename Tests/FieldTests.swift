@@ -29,10 +29,10 @@ struct BlogPost {
 extension BlogPost: ValueConvertible {
     
     var value: Value {
-        return [  "name": name,
+        return Obj([  "name": name,
                 "author": author,
                "content": content,
-                  "tags": Arr(tags)] as Obj
+                  "tags": Arr(tags)])
     }
 }
 
@@ -55,7 +55,7 @@ class FieldTests: FaunaDBTests {
         expect(try! arrField.get(arr)) == 3
         
         let objField = Field<Int>("data", 0)
-        let obj: Obj = ["data" : Arr(3, "Hi", Ref("classes/my_class"))]
+        let obj = Obj(["data" : Arr(3, "Hi", Ref("classes/my_class"))])
         let objInt = try? objField.get(obj)
         expect(objInt) ==  3
         expect(try! arrField.get(arr)) == 3
@@ -66,7 +66,7 @@ class FieldTests: FaunaDBTests {
     func testFieldErrors() {
         let arrField = Field<Int>(0)
         let objField = Field<Int>("data")
-        let obj: Obj = ["name": "my_db_name"]
+        let obj = Obj(["name": "my_db_name"])
         var arr = Arr(1, 2, 3)
         
         XCTAssertThrows(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try arrField.get(obj) }
@@ -78,8 +78,8 @@ class FieldTests: FaunaDBTests {
     }
     
     func testFieldComposition() {
-        let obj: Obj = ["name": "my_db_name"]
-        let arr: Arr = Arr(0, 1, 2, obj, "FaunaDB")
+        let obj = Obj(["name": "my_db_name"])
+        let arr = Arr(0, 1, 2, obj, "FaunaDB")
         
         let zip1: (Value -> (Int, Int)?) = FieldComposition.zip(field1: 0, field2: 2)
         let zip2: (Value -> (Int, Int, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
@@ -151,7 +151,7 @@ class FieldTests: FaunaDBTests {
     
     func testField(){
         var arr = Arr(1, 2, 3)
-        arr.append(["key": Ref("classes")] as Obj)
+        arr.append(Obj(["key": Ref("classes")]))
         let field2 = Field<Ref>(3, "key")
         let ref = try! field2.get(arr)
         expect(ref) == Ref("classes")
@@ -168,7 +168,7 @@ class FieldTests: FaunaDBTests {
         let timestamp: Timestamp? = homogeneousArray3.get(path: 0)
         expect(timestamp).notTo(beNil())
         
-        let complexArr = Arr(3, 5, ["test": ["test2": ["test3": Arr(1,2,3)] as Obj] as Obj] as Obj)
+        let complexArr = Arr(3, 5, Obj(["test": Obj(["test2": Obj(["test3": Arr(1,2,3)])])]))
         let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
         expect(int2) ==  1
     }
@@ -178,8 +178,8 @@ class FieldTests: FaunaDBTests {
         //MARK: DecodableValue
         let blogField = Field<BlogPost>(0, "data")
         
-        let blogPostData = ["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": Arr("DB", "Performance")] as Obj
-        let objContainingPost = Arr(["data" : blogPostData] as Obj)
+        let blogPostData = Obj(["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": Arr("DB", "Performance")])
+        let objContainingPost = Arr(Obj(["data" : blogPostData]))
         
         let post: BlogPost? = objContainingPost.get(path: 0, "data")
         expect(post?.name) == "My Blog Post"
@@ -199,7 +199,7 @@ class FieldTests: FaunaDBTests {
         expect(post3.content) == "My Content"
         
         // check decoding an array of a DecodableValue
-        let blogPostArr = Arr(["data": Arr(blogPostData, blogPostData, blogPostData, blogPostData, blogPostData)] as Obj)
+        let blogPostArr = Arr(Obj(["data": Arr(blogPostData, blogPostData, blogPostData, blogPostData, blogPostData)]))
         let postArray: [BlogPost]? = blogPostArr.get(path: 0, "data")
         expect(postArray?.count) == 5
         

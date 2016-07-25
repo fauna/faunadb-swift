@@ -7,19 +7,13 @@
 
 import Foundation
 
-public struct Obj: Value, DictionaryLiteralConvertible {
+public struct Obj: Value {
     
     var fn = false
     var dictionary = [String: Value]()
     
     public init(_ elements: [(String, Value)]){
         var dictionary = [String:Value]()
-        elements.forEach { key, value in dictionary[key] = value }
-        self.dictionary = dictionary
-    }
-    
-    public init(dictionaryLiteral elements: (String, Value)...){
-        var dictionary = [String: Value]()
         elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
@@ -53,6 +47,11 @@ public struct Obj: Value, DictionaryLiteralConvertible {
         }
         catch { return nil }
         self.dictionary = dictionary
+    }
+    
+    init(fnCall: [String: Value]){
+        self.init(fnCall)
+        fn = true
     }
 }
 

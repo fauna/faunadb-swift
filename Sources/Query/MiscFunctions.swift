@@ -9,7 +9,7 @@ import Foundation
 
 public struct NextId: Expr {
     
-    public let value: Value = fn(["next_id": Null()])
+    public let value: Value = Obj(fnCall:["next_id": Null()])
 
     /**
      * `NextId` produces a new identifier suitable for use when constructing refs.
@@ -36,7 +36,7 @@ public struct Equals: Expr {
      - returns: A equals expression.
      */
     public init(terms: Expr...){
-        value = fn(["equals": varargs(terms)])
+        value = Obj(fnCall:["equals": varargs(terms)])
     }
 }
 
@@ -57,7 +57,7 @@ public struct Contains: Expr {
      - returns: A contains expression.
      */
     public init(pathComponents: PathComponentType..., inExpr: Expr){
-        value = fn(["contains": varargs(pathComponents), "in": inExpr.value])
+        value = Obj(fnCall:["contains": varargs(pathComponents), "in": inExpr.value])
     }
 
     /**
@@ -71,7 +71,7 @@ public struct Contains: Expr {
      - returns: A contains expression.
      */
     public init(path: Expr, inExpr: Expr){
-        value = fn(["contains": path.value, "in": inExpr.value])
+        value = Obj(fnCall:["contains": path.value, "in": inExpr.value])
     }
 }
 
@@ -91,9 +91,12 @@ public struct Select: Expr {
      - returns: A Select expression.
      */
     public init(pathComponents: PathComponentType..., from: Expr, defaultValue: Expr? = nil){
-        var obj: Obj = ["select": varargs(pathComponents), "from": from.value]
-        obj["default"] = defaultValue?.value
-        value = fn(obj)
+        
+        value = {
+            var obj = Obj(fnCall: ["select": varargs(pathComponents), "from": from.value])
+            obj["default"] = defaultValue?.value
+            return obj
+        }()
     }
     
     /**
@@ -108,9 +111,11 @@ public struct Select: Expr {
      - returns: A Select expression.
      */
     public init(path: Expr, from: Expr, defaultValue: Expr? = nil){
-        var obj: Obj = ["select": path.value, "from": from.value]
-        obj["default"] = defaultValue?.value
-        value = fn(obj)
+        value = {
+            var obj = Obj(fnCall: ["select": path.value, "from": from.value])
+            obj["default"] = defaultValue?.value
+            return obj
+        }()
     }
 }
 
@@ -128,7 +133,7 @@ public struct Add: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["add": varargs(terms)])
+        value = Obj(fnCall:["add": varargs(terms)])
     }
 }
 
@@ -146,7 +151,7 @@ public struct Multiply: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["multiply": varargs(terms)])
+        value = Obj(fnCall:["multiply": varargs(terms)])
     }
 }
 
@@ -164,7 +169,7 @@ public struct Subtract: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["subtract": varargs(terms)])
+        value = Obj(fnCall:["subtract": varargs(terms)])
     }
 }
 
@@ -182,7 +187,7 @@ public struct Divide: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["divide": varargs(terms)])
+        value = Obj(fnCall:["divide": varargs(terms)])
     }
 }
 
@@ -201,7 +206,7 @@ public struct Modulo: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["modulo": varargs(terms)])
+        value = Obj(fnCall:["modulo": varargs(terms)])
     }
 }
 
@@ -219,7 +224,7 @@ public struct LT: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["lt": varargs(terms)])
+        value = Obj(fnCall:["lt": varargs(terms)])
     }
 }
 
@@ -238,7 +243,7 @@ public struct LTE: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["lte": varargs(terms)])
+        value = Obj(fnCall:["lte": varargs(terms)])
     }
 }
 
@@ -256,7 +261,7 @@ public struct GT: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["gt": varargs(terms)])
+        value = Obj(fnCall:["gt": varargs(terms)])
     }
 }
 
@@ -274,7 +279,7 @@ public struct GTE: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["gte": varargs(terms)])
+        value = Obj(fnCall:["gte": varargs(terms)])
     }
 }
 
@@ -292,7 +297,7 @@ public struct And: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["and": varargs(terms)])
+        value = Obj(fnCall:["and": varargs(terms)])
     }
 }
 
@@ -311,7 +316,7 @@ public struct Or: Expr {
      - returns: A Add expression.
      */
     public init(terms: Expr...){
-        value = fn(["or": varargs(terms)])
+        value = Obj(fnCall:["or": varargs(terms)])
     }
 }
 
@@ -332,7 +337,7 @@ public struct Not: Expr {
      - returns: A Add expression.
      */
     public init(boolExpr expr: Expr){
-        value = fn(["not": expr.value])
+        value = Obj(fnCall:["not": expr.value])
     }
 }
 
