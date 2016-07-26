@@ -14,9 +14,9 @@ enum ClientHeaders: String {
 }
 
 public final class Client {
-    public let session: NSURLSession
-    public let endpoint: NSURL
-    public let secret: String
+    let session: NSURLSession
+    let endpoint: NSURL
+    let secret: String
     
     private let observers: [ClientObserverType]
     private var authHeader: String

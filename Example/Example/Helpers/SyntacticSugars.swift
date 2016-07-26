@@ -5,6 +5,7 @@
 //  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
+import FaunaDB
 import Foundation
 
 
