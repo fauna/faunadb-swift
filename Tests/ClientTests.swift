@@ -609,13 +609,7 @@ class ClientTests: FaunaDBTests {
         
         epochR = await(Epoch(offset: 12345, unit: TimeUnit.millisecond))
         expect(epochR?.get()) == Timestamp(iso8601: "1970-01-01T00:00:12.345Z")
-        
-        epochR = await(Epoch(offset: 50 * 1000 * 1000, unit: TimeUnit.microsecond))
-        expect(epochR?.get()) == Timestamp(timeIntervalSince1970: 50)
-        
-        epochR = await(Epoch(offset: 60 * 1000 * 1000 * 1000, unit: TimeUnit.nanosecond))
-        expect(epochR?.get()) == Timestamp(timeIntervalSince1970: 60)
-        
+    
         let dateR = await(DateFn(iso8601: "1970-01-02"))
         expect(dateR?.get()) == Date(iso8601: "1970-01-02")
     }

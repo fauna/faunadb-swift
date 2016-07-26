@@ -29,8 +29,6 @@ public struct Time: Expr {
 public enum TimeUnit: String {
     case second = "second"
     case millisecond = "millisecond"
-    case microsecond = "microsecond"
-    case nanosecond = "nanosecond"
 }
 
 
@@ -39,7 +37,7 @@ public struct Epoch: Expr {
     public var value: Value
     
     /**
-     `Epoch` constructs a time special type relative to the epoch (1970-01-01T00:00:00Z). num must be an integer type. unit may be one of the following: “second”, “millisecond”, “microsecond”, “nanosecond”.
+     `Epoch` constructs a time special type relative to the epoch (1970-01-01T00:00:00Z). num must be an integer type. unit may be one of the following: “second”, “millisecond”.
      
      - parameter offset: number relative to the epoch.
      - parameter unit:   offset unit.
@@ -52,7 +50,7 @@ public struct Epoch: Expr {
 
 
     /**
-     `Epoch` constructs a time special type relative to the epoch (1970-01-01T00:00:00Z). num must be an integer type. unit may be one of the following: “second”, “millisecond”, “microsecond”, “nanosecond”.
+     `Epoch` constructs a time special type relative to the epoch (1970-01-01T00:00:00Z). num must be an integer type. unit may be one of the following: “second”, “millisecond”.
      
      - parameter offset: number relative to the epoch.
      - parameter unit:   offset unit.

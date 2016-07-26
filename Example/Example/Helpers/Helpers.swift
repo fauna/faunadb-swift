@@ -120,10 +120,10 @@ extension NSNumber {
 extension Dictionary: ValueConvertible {
     
     public var value: FaunaDB.Value {
-        let content: [(String, FaunaDB.Value)] =
+        let content: [(String, ValueConvertible)] =
             map { k, v in
                 let key = k as! String
-                let value = (v as? FaunaDB.Value) ?? (v as? ValueConvertible)?.value ?? (v as! NSObject).value()
+                let value = (v as? ValueConvertible) ?? (v as! NSObject).value()
                 return (key, value)
         }
         
@@ -136,12 +136,11 @@ extension Array: ValueConvertible {
     public var value: Value {
         return Arr(
             filter { item in
-                return item is Value || item is ValueConvertible || item is NSObject
+                return item is ValueConvertible || item is NSObject
                 }.map { item in
-                    let value = item as? Value
-                    let valueConvertibleValue = (item as? ValueConvertible)?.value
+                    let valueConvertibleValue = (item as? ValueConvertible)
                     let objectValue = (item as? NSObject)?.value()
-                    return objectValue ?? value ?? valueConvertibleValue!
+                    return objectValue ?? valueConvertibleValue!
             })
     }
 }
@@ -155,10 +154,8 @@ extension Arr: ArrayLiteralConvertible {
 
 extension Obj: DictionaryLiteralConvertible {
     
-    public init(dictionaryLiteral elements: (String, Value)...){
-        var dictionary = [String: Value]()
-        elements.forEach { key, value in dictionary[key] = value }
-        self.init(dictionary)
+    public init(dictionaryLiteral elements: (String, ValueConvertible)...){
+        self.init(elements)
     }
 }
 
