@@ -128,12 +128,12 @@ client.query({
         let tags: [String] = int % 2 == 0 ? ["philosophy", "travel"] : ["travel"]
         return BlogPost(name: blogName, author: "Fauna DB",  content: "bloig post content", tags: tags)
     }
-    return blogPosts.mapFauna { (blogValue: ValueConvertible) in
-        return Create(ref: Ref("classes/posts"), params: Obj(["data": blogValue]))
+    return Map(collection: Arr(blogPosts)) { blogPost in
+        return Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
     }
 }()) { result in
         // do something with the result.
-    }
+}
 
 
 

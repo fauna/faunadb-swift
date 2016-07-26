@@ -11,11 +11,11 @@ public struct Map: Expr {
     public let value: Value
 
     /**
-     *  `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
-     *
-     *  `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection:    collection to perform map expression.
      - parameter lambda:        lambda expression to apply to each collection item.
@@ -27,11 +27,11 @@ public struct Map: Expr {
     }
 
     /**
-     *  `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
-     *
-     *  `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection:    collection to perform map expression.
      - parameter lambda:        lambda expression to apply to each collection item.

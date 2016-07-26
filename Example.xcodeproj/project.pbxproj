@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		280D36D61D47D01E00DEF405 /* SyntacticSugars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */; };
 		285835691D4007C5006DCEC8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285835681D4007C5006DCEC8 /* ViewController.swift */; };
 		2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2858356A1D400808006DCEC8 /* RxViewController.swift */; };
 		287D0A721C4B7877004566D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A711C4B7877004566D6 /* ExampleUITests.swift */; };
@@ -79,6 +80,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyntacticSugars.swift; path = Example/Helpers/SyntacticSugars.swift; sourceTree = "<group>"; };
 		285835681D4007C5006DCEC8 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Example/StandaloneExample/ViewController.swift; sourceTree = "<group>"; };
 		2858356A1D400808006DCEC8 /* RxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = RxViewController.swift; path = Example/RxExample/RxViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		287D0A711C4B7877004566D6 /* ExampleUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExampleUITests.swift; path = Example/ExampleUITests/ExampleUITests.swift; sourceTree = SOURCE_ROOT; };
@@ -148,6 +150,7 @@
 		28B4E6D91D2ABDCF00FD948F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */,
 				28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */,
 				28B4E6DE1D2AC3B000FD948F /* Helpers.swift */,
 			);
@@ -355,6 +358,7 @@
 				28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */,
 				28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */,
 				28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */,
+				280D36D61D47D01E00DEF405 /* SyntacticSugars.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

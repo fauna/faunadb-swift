@@ -49,7 +49,6 @@
 		28F99C881D1061440016F809 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
 		28F99CAB1D10655E0016F809 /* BasicFormsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */; };
 		28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAC1D1065E20016F809 /* ReadFunctions.swift */; };
-		28F99CAF1D10C5AA0016F809 /* SyntacticSugars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,7 +320,6 @@
 		28F99C871D1061440016F809 /* CollectionFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionFunctions.swift; path = Query/CollectionFunctions.swift; sourceTree = "<group>"; };
 		28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicFormsFunctions.swift; path = Query/BasicFormsFunctions.swift; sourceTree = "<group>"; };
 		28F99CAC1D1065E20016F809 /* ReadFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadFunctions.swift; path = Query/ReadFunctions.swift; sourceTree = "<group>"; };
-		28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SyntacticSugars.swift; path = Query/SyntacticSugars.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,7 +374,6 @@
 			isa = PBXGroup;
 			children = (
 				28DCFF4F1CFF910100A813D3 /* Expr.swift */,
-				28F99CAE1D10C5AA0016F809 /* SyntacticSugars.swift */,
 				28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */,
 				2886147B1D0F6E50007FB922 /* MiscFunctions.swift */,
 				28F99C871D1061440016F809 /* CollectionFunctions.swift */,
@@ -895,7 +892,6 @@
 				2816488D1D3EA163002F1BEE /* AuthenticationFunctions.swift in Sources */,
 				28F99CAD1D1065E20016F809 /* ReadFunctions.swift in Sources */,
 				2886147C1D0F6E50007FB922 /* MiscFunctions.swift in Sources */,
-				28F99CAF1D10C5AA0016F809 /* SyntacticSugars.swift in Sources */,
 				28F99CAB1D10655E0016F809 /* BasicFormsFunctions.swift in Sources */,
 				28DCFF371CFE050E00A813D3 /* Client.swift in Sources */,
 				28E9D8631D08EE8700A511AA /* Timestamp.swift in Sources */,
