@@ -33,7 +33,7 @@ public struct Login: Expr{
      - returns: A `Login` expression.
      */
     public init(ref: Expr, params: Expr){
-        value = Obj(fnCall:["login": ref.value, "params": params.value])
+        value = Obj(fnCall:["login": ref, "params": params])
     }
     
 }
@@ -62,7 +62,7 @@ public struct Logout: Expr{
      - returns: A `Logout` expression.
      */
     public init(invalidateAll: Expr){
-        value = Obj(fnCall:["logout": invalidateAll.value])
+        value = Obj(fnCall:["logout": invalidateAll])
     }
     
 }
@@ -93,6 +93,6 @@ public struct Identify: Expr{
      - returns: A `Identify` expression.
      */
     public init(ref: Expr, password: Expr){
-        value = Obj(fnCall:["identify": ref.value, "password": password.value])
+        value = Obj(fnCall:["identify": ref, "password": password])
     }
 }

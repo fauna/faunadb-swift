@@ -18,25 +18,25 @@ extension NSNumber {
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C) -> Value{
+func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C) -> ValueConvertible{
     switch  collection.count {
     case 1:
-        return collection.first!.value
+        return collection.first!
     default:
-        return Arr(collection.map { $0.value })
+        return Arr(collection.map { $0 })
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(collection: C) -> Value{
+func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(collection: C) -> ValueConvertible{
     switch  collection.count {
     case 1:
-        return collection.first!.value
+        return collection.first!
     default:
-        return Arr(collection.map { $0.value })
+        return Arr(collection.map { $0 })
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(collection: C) -> Value{
+func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(collection: C) -> ValueConvertible{
     switch  collection.count {
     case 1:
         return collection.first!

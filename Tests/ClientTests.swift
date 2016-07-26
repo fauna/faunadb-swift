@@ -149,13 +149,13 @@ class ClientTests: FaunaDBTests {
         let expr1 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest1": randomText1])]))
         let expr2 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest2": randomText2])]))
         
-        let value = await(Arr(expr1.value, expr2.value))
+        let value = await(Arr(expr1, expr2))
         let arr: Arr? = value?.get()
         expect(arr?.count) == 2
         expect(arr?[0].get(path: "data", "queryTest1")) == randomText1
         expect(arr?[1].get(path: "data", "queryTest2")) == randomText2
         
-        let value2 = await(Arr(expr1.value, expr2.value))
+        let value2 = await(Arr(expr1, expr2))
         let arr2: Arr? = value2?.get()
         expect(arr2?.count) == 2
         expect(arr2?[0].get(path: "data", "queryTest1")) == randomText1
@@ -341,7 +341,7 @@ class ClientTests: FaunaDBTests {
 
         let foreachR = await(
             Foreach(collection:  Arr("Fireball Level 1", "Fireball Level 2")) { spell in
-                Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": spell.value])]))
+                Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": spell])]))
             }
         )
         expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]

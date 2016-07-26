@@ -23,7 +23,7 @@ public struct Map: Expr {
      - returns: A Map expression.
      */
     public init(collection: Expr, lambda: Expr) {
-        value = Obj(fnCall:["map": lambda.value, "collection": collection.value])
+        value = Obj(fnCall:["map": lambda, "collection": collection])
     }
 
     /**
@@ -60,7 +60,7 @@ public struct Foreach: Expr {
      - returns: A Foreach expression.
      */
     public init(collection: Expr, lambda: Expr){
-        value = Obj(fnCall:["foreach": lambda.value, "collection": collection.value])
+        value = Obj(fnCall:["foreach": lambda, "collection": collection])
     }
 
     /**
@@ -97,7 +97,7 @@ public struct Filter: Expr {
      - returns: A Filter expression.
      */
     public init(collection: Expr, lambda: Expr) {
-        value = Obj(fnCall:["filter": lambda.value, "collection": collection.value])
+        value = Obj(fnCall:["filter": lambda, "collection": collection])
     }
 
     /**
@@ -159,7 +159,7 @@ public struct Take: Expr {
      - returns: A take expression.
      */
     public init (count: Expr, collection: Expr){
-        value = Obj(fnCall:["take": count.value, "collection": collection.value])
+        value = Obj(fnCall:["take": count, "collection": collection])
     }
 }
 
@@ -199,7 +199,7 @@ public struct Drop: Expr {
      - returns: A Drop expression.
      */
     public init(count: Expr, collection: Expr) {
-        value = Obj(fnCall:["drop": count.value, "collection": collection.value])
+        value = Obj(fnCall:["drop": count, "collection": collection])
     }
     
 }
@@ -219,7 +219,7 @@ public struct Prepend: Expr {
      - returns: A Prepend expression.
      */
     public init(elements: Expr, toCollection collection: Expr){
-        value = Obj(fnCall:["collection": elements.value, "prepend": collection.value])
+        value = Obj(fnCall:["collection": elements, "prepend": collection])
     }
 }
 
@@ -239,6 +239,6 @@ public struct Append: Expr {
      - returns: An Append expression.
      */
     public init(elements: Expr, toCollection collection: Expr){
-        value = Obj(fnCall:["collection": elements.value, "append": collection.value])
+        value = Obj(fnCall:["collection": elements, "append": collection])
     }
 }

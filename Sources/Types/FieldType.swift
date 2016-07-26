@@ -83,17 +83,17 @@ public struct Field<T: DecodableValue where T.DecodedType == T>: FieldType, Arra
     }
     
     public func get(value: Value) throws -> T {
-        let result: Value = try path.reduce(value) { (partialValue, path) -> Value in
-            return try path.subValue(partialValue)
+        let result: ValueConvertible = try path.reduce(value) { (partialValue, path) -> ValueConvertible in
+            return try path.subValue(partialValue.value)
         }
-        guard let typedValue = T.decode(result) else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
+        guard let typedValue = T.decode(result.value) else { throw FieldPathError.UnexpectedType(value: result, expectedType: T.self, path: []) }
         return typedValue
     }
 
     public func collect(value: Value) throws -> [T] {
         let arr: Arr = try value.get(field: Field<Arr>(path))
         return try arr.map {
-            guard let item = T.decode($0) else { throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: []) }
+            guard let item = T.decode($0.value) else { throw FieldPathError.UnexpectedType(value: $0, expectedType: T.self, path: []) }
             return item
         }
     }

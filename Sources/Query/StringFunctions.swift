@@ -21,8 +21,8 @@ public struct Concat: Expr{
      */
     public init(strList: Expr, separator: Expr? = nil){
         value = {
-            var obj = Obj(fnCall: ["concat": strList.value])
-            obj["separator"] = separator?.value
+            var obj = Obj(fnCall: ["concat": strList])
+            obj["separator"] = separator
             return obj
         }()
     }
@@ -43,6 +43,6 @@ public struct Casefold: Expr{
      - returns: A Casefold expression.
      */
     public init(str: Expr){
-        value = Obj(fnCall:["casefold": str.value])
+        value = Obj(fnCall:["casefold": str])
     }
 }

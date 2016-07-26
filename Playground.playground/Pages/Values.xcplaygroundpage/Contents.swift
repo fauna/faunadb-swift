@@ -76,7 +76,7 @@ var intArr = mutableArr.filter { $0 is Int }
  Even though `Arr` is not a swift build-in type it share some default definition since it conforms to CollectionType and related protocols. This made super simple to create a build-in type from an Arr.
  */
 
-var array: [Value] = []
+var array: [ValueConvertible] = []
 array.appendContentsOf(mutableArr)
 
 

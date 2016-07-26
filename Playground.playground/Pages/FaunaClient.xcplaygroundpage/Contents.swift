@@ -129,7 +129,7 @@ client.query({
         return BlogPost(name: blogName, author: "Fauna DB",  content: "bloig post content", tags: tags)
     }
     return blogPosts.mapFauna { (blogValue: ValueConvertible) in
-        return Create(ref: Ref("classes/posts"), params: Obj(["data": blogValue.value]))
+        return Create(ref: Ref("classes/posts"), params: Obj(["data": blogValue]))
     }
 }()) { result in
         // do something with the result.

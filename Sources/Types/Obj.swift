@@ -10,46 +10,46 @@ import Foundation
 public struct Obj: Value {
     
     var fn = false
-    var dictionary = [String: Value]()
+    var dictionary = [String: ValueConvertible]()
     
-    public init(_ elements: [(String, Value)]){
-        var dictionary = [String:Value]()
+    public init(_ elements: [(String, ValueConvertible)]){
+        var dictionary = [String:ValueConvertible]()
         elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
     
-    public init(_ elements: (String, Value)...){
-        var dictionary = [String: Value]()
+    public init(_ elements: (String, ValueConvertible)...){
+        var dictionary = [String: ValueConvertible]()
         elements.forEach { key, value in dictionary[key] = value }
         self.dictionary = dictionary
     }
     
-    public init<V: Value>(_ dictionary: [String: V]){
-        var res = [String: Value]()
+    public init<V: ValueConvertible>(_ dictionary: [String: V]){
+        var res = [String: ValueConvertible]()
         dictionary.forEach { k, v in res[k] = v }
         self.dictionary = res
     }
     
-    public init(_ dictionary: [String: Value]){
+    public init(_ dictionary: [String: ValueConvertible]){
         self.dictionary = dictionary
     }
     
     init?(json: [String: AnyObject]){
-        var dictionary = [String:Value]()
+        var dictionary = [String: ValueConvertible]()
         var json = json
         if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
             json = objData
         }
         do {
             try json.forEach {  (key, value) throws in
-                dictionary[key] = try Mapper.fromData(value)
+                dictionary[key] = try Mapper.fromData(value) as ValueConvertible
             }
         }
         catch { return nil }
         self.dictionary = dictionary
     }
     
-    init(fnCall: [String: Value]){
+    init(fnCall: [String: ValueConvertible]){
         self.init(fnCall)
         fn = true
     }
@@ -83,32 +83,32 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension Obj: CollectionType {
-    public typealias Element = (String, Value)
-    public typealias Index = DictionaryIndex<String, Value>
+    public typealias Element = (String, ValueConvertible)
+    public typealias Index = DictionaryIndex<String, ValueConvertible>
     
     /// Create an empty dictionary.
     public init(){}
 
-    public var startIndex: DictionaryIndex<String, Value> { return dictionary.startIndex }
-    public var endIndex: DictionaryIndex<String, Value> { return dictionary.endIndex }
-    public func indexForKey(key: String) -> DictionaryIndex<String, Value>? {
+    public var startIndex: DictionaryIndex<String, ValueConvertible> { return dictionary.startIndex }
+    public var endIndex: DictionaryIndex<String, ValueConvertible> { return dictionary.endIndex }
+    public func indexForKey(key: String) -> DictionaryIndex<String, ValueConvertible>? {
         return dictionary.indexForKey(key)
     }
-    public subscript (position: DictionaryIndex<String, Value>) -> (String, Value) {
+    public subscript (position: DictionaryIndex<String, ValueConvertible>) -> (String, ValueConvertible) {
         return dictionary[position]
     }
-    public subscript (key: String) -> Value? {
+    public subscript (key: String) -> ValueConvertible? {
         get{ return dictionary[key] }
         set(newValue) { dictionary[key] = newValue }
     }
     
-    public mutating func updateValue(value: Value, forKey key: String) -> Value?{
+    public mutating func updateValue(value: ValueConvertible, forKey key: String) -> ValueConvertible?{
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: DictionaryIndex<String, Value>) -> (String, Value) {
+    public mutating func removeAtIndex(index: DictionaryIndex<String, ValueConvertible>) -> (String, ValueConvertible) {
         return dictionary.removeAtIndex(index)
     }
-    public mutating func removeValueForKey(key: String) -> Value?{
+    public mutating func removeValueForKey(key: String) -> ValueConvertible?{
         return dictionary.removeValueForKey(key)
     }    
 }
@@ -120,7 +120,7 @@ extension Obj: Equatable {}
 public func ==(lhs: Obj, rhs: Obj) -> Bool {
     guard lhs.count == rhs.count else { return false }
     for (key, value) in lhs {
-        guard let rValue = rhs[key] where value.isEquals(rValue) else { return false }
+        guard let rValue = rhs[key] where value.value.isEquals(rValue.value) else { return false }
     }
     return true
 }

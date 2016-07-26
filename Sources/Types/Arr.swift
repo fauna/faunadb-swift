@@ -9,21 +9,21 @@ import Foundation
 
 public struct Arr: Value {
     
-    private var array = [Value]()
+    private var array = [ValueConvertible]()
     
     public init(){}
     
     init?(json: [AnyObject]) {
-        guard let arr = try? json.map({ return try Mapper.fromData($0) }) else { return nil }
+        guard let arr = try? json.map({ return try Mapper.fromData($0) as ValueConvertible }) else { return nil }
         array = arr
     }
     
-    public init<C: SequenceType where C.Generator.Element: Value>(_ sequence: C){
+    public init<C: SequenceType where C.Generator.Element: ValueConvertible>(_ sequence: C){
         self.init()
-        array.appendContentsOf(sequence.map { $0 as Value})
+        array.appendContentsOf(sequence.map { $0 as ValueConvertible})
     }
     
-    public init(_ elements: Value...){
+    public init(_ elements: ValueConvertible...){
         self.init(elements)
     }
 }
@@ -43,7 +43,7 @@ extension Arr: MutableCollectionType {
     
     public var startIndex: Int { return array.startIndex }
     public var endIndex: Int { return array.endIndex }
-    public subscript (position: Int) -> Value {
+    public subscript (position: Int) -> ValueConvertible {
         get { return array[position] }
         set { array[position] = newValue }
     }
@@ -57,13 +57,13 @@ extension Arr: RangeReplaceableCollectionType {
         array.append(exp)
     }
     
-    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == Value>(newExprs: S) {
+    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == ValueConvertible>(newExprs: S) {
         array.appendContentsOf(newExprs)
     }
     
     public mutating func reserveCapacity(n: Int){ array.reserveCapacity(n) }
     
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == Value>(subRange: Range<Int>, with newExprs: C) {
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == ValueConvertible>(subRange: Range<Int>, with newExprs: C) {
         array.replaceRange(subRange, with: newExprs)
     }
     
@@ -92,7 +92,7 @@ public func ==(lhs: Arr, rhs: Arr) -> Bool {
     var i1 = lhs.generate()
     var i2 = rhs.generate()
     while let e1 = i1.next(), e2 = i2.next() {
-        guard e1.isEquals(e2) else { return false }
+        guard e1.value.isEquals(e2.value) else { return false }
     }
     return true
 }
