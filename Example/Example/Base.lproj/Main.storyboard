@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bvW-90-XVm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bvW-90-XVm">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -107,7 +107,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1209" y="-97"/>
+            <point key="canvasLocation" x="1146" y="-98"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Xmy-35-lNK">
@@ -210,10 +210,10 @@
             </objects>
             <point key="canvasLocation" x="399" y="77"/>
         </scene>
-        <!--Rx View Controller-->
+        <!--Standalone View Controller-->
         <scene sceneID="sLu-Au-hf6">
             <objects>
-                <viewController id="EMm-vA-6vx" customClass="RxViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="EMm-vA-6vx" customClass="StandaloneViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wCk-h4-gwO"/>
                         <viewControllerLayoutGuide type="bottom" id="akC-1T-z6f"/>
@@ -291,6 +291,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="XQr-Ik-UM0">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="QCA-px-xI6"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="A6S-0H-dkS">
                             <rect key="frame" x="180" y="7" width="240" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -302,6 +303,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="BTp-mH-oFe" id="eM2-Pa-0vU"/>
+                        <outlet property="editButton" destination="QCA-px-xI6" id="CrA-4u-TmR"/>
                         <outlet property="searchBar" destination="4dn-Hd-EOH" id="Ofr-lQ-Cvd"/>
                         <outlet property="segmentedControl" destination="A6S-0H-dkS" id="lpV-k4-kqO"/>
                         <outlet property="tableView" destination="Zd3-2l-u6L" id="buw-fg-2IF"/>
@@ -309,7 +311,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EW1-XX-pIZ" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1227" y="722"/>
+            <point key="canvasLocation" x="1146" y="565"/>
         </scene>
     </scenes>
 </document>

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		280D36D61D47D01E00DEF405 /* SyntacticSugars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */; };
-		285835691D4007C5006DCEC8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285835681D4007C5006DCEC8 /* ViewController.swift */; };
+		285835691D4007C5006DCEC8 /* StandaloneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285835681D4007C5006DCEC8 /* StandaloneViewController.swift */; };
 		2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2858356A1D400808006DCEC8 /* RxViewController.swift */; };
 		287D0A721C4B7877004566D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A711C4B7877004566D6 /* ExampleUITests.swift */; };
 		287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; };
@@ -81,7 +81,7 @@
 
 /* Begin PBXFileReference section */
 		280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyntacticSugars.swift; path = Example/Helpers/SyntacticSugars.swift; sourceTree = "<group>"; };
-		285835681D4007C5006DCEC8 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Example/StandaloneExample/ViewController.swift; sourceTree = "<group>"; };
+		285835681D4007C5006DCEC8 /* StandaloneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StandaloneViewController.swift; path = Example/StandaloneExample/StandaloneViewController.swift; sourceTree = "<group>"; };
 		2858356A1D400808006DCEC8 /* RxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = RxViewController.swift; path = Example/RxExample/RxViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		287D0A711C4B7877004566D6 /* ExampleUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExampleUITests.swift; path = Example/ExampleUITests/ExampleUITests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = FaunaDB.xcodeproj; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 		285835671D40074B006DCEC8 /* StandaloneExample */ = {
 			isa = PBXGroup;
 			children = (
-				285835681D4007C5006DCEC8 /* ViewController.swift */,
+				285835681D4007C5006DCEC8 /* StandaloneViewController.swift */,
 			);
 			name = StandaloneExample;
 			sourceTree = "<group>";
@@ -352,7 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */,
-				285835691D4007C5006DCEC8 /* ViewController.swift in Sources */,
+				285835691D4007C5006DCEC8 /* StandaloneViewController.swift in Sources */,
 				2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */,
 				28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */,
 				28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */,

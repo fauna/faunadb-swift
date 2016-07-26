@@ -104,7 +104,7 @@ extension PaginationRequestType where Response.Paginate.Element: DecodableValue,
                        lambda: Lambda(){ Obj(["ref": $0, "data": Get(ref: $0)]) })
                 .rx_query()
             .flatMap { value -> Observable<Response> in
-                let data:Arr = try! value.get(path: "data")
+                let data: Arr = try! value.get(path: "data")
                 var cursorData: Arr? = value.get(path: "after")
                 let nextCursor = cursorData.map { Cursor.After(expr: $0)}
                 cursorData = value.get(path: "before")

@@ -151,8 +151,8 @@ extension SetUpFaunaController{
         faunaClient.query({
             (1...100).map { int in
                 return BlogPost(name: "Blog Post \(int)", author: "FaunaDB",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
-                }.mapFauna { blogValue in
-                    Create(ref: Ref("classes/posts"), params: ["data": blogValue])
+                }.mapFauna { blogPost in
+                    Create(ref: Ref("classes/posts"), params: ["data": blogPost])
                 }
         }()) { result in
             callback(result)
