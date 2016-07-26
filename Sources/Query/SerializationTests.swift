@@ -57,6 +57,12 @@ class SerializationTests: FaunaDBTests {
         expectToJson(complexValue) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5,[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]]"
         
         expectToJson(Arr(3, 4, 5, 6, Arr(3, 5, 6, 7))) == "[3,4,5,6,[3,5,6,7]]"
+        
+        expectToJson(Arr(Arr(3, 5, 6, 7))) == "[[3,5,6,7]]"
+        
+        let intArr = Arr(3, 5, 6, 7)
+        expectToJson(Arr(intArr)) == "[[3,5,6,7]]"
+        
     }
     
     func testObj() {

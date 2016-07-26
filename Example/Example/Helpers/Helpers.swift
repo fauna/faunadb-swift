@@ -62,47 +62,7 @@ extension Expr {
 }
 
 
-// Helpers to make Array and Dictionary types conforms to ValueConvertible, this may be risky so it's not included natively in the  swift FaunaDB SDK.
 
-
-extension NSObject {
-    
-    private func value() -> Value {
-        switch  self {
-        case let str as NSString:
-            return str as String
-        case let int as NSNumber:
-            if int.isDoubleNumber() {
-                return int as Double
-            }
-            else if int.isBoolNumber() {
-                return int as Bool
-            }
-            else {
-                return int as Int
-            }
-        case let date as NSDate:
-            return date
-        case let dateComponents as NSDateComponents:
-            return dateComponents
-        case let nsArray as NSArray:
-            var result = Arr()
-            for item in nsArray {
-                result.append((item as! NSObject).value())
-            }
-            return result
-        case let nsDictionary as NSDictionary:
-            var result = Obj()
-            for item in nsDictionary {
-                result[item.key as! String] = (item.value as! NSObject).value()
-            }
-            return result
-        default:
-            assertionFailure()
-            return ""
-        }
-    }
-}
 
 extension NSNumber {
     
@@ -116,38 +76,11 @@ extension NSNumber {
     
 }
 
-
-extension Dictionary: ValueConvertible {
-    
-    public var value: FaunaDB.Value {
-        let content: [(String, ValueConvertible)] =
-            map { k, v in
-                let key = k as! String
-                let value = (v as? ValueConvertible) ?? (v as! NSObject).value()
-                return (key, value)
-        }
-        
-        return Obj(content)
-    }
-}
-
-extension Array: ValueConvertible {
-    
-    public var value: Value {
-        return Arr(
-            filter { item in
-                return item is ValueConvertible || item is NSObject
-                }.map { item in
-                    let valueConvertibleValue = (item as? ValueConvertible)
-                    let objectValue = (item as? NSObject)?.value()
-                    return objectValue ?? valueConvertibleValue!
-            })
-    }
-}
+// Helpers to make Array and Dictionary types conforms to ArrayLiteralConvertible and DictionaryLiteralConvertible respectively.
 
 extension Arr: ArrayLiteralConvertible {
         
-    public init(arrayLiteral elements: Value...){
+    public init(arrayLiteral elements: ValueConvertible...){
         self.init(elements)
     }
 }
