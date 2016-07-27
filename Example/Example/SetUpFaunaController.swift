@@ -88,11 +88,11 @@ class SetUpFaunaController: UITableViewController {
             .flatMap { _ in
                 return Do(exprs: Create(ref: Ref("indexes"), params: ["name": "posts_by_tags",
                                         "source": BlogPost.classRef,
-                                        "terms": Arr([Obj(["field": Arr(["data", "tags"])])]),
+                                        "terms": Arr(Obj(["field": Arr("data", "tags")])),
                                         "values": Arr()]),
                                   Create(ref: Ref("indexes"), params: ["name": "posts_by_name",
                                         "source": BlogPost.classRef,
-                                        "terms": Arr([Obj(["field": Arr(["data", "name"])])]),
+                                        "terms": Arr(Obj(["field": Arr("data", "name")])),
                                         "values": Arr()])
                         ).rx_query()
             }
@@ -130,14 +130,14 @@ extension SetUpFaunaController{
                     }
                     faunaClient.query({
                         return Do(exprs:
-                                        Create(ref: Ref("indexes"), params: ["name": "posts_by_tags",
-                                            "source": BlogPost.classRef,
-                                            "terms": Arr([Obj(["field": Arr(["data", "tags"])])]),
-                                            "values": Arr()]),
-                                        Create(ref: Ref("indexes"), params: ["name": "posts_by_name",
-                                            "source": BlogPost.classRef,
-                                            "terms": Arr([Obj(["field": Arr(["data", "name"])])]),
-                                            "values": Arr()])
+                                        Create(ref: Ref("indexes"), params:["name": "posts_by_tags",
+                                                                            "source": BlogPost.classRef,
+                                                                            "terms": Arr(Obj(["field": Arr("data", "tags")])),
+                                                                            "values": Arr()]),
+                                        Create(ref: Ref("indexes"), params:["name": "posts_by_name",
+                                                                            "source": BlogPost.classRef,
+                                                                            "terms": Arr(Obj(["field": Arr("data", "name")])),
+                                                                            "values": Arr()])
                                )
                     }()) {  createIndexR in
                         callback(createIndexR)

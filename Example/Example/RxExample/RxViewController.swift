@@ -12,7 +12,7 @@ import RxFaunaDB
 import RxSwift
 import RxCocoa
 
-class RxViewController: UIViewController {
+class RxViewController: UIViewController, UITableViewDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -44,6 +44,7 @@ class RxViewController: UIViewController {
         tableView.backgroundView = emptyStateLabel
         tableView.keyboardDismissMode = .OnDrag
         tableView.addSubview(self.refreshControl)
+        tableView.delegate = self
         emptyStateLabel.text = "No blog post found"
         
         searchBar.rx_text
@@ -135,12 +136,17 @@ class RxViewController: UIViewController {
         editButton
         .rx_tap
         .subscribeNext { [weak self] in
-            self?.tableView.editing = !(self?.tableView.editing ?? false)
-            self?.editButton.title = self?.editButton.title == "Edit" ? "Cancel" : "Edit"
+            let newEditingValue = !(self?.tableView.editing ?? false)
+            self?.tableView.setEditing(newEditingValue, animated: true)
+            self?.editButton.title = newEditingValue ? "Edit" : "Done"
         }
         .addDisposableTo(disposeBag)
     }
     
+    
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
     
     
 }

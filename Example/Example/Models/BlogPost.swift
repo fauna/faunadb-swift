@@ -47,3 +47,8 @@ extension BlogPost: FaunaModel {
     static var classRef: Ref { return Ref("classes/posts") }
 }
 
+extension BlogPost: Equatable {}
+
+func ==(lhs: BlogPost, rhs: BlogPost) -> Bool{
+    return lhs.refId == rhs.refId
+}

@@ -87,7 +87,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="vvj-eq-rop">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="UHy-NM-Khe"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="0ym-95-WLI">
                             <rect key="frame" x="180" y="7" width="240" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -96,6 +95,7 @@
                                 <segment title="Philosophy"/>
                             </segments>
                         </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="UHy-NM-Khe"/>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="35i-zZ-VOr" id="T9G-qi-kv4"/>
@@ -139,10 +139,10 @@
                             <tableViewSection headerTitle="Standalone Examples" id="H3y-GB-xFQ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="2gB-XC-MQF">
-                                        <rect key="frame" x="0.0" y="114" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2gB-XC-MQF" id="Zx7-aW-4Az">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="TGg-bj-1b7">
@@ -168,10 +168,10 @@
                             <tableViewSection headerTitle="Rx Examples" id="CRL-Ud-uiR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="aLc-2S-p4a">
-                                        <rect key="frame" x="0.0" y="208" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="207.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aLc-2S-p4a" id="Xx5-oG-0Ja">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="JCZ-2W-kh3">
@@ -291,7 +291,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="XQr-Ik-UM0">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="QCA-px-xI6"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="A6S-0H-dkS">
                             <rect key="frame" x="180" y="7" width="240" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -300,6 +299,7 @@
                                 <segment title="Philosophy"/>
                             </segments>
                         </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="QCA-px-xI6"/>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="BTp-mH-oFe" id="eM2-Pa-0vU"/>

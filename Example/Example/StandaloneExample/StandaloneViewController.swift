@@ -51,24 +51,33 @@ class StandaloneViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(StandaloneViewController.segmentedControlChanged), forControlEvents: .ValueChanged)
         searchBar.delegate = self
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action:  #selector(StandaloneViewController.refreshControlChanged), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(StandaloneViewController.refreshControlChanged), forControlEvents: .ValueChanged)
+        editButton.target = self
+        editButton.action = #selector(StandaloneViewController.editControllerTapped)
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
-    
 }
 
 extension StandaloneViewController {
+    
+    //MARK: Events
     
     func segmentedControlChanged() {
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
     
     func refreshControlChanged() {
-        guard !refreshControl.refreshing  else { return }
+        guard refreshControl.refreshing  else { return }
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { [weak self] _ in
             self?.refreshControl.endRefreshing()
         }
+    }
+    
+    func editControllerTapped() {
+        tableView.setEditing(!(tableView.editing ?? false), animated: true)
+        editButton.title = tableView.editing ? "Edit" : "Done"
     }
 }
 
@@ -98,11 +107,39 @@ extension StandaloneViewController: UISearchBarDelegate {
     }
 }
 
+extension StandaloneViewController: UITableViewDelegate {
+
+    func scrollViewDidScroll(scrollView: UIScrollView){
+        let visibleHeight = scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom
+        let y = scrollView.contentOffset.y + scrollView.contentInset.top
+        let threshold = max(0.0, scrollView.contentSize.height - visibleHeight)
+        let reachedBottom = y > threshold
+        if reachedBottom {
+            performQuery(cancelPendingRequest: false, backToFirstPage: false, callback: { _ in })
+        }
+    }
+    
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        guard editingStyle == .Delete else { return }
+        let blogPost = items[indexPath.row]
+        
+        faunaClient.query(Delete(ref: blogPost.refId!)) { [weak self] result in
+            if let index = self?.items.indexOf(blogPost) where result.error == nil {
+                self?.items.removeAtIndex(index)
+            }
+        }
+    }
+}
+
 
 extension StandaloneViewController {
     
     private func showAlertMessage(error: FaunaDB.Error){
-        if case .NetworkException(_, _, _) = error {
+        if case .NetworkException(_, _, _) = error{
             return
         }
         let alert = UIAlertController(title: "Oops!", message:"Something went wrong.. Please try again!!", preferredStyle: .Alert)
@@ -110,8 +147,9 @@ extension StandaloneViewController {
         self.presentViewController(alert, animated: true){}
     }
     
-    func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value, FaunaDB.Error) -> ())) -> NSURLSessionDataTask? {
+    func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value?, error: FaunaDB.Error?) -> ())) -> NSURLSessionDataTask? {
         guard pendingRequest == nil || cancelPendingRequest else {
+            callback(data: nil, error: nil)
             return nil
         }
         if cancelPendingRequest {
@@ -119,12 +157,16 @@ extension StandaloneViewController {
         }
         if backToFirstPage {
             cursor = nil
+            items = []
         }
+        activityIndicator.startAnimating()
         pendingRequest = faunaClient.query(predicateExpr) { [weak self] result in
+            self?.activityIndicator.stopAnimating()
             self?.pendingRequest = nil
             switch result {
             case .Failure(let error):
                 self?.showAlertMessage(error)
+                callback(data: nil, error: error)
             case .Success(let value):
                 let data: [BlogPost] = try! value.get(path: "data")
                 var cursorData: Arr? = value.get(path: "after")
@@ -137,14 +179,9 @@ extension StandaloneViewController {
                 else {
                     self?.items = data
                 }
+                callback(data: value, error: nil)
             }
         }
         return pendingRequest
     }
 }
-
-
-
-
-
-
