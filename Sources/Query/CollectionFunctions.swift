@@ -41,18 +41,83 @@ public struct Map: Expr {
     public init(collection: Expr, @noescape lambda: (Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
+    
+    /**
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter collection:    collection to perform map expression. Collection elements must be an array of 2 elements which will be bounded to lamba arguments.
+     - parameter lambda:        lambda expression to apply to each collection item.
+     
+     - returns: A Map expression.
+     */
+    public init(collection: Expr, @noescape lambda: (Expr, Expr)-> Expr){
+        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    }
+    
+    /**
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter collection:    collection to perform map expression.
+     - parameter lambda:        lambda expression to apply to each collection item. Collection elements must be an array of 3 elements which will be bounded to lamba arguments.
+     
+     - returns: A Map expression.
+     */
+    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr)-> Expr){
+        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    }
+    
+    /**
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter collection:    collection to perform map expression.
+     - parameter lambda:        lambda expression to apply to each collection item. Collection elements must be an array of 4 elements which will be bounded to lamba arguments.
 
+     
+     - returns: A Map expression.
+     */
+    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr, Expr)-> Expr){
+        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    }
+    
+    /**
+     `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
+     
+     `Map` applies the `lambda` expression concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter collection:    collection to perform map expression.
+     - parameter lambda:        lambda expression to apply to each collection item. Collection elements must be an array of 4 elements which will be bounded to lamba arguments.
+
+     
+     - returns: A Map expression.
+     */
+    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr, Expr, Expr)-> Expr){
+        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    }
 }
 
 public struct Foreach: Expr {
     public let value: Value
     
     /**
-     * `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
-     *
-     * `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
+     
+     `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection: collection to perform foreach expression.
      - parameter lambda:     lambda expression to apply to each collection item.
@@ -64,11 +129,11 @@ public struct Foreach: Expr {
     }
 
     /**
-     * `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
-     *
-     * `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
+     
+     `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection: collection to perform foreach expression.
      - parameter lambda:     lambda expression to apply to each collection item.
@@ -85,11 +150,11 @@ public struct Filter: Expr {
     public let value: Value
    
     /**
-     * `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
-     *
-     * Providing a lambda which does not return a Boolean results in an “invalid argument” error.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
+     
+     Providing a lambda which does not return a Boolean results in an “invalid argument” error.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection: collection to perform filter expression.
      - parameter lambda:      lambda expression to apply to each collection item. Must return a boolean value.
@@ -101,11 +166,11 @@ public struct Filter: Expr {
     }
 
     /**
-     * `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
-     *
-     * Providing a lambda which does not return a Boolean results in an “invalid argument” error.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
+     
+     Providing a lambda which does not return a Boolean results in an “invalid argument” error.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter collection: collection to perform filter expression.
      - parameter lambda:      lambda expression to apply to each collection item. Must return a boolean value.
