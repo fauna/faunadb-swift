@@ -27,10 +27,9 @@ public struct Var: Expr {
     
     //MARK: Helpers
     
-    private static var index: Int = 0
+    private static var index: Int64 = 0
     private static var newName: String {
-        index = index == Int.max ? 0 : index + 1
-        return "v\(index)"
+        return "v\(OSAtomicIncrement64(&index))"
     }
     
     internal static func resetIndex(){
