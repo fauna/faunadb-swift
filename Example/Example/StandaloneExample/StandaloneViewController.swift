@@ -31,6 +31,7 @@ class StandaloneViewController: UIViewController {
         }
     }
     var cursor: Cursor?
+    var pendingRequest: NSURLSessionDataTask?
     
     var predicateExpr: Expr {
         let match: Expr = {
@@ -47,14 +48,27 @@ class StandaloneViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        segmentedControl.addTarget(self, action: #selector(StandaloneViewController.segmentedConteolChanged), forControlEvents: UIControlEvents.ValueChanged)
+        segmentedControl.addTarget(self, action: #selector(StandaloneViewController.segmentedControlChanged), forControlEvents: .ValueChanged)
         searchBar.delegate = self
-        //tableView.delegate = self
         tableView.dataSource = self
-        performQuery()
+        tableView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action:  #selector(StandaloneViewController.refreshControlChanged), forControlEvents: .ValueChanged)
+        performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
-    func segmentedConteolChanged() {
-        print(segmentedControl.selectedSegmentIndex)
+    
+}
+
+extension StandaloneViewController {
+    
+    func segmentedControlChanged() {
+        performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
+    }
+    
+    func refreshControlChanged() {
+        guard !refreshControl.refreshing  else { return }
+        performQuery(cancelPendingRequest: true, backToFirstPage: true) { [weak self] _ in
+            self?.refreshControl.endRefreshing()
+        }
     }
 }
 
@@ -78,8 +92,9 @@ extension StandaloneViewController: UITableViewDataSource {
 }
 
 extension StandaloneViewController: UISearchBarDelegate {
+    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
-        print(searchBar.text)
+        performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
 }
 
@@ -87,13 +102,26 @@ extension StandaloneViewController: UISearchBarDelegate {
 extension StandaloneViewController {
     
     private func showAlertMessage(error: FaunaDB.Error){
+        if case .NetworkException(_, _, _) = error {
+            return
+        }
         let alert = UIAlertController(title: "Oops!", message:"Something went wrong.. Please try again!!", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default) { _ in })
+        alert.addAction(UIAlertAction(title: "Okay", style: .Default) { _ in })
         self.presentViewController(alert, animated: true){}
     }
     
-    func performQuery() -> NSURLSessionDataTask {
-        return faunaClient.query(predicateExpr) { [weak self] result in
+    func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value, FaunaDB.Error) -> ())) -> NSURLSessionDataTask? {
+        guard pendingRequest == nil || cancelPendingRequest else {
+            return nil
+        }
+        if cancelPendingRequest {
+            pendingRequest?.cancel()
+        }
+        if backToFirstPage {
+            cursor = nil
+        }
+        pendingRequest = faunaClient.query(predicateExpr) { [weak self] result in
+            self?.pendingRequest = nil
             switch result {
             case .Failure(let error):
                 self?.showAlertMessage(error)
@@ -111,6 +139,7 @@ extension StandaloneViewController {
                 }
             }
         }
+        return pendingRequest
     }
 }
 

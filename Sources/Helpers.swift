@@ -32,7 +32,7 @@ func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(coll
     case 1:
         return collection.first!
     default:
-        return Arr(collection.map { $0 })
+        return Arr(collection)
     }
 }
 
