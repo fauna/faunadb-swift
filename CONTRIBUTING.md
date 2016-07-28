@@ -27,8 +27,6 @@ This document provides general guidelines about how to contribute to the project
 The easiest way to start contributing is searching open issues by `help wanted` tag. We also add a `difficulty` tag (difficulty: easy, difficulty: moderate, difficulty: hard) in order to give an idea of how complex it can be to implement the feature according maintainers project experience.
 
 * Add test coverage to the feature or fix. We only accept new feature pull requests that have related test coverage. This allows us to keep the library stable as we move forward.
-* Remember to document the new feature. We do not accept new feature pull requests without its associated documentation.
-* In case of a new feature please update the example project showing the feature.
 * Please only one fix or feature per pull request. This will increase the chances your feature will be merged.
 
 
@@ -44,11 +42,6 @@ The easiest way to start contributing is searching open issues by `help wanted` 
 8. Squash your commits into one commit. `git rebase -i HEAD~6` considering you did 6 commits.
 9. Push your branch into your forked remote repository.
 10. Create a new pull request adding any useful comment.
-
-
-###### Code style and conventions
-
-We try to follow our [swift style guide](https://github.com/faunadb/Swift-Style-Guide). Following it is not strictly necessary to contribute and to have a pull request accepted but project maintainers try to follow it. We would love to hear your ideas to improve our code style and conventions. Feel free to contribute.
 
 
 ### Feature proposal
