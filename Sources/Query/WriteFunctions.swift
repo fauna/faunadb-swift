@@ -37,34 +37,6 @@ public struct Create: Expr {
 
      - returns: A Create expression.
      */
-    public init(ref: Ref, params: Obj){
-        self.init(ref: ref as Expr, params: params as Expr)
-    }
-
-    /**
-     Creates an instance of the class referred to by ref, using params.
-
-     [Reference](https://faunadb.com/documentation/queries#write_functions)
-
-     - parameter ref: Indicates the class where the instance should be created.
-     - parameter params: Data to create the instance.
-
-     - returns: A Create expression.
-     */
-    public init(ref: Ref, params: Expr){
-        self.init(ref: ref as Expr, params: params as Expr)
-    }
-
-    /**
-     Creates an instance of the class referred to by ref, using params.
-
-     [Reference](https://faunadb.com/documentation/queries#write_functions)
-
-     - parameter ref: Indicates the class where the instance should be created.
-     - parameter params: Data to create the instance.
-
-     - returns: A Create expression.
-     */
     public init(ref: Expr, params: Expr){
         value = Obj(fnCall:["create": ref, "params": params])
     }

@@ -10,22 +10,7 @@ import Foundation
 public struct Login: Expr{
 
     public var value: Value
-
-    /**
-     `Login` creates a token for the provided ref.
-
-     [Reference](https://faunadb.com/documentation/queries#auth_functions)
-
-     - parameter ref:    A `Ref` instance.
-     - parameter params: Typically Obj(["password": "the_password"])
-
-     - returns: A `Login` expression.
-     */
-    public init(ref: Ref, params: Obj){
-        self.init(ref: ref as Expr, params: params as Expr)
-    }
-
-
+    
     /**
      `Login` creates a token for the provided ref.
 
@@ -75,18 +60,6 @@ public struct Logout: Expr{
 public struct Identify: Expr{
 
     public var value: Value
-
-    /**
-     `Identify` checks the given password against the ref’s credentials, returning `true` if the credentials are valid, or `false` otherwise.
-
-     - parameter ref:      Identifies an instance.
-     - parameter password: Password to check agains `ref` instance.
-
-     - returns: A `Identify` expression.
-     */
-    public init(ref: Ref, password: String){
-        self.init(ref: ref as Expr, password: password as Expr)
-    }
 
     /**
      `Identify` checks the given password against the ref’s credentials, returning `true` if the credentials are valid, or `false` otherwise.

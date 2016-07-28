@@ -17,14 +17,14 @@ var faunaClient: Client = {
 extension FaunaModel {
 
     func fCreate() -> Create {
-        return Create(ref: Self.classRef, params: ["data": value])
+        return Create(ref: Self.classRef, params: Obj(["data": value]))
     }
 
     func fUpdate() -> Update? {
         guard let refId = refId else {
             return nil
         }
-        return Update(ref: refId, params: ["data": value])
+        return Update(ref: refId, params: Obj(["data": value]))
     }
 
     func fDelete() -> Delete? {
@@ -36,7 +36,7 @@ extension FaunaModel {
 
     func fReplace() -> Replace? {
         guard let refId = refId else { return nil }
-        return Replace(ref: refId, params: ["data": value])
+        return Replace(ref: refId, params: Obj(["data": value]))
     }
 
 }

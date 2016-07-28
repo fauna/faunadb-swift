@@ -16,20 +16,7 @@ public struct Get: Expr{
      [Reference](https://faunadb.com/documentation/queries#read_functions-get_ref)
 
      - parameter ref: reference to the intance to retrive.
-     - parameter ts:  if ts is passed `Get` retrieves the instance specified by ref parameter at specific time determined by ts parameter. Optional.
-
-     - returns: a Get expression.
-     */
-    public init(ref: Ref, ts: Timestamp? = nil){
-        self.init(ref: ref as Expr, ts: ts as? Expr)
-    }
-
-    /**
-     Retrieves the instance identified by ref. If the instance does not exist, an “instance not found” error will be returned. Use the exists predicate to avoid “instance not found” errors.
-     [Reference](https://faunadb.com/documentation/queries#read_functions-get_ref)
-
-     - parameter ref: reference to the intance to retrive.
-     - parameter ts:  if ts is passed `Get` retrieves the instance specified by ref parameter at specific time determined by ts parameter. Optional.
+     - parameter ts:  if `ts` is passed `Get` retrieves the instance specified by ref parameter at specific time determined by ts parameter. Optional.
 
      - returns: a Get expression.
      */
@@ -46,22 +33,6 @@ public struct Get: Expr{
 public struct Exists: Expr {
 
     public var value: Value
-
-
-    /**
-     `Exists` returns boolean true if the provided ref exists (in the case of an instance), or is non-empty (in the case of a set), and false otherwise.
-
-     [Reference](https://faunadb.com/documentation/queries#read_functions)
-
-     - parameter ref: Ref value to check if exists.
-     - parameter ts:  Existence of the ref is checked at given time.
-
-     - returns: A Exists expression.
-     */
-    public init(ref: Ref, ts: Timestamp? = nil){
-        self.init(ref: ref as Expr, ts: ts as? Expr)
-    }
-
 
     /**
      `Exists` returns boolean true if the provided ref exists (in the case of an instance), or is non-empty (in the case of a set), and false otherwise.

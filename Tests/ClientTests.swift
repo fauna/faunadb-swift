@@ -385,7 +385,7 @@ class ClientTests: FaunaDBTests {
 
 
         let replaceR = await(
-            Replace(ref: try! createR!.get(path: "ref"),
+            Replace(ref: try! createR!.get(path: "ref") as Ref,
                                   params: Obj(["data": Obj(["name": "Volcano",
                                                  "element": Arr("fire", "earth"),
                                                     "cost": 10.0])]))
@@ -418,10 +418,10 @@ class ClientTests: FaunaDBTests {
 
 
         let deleteR = await(
-            Delete(ref: try! createR!.get(path: "ref"))
+            Delete(ref: try! createR!.get(path: "ref") as Ref)
         )
         expect(deleteR).notTo(beNil())
-        let notFoundError = awaitError(Get(ref: try! createR!.get(path: "ref")))
+        let notFoundError = awaitError(Get(ref: try! createR!.get(path: "ref") as Ref))
         expect(notFoundError?.equalType(Error.NotFoundException(response: nil, errors: []))) == true
     }
 
