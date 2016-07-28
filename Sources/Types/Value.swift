@@ -15,11 +15,11 @@ public protocol Value: Expr {}
 public protocol ScalarValue: Value, DecodableValue {}
 
 extension Value {
-    
+
     public var value: Value { return self }
-    
+
     public func isEquals(other: Value) -> Bool {
-        
+
         switch (self, other) {
         case (let exp1 as Arr, let exp2 as Arr):
             return exp1 == exp2
@@ -48,20 +48,3 @@ extension Value {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,7 +21,7 @@ public enum Error: ErrorType {
 
 
 extension Error: CustomDebugStringConvertible, CustomStringConvertible {
-    
+
     public var description: String {
         switch self {
         case .UnavailableException(let response, let errors):
@@ -43,13 +43,13 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         case .UnparsedDataException(let data, let msg):
             return getDesc(nil, msg: msg.map { "\($0): /n\(data)" } ?? "\(data)", error: nil)
         }
-        
+
     }
 
     public var debugDescription: String {
         return description
     }
-    
+
     private func getDesc(response: NSURLResponse?, errors: [ErrorResponse] = [], msg: String? = nil, error: NSError? = nil) -> String{
         var result = [String]()
         _ = msg.map { result.append("Error: \($0)") }
@@ -61,7 +61,7 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         _ = error.map { result.append("Error: \($0.description)") }
         return result.joinWithSeparator("\n")
     }
-    
+
     public var responseErrors: [ErrorResponse]{
         switch self {
         case .UnavailableException(_, let errors):
@@ -86,7 +86,7 @@ public struct ErrorFailure {
     let field: [String]
     let desc: String
     let code: String
-    
+
     init(json: [String: AnyObject]){
         self.code = json["code"] as! String
         self.desc = json["description"] as! String
@@ -99,8 +99,8 @@ public struct ErrorResponse {
     let desc: String
     let position: [String]?
     let failures: [ErrorFailure]
-    
-    
+
+
     public init?(json: [String: AnyObject]){
         self.code = json["code"] as! String
         self.desc = json["description"] as! String
@@ -117,13 +117,12 @@ public struct ErrorResponse {
 }
 
 extension ErrorResponse: CustomStringConvertible, CustomDebugStringConvertible {
-    
+
     public var description: String {
         return "ErrorResponse - Code: \(code) - description: \(desc)"
     }
-    
+
     public var debugDescription: String {
         return description
     }
 }
-

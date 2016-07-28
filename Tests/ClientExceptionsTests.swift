@@ -10,20 +10,19 @@ import Nimble
 import Result
 @testable import FaunaDB
 
-
 class ClientExceptionsTests: FaunaDBTests {
-    
+
     private func setupFaunaDB(){
-        
+
         let create = Create(ref: Ref("databases"),
                             params: Obj(["name": testDbName]))
         let dbRef: Ref? = await(create)?.get(field: Fields.ref)
         expect(dbRef) == Ref("databases/\(testDbName)")
         let secret: String? = await(Create(ref: Ref("keys"), params: Obj(["database": dbRef!, "role": "server"])))?.get(path: "secret")
         expect(secret).notTo(beNil())
-        
+
         client = Client(secret: secret!)
-        
+
         var value: Value?
         value = await(Create(ref: Ref("classes"), params: Obj(["name": "spells"])))
         expect(value).notTo(beNil())
@@ -36,41 +35,41 @@ class ClientExceptionsTests: FaunaDBTests {
                         "active": true])))
         expect(value).notTo(beNil())
     }
-    
+
     func testNotFoundException(){
         // MARK: NotFoundException
-        
+
         setupFaunaDB()
-        
+
         let error = awaitError(Get(ref: Ref("classes/spells/1234")))
         expect(error?.equalType(Error.NotFoundException(response: nil, errors: []))) == true
     }
-    
+
     func testBadRequest() {
         // MARK: BadRequestException
-        
+
         setupFaunaDB()
-        
+
         let error = awaitError(Get(ref: 3))
         expect(error?.equalType(Error.BadRequestException(response: nil, errors: []))) == true
     }
-    
+
     func testUnauthorized(){
         // MARK: UnauthorizedException
         client = Client(secret: "notavalidsecret")
-        
+
         let error = awaitError(Get(ref: Ref("classes/spells/1234")))
         expect(error?.equalType(Error.UnauthorizedException(response: nil, errors: []))) == true
     }
-    
-    
+
+
     func testNetworkException(){
         // MARK: NetworkException
         client = Client(secret: client.secret, endpoint: NSURL(string: "https://notValidSubdomain.faunadb.com")!)
         let error = awaitError("Hi!")
         expect(error?.equalType(Error.NetworkException(response: nil, error: nil, msg: nil))) == true
     }
-    
+
     func testUnparseableDataException(){
         // MARK: UnparseableDataException
         do {
@@ -81,7 +80,7 @@ class ClientExceptionsTests: FaunaDBTests {
             fail()
         }
     }
-    
+
     func testDriverException(){
         // MARK: DriverException
         do {
@@ -94,5 +93,3 @@ class ClientExceptionsTests: FaunaDBTests {
 
     }
 }
-
-

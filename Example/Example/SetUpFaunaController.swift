@@ -10,23 +10,22 @@ import FaunaDB
 import Result
 import RxSwift
 
- 
 class SetUpFaunaController: UITableViewController {
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         faunaClient = Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+
         // animate activity indicator, disable UI interaction
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         let indicators = cell?.contentView.subviews.filter { $0 is UIActivityIndicatorView }.map { $0 as! UIActivityIndicatorView }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.view.userInteractionEnabled = false
         indicators?.forEach { $0.startAnimating() }
-        
+
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 // Standalone setup
@@ -64,15 +63,15 @@ class SetUpFaunaController: UITableViewController {
             }
         }
     }
-    
+
     let disposeBag = DisposeBag()
 }
- 
- 
+
+
  extension SetUpFaunaController{
-    
+
     func rxSetUpSchema(dbName: String) -> Observable<Value> {
-        
+
         //MARK: Rx schema set up
         return Create(ref: Ref("databases"), params: ["name": dbName]).rx_query()
             .flatMap { _ in
@@ -97,7 +96,7 @@ class SetUpFaunaController: UITableViewController {
                         ).rx_query()
             }
     }
-    
+
     func rxCreateInstances() -> Observable<Value> {
         return (1...100).map {
             BlogPost(name: "Blog Post \($0)", author: "FaunaDB",  content: "content", tags: $0 % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
@@ -106,16 +105,16 @@ class SetUpFaunaController: UITableViewController {
         }.rx_query()
     }
  }
- 
- 
+
+
 extension SetUpFaunaController{
- 
+
     //MARK: Standalone schema set up
-    
-    
+
+
     func setUpSchema(dbName: String, callback: (Result<Value, Error> -> ())) {
         faunaClient.query(Create(ref: Ref("databases"), params: ["name": dbName])) { createDbR in
-            
+
             faunaClient.query(Create(ref: Ref("keys"), params: ["database": Ref("databases/\(dbName)"), "role": "server"])) { createKeyR in
                 guard let result = try? createKeyR.dematerialize() else {
                     callback(createKeyR)
@@ -146,7 +145,7 @@ extension SetUpFaunaController{
             }
         }
     }
-    
+
     func createInstances(callback: (Result<Value, Error> -> ())) {
         faunaClient.query({
             (1...100).map { int in
@@ -159,6 +158,3 @@ extension SetUpFaunaController{
         }
     }
 }
-
-
-

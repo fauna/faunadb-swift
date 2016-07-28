@@ -9,7 +9,7 @@ import Foundation
 
 extension Int: ScalarValue{}
 extension Int: Encodable {
-    
+
     func toJSON() -> AnyObject {
         return self
     }
@@ -17,7 +17,7 @@ extension Int: Encodable {
 
 extension Double: ScalarValue{}
 extension Double: Encodable {
-    
+
     func toJSON() -> AnyObject {
         return self
     }
@@ -25,7 +25,7 @@ extension Double: Encodable {
 
 extension String: ScalarValue{}
 extension String: Encodable {
-    
+
     func toJSON() -> AnyObject {
         return self
     }
@@ -33,7 +33,7 @@ extension String: Encodable {
 
 extension Bool: ScalarValue{}
 extension Bool: Encodable {
-    
+
     func toJSON() -> AnyObject {
         return self
     }
@@ -44,20 +44,20 @@ public struct Null: ScalarValue {
 }
 
 extension Null: CustomDebugStringConvertible, CustomStringConvertible {
-    
+
     public var description: String {
         return "null"
     }
-    
+
     public var debugDescription: String {
         return description
     }
 }
 
 extension Null: Encodable {
-    
+
     //MARK: Encodable
-    
+
     func toJSON() -> AnyObject {
         return NSNull()
     }

@@ -10,14 +10,14 @@ import Foundation
 public typealias Date = NSDateComponents
 
 extension Date: ScalarValue {
-    
+
     public convenience init(day: Int, month: Int, year: Int){
         self.init()
         self.day = day
         self.month = month
         self.year = year
     }
-    
+
     public convenience init?(iso8601: String){
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
@@ -31,7 +31,7 @@ extension Date: ScalarValue {
         self.month = dateComponents.month
         self.year = dateComponents.year
     }
-    
+
     convenience init?(json: [String: AnyObject]){
         guard let date = json["@date"] as? String where json.count == 1 else { return nil }
         self.init(iso8601:date)
@@ -39,9 +39,9 @@ extension Date: ScalarValue {
 }
 
 extension Date: Encodable {
-    
+
     //MARK: Encodable
-    
+
     func toJSON() -> AnyObject {
         let monthStr = month < 9 ? "0\(month)" : String(month)
         let dayStr = day < 9 ? "0\(day)" : String(day)

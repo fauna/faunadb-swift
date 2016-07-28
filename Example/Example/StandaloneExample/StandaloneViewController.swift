@@ -9,7 +9,7 @@ import Foundation
 import FaunaDB
 
 class StandaloneViewController: UIViewController {
-    
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
@@ -24,7 +24,7 @@ class StandaloneViewController: UIViewController {
         emptyStateLabel.textAlignment = .Center
         return emptyStateLabel
     }()
-    
+
     var items = [BlogPost]() {
         didSet {
             self.tableView.reloadData()
@@ -32,7 +32,7 @@ class StandaloneViewController: UIViewController {
     }
     var cursor: Cursor?
     var pendingRequest: NSURLSessionDataTask?
-    
+
     var predicateExpr: Expr {
         let match: Expr = {
             if let text = searchBar.text where text.isEmpty == false {
@@ -61,20 +61,20 @@ class StandaloneViewController: UIViewController {
 }
 
 extension StandaloneViewController {
-    
+
     //MARK: Events
-    
+
     func segmentedControlChanged() {
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
-    
+
     func refreshControlChanged() {
         guard refreshControl.refreshing  else { return }
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { [weak self] _ in
             self?.refreshControl.endRefreshing()
         }
     }
-    
+
     func editControllerTapped() {
         tableView.setEditing(!(tableView.editing ?? false), animated: true)
         editButton.title = tableView.editing ? "Edit" : "Done"
@@ -82,15 +82,15 @@ extension StandaloneViewController {
 }
 
 extension StandaloneViewController: UITableViewDataSource {
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell")!
         let blogPost = items[indexPath.row]
@@ -101,7 +101,7 @@ extension StandaloneViewController: UITableViewDataSource {
 }
 
 extension StandaloneViewController: UISearchBarDelegate {
-    
+
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
     }
@@ -118,15 +118,15 @@ extension StandaloneViewController: UITableViewDelegate {
             performQuery(cancelPendingRequest: false, backToFirstPage: false, callback: { _ in })
         }
     }
-    
+
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
     }
-    
+
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         guard editingStyle == .Delete else { return }
         let blogPost = items[indexPath.row]
-        
+
         faunaClient.query(Delete(ref: blogPost.refId!)) { [weak self] result in
             if let index = self?.items.indexOf(blogPost) where result.error == nil {
                 self?.items.removeAtIndex(index)
@@ -137,7 +137,7 @@ extension StandaloneViewController: UITableViewDelegate {
 
 
 extension StandaloneViewController {
-    
+
     private func showAlertMessage(error: FaunaDB.Error){
         if case .NetworkException(_, _, _) = error{
             return
@@ -146,7 +146,7 @@ extension StandaloneViewController {
         alert.addAction(UIAlertAction(title: "Okay", style: .Default) { _ in })
         self.presentViewController(alert, animated: true){}
     }
-    
+
     func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value?, error: FaunaDB.Error?) -> ())) -> NSURLSessionDataTask? {
         guard pendingRequest == nil || cancelPendingRequest else {
             callback(data: nil, error: nil)

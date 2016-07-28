@@ -23,7 +23,7 @@ public func ==(lhs: FieldPathError, rhs: FieldPathError) -> Bool {
     default:
         return false
     }
-    
+
 }
 
 public protocol PathComponentType: CustomStringConvertible, CustomDebugStringConvertible, Value {
@@ -42,7 +42,7 @@ func ==(lhs: [PathComponentType], rhs: [PathComponentType]) -> Bool{
 }
 
 extension PathComponentType {
-    
+
     public var description: String {
         if let str = self as? String {
             return "/\(str)"
@@ -52,11 +52,11 @@ extension PathComponentType {
         }
         return "Unknown PathComponentType"
     }
-    
+
     public var debugDescription: String {
         return description
     }
-    
+
     public func isEqual(other: PathComponentType) -> Bool {
         switch (self, other) {
         case (let str as String, let str2 as String):
@@ -71,7 +71,7 @@ extension PathComponentType {
 }
 
 extension String: PathComponentType {
-    
+
     public func subValue(v: Value) throws -> ValueConvertible {
         switch v{
         case let obj as Obj:
@@ -98,4 +98,3 @@ extension Int: PathComponentType {
         }
     }
 }
-

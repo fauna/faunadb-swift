@@ -17,10 +17,10 @@ public final class Client {
     let session: NSURLSession
     let endpoint: NSURL
     let secret: String
-    
+
     private let observers: [ClientObserverType]
     private var authHeader: String
-    
+
     public init(secret:String,
                 endpoint: NSURL = NSURL(string: "https://rest.faunadb.com")!,
                 timeout: NSTimeInterval = 60, observers: [ClientObserverType] = []){
@@ -140,7 +140,7 @@ extension Client {
     private static func authHeaderValue(token: String) -> String {
         return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([])
     }
-    
+
     static func toData(object: AnyObject) throws -> NSData {
         if object is [AnyObject] || object is [String: AnyObject] {
             return try NSJSONSerialization.dataWithJSONObject(object, options: [])

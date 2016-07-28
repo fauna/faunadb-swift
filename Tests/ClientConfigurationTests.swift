@@ -10,7 +10,7 @@ import XCTest
 @testable import FaunaDB
 
 class ClientConfigurationTests: FaunaDBTests {
-    
+
     func testDefaultValues() {
         let secret = "any_secret"
         let client = Client(secret: secret)

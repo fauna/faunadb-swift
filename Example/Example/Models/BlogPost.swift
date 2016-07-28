@@ -14,7 +14,7 @@ struct BlogPost {
     let content: String
     let tags: [String]
     let refId: Ref?
-    
+
     init(name:String, author: String, content: String, tags: [String] = [], refId: Ref? = nil){
         self.name = name
         self.author = author
@@ -22,8 +22,6 @@ struct BlogPost {
         self.tags = tags
         self.refId = refId
     }
-    
-    
 }
 
 extension BlogPost: DecodableValue {
@@ -38,12 +36,12 @@ extension BlogPost: DecodableValue {
 }
 
 extension BlogPost: FaunaModel {
-    
-    
+
+
     var value: Value {
         return Obj(["name": name, "author": author, "content": content, "tags": Arr(tags)])
     }
-    
+
     static var classRef: Ref { return Ref("classes/posts") }
 }
 

@@ -8,11 +8,11 @@
 import Foundation
 
 extension NSNumber {
-    
+
     func isBoolNumber() -> Bool{
         return CFGetTypeID(self) == CFBooleanGetTypeID()
     }
-    
+
     func isDoubleNumber() -> Bool{
         return CFNumberGetType(self) == CFNumberType.DoubleType || CFNumberGetType(self) == CFNumberType.Float64Type
     }
@@ -43,11 +43,11 @@ func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(c
     default:
         return Arr(collection.map { $0 })
     }
-    
+
 }
 
 struct Mapper {
-    
+
     static func fromFaunaResponseData(data: NSData) throws -> Value{
         let jsonData: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
         guard let res = jsonData.objectForKey("resource") else {
@@ -55,7 +55,7 @@ struct Mapper {
         }
         return try Mapper.fromData(res)
     }
-    
+
     static func fromData(data: AnyObject) throws -> Value {
         switch data {
         case let strValue as String:

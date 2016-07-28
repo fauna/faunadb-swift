@@ -10,15 +10,15 @@ import Foundation
 public struct Ref: ScalarValue {
 
     let ref: String
-    
+
     public init(_ ref: String){
         self.ref = ref
     }
-    
+
     public init(ref: Ref, id: String){
         self.init("\(ref.ref)/\(id)")
     }
-    
+
     init?(json: [String: AnyObject]){
         guard let ref = json["@ref"] as? String where json.count == 1 else { return nil }
         self.init(ref)
@@ -26,11 +26,11 @@ public struct Ref: ScalarValue {
 }
 
 extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
-    
+
     public var description: String{
         return "Ref(\(ref))"
     }
-    
+
     public var debugDescription: String {
         return description
     }
@@ -38,9 +38,9 @@ extension Ref: CustomStringConvertible, CustomDebugStringConvertible {
 
 
 extension Ref: Encodable {
-    
+
     //MARK: Encodable
-    
+
     func toJSON() -> AnyObject {
         return ["@ref": ref.toJSON()]
     }

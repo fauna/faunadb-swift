@@ -8,14 +8,14 @@
 import Foundation
 
 public struct NextId: Expr {
-    
+
     public let value: Value = Obj(fnCall:["next_id": Null()])
 
     /**
-     * `NextId` produces a new identifier suitable for use when constructing refs.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `NextId` produces a new identifier suitable for use when constructing refs.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - returns: A NextId expression.
      */
     public init(){
@@ -23,16 +23,16 @@ public struct NextId: Expr {
 }
 
 public struct Equals: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `Equals` tests equivalence between a list of values.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Equals` tests equivalence between a list of values.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: values to test equivalence.
-     
+
      - returns: A equals expression.
      */
     public init(terms: Expr...){
@@ -43,17 +43,17 @@ public struct Equals: Expr {
 
 
 public struct Contains: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `Contains` returns true if the argument passed to `inExpr` contains a value at the specified `path`, and false otherwise.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Contains` returns true if the argument passed to `inExpr` contains a value at the specified `path`, and false otherwise.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter path:   Determines a location within `inExpr` data.
      - parameter inExpr: value or expression that prodices a value.
-     
+
      - returns: A contains expression.
      */
     public init(pathComponents: PathComponentType..., inExpr: Expr){
@@ -61,13 +61,13 @@ public struct Contains: Expr {
     }
 
     /**
-     *  `Contains` returns true if the argument passed to `inExpr` contains a value at the specified `path`, and false otherwise.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Contains` returns true if the argument passed to `inExpr` contains a value at the specified `path`, and false otherwise.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter path:   Determines a location within `inExpr` data.
      - parameter inExpr: value or expression that prodices a value.
-     
+
      - returns: A contains expression.
      */
     public init(path: Expr, inExpr: Expr){
@@ -76,38 +76,38 @@ public struct Contains: Expr {
 }
 
 public struct Select: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `Select` traverses into the argument passed to from and returns the resulting value. If the path does not exist, it results in an error.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Select` traverses into the argument passed to from and returns the resulting value. If the path does not exist, it results in an error.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter path:         determines a location within `inExpr` data.
      - parameter from:         value or expression that evaluates into a Value to get the data located in path.
      - parameter defaultValue: -
-     
+
      - returns: A Select expression.
      */
     public init(pathComponents: PathComponentType..., from: Expr, defaultValue: Expr? = nil){
-        
+
         value = {
             var obj = Obj(fnCall: ["select": varargs(pathComponents), "from": from])
             obj["default"] = defaultValue
             return obj
         }()
     }
-    
+
     /**
-     *  `Select` traverses into the argument passed to from and returns the resulting value. If the path does not exist, it results in an error.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Select` traverses into the argument passed to from and returns the resulting value. If the path does not exist, it results in an error.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter path:         determines a location within `inExpr` data.
      - parameter from:         value or expression that evaluates into a Value to get the data located in path.
      - parameter defaultValue: -
-     
+
      - returns: A Select expression.
      */
     public init(path: Expr, from: Expr, defaultValue: Expr? = nil){
@@ -120,16 +120,16 @@ public struct Select: Expr {
 }
 
 public struct Add: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `Add` computes the sum of a list of numbers. Attempting to add fewer that two numbers will result in an “invalid argument” error.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Add` computes the sum of a list of numbers. Attempting to add fewer that two numbers will result in an “invalid argument” error.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -138,16 +138,16 @@ public struct Add: Expr {
 }
 
 public struct Multiply: Expr {
-    
+
     public let value: Value
 
     /**
-     *  `Multiply` computes the product of a list of numbers. Attempting to multiply fewer than two numbers will result in an “invalid argument” error.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Multiply` computes the product of a list of numbers. Attempting to multiply fewer than two numbers will result in an “invalid argument” error.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -156,16 +156,16 @@ public struct Multiply: Expr {
 }
 
 public struct Subtract: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `Subtract` computes the difference of a list of numbers. Attempting to subtract fewer than two numbers will result in an “invalid argument” error.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Subtract` computes the difference of a list of numbers. Attempting to subtract fewer than two numbers will result in an “invalid argument” error.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -174,16 +174,16 @@ public struct Subtract: Expr {
 }
 
 public struct Divide: Expr {
-    
+
     public let value: Value
 
     /**
-     *  `Divide` computes the quotient of a list of numbers.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Divide` computes the quotient of a list of numbers.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -193,16 +193,16 @@ public struct Divide: Expr {
 
 
 public struct Modulo: Expr {
-    
+
     public let value: Value
 
     /**
-     *  `Modulo` computes the remainder after division of a list of numbers.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Modulo` computes the remainder after division of a list of numbers.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -211,16 +211,16 @@ public struct Modulo: Expr {
 }
 
 public struct LT: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `LT` returns true if each specified value compares as less than the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `LT` returns true if each specified value compares as less than the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -229,17 +229,17 @@ public struct LT: Expr {
 }
 
 public struct LTE: Expr {
-    
+
     public let value: Value
-    
+
 
     /**
-     *  `LTE` returns true if each specified value compares as less than or equal to the ones following it, and false otherwise. The function takes one or more arguments; it always returns  true if it has a single argument.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `LTE` returns true if each specified value compares as less than or equal to the ones following it, and false otherwise. The function takes one or more arguments; it always returns  true if it has a single argument.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -248,16 +248,16 @@ public struct LTE: Expr {
 }
 
 public struct GT: Expr {
-    
+
     public let value: Value
-    
+
     /**
      `GT` returns true if each specified value compares as greater than the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
-     
+
      [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -266,16 +266,16 @@ public struct GT: Expr {
 }
 
 public struct GTE: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `GTE` returns true if each specified value compares as greater than or equal to the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `GTE` returns true if each specified value compares as greater than or equal to the ones following it, and false otherwise. The function takes one or more arguments; it always returns true if it has a single argument.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: number or expression that evalues to a number.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -284,16 +284,16 @@ public struct GTE: Expr {
 }
 
 public struct And: Expr {
-    
+
     public let value: Value
-    
+
     /**
-     *  `And` computes the conjunction of a list of boolean values, returning `true` if all elements are true, and `false` otherwise.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `And` computes the conjunction of a list of boolean values, returning `true` if all elements are true, and `false` otherwise.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: boolean or expression that evalues to a boolean.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -302,17 +302,17 @@ public struct And: Expr {
 }
 
 public struct Or: Expr {
-    
+
     public let value: Value
-    
+
 
     /**
-     *  `Or` computes the disjunction of a list of boolean values, returning `true` if any elements are true, and `false` otherwise.
-     *
-     *  [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+     `Or` computes the disjunction of a list of boolean values, returning `true` if any elements are true, and `false` otherwise.
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: boolean or expression that evalues to a boolean.
-     
+
      - returns: A Add expression.
      */
     public init(terms: Expr...){
@@ -321,23 +321,22 @@ public struct Or: Expr {
 }
 
 public struct Not: Expr {
-    
+
     public let value: Value
-    
+
 
     /**
-     *  `Not` computes the negation of a boolean expression. Computes the negation of a boolean value, returning true if its argument is false, or false if its argument is true.
-     
+     `Not` computes the negation of a boolean expression. Computes the negation of a boolean value, returning true if its argument is false, or false if its argument is true.
+
      - parameter boolExpr: indicates the expression to negate.
-     *
-     * [Reference](https://faunadb.com/documentation/queries#misc_functions)
-     
+
+     [Reference](https://faunadb.com/documentation/queries#misc_functions)
+
      - parameter terms: boolean or expression that evalues to a boolean.
-     
+
      - returns: A Add expression.
      */
     public init(boolExpr expr: Expr){
         value = Obj(fnCall:["not": expr])
     }
 }
-

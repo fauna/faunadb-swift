@@ -16,25 +16,25 @@ class FaunaDBTests: XCTestCase {
     lazy var client: Client = {
         return Client(secret: FaunaDBTests.secret)
     }()
-    
+
     let testDbName = "faunadb-swift-test-\(arc4random())"
-    
+
     override func setUp() {
         super.setUp()
         // This method is called before the invocation of each test method in the class.
         Nimble.AsyncDefaults.Timeout = 5.SEC
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     // MARK: Helpers
-    
+
     func await(expr: Expr) -> Value? {
         var res: Value?
-        waitUntil(timeout: 5) { [weak self] done in
+        waitUntil(timeout: 10) { [weak self] done in
             self?.client.query(expr) { result in
                 res = try? result.dematerialize()
                 done()
@@ -42,7 +42,7 @@ class FaunaDBTests: XCTestCase {
         }
         return res
     }
-    
+
     func awaitError(expr: Expr) -> FaunaDB.Error? {
         var res: FaunaDB.Error?
         waitUntil(timeout: 5) { [weak self] done in
@@ -53,7 +53,7 @@ class FaunaDBTests: XCTestCase {
         }
         return res
     }
-      
+
 }
 
 func XCTAssertThrows<T: ErrorType where T: Equatable>(error: T, block: () throws -> ()) {
@@ -69,7 +69,7 @@ func XCTAssertThrows<T: ErrorType where T: Equatable>(error: T, block: () throws
 }
 
 extension ValueConvertible {
-    
+
     var jsonString: String {
         let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
         return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
@@ -91,7 +91,7 @@ extension Int {
 
 @warn_unused_result(message="Follow 'expect(…)' with '.to(…)', '.toNot(…)', 'toEventually(…)', '==', etc.")
 public func expectToJson<T: ValueConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
-    return try expect(expression()?.jsonString)    
+    return try expect(expression()?.jsonString)
 }
 
 struct Fields {
@@ -101,8 +101,8 @@ struct Fields {
 }
 
 extension CollectionType where Index.Distance == Int{
-    
-    
+
+
     public var sample: Self.Generator.Element? {
         if !isEmpty {
             let randomIndex = startIndex.advancedBy(Int(arc4random_uniform(UInt32(count))))
@@ -110,12 +110,12 @@ extension CollectionType where Index.Distance == Int{
         }
         return nil
     }
-    
+
     public func sample(size size: Int) -> [Self.Generator.Element]? {
-        
+
         if !self.isEmpty {
             var sampleElements: [Self.Generator.Element] = []
-            
+
             for _ in 1...size {
                 sampleElements.append(sample!)
             }
@@ -123,7 +123,7 @@ extension CollectionType where Index.Distance == Int{
         }
         return nil
     }
-    
+
 
 }
 
@@ -132,9 +132,9 @@ extension String{
 
     public init(randomWithLength length: Int) {
         self.init("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".characters.sample(size: length)!)
-        
+
     }
-    
+
     public init(randomNumWithLength length: Int) {
         self.init(["123456789".characters.sample!] + "0123456789".characters.sample(size: length - 1)!)
     }
@@ -142,7 +142,7 @@ extension String{
 
 
 extension FaunaDB.Error {
-    
+
     public func equalType(other: FaunaDB.Error) -> Bool {
         switch (self, other) {
         case (.UnavailableException(_, _), .UnavailableException(_, _)):
@@ -168,4 +168,3 @@ extension FaunaDB.Error {
         }
     }
 }
-
