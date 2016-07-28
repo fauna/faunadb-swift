@@ -21,22 +21,15 @@ extension FaunaModel {
     }
 
     func fUpdate() -> Update? {
-        guard let refId = refId else {
-            return nil
-        }
-        return Update(ref: refId, params: Obj(["data": value]))
+        return refId.map { Update(ref: $0, params: Obj(["data": value])) }
     }
 
     func fDelete() -> Delete? {
-        guard let refId = refId else {
-            return nil
-        }
-        return Delete(ref: refId)
+        return refId.map {  Delete(ref: $0) }
     }
 
     func fReplace() -> Replace? {
-        guard let refId = refId else { return nil }
-        return Replace(ref: refId, params: Obj(["data": value]))
+        return refId.map { Replace(ref: $0, params: Obj(["data": value])) }
     }
 
 }

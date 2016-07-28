@@ -147,11 +147,12 @@ extension SetUpFaunaController{
 
     func createInstances(callback: (Result<Value, Error> -> ())) {
         faunaClient.query({
-            (1...100).map { int in
-                return BlogPost(name: "Blog Post \(int)", author: "FaunaDB",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
-                }.mapFauna { blogPost in
-                    Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
-                }
+            let blogPosts = (1...100).map {
+                BlogPost(name: "Blog Post \($0)", author: "FaunaDB",  content: "content", tags: $0 % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
+            }
+            return Map(collection: Arr(blogPosts)) { blogPost  in
+                 Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
+            }
         }()) { result in
             callback(result)
         }
