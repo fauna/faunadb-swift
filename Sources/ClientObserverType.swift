@@ -2,57 +2,74 @@
 //  ClientObserverType.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 5/31/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
 
 public protocol ClientObserverType {
-    
+
     func willSendRequest(request: NSURLRequest, session: NSURLSession)
     func didReceiveResponse(response: NSURLResponse?, data: NSData?, error: NSError?, request: NSURLRequest?)
 }
 
 
 public struct Logger: ClientObserverType {
-    
+
     public init() {}
-    
+
     public func willSendRequest(request: NSURLRequest, session: NSURLSession){
         print(request.cURLRepresentation(session))
     }
-    
+
     public func didReceiveResponse(response: NSURLResponse?, data: NSData?, error: NSError?, request: NSURLRequest?) {
         if let error = error {
-            print("ERROR ====>: \(error)")
+            print("\nRESPONSE ERROR: \(error)")
+        }
+        if let response = response as? NSHTTPURLResponse {
+            print("\nRESPONSE STATUS: \(response.statusCode)")
         }
         if let data = data {
-                let jsonData = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-                print("\nRESPONSE Status: \((response as! NSHTTPURLResponse).statusCode)  \n\(jsonData)")
+            if let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) where NSJSONSerialization.isValidJSONObject(jsonData){
+                print("\nRESPONSE DATA:")
+                print("\n\(prettyJSON(jsonData))")
+            }
+            else {
+                print("\nRESPONSE RAW DATA (NOT A VALID JSON):")
+                print("\n\(String(data: data, encoding: NSUTF8StringEncoding))")
+
+            }
         }
         else {
-             print("No RESPONSE DATA")
+            print("\nNO RESPONSE DATA")
         }
+    }
+
+
+    private func prettyJSON(value: AnyObject, prettyPrinted: Bool = true) -> String {
+        guard let prettyData = try? NSJSONSerialization.dataWithJSONObject(value, options: prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : []), let string = NSString(data: prettyData, encoding: NSUTF8StringEncoding) else{
+            return String()
+        }
+        return string as String
     }
 }
 
 extension NSURLRequest {
-    
+
     func cURLRepresentation(session: NSURLSession) -> String {
-        var components = ["$ curl -i"]
-        
+        var components = ["\n$ curl -i"]
+
         guard let
             URL = URL,
             host = URL.host
             else {
                 return "$ curl command could not be created"
         }
-        
+
         if let HTTPMethod = HTTPMethod where HTTPMethod != "GET" {
             components.append("-X \(HTTPMethod)")
         }
-        
+
         if let credentialStorage =  session.configuration.URLCredentialStorage {
             let protectionSpace = NSURLProtectionSpace(
                 host: host,
@@ -61,14 +78,14 @@ extension NSURLRequest {
                 realm: host,
                 authenticationMethod: NSURLAuthenticationMethodHTTPBasic
             )
-            
+
             if let credentials = credentialStorage.credentialsForProtectionSpace(protectionSpace)?.values {
                 for credential in credentials {
                     components.append("-u \(credential.user!):\(credential.password!)")
                 }
             }
         }
-        
+
         if session.configuration.HTTPShouldSetCookies {
             if let
                 cookieStorage = session.configuration.HTTPCookieStorage,
@@ -78,37 +95,37 @@ extension NSURLRequest {
                 components.append("-b \"\(string.substringToIndex(string.endIndex.predecessor()))\"")
             }
         }
-        
+
         var headers: [NSObject: AnyObject] = [:]
-        
+
         if let additionalHeaders = session.configuration.HTTPAdditionalHeaders {
             for (field, value) in additionalHeaders where field != "Cookie" {
                 headers[field] = value
             }
         }
-        
+
         if let headerFields = allHTTPHeaderFields {
             for (field, value) in headerFields where field != "Cookie" {
                 headers[field] = value
             }
         }
-        
+
         for (field, value) in headers {
-            components.append("-H \"\(field): \(value)\"")
+            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field ? value : "Basic <hidden>")\"")
         }
-        
+
         if let
             HTTPBodyData = HTTPBody,
             HTTPBody = String(data: HTTPBodyData, encoding: NSUTF8StringEncoding)
         {
             var escapedBody = HTTPBody.stringByReplacingOccurrencesOfString("\\\"", withString: "\\\\\"")
             escapedBody = escapedBody.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
-            
+
             components.append("-d \"\(escapedBody)\"")
         }
-        
+
         components.append("\"\(URL.absoluteString)\"")
-        
+
         return components.joinWithSeparator(" \\\n\t")
     }
 

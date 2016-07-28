@@ -8,31 +8,32 @@
 import Foundation
 import Result
 
+enum ClientHeaders: String {
+    case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON"
+    case Authorization = "Authorization"
+}
+
 public final class Client {
+    let session: NSURLSession
+    let endpoint: NSURL
+    let secret: String
 
-    private enum ClientHeaders: String {
-        case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON" // true
-        case Authorization = "Authorization"
-    }
-    var session: NSURLSession
-    var delegate: ClientDelegate
-    var faunaRoot: NSURL
-    var secret: String
-    var authHeader: String
-    public var observers = [ClientObserverType]()
+    private let observers: [ClientObserverType]
+    private var authHeader: String
 
-    public init (configuration: ClientConfiguration){
-        faunaRoot = configuration.faunaRoot
-        secret = configuration.secret
+    public init(secret:String,
+                endpoint: NSURL = NSURL(string: "https://rest.faunadb.com")!,
+                timeout: NSTimeInterval = 60, observers: [ClientObserverType] = []){
+        self.endpoint = endpoint
+        self.secret = secret
+        self.observers = observers
         authHeader = Client.authHeaderValue(secret)
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfig.timeoutIntervalForRequest = configuration.timeoutIntervalForRequest
+        sessionConfig.timeoutIntervalForRequest = timeout
         var headers = sessionConfig.HTTPAdditionalHeaders ?? [NSObject: AnyObject]()
         headers[ClientHeaders.Authorization.rawValue] = authHeader
-        headers[ClientHeaders.PrettyPrintJSONResponses.rawValue] = true
         sessionConfig.HTTPAdditionalHeaders = headers
-        delegate = ClientDelegate()
-        session =  NSURLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: .mainQueue())
+        session =  NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: .mainQueue())
     }
 
 }
@@ -40,22 +41,25 @@ public final class Client {
 
 extension Client {
 
-    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)? = nil) -> NSURLSessionDataTask {
-        let jsonData = try! toData(expr().toJSON()) ?? NSData()
+    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
+        let jsonData = try! Client.toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
                 guard let mySelf = self else { return }
                 try mySelf.handleNetworkingErrors(response, error: error)
-                let jsonData =  try mySelf.handleQueryErrors(response, data: data)
-                let result = try! Mapper.fromData(jsonData ?? NSNull())
-                completion?(Result.Success(result))
+                guard let data = data else {
+                    throw Error.UnknownException(response: response, errors: [], msg: "Empty server response")
+                }
+                try mySelf.handleQueryErrors(response, data: data)
+                let result = try Mapper.fromFaunaResponseData(data)
+                completion(Result.Success(result))
             }
             catch {
                 guard let faunaError = error as? FaunaDB.Error else {
-                    completion?(.Failure(.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
+                    completion(.Failure(.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
                     return
                 }
-                completion?(.Failure(faunaError))
+                completion(.Failure(faunaError))
             }
         }
     }
@@ -64,7 +68,7 @@ extension Client {
 extension Client {
 
     private func postJSON(data: NSData, completion: ((NSData?, NSURLResponse?, NSError?) -> Void)) -> NSURLSessionDataTask{
-        let request = NSMutableURLRequest(URL: faunaRoot)
+        let request = NSMutableURLRequest(URL: endpoint)
         request.HTTPBody = data
         request.HTTPMethod = "POST"
         var headers = request.allHTTPHeaderFields ?? [String: String]()
@@ -89,52 +93,44 @@ extension Client {
 extension Client {
 
 
-    func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
+    private func handleNetworkingErrors(response: NSURLResponse?, error: NSError?) throws {
         guard let error = error else { return }
         throw Error.NetworkException(response: response, error: error, msg: error.description)
     }
 
-    func handleQueryErrors(response: NSURLResponse?, data: NSData?) throws -> AnyObject? {
+    private func handleQueryErrors(response: NSURLResponse?, data: NSData) throws {
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            throw Error.NetworkException(response: response, error: nil, msg: "Cannot cast NSURLResponse to NSHTTPURLResponse")
+            throw Error.NetworkException(response: response, error: nil, msg: "Fail to parse network response. Invalid response type.")
         }
 
         if httpResponse.statusCode >= 300 {
             var errors = [ErrorResponse]()
             do {
-                let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+                let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
                 let array = json.objectForKey("errors") as! [[String: AnyObject]]
                 errors = array.map { ErrorResponse(json: $0)! }
             }
             catch {
-                    if httpResponse.statusCode == 503 {
-                        throw Error.UnavailableException(response: response, errors: [], msg: "Service Unavailable: Unparseable response.")
-                    }
-                    throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
-            }    
+                if httpResponse.statusCode == 503 {
+                    throw Error.UnavailableException(response: response, errors: [])
+                }
+                throw Error.UnknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
+            }
             switch httpResponse.statusCode {
             case 400:
-                throw Error.BadRequestException(response: response, errors: errors, msg: nil)
+                throw Error.BadRequestException(response: response, errors: errors)
             case 401:
-                throw Error.UnauthorizedException(response: response, errors: errors, msg: nil)
+                throw Error.UnauthorizedException(response: response, errors: errors)
             case 404:
-                throw Error.NotFoundException(response: response, errors: errors, msg: nil)
+                throw Error.NotFoundException(response: response, errors: errors)
             case 500:
                 throw Error.InternalException(response: response, errors: errors, msg: nil)
             case 503:
-                throw Error.UnavailableException(response: response, errors: errors, msg: nil)
+                throw Error.UnavailableException(response: response, errors: errors)
             default:
                 throw Error.UnknownException(response: response, errors: errors, msg: nil)
             }
         }
-        if let data = data {
-            let str = String(data: data, encoding: NSUTF8StringEncoding) ?? ""
-            print (str)
-            let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            
-            return jsonData.objectForKey("resource")
-        }
-        return nil
     }
 }
 
@@ -144,22 +140,15 @@ extension Client {
     private static func authHeaderValue(token: String) -> String {
         return "Basic " + "\(token):".dataUsingEncoding(NSASCIIStringEncoding)!.base64EncodedStringWithOptions([])
     }
-    
-    private func toData(object: AnyObject?) throws -> NSData? {
-        guard let object = object else { return nil }
+
+    static func toData(object: AnyObject) throws -> NSData {
         if object is [AnyObject] || object is [String: AnyObject] {
             return try NSJSONSerialization.dataWithJSONObject(object, options: [])
         }
-        else if let str = object as? String, let data = str.dataUsingEncoding(NSUTF8StringEncoding) {
+        else if let str = object as? String, let data = "\"\(str)\"".dataUsingEncoding(NSUTF8StringEncoding) {
             return data
         }
-        return nil
+        throw Error.DriverException(data: object, msg: "Unsupported JSON type: \(object.dynamicType)")
     }
-
-}
-
-
-
-internal class ClientDelegate: NSObject, NSURLSessionDataDelegate {
 
 }

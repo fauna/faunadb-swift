@@ -1,22 +1,22 @@
 //
 //  ClientConfigurationTests.swift
-//  FaunaDB
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 5/31/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
+
 
 import XCTest
 @testable import FaunaDB
 
 class ClientConfigurationTests: FaunaDBTests {
-    
+
     func testDefaultValues() {
         let secret = "any_secret"
-        let clientConfig = ClientConfiguration(secret: secret)
-        XCTAssertEqual(clientConfig.secret , secret)
-        XCTAssertEqual(clientConfig.faunaRoot, NSURL(string: "https://rest.faunadb.com")!)
-        XCTAssertEqual(clientConfig.timeoutIntervalForRequest, 60)
+        let client = Client(secret: secret)
+        XCTAssertEqual(client.secret , secret)
+        XCTAssertEqual(client.endpoint, NSURL(string: "https://rest.faunadb.com")!)
+        XCTAssertEqual(client.session.configuration.timeoutIntervalForRequest, 60)
     }
 
 }

@@ -1,92 +1,95 @@
 //
-//  ClientExceptions.swift
-//  FaunaDB
+//  ClientConfigurationTests.swift
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 6/10/16.
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-//
-
-import Foundation
 
 import XCTest
 import Nimble
 import Result
 @testable import FaunaDB
 
-
 class ClientExceptionsTests: FaunaDBTests {
-    
-    lazy var client: Client = {
-        let result = Client(configuration: ClientConfiguration(secret: FaunaDBTests.secret))
-        result.observers = [Logger()]
-        return result
-    }()
-    
-    let testDbName = "faunadb-swift-test-\(arc4random())"
-    
-    
-    override func setUp() {
-        super.setUp()
-        Nimble.AsyncDefaults.Timeout = 6.SEC
+
+    private func setupFaunaDB(){
+
+        let create = Create(ref: Ref("databases"),
+                            params: Obj(["name": testDbName]))
+        let dbRef: Ref? = await(create)?.get(field: Fields.ref)
+        expect(dbRef) == Ref("databases/\(testDbName)")
+        let secret: String? = await(Create(ref: Ref("keys"), params: Obj(["database": dbRef!, "role": "server"])))?.get(path: "secret")
+        expect(secret).notTo(beNil())
+
+        client = Client(secret: secret!)
+
+        var value: Value?
+        value = await(Create(ref: Ref("classes"), params: Obj(["name": "spells"])))
+        expect(value).notTo(beNil())
+        value = await(Create(ref: Ref("indexes"),
+                          params: Obj(["name": "spells_by_element",
+                        "source": Ref("classes/spells"),
+                         "terms": Arr(
+                                    Obj(("field", Arr("data", "element")))
+                                  ),
+                        "active": true])))
+        expect(value).notTo(beNil())
     }
-    
-    func testClientExceptions() {
-        let create = Create(ref: Ref.databases, params: ["name": testDbName])
-        var dbRef: Ref?
-        var secret: String?
-        client.query(create) { [weak self] result in
-            dbRef = try! result.dematerialize().get(FaunaDBTests.fieldRef)
-            self?.client.query(Create(ref: Ref.keys, params: ["database": dbRef!, "role": "server"]))  { result in
-                let sec: String = try! result.dematerialize().get("secret")
-                self?.client = Client(configuration: ClientConfiguration(secret: sec))
-                secret = sec
-            }
-        }
-        expect(dbRef).toEventually(equal(Ref("databases/\(testDbName)")))
-        expect(secret).toNotEventually(beNil())
-        
-       
-        
-        
-        waitUntil(timeout: 3){ [weak self] action in
-            self?.client.query(Create(ref: Ref.classes, params: ["name": "spells"])){ _ in
-                action()
-            }
-        }
-        waitUntil(timeout: 3){ [weak self] action in
-            self?.client.query(Create(ref: Ref.indexes, params: ["name": "spells_by_element",
-                                          "source": Ref("classes/spells"),
-                                          "terms": [["path": "data.element"] as Obj] as Arr ,
-                "active": true])){ _ in
-                action()
-            }
-        }
-        waitUntil(timeout: 3) {[weak self] done in
-            self?.client.query(Get(ref: "classes/spells/1234")) { result in
-                guard case let .Failure(queryError) = result, case .NotFoundException(response: _, errors: _, msg: _) = queryError else  {
-                    fail()
-                    done()
-                    return
-                }
-                done()
-            }
-        }
+
+    func testNotFoundException(){
+        // MARK: NotFoundException
+
+        setupFaunaDB()
+
+        let error = awaitError(Get(ref: Ref("classes/spells/1234")))
+        expect(error?.equalType(Error.NotFoundException(response: nil, errors: []))) == true
     }
-    
+
+    func testBadRequest() {
+        // MARK: BadRequestException
+
+        setupFaunaDB()
+
+        let error = awaitError(Get(ref: 3))
+        expect(error?.equalType(Error.BadRequestException(response: nil, errors: []))) == true
+    }
+
     func testUnauthorized(){
-        let badClient = Client(configuration: ClientConfiguration(secret: "notavalidsecret"))
-        waitUntil(timeout: 3) { done in
-            badClient.query(Get(ref: "classes/spells/1234")) { result in
-                guard case let .Failure(queryError) = result, case .UnauthorizedException(response: _, errors: _, msg: _) = queryError else  {
-                    fail()
-                    done()
-                    return
-                }
-                done()
-            }
+        // MARK: UnauthorizedException
+        client = Client(secret: "notavalidsecret")
+
+        let error = awaitError(Get(ref: Ref("classes/spells/1234")))
+        expect(error?.equalType(Error.UnauthorizedException(response: nil, errors: []))) == true
+    }
+
+
+    func testNetworkException(){
+        // MARK: NetworkException
+        client = Client(secret: client.secret, endpoint: NSURL(string: "https://notValidSubdomain.faunadb.com")!)
+        let error = awaitError("Hi!")
+        expect(error?.equalType(Error.NetworkException(response: nil, error: nil, msg: nil))) == true
+    }
+
+    func testUnparseableDataException(){
+        // MARK: UnparseableDataException
+        do {
+            try Mapper.fromData([Float(3)])
+        }
+        catch Error.UnparsedDataException(data: _, msg: _) {}
+        catch {
+            fail()
         }
     }
 
+    func testDriverException(){
+        // MARK: DriverException
+        do {
+            try Client.toData(3)
+        }
+        catch Error.DriverException(data: _, msg: _) {}
+        catch {
+            fail()
+        }
+
+    }
 }
-
-

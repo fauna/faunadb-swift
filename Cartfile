@@ -1,3 +1,2 @@
-github "antitypical/Result" "master"
-github "hkellaway/Gloss"
-github "ReactiveX/RxSwift"
+github "antitypical/Result" ~> 2.0
+github "ReactiveX/RxSwift" "2.6.0"

@@ -1,9 +1,8 @@
 //
-//  File.swift
+//  Client+Rx.swift
 //  FaunaDB
 //
-//  Created by Martin Barreto on 6/9/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import Foundation
@@ -29,15 +28,12 @@ extension FaunaDB.Client {
             }
         }
     }
-    
+
 }
 
-
 extension ObservableType where Self.E == Value {
-    
+
     public func mapWithField<T: Value>(field: Field<T>) -> Observable<T> {
-        return self.map {
-            return try field.get($0)
-        }
+        return map { try field.get($0) }
     }
 }

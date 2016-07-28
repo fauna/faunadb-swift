@@ -1,18 +1,15 @@
 //
-//  DeserializationTests.swift
-//  FaunaDB
+//  ClientConfigurationTests.swift
+//  FaunaDBTests
 //
-//  Created by Martin Barreto on 6/8/16.
-//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
 import XCTest
 @testable import FaunaDB
 
-
 class DeserializationTests: FaunaDBTests {
 
-    
     func testQueryResponse() {
         let toDeserialize =
             "{" +
@@ -22,14 +19,14 @@ class DeserializationTests: FaunaDBTests {
                 "\"ts\":1432763268186882" +
         "}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value: Obj = ["ref": Ref("classes/derp/101192216816386048"),
+        let value =  Obj([  "ref": Ref("classes/derp/101192216816386048"),
                           "class": Ref("classes/derp"),
-                          "ts": Double(1432763268186882),
-                          "data": ["test": 1 as Double] as Obj]
-        XCTAssert(deseralizedValue.isEquals(value))
+                             "ts": Double(1432763268186882),
+                           "data": Obj(["test": 1.0])])
+        XCTAssertTrue(deseralizedValue.isEquals(value))
     }
 
-   
+
     func testQueryResponseWithRef() {
         let toDeserialize =
             "{" +
@@ -39,13 +36,14 @@ class DeserializationTests: FaunaDBTests {
                 "\"data\":{\"refField\":{\"@ref\":\"classes/spells/93044099909681152\"}}" +
             "}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value: Obj = ["ref": Ref("classes/spells/93044099947429888"),
-                     "class": Ref("classes/spells"),
-                     "ts": Double(1424992618413105),
-                     "data": ["refField": Ref("classes/spells/93044099909681152")] as Obj]
+        let value = Obj( [ "ref": Ref("classes/spells/93044099947429888"),
+                         "class": Ref("classes/spells"),
+                            "ts": Double(1424992618413105),
+                          "data": Obj(["refField": Ref("classes/spells/93044099909681152")])])
         XCTAssert(deseralizedValue.isEquals(value))
     }
-    
+
+
     func testQueryResponseWithLiteralObject(){
         let toDeserialize =
         "{" +
@@ -55,25 +53,26 @@ class DeserializationTests: FaunaDBTests {
             "\"ts\":1433273471399755" +
         "}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value: Obj = ["ref": Ref("classes/derp/101727203651223552"),
+        let value = Obj( [  "ref": Ref("classes/derp/101727203651223552"),
                           "class": Ref("classes/derp"),
-                          "ts": Double(1433273471399755),
-                          "data": ["test": ["field1": ["@name": "Test"] as Obj] as Obj] as Obj]
+                             "ts": Double(1433273471399755),
+                           "data": Obj(["test": Obj(["field1": Obj(["@name": "Test"])])])])
         XCTAssert(deseralizedValue.isEquals(value))
     }
-    
+
     func testEmptyObject(){
         let toDeserialize = "{}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         XCTAssert(deseralizedValue.isEquals(Obj()))
     }
-    
+
+
     func testTs(){
         let toDeserialize =  "{\"@ts\":\"1970-01-01T00:05:00Z\"}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         XCTAssert(deseralizedValue.isEquals(Timestamp(timeIntervalSince1970: 5.MIN)))
     }
-    
+
     func testDate(){
         let toDeserialize = "{\"@date\":\"1970-01-03\"}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
@@ -81,19 +80,19 @@ class DeserializationTests: FaunaDBTests {
         XCTAssertNotNil(date)
         XCTAssert(deseralizedValue.isEquals(date!))
     }
-    
+
     func testBool(){
         let toDeserialize = "{\"bool\": true}"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
-         XCTAssert(deseralizedValue.isEquals(["bool": true] as Obj))
+         XCTAssert(deseralizedValue.isEquals(Obj(["bool": true])))
     }
-    
+
     func testArr(){
-        let toDeserialize = "[2, \"Hi\", {\"@date\":\"1970-01-03\"}, {\"@ts\":\"1970-01-01T00:05:00Z\"}]"
+        let toDeserialize = "[0, true, 1, false, \"Hi\", {\"@date\":\"1970-01-03\"}, {\"@ts\":\"1970-01-01T00:05:00Z\"}]"
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         let date = Date(iso8601: "1970-01-03")
         XCTAssertNotNil(date)
-        let arr: Arr = [Double(2), "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN)]
+        let arr = Arr(Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN))
         XCTAssert(deseralizedValue.isEquals(arr))
-    }    
+    }
 }
