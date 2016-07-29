@@ -11,7 +11,7 @@ import Nimble
 
 class FaunaDBTests: XCTestCase {
 
-    static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
+    static let secret = "your_admin_key"
 
     lazy var client: Client = {
         return Client(secret: FaunaDBTests.secret)
@@ -43,8 +43,8 @@ class FaunaDBTests: XCTestCase {
         return res
     }
 
-    func awaitError(expr: Expr) -> FaunaDB.Error? {
-        var res: FaunaDB.Error?
+    func awaitError(expr: Expr) -> Error? {
+        var res: Error?
         waitUntil(timeout: 5) { [weak self] done in
             self?.client.query(expr) { result in
                 res = result.error
@@ -141,9 +141,9 @@ extension String{
 }
 
 
-extension FaunaDB.Error {
+extension Error {
 
-    public func equalType(other: FaunaDB.Error) -> Bool {
+    public func equalType(other: Error) -> Bool {
         switch (self, other) {
         case (.UnavailableException(_, _), .UnavailableException(_, _)):
             return true

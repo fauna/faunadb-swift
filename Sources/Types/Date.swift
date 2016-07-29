@@ -19,13 +19,8 @@ extension Date: ScalarValue {
     }
 
     public convenience init?(iso8601: String){
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT:0)
-        let calendar = NSCalendar.currentCalendar()
         guard let date = dateFormatter.dateFromString(iso8601) else { return nil }
-        let dateComponents = calendar.componentsInTimeZone(NSTimeZone(forSecondsFromGMT:0), fromDate: date)
+        let dateComponents = NSCalendar.currentCalendar().componentsInTimeZone(NSTimeZone(forSecondsFromGMT:0), fromDate: date)
         self.init()
         self.day = dateComponents.day
         self.month = dateComponents.month
@@ -48,3 +43,11 @@ extension Date: Encodable {
         return ["@date": "\(year)-\(monthStr)-\(dayStr)"]
     }
 }
+
+private let dateFormatter: NSDateFormatter = {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT:0)
+    return dateFormatter
+}()

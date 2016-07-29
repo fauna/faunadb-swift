@@ -54,7 +54,7 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         var result = [String]()
         _ = msg.map { result.append("Error: \($0)") }
         _ = response.map { result.append("Response: " + $0.description) }
-        if errors.count > 0 {
+        if !errors.isEmpty {
             result.append("Errors:")
             errors.forEach { result.append( $0.description ) }
         }
@@ -106,13 +106,9 @@ public struct ErrorResponse {
         self.desc = json["description"] as! String
         self.position = json["position"] as? [String]
         let failuresArr = json["failures"] as? NSArray ?? []
-        var failures = [ErrorFailure]()
-        for obj in failuresArr{
-            if let obj = obj as? [String : AnyObject]{
-                failures.append(ErrorFailure(json: obj))
-            }
-        }
-        self.failures = failures
+        self.failures = failuresArr
+            .flatMap { $0 as? [String : AnyObject] }
+            .map { ErrorFailure(json: $0) }
     }
 }
 

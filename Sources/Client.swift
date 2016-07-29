@@ -41,11 +41,14 @@ public final class Client {
 
 extension Client {
 
-    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, FaunaDB.Error> -> Void)) -> NSURLSessionDataTask {
+    public func query(@autoclosure expr: (()-> Expr), completion: (Result<Value, Error> -> Void)) -> NSURLSessionDataTask {
         let jsonData = try! Client.toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in
             do {
-                guard let mySelf = self else { return }
+                guard let mySelf = self else {
+                    completion(.Failure(.UnknownException(response: response, errors: [], msg: "Client has been released")))
+                    return
+                }
                 try mySelf.handleNetworkingErrors(response, error: error)
                 guard let data = data else {
                     throw Error.UnknownException(response: response, errors: [], msg: "Empty server response")
@@ -55,7 +58,7 @@ extension Client {
                 completion(Result.Success(result))
             }
             catch {
-                guard let faunaError = error as? FaunaDB.Error else {
+                guard let faunaError = error as? Error else {
                     completion(.Failure(.UnknownException(response: response, errors: [], msg: (error as NSError).description)))
                     return
                 }

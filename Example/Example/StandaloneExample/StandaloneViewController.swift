@@ -30,7 +30,7 @@ class StandaloneViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
-    var cursor: Cursor?
+    var lastPageRetrieved: PaginationResult<BlogPost>?
     var pendingRequest: NSURLSessionDataTask?
 
     var predicateExpr: Expr {
@@ -41,7 +41,7 @@ class StandaloneViewController: UIViewController {
             }
             return Match(index: Ref("indexes/posts_by_tags"), terms: segmentedControl.selectedSegmentIndex == 1 ? "philosophy" : "travel")
         }()
-        return Map(collection: FaunaDB.Paginate(resource: match, cursor: cursor)) { ref in
+        return Map(collection: FaunaDB.Paginate(resource: match, cursor: lastPageRetrieved?.afterCursor)) { ref in
             Get(ref: ref)
         }
     }
@@ -138,7 +138,7 @@ extension StandaloneViewController: UITableViewDelegate {
 
 extension StandaloneViewController {
 
-    private func showAlertMessage(error: FaunaDB.Error){
+    private func showAlertMessage(error: Error){
         if case .NetworkException(_, _, _) = error{
             return
         }
@@ -147,7 +147,7 @@ extension StandaloneViewController {
         self.presentViewController(alert, animated: true){}
     }
 
-    func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value?, error: FaunaDB.Error?) -> ())) -> NSURLSessionDataTask? {
+    func performQuery(cancelPendingRequest cancelPendingRequest: Bool, backToFirstPage: Bool, callback: ((data: Value?, error: Error?) -> ())) -> NSURLSessionDataTask? {
         guard pendingRequest == nil || cancelPendingRequest else {
             callback(data: nil, error: nil)
             return nil
@@ -156,7 +156,7 @@ extension StandaloneViewController {
             pendingRequest?.cancel()
         }
         if backToFirstPage {
-            cursor = nil
+            lastPageRetrieved = nil
             items = []
         }
         activityIndicator.startAnimating()
@@ -168,20 +168,38 @@ extension StandaloneViewController {
                 self?.showAlertMessage(error)
                 callback(data: nil, error: error)
             case .Success(let value):
-                let data: [BlogPost] = try! value.get(path: "data")
-                var cursorData: Arr? = value.get(path: "after")
-                self?.cursor = cursorData.map { Cursor.After(expr: $0)}
-                cursorData = value.get(path: "before")
-                let beforeCursor = cursorData.map { Cursor.Before(expr: $0)}
-                if let _ = beforeCursor {
-                    self?.items.appendContentsOf(data)
+                let paginationData: PaginationResult<BlogPost> = try! value.get()
+                self?.lastPageRetrieved = paginationData
+                if let _ = paginationData.beforeCursor {
+                    self?.items.appendContentsOf(paginationData.items)
                 }
                 else {
-                    self?.items = data
+                    self?.items = paginationData.items
                 }
                 callback(data: value, error: nil)
             }
         }
         return pendingRequest
+    }
+}
+
+
+struct PaginationResult<T: DecodableValue where T.DecodedType == T>: DecodableValue {
+    let items: [T]
+    let afterCursor: Cursor?
+    let beforeCursor: Cursor?
+    
+    init(items: [T], afterCursor: Cursor? = nil, beforeCursor: Cursor? = nil){
+        self.items = items
+        self.afterCursor = afterCursor
+        self.beforeCursor = beforeCursor
+    }
+    
+    static func decode(value: Value) -> PaginationResult<T>? {
+        let afterCursorData: Arr? = value.get(path: "after")
+        let beforeCursorData: Arr? = value.get(path: "before")
+        return try? self.init(      items: value.get(path: "data"),
+                                    afterCursor: afterCursorData.map { Cursor.After(expr: $0)},
+                                    beforeCursor: beforeCursorData.map { Cursor.Before(expr: $0)})
     }
 }
