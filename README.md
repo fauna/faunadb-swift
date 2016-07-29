@@ -203,7 +203,7 @@ All communication between your app and FaunaDB db should be done through a Fauna
 The simplest way to set up a client is by passing Fauna DB secret as a parameter.
 
 ```swift
-let client = Client(secret: <YOUR_FAUA_DB_SECRET>)
+let client = Client(secret: <YOUR_FAUNA_DB_SECRET>)
 ```
 
 > `Client` accepts other configurations such as endpoint, timeout and observers.
@@ -211,7 +211,7 @@ let client = Client(secret: <YOUR_FAUA_DB_SECRET>)
 In order to make development process easier we can attach an observer to the client. We provide [Logger](Sources/ClientObserverType.swift) observer that shows the curl representation of every communication with Fauna DB and also displays the response data.
 
 ```swift
-let client = Client(secret: <YOUR_FAUA_DB_SECRET>, observers: [Logger()]))
+let client = Client(secret: <YOUR_FAUNA_DB_SECRET>, observers: [Logger()]))
 ```
 
 > Notice that we can add as many observers as we want since observers parameter type is an array of `ClientObserverType` protocol.

@@ -36,7 +36,7 @@ class ClientTests: FaunaDBTests {
         let secret: String = try! value!.get(path: "secret")
 
         // set up client using the new secret
-        client = Client(secret: secret, observers: [Logger()])
+        client = Client(secret: secret)
 
 
         // Create spells class
@@ -628,7 +628,7 @@ class ClientTests: FaunaDBTests {
             )?.get(path: "secret")
         expect(secret).toNot(beNil())
         let oldSecret = client.secret
-        client = Client(secret: secret!, observers: [Logger()])
+        client = Client(secret: secret!)
 
         let logoutR: Bool? = await(
             Logout(invalidateAll: false)
@@ -637,7 +637,7 @@ class ClientTests: FaunaDBTests {
         expect(logoutR) == true
 
 
-        client = Client(secret: oldSecret, observers: [Logger()])
+        client = Client(secret: oldSecret)
 
         let identifyR = await(
             Identify(ref: createRef!, password: "abcdefg")

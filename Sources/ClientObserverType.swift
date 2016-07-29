@@ -47,7 +47,7 @@ public struct Logger: ClientObserverType {
 
 
     private func prettyJSON(value: AnyObject, prettyPrinted: Bool = true) -> String {
-        guard let prettyData = try? NSJSONSerialization.dataWithJSONObject(value, options: prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : []), let string = NSString(data: prettyData, encoding: NSUTF8StringEncoding) else{
+        guard let prettyData = try? NSJSONSerialization.dataWithJSONObject(value, options: prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : []), string = NSString(data: prettyData, encoding: NSUTF8StringEncoding) else{
             return String()
         }
         return string as String

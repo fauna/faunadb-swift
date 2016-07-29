@@ -10,8 +10,10 @@ import RxSwift
 
 import Foundation
 
+let secret = "your_admin_key"
+
 var faunaClient: Client = {
-    return Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
+    return Client(secret: secret, observers: [Logger()])
 }()
 
 extension FaunaModel {
@@ -49,7 +51,7 @@ extension ValueConvertible {
 extension Expr {
 
     public func rx_query() -> Observable<Value> {
-        return self.client.rx_query(self)
+        return client.rx_query(self)
     }
 }
 
