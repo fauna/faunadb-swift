@@ -33,7 +33,7 @@ extension FaunaDB.Client {
 
 extension ObservableType where Self.E == Value {
 
-    public func mapWithField<T: Value>(field: Field<T>) -> Observable<T> {
+    public func mapWithField<T: DecodableValue where T.DecodedType == T>(field: Field<T>) -> Observable<T> {
         return map { try field.get($0) }
     }
 }
