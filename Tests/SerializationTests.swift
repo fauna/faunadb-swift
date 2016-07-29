@@ -370,14 +370,6 @@ class SerializationTests: FaunaDBTests {
         var count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))
         expectToJson(count) == "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
 
-        count = Count(set: Match(index: Ref("indexes/spells_by_element") as Expr, terms: "fire"),
-                      countEvents: true)
-        expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
-
-        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                      countEvents: true)
-        expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
-
         count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
                       countEvents: true)
         expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
