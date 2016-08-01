@@ -17,8 +17,9 @@
 		287ED5491D2D7113000E7BC6 /* RxFaunaDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28773DD11D09DF96003CE59C /* RxFaunaDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */; };
 		28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DE1D2AC3B000FD948F /* Helpers.swift */; };
-		28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B4E6E21D2B033200FD948F /* RxCocoa.framework */; };
 		28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9B7A51D42A90300749967 /* BlogPost.swift */; };
+		28D89B7D1D4FD8E9009AE721 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */; };
 		28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828CF1C4B714D00330CF4 /* AppDelegate.swift */; };
 		28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */; };
 		28F828D51C4B714D00330CF4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28F828D31C4B714D00330CF4 /* Main.storyboard */; };
@@ -48,7 +49,14 @@
 			remoteGlobalIDString = 28F828871C494B2C00330CF4;
 			remoteInfo = FaunaDBTests;
 		};
-		287D0A7F1C4B7B55004566D6 /* PBXContainerItemProxy */ = {
+		28D89B801D4FF11F009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28E9D8A71D09D6B500A511AA;
+			remoteInfo = RxFaunaDB;
+		};
+		28D89B821D4FF126009AE721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
 			proxyType = 1;
@@ -73,6 +81,7 @@
 			files = (
 				287ED5491D2D7113000E7BC6 /* RxFaunaDB.framework in Embed Frameworks */,
 				287D0A7E1C4B7B55004566D6 /* FaunaDB.framework in Embed Frameworks */,
+				28D89B7D1D4FD8E9009AE721 /* RxCocoa.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,8 +96,8 @@
 		287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = FaunaDB.xcodeproj; sourceTree = "<group>"; };
 		28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaginationViewModel.swift; path = Example/Helpers/PaginationViewModel.swift; sourceTree = "<group>"; };
 		28B4E6DE1D2AC3B000FD948F /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = Helpers.swift; path = Example/Helpers/Helpers.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		28B4E6E21D2B033200FD948F /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		28B9B7A51D42A90300749967 /* BlogPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlogPost.swift; path = Example/Models/BlogPost.swift; sourceTree = "<group>"; };
+		28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		28F828CC1C4B714D00330CF4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828CF1C4B714D00330CF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Example/AppDelegate.swift; sourceTree = "<group>"; };
 		28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SetUpFaunaController.swift; path = Example/SetUpFaunaController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -105,9 +114,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */,
 				287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */,
 				287ED5481D2D7101000E7BC6 /* RxFaunaDB.framework in Frameworks */,
+				28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,12 +166,12 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
-		28B4E6E11D2B031D00FD948F /* Frameworks */ = {
+		28B4E6E11D2B031D00FD948F /* Dependency Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				28B4E6E21D2B033200FD948F /* RxCocoa.framework */,
+				28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */,
 			);
-			name = Frameworks;
+			name = "Dependency Frameworks";
 			sourceTree = "<group>";
 		};
 		28B9B7A21D42A8E100749967 /* Models */ = {
@@ -176,7 +185,7 @@
 		28F828C31C4B714D00330CF4 = {
 			isa = PBXGroup;
 			children = (
-				28B4E6E11D2B031D00FD948F /* Frameworks */,
+				28B4E6E11D2B031D00FD948F /* Dependency Frameworks */,
 				28F828CE1C4B714D00330CF4 /* Example */,
 				28F828E31C4B714D00330CF4 /* ExampleUITests */,
 				28F828CD1C4B714D00330CF4 /* Products */,
@@ -234,7 +243,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				287D0A801C4B7B55004566D6 /* PBXTargetDependency */,
+				28D89B831D4FF126009AE721 /* PBXTargetDependency */,
+				28D89B811D4FF11F009AE721 /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -373,10 +383,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		287D0A801C4B7B55004566D6 /* PBXTargetDependency */ = {
+		28D89B811D4FF11F009AE721 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RxFaunaDB;
+			targetProxy = 28D89B801D4FF11F009AE721 /* PBXContainerItemProxy */;
+		};
+		28D89B831D4FF126009AE721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FaunaDB;
-			targetProxy = 287D0A7F1C4B7B55004566D6 /* PBXContainerItemProxy */;
+			targetProxy = 28D89B821D4FF126009AE721 /* PBXContainerItemProxy */;
 		};
 		28F828E21C4B714D00330CF4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
