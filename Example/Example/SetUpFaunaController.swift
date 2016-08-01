@@ -14,7 +14,11 @@ class SetUpFaunaController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        #if DEBUG
         faunaClient = Client(secret: secret, observers: [Logger()])
+        #else
+        faunaClient = Client(secret: secret)
+        #endif
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -79,7 +83,11 @@ class SetUpFaunaController: UITableViewController {
             }
             .mapWithField("secret")
             .doOnNext { (secret: String) in
+                #if DEBUG
                 faunaClient = Client(secret: secret, observers: [Logger()])
+                #else
+                faunaClient = Client(secret: secret)
+                #endif
             }
             .flatMap { _ in
                 return faunaClient.rx_query(Create(ref: Ref("classes"), params: Obj(["name": "posts"])))
@@ -123,7 +131,11 @@ extension SetUpFaunaController{
                     return
                 }
                 let secret: String = try! result.get(path: "secret")
+                #if DEBUG
                 faunaClient = Client(secret: secret, observers: [Logger()])
+                #else
+                faunaClient = Client(secret: secret)
+                #endif
                 faunaClient.query(Create(ref: Ref("classes"), params: Obj(["name": "posts"]))) { createClassR in
                     guard let _ = try? createClassR.dematerialize() else {
                         callback(createClassR)

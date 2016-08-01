@@ -12,9 +12,16 @@ import Foundation
 
 let secret = "your_admin_key"
 
+#if DEBUG
 var faunaClient: Client = {
     return Client(secret: secret, observers: [Logger()])
 }()
+#else
+var faunaClient: Client = {
+    return Client(secret: secret)
+}()
+#endif
+
 
 extension FaunaModel {
 
