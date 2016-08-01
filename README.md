@@ -17,15 +17,9 @@ By [Fauna, Inc](http://faunadb.com).
 
 ## Inroduction
 
-This repository contains FaunaDB driver for Swift language. Basically it provides high level abstractions that allows us to work with fauna DB efficiently and without the need to deal with rest messages, networking errors, data encoding, decoding and so on.
-
-Apart of the FaunaDB driver, we also provide [RxSwift](https://github.com/ReactiveX/RxSwift) reactive programming [extensions](RxSources/Client+Rx.swift) for FaunaDB.
+This repository contains FaunaDB driver for Swift language. It provides high level abstractions that allows us to work with fauna DB efficiently and without the need to deal with rest messages, networking errors, data encoding, decoding and so on.
 
 > working on another language? Take a look at our github account, we provide Fauna DB drivers for many popular languages and many others are coming. Don't hesitate to contact us if the language you are working on is not supported yet. Notice you can always use the [REST API](https://faunadb.com/documentation/rest) directly.
-
-## About Fauna BD
-
-FaunaDB is a state of the art db system that aims to be as reliable, secure and fast as possible. For more information about Fauna, please visit our [website](https://faunadb.com/). If you are curious about Fauna DB design and architecture, please check out the [Design and Architecture of FaunaDB](https://faunadb.com/pdf/Design%20and%20Architecture%20of%20FaunaDB%2020160701.pdf) whitepaper.
 
 ## Requirements
 
@@ -217,6 +211,17 @@ let client = Client(secret: <YOUR_FAUNA_DB_SECRET>, observers: [Logger()]))
 > Notice that we can add as many observers as we want since observers parameter type is an array of `ClientObserverType` protocol.
 
 Once we have set up the client we can use it by just invoking its `query` method which has 2 parameters, the query expression and a callback that will be called right after the asynchronous operation finishes.
+
+
+It's not recommended to use `Logger` observer in released apps. We can turn it off in production code by using preprocessor macros as shown below.
+
+```swift
+#if DEBUG
+let client = Client(secret: <YOUR_FAUNA_DB_SECRET>, observers: [Logger()]))
+#else
+let client = Client(secret: <YOUR_FAUNA_DB_SECRET>)
+#endif
+```
 
 #### How to work directly with your app types
 
