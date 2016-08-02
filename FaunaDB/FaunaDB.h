@@ -5,7 +5,7 @@
 //  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for FaunaDB.
 FOUNDATION_EXPORT double FaunaDBVersionNumber;
