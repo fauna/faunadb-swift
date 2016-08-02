@@ -8,31 +8,134 @@
 
 /* Begin PBXBuildFile section */
 		2816488D1D3EA163002F1BEE /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
-		283EB4EB1D26FB6000E59EBA /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
-		283EB4ED1D26FB6600E59EBA /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */; };
-		283EB4EE1D26FB6900E59EBA /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
-		283EB4EF1D26FB6C00E59EBA /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
-		283EB4F01D26FB6F00E59EBA /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
-		283EB4F21D26FBC500E59EBA /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
 		287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */; };
 		287ED58B1D308ED6000E7BC6 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
 		287ED58D1D33DF80000E7BC6 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
 		28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
-		288614181D0AF605007FB922 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; };
-		288614191D0AF605007FB922 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; };
-		288614401D0AFBC1007FB922 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614161D0AF605007FB922 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		288614411D0AFBC1007FB922 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2886144F1D0C8CF7007FB922 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
 		2886147C1D0F6E50007FB922 /* MiscFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFunctions.swift */; };
 		288F0F781D0FA41D00079435 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
 		28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
 		28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
-		28A398881D341BE300F7D51B /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A398871D341BE300F7D51B /* SerializationTests.swift */; };
 		28D89B711D4FD6D7009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B701D4FD6D7009AE721 /* Result.framework */; };
 		28D89B721D4FD73C009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B701D4FD6D7009AE721 /* Result.framework */; };
 		28D89B841D4FF1AA009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F8287D1C494B2C00330CF4 /* FaunaDB.framework */; };
+		28D89B941D4FFAB4009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */; };
+		28D89BA11D4FFAD2009AE721 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
+		28D89BA21D4FFAD2009AE721 /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
+		28D89BA31D4FFAD2009AE721 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */; };
+		28D89BA41D4FFAD2009AE721 /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
+		28D89BA51D4FFAD2009AE721 /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
+		28D89BA61D4FFAD2009AE721 /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
+		28D89BA71D4FFAD2009AE721 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A398871D341BE300F7D51B /* SerializationTests.swift */; };
+		28D89BA81D5005DB009AE721 /* FaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F828801C494B2C00330CF4 /* FaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		28D89BAA1D5006D8009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89BA91D5006D8009AE721 /* Result.framework */; };
+		28D89BAF1D500CCD009AE721 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
+		28D89BB01D500CD3009AE721 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
+		28D89BB11D500CD3009AE721 /* BasicFormsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */; };
+		28D89BB21D500CD3009AE721 /* MiscFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFunctions.swift */; };
+		28D89BB31D500CD3009AE721 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
+		28D89BB41D500CD3009AE721 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
+		28D89BB51D500CD3009AE721 /* ReadFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAC1D1065E20016F809 /* ReadFunctions.swift */; };
+		28D89BB61D500CD3009AE721 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
+		28D89BB71D500CD3009AE721 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
+		28D89BB81D500CD3009AE721 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
+		28D89BB91D500CD3009AE721 /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
+		28D89BBA1D500CD8009AE721 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* Value.swift */; };
+		28D89BBB1D500CD8009AE721 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
+		28D89BBC1D500CD8009AE721 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
+		28D89BBD1D500CD8009AE721 /* Scalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4A1CFF909100A813D3 /* Scalars.swift */; };
+		28D89BBE1D500CD8009AE721 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8601D08EE7800A511AA /* Date.swift */; };
+		28D89BBF1D500CD8009AE721 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8621D08EE8700A511AA /* Timestamp.swift */; };
+		28D89BC01D500CD8009AE721 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF461CFF906200A813D3 /* Ref.swift */; };
+		28D89BC11D500CD8009AE721 /* Arr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* Arr.swift */; };
+		28D89BC21D500CD8009AE721 /* Obj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF481CFF907E00A813D3 /* Obj.swift */; };
+		28D89BC31D500CD8009AE721 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
+		28D89BC41D500CD8009AE721 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
+		28D89BC51D500CD8009AE721 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
+		28D89BC61D500CDC009AE721 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
+		28D89BC71D500CDC009AE721 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
+		28D89BC81D500CDC009AE721 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
+		28D89BCC1D500ED5009AE721 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89BCA1D500E3B009AE721 /* Nimble.framework */; };
+		28D89BCF1D501125009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89BA91D5006D8009AE721 /* Result.framework */; };
+		28D89BDA1D5020EC009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F8287D1C494B2C00330CF4 /* FaunaDB.framework */; };
+		28D89BE01D50369D009AE721 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288614171D0AF605007FB922 /* Nimble.framework */; };
+		28D89BE11D5036A3009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B701D4FD6D7009AE721 /* Result.framework */; };
+		28D89BE31D50382A009AE721 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
+		28D89BE41D50382A009AE721 /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
+		28D89BE51D50382A009AE721 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */; };
+		28D89BE61D50382A009AE721 /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
+		28D89BE71D50382A009AE721 /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
+		28D89BE81D50382A009AE721 /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
+		28D89BE91D50382A009AE721 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A398871D341BE300F7D51B /* SerializationTests.swift */; };
+		28D89BFA1D503B6B009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89BF01D503B6A009AE721 /* FaunaDB.framework */; };
+		28D89C081D503DCA009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C071D503DCA009AE721 /* Result.framework */; };
+		28D89C0B1D504564009AE721 /* FaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F828801C494B2C00330CF4 /* FaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		28D89C0C1D504596009AE721 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
+		28D89C0D1D504596009AE721 /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
+		28D89C0E1D504596009AE721 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */; };
+		28D89C0F1D504596009AE721 /* ClientExceptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */; };
+		28D89C101D504596009AE721 /* FieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB36C1D0782A50002B487 /* FieldTests.swift */; };
+		28D89C111D504596009AE721 /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */; };
+		28D89C121D504596009AE721 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A398871D341BE300F7D51B /* SerializationTests.swift */; };
+		28D89C131D50462B009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C071D503DCA009AE721 /* Result.framework */; };
+		28D89C151D504630009AE721 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C141D504630009AE721 /* Nimble.framework */; };
+		28D89C171D504774009AE721 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
+		28D89C181D504774009AE721 /* BasicFormsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */; };
+		28D89C191D504774009AE721 /* MiscFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFunctions.swift */; };
+		28D89C1A1D504774009AE721 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
+		28D89C1B1D504774009AE721 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
+		28D89C1C1D504774009AE721 /* ReadFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAC1D1065E20016F809 /* ReadFunctions.swift */; };
+		28D89C1D1D504774009AE721 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
+		28D89C1E1D504774009AE721 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
+		28D89C1F1D504774009AE721 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
+		28D89C201D504774009AE721 /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
+		28D89C211D504779009AE721 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* Value.swift */; };
+		28D89C221D504779009AE721 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
+		28D89C231D504779009AE721 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
+		28D89C241D504779009AE721 /* Scalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4A1CFF909100A813D3 /* Scalars.swift */; };
+		28D89C251D504779009AE721 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8601D08EE7800A511AA /* Date.swift */; };
+		28D89C261D504779009AE721 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8621D08EE8700A511AA /* Timestamp.swift */; };
+		28D89C271D504779009AE721 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF461CFF906200A813D3 /* Ref.swift */; };
+		28D89C281D504779009AE721 /* Arr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* Arr.swift */; };
+		28D89C291D504779009AE721 /* Obj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF481CFF907E00A813D3 /* Obj.swift */; };
+		28D89C2A1D504779009AE721 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
+		28D89C2B1D504779009AE721 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
+		28D89C2C1D504779009AE721 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
+		28D89C2D1D50477D009AE721 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
+		28D89C2E1D50477D009AE721 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
+		28D89C2F1D50477D009AE721 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
+		28D89C301D50477D009AE721 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
+		28D89C3E1D5048ED009AE721 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
+		28D89C3F1D5048ED009AE721 /* BasicFormsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAA1D10655E0016F809 /* BasicFormsFunctions.swift */; };
+		28D89C401D5048ED009AE721 /* MiscFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886147B1D0F6E50007FB922 /* MiscFunctions.swift */; };
+		28D89C411D5048ED009AE721 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
+		28D89C421D5048ED009AE721 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
+		28D89C431D5048ED009AE721 /* ReadFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99CAC1D1065E20016F809 /* ReadFunctions.swift */; };
+		28D89C441D5048ED009AE721 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
+		28D89C451D5048ED009AE721 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
+		28D89C461D5048ED009AE721 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
+		28D89C471D5048ED009AE721 /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
+		28D89C481D5048F8009AE721 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* Value.swift */; };
+		28D89C491D5048F8009AE721 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
+		28D89C4A1D5048F8009AE721 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
+		28D89C4B1D5048F8009AE721 /* Scalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4A1CFF909100A813D3 /* Scalars.swift */; };
+		28D89C4C1D5048F8009AE721 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8601D08EE7800A511AA /* Date.swift */; };
+		28D89C4D1D5048F8009AE721 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8621D08EE8700A511AA /* Timestamp.swift */; };
+		28D89C4E1D5048F8009AE721 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF461CFF906200A813D3 /* Ref.swift */; };
+		28D89C4F1D5048F8009AE721 /* Arr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF561D00A86E00A813D3 /* Arr.swift */; };
+		28D89C501D5048F8009AE721 /* Obj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF481CFF907E00A813D3 /* Obj.swift */; };
+		28D89C511D5048F8009AE721 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
+		28D89C521D5048F8009AE721 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
+		28D89C531D5048F8009AE721 /* SetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2886144E1D0C8CF7007FB922 /* SetRef.swift */; };
+		28D89C541D5048FE009AE721 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
+		28D89C551D5048FE009AE721 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
+		28D89C561D5048FE009AE721 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
+		28D89C571D5048FE009AE721 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
+		28D89C581D504925009AE721 /* FaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F828801C494B2C00330CF4 /* FaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		28D89C5A1D50495B009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C591D50495B009AE721 /* Result.framework */; };
 		28DCFF371CFE050E00A813D3 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF361CFE050E00A813D3 /* Client.swift */; };
 		28DCFF421CFE3B3400A813D3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF411CFE3B3400A813D3 /* Error.swift */; };
 		28DCFF441CFE40B600A813D3 /* ClientObserverType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */; };
@@ -46,7 +149,6 @@
 		28E9D8AB1D09D6B500A511AA /* RxFaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28E9D8AA1D09D6B500A511AA /* RxFaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28E9D8B21D09D95E00A511AA /* Client+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8B11D09D95E00A511AA /* Client+Rx.swift */; };
 		28F828811C494B2C00330CF4 /* FaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F828801C494B2C00330CF4 /* FaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		28F828881C494B2C00330CF4 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F8287D1C494B2C00330CF4 /* FaunaDB.framework */; };
 		28F888521D3710C3005782E4 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
 		28F888541D3710E6005782E4 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
 		28F99C881D1061440016F809 /* CollectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F99C871D1061440016F809 /* CollectionFunctions.swift */; };
@@ -55,28 +157,28 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		28F828891C494B2C00330CF4 /* PBXContainerItemProxy */ = {
+		28D89B951D4FFAB4009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28F828741C494B2C00330CF4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28D89B891D4FFAB4009AE721;
+			remoteInfo = "FaunaDB OSX";
+		};
+		28D89BDB1D5020EC009AE721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28F828741C494B2C00330CF4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 28F8287C1C494B2C00330CF4;
-			remoteInfo = FaunaDB;
+			remoteInfo = "FaunaDB iOS";
+		};
+		28D89BFB1D503B6B009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28F828741C494B2C00330CF4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28D89BEF1D503B6A009AE721;
+			remoteInfo = "FaunaDB tvOS";
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		2886143B1D0AFB53007FB922 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				288614401D0AFBC1007FB922 /* Quick.framework in CopyFiles */,
-				288614411D0AFBC1007FB922 /* Nimble.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationFunctions.swift; path = Query/AuthenticationFunctions.swift; sourceTree = "<group>"; };
@@ -88,7 +190,6 @@
 		287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeAndDateFunctions.swift; path = Query/TimeAndDateFunctions.swift; sourceTree = "<group>"; };
 		287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFunctions.swift; path = Query/StringFunctions.swift; sourceTree = "<group>"; };
 		28858D2A1D11C49400532DE7 /* WriteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = WriteFunctions.swift; path = Query/WriteFunctions.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		288614161D0AF605007FB922 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		288614171D0AF605007FB922 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		288614441D0B4C5D007FB922 /* ClientExceptionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientExceptionsTests.swift; path = Tests/ClientExceptionsTests.swift; sourceTree = SOURCE_ROOT; };
 		2886144E1D0C8CF7007FB922 /* SetRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetRef.swift; path = Types/SetRef.swift; sourceTree = "<group>"; };
@@ -97,6 +198,17 @@
 		28A1B1AD1D25C616006AA400 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Helpers.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		28A398871D341BE300F7D51B /* SerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializationTests.swift; path = Tests/SerializationTests.swift; sourceTree = SOURCE_ROOT; };
 		28D89B701D4FD6D7009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89B931D4FFAB4009AE721 /* FaunaDB OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FaunaDB OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89BA91D5006D8009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
+		28D89BCA1D500E3B009AE721 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
+		28D89BD51D5020EB009AE721 /* FaunaDB iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FaunaDB iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89BF01D503B6A009AE721 /* FaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89BF91D503B6B009AE721 /* FaunaDB tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FaunaDB tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89C071D503DCA009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
+		28D89C141D504630009AE721 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/tvOS/Nimble.framework; sourceTree = "<group>"; };
+		28D89C361D5048CD009AE721 /* FaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D89C591D50495B009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/watchOS/Result.framework; sourceTree = "<group>"; };
 		28DCFF361CFE050E00A813D3 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Client.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientConfigurationTests.swift; path = Tests/ClientConfigurationTests.swift; sourceTree = SOURCE_ROOT; };
 		28DCFF3F1CFE3AB000A813D3 /* ClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTests.swift; path = Tests/ClientTests.swift; sourceTree = SOURCE_ROOT; };
@@ -118,7 +230,6 @@
 		28F8287D1C494B2C00330CF4 /* FaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828801C494B2C00330CF4 /* FaunaDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaunaDB.h; sourceTree = "<group>"; };
 		28F828821C494B2C00330CF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		28F828871C494B2C00330CF4 /* FaunaDBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaunaDBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F8288E1C494B2C00330CF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		28F8289B1C494BF100330CF4 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; };
 		28F888511D3710C3005782E4 /* ValueConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueConvertible.swift; path = Types/ValueConvertible.swift; sourceTree = "<group>"; };
@@ -129,6 +240,60 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		28D89B861D4FFAB4009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BAA1D5006D8009AE721 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89B901D4FFAB4009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BCC1D500ED5009AE721 /* Nimble.framework in Frameworks */,
+				28D89BCF1D501125009AE721 /* Result.framework in Frameworks */,
+				28D89B941D4FFAB4009AE721 /* FaunaDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BD21D5020EB009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BE01D50369D009AE721 /* Nimble.framework in Frameworks */,
+				28D89BE11D5036A3009AE721 /* Result.framework in Frameworks */,
+				28D89BDA1D5020EC009AE721 /* FaunaDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BEC1D503B6A009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C081D503DCA009AE721 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BF61D503B6B009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C151D504630009AE721 /* Nimble.framework in Frameworks */,
+				28D89C131D50462B009AE721 /* Result.framework in Frameworks */,
+				28D89BFA1D503B6B009AE721 /* FaunaDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89C321D5048CD009AE721 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C5A1D50495B009AE721 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		28E9D8A41D09D6B500A511AA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -144,16 +309,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28D89B721D4FD73C009AE721 /* Result.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		28F828841C494B2C00330CF4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				288614181D0AF605007FB922 /* Quick.framework in Frameworks */,
-				288614191D0AF605007FB922 /* Nimble.framework in Frameworks */,
-				28F828881C494B2C00330CF4 /* FaunaDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,8 +328,9 @@
 		28D89B791D4FD7C8009AE721 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				288614161D0AF605007FB922 /* Quick.framework */,
+				28D89C141D504630009AE721 /* Nimble.framework */,
 				288614171D0AF605007FB922 /* Nimble.framework */,
+				28D89BCA1D500E3B009AE721 /* Nimble.framework */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -182,7 +338,10 @@
 		28D89B7A1D4FD7D2009AE721 /* FaunaDB */ = {
 			isa = PBXGroup;
 			children = (
+				28D89C591D50495B009AE721 /* Result.framework */,
+				28D89C071D503DCA009AE721 /* Result.framework */,
 				28D89B701D4FD6D7009AE721 /* Result.framework */,
+				28D89BA91D5006D8009AE721 /* Result.framework */,
 			);
 			name = FaunaDB;
 			sourceTree = "<group>";
@@ -231,13 +390,6 @@
 			name = Query;
 			sourceTree = "<group>";
 		};
-		28DCFF581D00CF0400A813D3 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		28E9D8A91D09D6B500A511AA /* RxFaunaDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,7 +417,6 @@
 				28F8287F1C494B2C00330CF4 /* FaunaDB */,
 				28E9D8A91D09D6B500A511AA /* RxFaunaDB */,
 				28F8287E1C494B2C00330CF4 /* Products */,
-				28DCFF581D00CF0400A813D3 /* Frameworks */,
 				28D89B6F1D4FD596009AE721 /* Dependency Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -274,8 +425,13 @@
 			isa = PBXGroup;
 			children = (
 				28F8287D1C494B2C00330CF4 /* FaunaDB.framework */,
-				28F828871C494B2C00330CF4 /* FaunaDBTests.xctest */,
 				28E9D8A81D09D6B500A511AA /* RxFaunaDB.framework */,
+				28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */,
+				28D89B931D4FFAB4009AE721 /* FaunaDB OSXTests.xctest */,
+				28D89BD51D5020EB009AE721 /* FaunaDB iOSTests.xctest */,
+				28D89BF01D503B6A009AE721 /* FaunaDB.framework */,
+				28D89BF91D503B6B009AE721 /* FaunaDB tvOSTests.xctest */,
+				28D89C361D5048CD009AE721 /* FaunaDB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -308,12 +464,12 @@
 		28F828971C494B4200330CF4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				28A1B1AD1D25C616006AA400 /* Helpers.swift */,
 				28DCFF4E1CFF90D800A813D3 /* Query */,
 				28DCFF451CFF903C00A813D3 /* Types */,
 				28DCFF361CFE050E00A813D3 /* Client.swift */,
 				28DCFF431CFE40B600A813D3 /* ClientObserverType.swift */,
 				28DCFF411CFE3B3400A813D3 /* Error.swift */,
+				28A1B1AD1D25C616006AA400 /* Helpers.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -321,6 +477,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		28D89B871D4FFAB4009AE721 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BA81D5005DB009AE721 /* FaunaDB.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BED1D503B6A009AE721 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C0B1D504564009AE721 /* FaunaDB.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89C331D5048CD009AE721 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C581D504925009AE721 /* FaunaDB.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		28E9D8A51D09D6B500A511AA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,9 +520,118 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		28E9D8A71D09D6B500A511AA /* RxFaunaDB */ = {
+		28D89B891D4FFAB4009AE721 /* FaunaDB OSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB" */;
+			buildConfigurationList = 28D89B9B1D4FFAB4009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB OSX" */;
+			buildPhases = (
+				28D89B851D4FFAB4009AE721 /* Sources */,
+				28D89B861D4FFAB4009AE721 /* Frameworks */,
+				28D89B871D4FFAB4009AE721 /* Headers */,
+				28D89B881D4FFAB4009AE721 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FaunaDB OSX";
+			productName = "FaunaDB OSX";
+			productReference = 28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		28D89B921D4FFAB4009AE721 /* FaunaDB OSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D89B9E1D4FFAB4009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB OSXTests" */;
+			buildPhases = (
+				28D89B8F1D4FFAB4009AE721 /* Sources */,
+				28D89B901D4FFAB4009AE721 /* Frameworks */,
+				28D89BEA1D50388B009AE721 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28D89B961D4FFAB4009AE721 /* PBXTargetDependency */,
+			);
+			name = "FaunaDB OSXTests";
+			productName = "FaunaDB OSXTests";
+			productReference = 28D89B931D4FFAB4009AE721 /* FaunaDB OSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		28D89BD41D5020EB009AE721 /* FaunaDB iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D89BDD1D5020EC009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB iOSTests" */;
+			buildPhases = (
+				28D89BD11D5020EB009AE721 /* Sources */,
+				28D89BD21D5020EB009AE721 /* Frameworks */,
+				28D89BE21D503775009AE721 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28D89BDC1D5020EC009AE721 /* PBXTargetDependency */,
+			);
+			name = "FaunaDB iOSTests";
+			productName = "FaunaDB iOSTests";
+			productReference = 28D89BD51D5020EB009AE721 /* FaunaDB iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		28D89BEF1D503B6A009AE721 /* FaunaDB tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D89C011D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOS" */;
+			buildPhases = (
+				28D89BEB1D503B6A009AE721 /* Sources */,
+				28D89BEC1D503B6A009AE721 /* Frameworks */,
+				28D89BED1D503B6A009AE721 /* Headers */,
+				28D89BEE1D503B6A009AE721 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FaunaDB tvOS";
+			productName = "FaunaDB tvOS";
+			productReference = 28D89BF01D503B6A009AE721 /* FaunaDB.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		28D89BF81D503B6B009AE721 /* FaunaDB tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D89C041D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOSTests" */;
+			buildPhases = (
+				28D89BF51D503B6B009AE721 /* Sources */,
+				28D89BF61D503B6B009AE721 /* Frameworks */,
+				28D89BF71D503B6B009AE721 /* Resources */,
+				28D89C161D504684009AE721 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28D89BFC1D503B6B009AE721 /* PBXTargetDependency */,
+			);
+			name = "FaunaDB tvOSTests";
+			productName = "FaunaDB tvOSTests";
+			productReference = 28D89BF91D503B6B009AE721 /* FaunaDB tvOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		28D89C351D5048CD009AE721 /* FaunaDB watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D89C3B1D5048CD009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB watchOS" */;
+			buildPhases = (
+				28D89C311D5048CD009AE721 /* Sources */,
+				28D89C321D5048CD009AE721 /* Frameworks */,
+				28D89C331D5048CD009AE721 /* Headers */,
+				28D89C341D5048CD009AE721 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FaunaDB watchOS";
+			productName = "FaunaDB watchOS";
+			productReference = 28D89C361D5048CD009AE721 /* FaunaDB.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		28E9D8A71D09D6B500A511AA /* RxFaunaDB iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB iOS" */;
 			buildPhases = (
 				28E9D8A31D09D6B500A511AA /* Sources */,
 				28E9D8A41D09D6B500A511AA /* Frameworks */,
@@ -353,14 +642,14 @@
 			);
 			dependencies = (
 			);
-			name = RxFaunaDB;
+			name = "RxFaunaDB iOS";
 			productName = RxFaunaDB;
 			productReference = 28E9D8A81D09D6B500A511AA /* RxFaunaDB.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		28F8287C1C494B2C00330CF4 /* FaunaDB */ = {
+		28F8287C1C494B2C00330CF4 /* FaunaDB iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28F828911C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDB" */;
+			buildConfigurationList = 28F828911C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDB iOS" */;
 			buildPhases = (
 				28F828781C494B2C00330CF4 /* Sources */,
 				28F828791C494B2C00330CF4 /* Frameworks */,
@@ -371,29 +660,10 @@
 			);
 			dependencies = (
 			);
-			name = FaunaDB;
+			name = "FaunaDB iOS";
 			productName = FaunaDB;
 			productReference = 28F8287D1C494B2C00330CF4 /* FaunaDB.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		28F828861C494B2C00330CF4 /* FaunaDBTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 28F828941C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDBTests" */;
-			buildPhases = (
-				28F828831C494B2C00330CF4 /* Sources */,
-				28F828841C494B2C00330CF4 /* Frameworks */,
-				28F828851C494B2C00330CF4 /* Resources */,
-				2886143B1D0AFB53007FB922 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				28F8288A1C494B2C00330CF4 /* PBXTargetDependency */,
-			);
-			name = FaunaDBTests;
-			productName = FaunaDBTests;
-			productReference = 28F828871C494B2C00330CF4 /* FaunaDBTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -404,13 +674,28 @@
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
+					28D89B891D4FFAB4009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					28D89B921D4FFAB4009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					28D89BD41D5020EB009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					28D89BEF1D503B6A009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					28D89BF81D503B6B009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					28D89C351D5048CD009AE721 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					28E9D8A71D09D6B500A511AA = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
 					28F8287C1C494B2C00330CF4 = {
-						CreatedOnToolsVersion = 7.2;
-					};
-					28F828861C494B2C00330CF4 = {
 						CreatedOnToolsVersion = 7.2;
 					};
 				};
@@ -427,14 +712,47 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				28F8287C1C494B2C00330CF4 /* FaunaDB */,
-				28E9D8A71D09D6B500A511AA /* RxFaunaDB */,
-				28F828861C494B2C00330CF4 /* FaunaDBTests */,
+				28F8287C1C494B2C00330CF4 /* FaunaDB iOS */,
+				28D89B891D4FFAB4009AE721 /* FaunaDB OSX */,
+				28D89BEF1D503B6A009AE721 /* FaunaDB tvOS */,
+				28D89C351D5048CD009AE721 /* FaunaDB watchOS */,
+				28D89BD41D5020EB009AE721 /* FaunaDB iOSTests */,
+				28D89B921D4FFAB4009AE721 /* FaunaDB OSXTests */,
+				28D89BF81D503B6B009AE721 /* FaunaDB tvOSTests */,
+				28E9D8A71D09D6B500A511AA /* RxFaunaDB iOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		28D89B881D4FFAB4009AE721 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BEE1D503B6A009AE721 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BF71D503B6B009AE721 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89C341D5048CD009AE721 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		28E9D8A61D09D6B500A511AA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -449,16 +767,198 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		28F828851C494B2C00330CF4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		28D89BE21D503775009AE721 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-/* End PBXResourcesBuildPhase section */
+		28D89BEA1D50388B009AE721 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/Nimble.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/Result.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		28D89C161D504684009AE721 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/tvOS/Nimble.framework",
+				"$(SRCROOT)/Carthage/Build/tvOS/Result.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		28D89B851D4FFAB4009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BB31D500CD3009AE721 /* CollectionFunctions.swift in Sources */,
+				28D89BBC1D500CD8009AE721 /* DecodableValue.swift in Sources */,
+				28D89BC71D500CDC009AE721 /* ClientObserverType.swift in Sources */,
+				28D89BBD1D500CD8009AE721 /* Scalars.swift in Sources */,
+				28D89BC21D500CD8009AE721 /* Obj.swift in Sources */,
+				28D89BBE1D500CD8009AE721 /* Date.swift in Sources */,
+				28D89BB01D500CD3009AE721 /* Expr.swift in Sources */,
+				28D89BC11D500CD8009AE721 /* Arr.swift in Sources */,
+				28D89BB11D500CD3009AE721 /* BasicFormsFunctions.swift in Sources */,
+				28D89BBB1D500CD8009AE721 /* ValueConvertible.swift in Sources */,
+				28D89BB71D500CD3009AE721 /* TimeAndDateFunctions.swift in Sources */,
+				28D89BB81D500CD3009AE721 /* StringFunctions.swift in Sources */,
+				28D89BB61D500CD3009AE721 /* WriteFunctions.swift in Sources */,
+				28D89BAF1D500CCD009AE721 /* Helpers.swift in Sources */,
+				28D89BB41D500CD3009AE721 /* SetFunctions.swift in Sources */,
+				28D89BC61D500CDC009AE721 /* Client.swift in Sources */,
+				28D89BC81D500CDC009AE721 /* Error.swift in Sources */,
+				28D89BB91D500CD3009AE721 /* AuthenticationFunctions.swift in Sources */,
+				28D89BBF1D500CD8009AE721 /* Timestamp.swift in Sources */,
+				28D89BC31D500CD8009AE721 /* PathComponentType.swift in Sources */,
+				28D89BB51D500CD3009AE721 /* ReadFunctions.swift in Sources */,
+				28D89BC41D500CD8009AE721 /* FieldType.swift in Sources */,
+				28D89BB21D500CD3009AE721 /* MiscFunctions.swift in Sources */,
+				28D89BBA1D500CD8009AE721 /* Value.swift in Sources */,
+				28D89BC01D500CD8009AE721 /* Ref.swift in Sources */,
+				28D89BC51D500CD8009AE721 /* SetRef.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89B8F1D4FFAB4009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BA41D4FFAD2009AE721 /* ClientExceptionsTests.swift in Sources */,
+				28D89BA61D4FFAD2009AE721 /* DeserializationTests.swift in Sources */,
+				28D89BA21D4FFAD2009AE721 /* ClientConfigurationTests.swift in Sources */,
+				28D89BA71D4FFAD2009AE721 /* SerializationTests.swift in Sources */,
+				28D89BA31D4FFAD2009AE721 /* ClientTests.swift in Sources */,
+				28D89BA51D4FFAD2009AE721 /* FieldTests.swift in Sources */,
+				28D89BA11D4FFAD2009AE721 /* FaunaDBTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BD11D5020EB009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89BE71D50382A009AE721 /* FieldTests.swift in Sources */,
+				28D89BE91D50382A009AE721 /* SerializationTests.swift in Sources */,
+				28D89BE31D50382A009AE721 /* FaunaDBTests.swift in Sources */,
+				28D89BE51D50382A009AE721 /* ClientTests.swift in Sources */,
+				28D89BE81D50382A009AE721 /* DeserializationTests.swift in Sources */,
+				28D89BE61D50382A009AE721 /* ClientExceptionsTests.swift in Sources */,
+				28D89BE41D50382A009AE721 /* ClientConfigurationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BEB1D503B6A009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C181D504774009AE721 /* BasicFormsFunctions.swift in Sources */,
+				28D89C251D504779009AE721 /* Date.swift in Sources */,
+				28D89C201D504774009AE721 /* AuthenticationFunctions.swift in Sources */,
+				28D89C211D504779009AE721 /* Value.swift in Sources */,
+				28D89C2A1D504779009AE721 /* PathComponentType.swift in Sources */,
+				28D89C2B1D504779009AE721 /* FieldType.swift in Sources */,
+				28D89C2C1D504779009AE721 /* SetRef.swift in Sources */,
+				28D89C1D1D504774009AE721 /* WriteFunctions.swift in Sources */,
+				28D89C291D504779009AE721 /* Obj.swift in Sources */,
+				28D89C1A1D504774009AE721 /* CollectionFunctions.swift in Sources */,
+				28D89C241D504779009AE721 /* Scalars.swift in Sources */,
+				28D89C271D504779009AE721 /* Ref.swift in Sources */,
+				28D89C2E1D50477D009AE721 /* ClientObserverType.swift in Sources */,
+				28D89C2D1D50477D009AE721 /* Client.swift in Sources */,
+				28D89C1B1D504774009AE721 /* SetFunctions.swift in Sources */,
+				28D89C1C1D504774009AE721 /* ReadFunctions.swift in Sources */,
+				28D89C221D504779009AE721 /* ValueConvertible.swift in Sources */,
+				28D89C281D504779009AE721 /* Arr.swift in Sources */,
+				28D89C191D504774009AE721 /* MiscFunctions.swift in Sources */,
+				28D89C1E1D504774009AE721 /* TimeAndDateFunctions.swift in Sources */,
+				28D89C1F1D504774009AE721 /* StringFunctions.swift in Sources */,
+				28D89C171D504774009AE721 /* Expr.swift in Sources */,
+				28D89C261D504779009AE721 /* Timestamp.swift in Sources */,
+				28D89C301D50477D009AE721 /* Helpers.swift in Sources */,
+				28D89C2F1D50477D009AE721 /* Error.swift in Sources */,
+				28D89C231D504779009AE721 /* DecodableValue.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89BF51D503B6B009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C101D504596009AE721 /* FieldTests.swift in Sources */,
+				28D89C121D504596009AE721 /* SerializationTests.swift in Sources */,
+				28D89C0C1D504596009AE721 /* FaunaDBTests.swift in Sources */,
+				28D89C0E1D504596009AE721 /* ClientTests.swift in Sources */,
+				28D89C111D504596009AE721 /* DeserializationTests.swift in Sources */,
+				28D89C0F1D504596009AE721 /* ClientExceptionsTests.swift in Sources */,
+				28D89C0D1D504596009AE721 /* ClientConfigurationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28D89C311D5048CD009AE721 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D89C3F1D5048ED009AE721 /* BasicFormsFunctions.swift in Sources */,
+				28D89C4C1D5048F8009AE721 /* Date.swift in Sources */,
+				28D89C471D5048ED009AE721 /* AuthenticationFunctions.swift in Sources */,
+				28D89C481D5048F8009AE721 /* Value.swift in Sources */,
+				28D89C511D5048F8009AE721 /* PathComponentType.swift in Sources */,
+				28D89C521D5048F8009AE721 /* FieldType.swift in Sources */,
+				28D89C531D5048F8009AE721 /* SetRef.swift in Sources */,
+				28D89C441D5048ED009AE721 /* WriteFunctions.swift in Sources */,
+				28D89C501D5048F8009AE721 /* Obj.swift in Sources */,
+				28D89C411D5048ED009AE721 /* CollectionFunctions.swift in Sources */,
+				28D89C4B1D5048F8009AE721 /* Scalars.swift in Sources */,
+				28D89C4E1D5048F8009AE721 /* Ref.swift in Sources */,
+				28D89C551D5048FE009AE721 /* ClientObserverType.swift in Sources */,
+				28D89C541D5048FE009AE721 /* Client.swift in Sources */,
+				28D89C421D5048ED009AE721 /* SetFunctions.swift in Sources */,
+				28D89C431D5048ED009AE721 /* ReadFunctions.swift in Sources */,
+				28D89C491D5048F8009AE721 /* ValueConvertible.swift in Sources */,
+				28D89C4F1D5048F8009AE721 /* Arr.swift in Sources */,
+				28D89C401D5048ED009AE721 /* MiscFunctions.swift in Sources */,
+				28D89C451D5048ED009AE721 /* TimeAndDateFunctions.swift in Sources */,
+				28D89C461D5048ED009AE721 /* StringFunctions.swift in Sources */,
+				28D89C3E1D5048ED009AE721 /* Expr.swift in Sources */,
+				28D89C4D1D5048F8009AE721 /* Timestamp.swift in Sources */,
+				28D89C571D5048FE009AE721 /* Helpers.swift in Sources */,
+				28D89C561D5048FE009AE721 /* Error.swift in Sources */,
+				28D89C4A1D5048F8009AE721 /* DecodableValue.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		28E9D8A31D09D6B500A511AA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -500,31 +1000,283 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		28F828831C494B2C00330CF4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				283EB4EE1D26FB6900E59EBA /* ClientExceptionsTests.swift in Sources */,
-				283EB4F01D26FB6F00E59EBA /* DeserializationTests.swift in Sources */,
-				283EB4ED1D26FB6600E59EBA /* ClientTests.swift in Sources */,
-				28A398881D341BE300F7D51B /* SerializationTests.swift in Sources */,
-				283EB4F21D26FBC500E59EBA /* FaunaDBTests.swift in Sources */,
-				283EB4EF1D26FB6C00E59EBA /* FieldTests.swift in Sources */,
-				283EB4EB1D26FB6000E59EBA /* ClientConfigurationTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		28F8288A1C494B2C00330CF4 /* PBXTargetDependency */ = {
+		28D89B961D4FFAB4009AE721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 28F8287C1C494B2C00330CF4 /* FaunaDB */;
-			targetProxy = 28F828891C494B2C00330CF4 /* PBXContainerItemProxy */;
+			target = 28D89B891D4FFAB4009AE721 /* FaunaDB OSX */;
+			targetProxy = 28D89B951D4FFAB4009AE721 /* PBXContainerItemProxy */;
+		};
+		28D89BDC1D5020EC009AE721 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28F8287C1C494B2C00330CF4 /* FaunaDB iOS */;
+			targetProxy = 28D89BDB1D5020EC009AE721 /* PBXContainerItemProxy */;
+		};
+		28D89BFC1D503B6B009AE721 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28D89BEF1D503B6A009AE721 /* FaunaDB tvOS */;
+			targetProxy = 28D89BFB1D503B6B009AE721 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		28D89B9C1D4FFAB4009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		28D89B9D1D4FFAB4009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		28D89B9F1D4FFAB4009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(PROJECT_DIR)/Carthage/Build/Mac";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		28D89BA01D4FFAB4009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(PROJECT_DIR)/Carthage/Build/Mac";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		28D89BDE1D5020EC009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		28D89BDF1D5020EC009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		28D89C021D503B6B009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Debug;
+		};
+		28D89C031D503B6B009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Release;
+		};
+		28D89C051D503B6B009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Debug;
+		};
+		28D89C061D503B6B009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Release;
+		};
+		28D89C3C1D5048CD009AE721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-watchOS";
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Debug;
+		};
+		28D89C3D1D5048CD009AE721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = FaunaDB/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-watchOS";
+				PRODUCT_NAME = FaunaDB;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Release;
+		};
 		28E9D8AE1D09D6B500A511AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -543,7 +1295,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB.RxFaunaDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RxFaunaDB;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -567,7 +1319,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB.RxFaunaDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RxFaunaDB;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -668,6 +1420,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -675,9 +1428,9 @@
 				INFOPLIST_FILE = FaunaDB/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FaunaDB;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -689,6 +1442,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -696,48 +1450,65 @@
 				INFOPLIST_FILE = FaunaDB/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FaunaDB;
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		28F828951C494B2C00330CF4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
-				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		28F828961C494B2C00330CF4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
-				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDBTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB" */ = {
+		28D89B9B1D4FFAB4009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89B9C1D4FFAB4009AE721 /* Debug */,
+				28D89B9D1D4FFAB4009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28D89B9E1D4FFAB4009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB OSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89B9F1D4FFAB4009AE721 /* Debug */,
+				28D89BA01D4FFAB4009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28D89BDD1D5020EC009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89BDE1D5020EC009AE721 /* Debug */,
+				28D89BDF1D5020EC009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28D89C011D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89C021D503B6B009AE721 /* Debug */,
+				28D89C031D503B6B009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28D89C041D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89C051D503B6B009AE721 /* Debug */,
+				28D89C061D503B6B009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28D89C3B1D5048CD009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28D89C3C1D5048CD009AE721 /* Debug */,
+				28D89C3D1D5048CD009AE721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28E9D8AE1D09D6B500A511AA /* Debug */,
@@ -755,20 +1526,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		28F828911C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDB" */ = {
+		28F828911C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDB iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28F828921C494B2C00330CF4 /* Debug */,
 				28F828931C494B2C00330CF4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		28F828941C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDBTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				28F828951C494B2C00330CF4 /* Debug */,
-				28F828961C494B2C00330CF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
