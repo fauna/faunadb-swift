@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28D89C351D5048CD009AE721"
-               BuildableName = "FaunaDB watchOS.framework"
+               BuildableName = "FaunaDB.framework"
                BlueprintName = "FaunaDB watchOS"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28D89C351D5048CD009AE721"
-            BuildableName = "FaunaDB watchOS.framework"
+            BuildableName = "FaunaDB.framework"
             BlueprintName = "FaunaDB watchOS"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28D89C351D5048CD009AE721"
-            BuildableName = "FaunaDB watchOS.framework"
+            BuildableName = "FaunaDB.framework"
             BlueprintName = "FaunaDB watchOS"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
