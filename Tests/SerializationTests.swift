@@ -69,7 +69,7 @@ class SerializationTests: FaunaDBTests {
 
         // MARK: Obj
         let obj = Obj(["test": 1, "test2": Ref("some/ref")])
-        expectToJson(obj) == "{\"object\":{\"test\":1,\"test2\":{\"@ref\":\"some\\/ref\"}}}"
+        expectToJson(obj).to(satisfyAnyOf(equal("{\"object\":{\"test\":1,\"test2\":{\"@ref\":\"some\\/ref\"}}}"), equal("{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}")))
 
         var obj2 = Obj([:])
         obj2["test"] = 1
@@ -85,12 +85,11 @@ class SerializationTests: FaunaDBTests {
 
         let obj5 = Obj(["key1": 1, "key2": "faunaDB"])
         expectToJson(obj5) == "{\"object\":{\"key1\":1,\"key2\":\"faunaDB\"}}"
-
     }
 
     func testArrWithObj() {
         let arr = Arr(Arr(Obj(["test":"value"]), 2323, true), "hi", Obj(["test2": Null(),"test": "yo"]))
-        expectToJson(arr) == "[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test\":\"yo\",\"test2\":null}}]"
+        expectToJson(arr).to(satisfyAnyOf(equal("[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test\":\"yo\",\"test2\":null}}]"), equal("[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]")))
     }
 
     func testLiteralValues() {
@@ -162,17 +161,18 @@ class SerializationTests: FaunaDBTests {
         let spell = Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])
         var create = Create(ref: Ref("classes/spells"),
                             params: Obj(["data": spell]))
-        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"
+        expectToJson(create).to(satisfyAnyOf(equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"), equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")))
 
         create = Create(ref: Ref("classes/spells"),
                         params: Obj(["data": Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])]))
-        expectToJson(create) == "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"
-
+        expectToJson(create).to(satisfyAnyOf(equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"), equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")))
+        
+        
         //MARK: Update
 
         let update = Update(ref: Ref("classes/spells/123456"),
                             params: Obj(["data": Obj(["name": "Mountain's Thunder", "cost": Null()])]))
-        expectToJson(update) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":null}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
+        expectToJson(update).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":null}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"), equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")))
 
         //MARK: Replace
 
@@ -182,12 +182,12 @@ class SerializationTests: FaunaDBTests {
         replaceSpell["cost"] = 10
         var replace = Replace(ref: Ref("classes/spells/123456"),
                               params: Obj(["data": replaceSpell]))
-        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"
+        expectToJson(replace).to(satisfyAnyOf(equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"), equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")))
 
 
         replace = Replace(ref: Ref("classes/spells/123456"),
                           params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
-        expectToJson(replace) == "{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"
+        expectToJson(replace).to(satisfyAnyOf(equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"), equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")))
         
         //MARK: Delete
 
@@ -206,21 +206,21 @@ class SerializationTests: FaunaDBTests {
                             action: .Create,
                             params: Obj(["data": replaceSpell]))
 
-        expectToJson(insert) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        expectToJson(insert).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
 
         insert = Insert(ref: Ref("classes/spells/123456"),
                         ts: Timestamp(timeIntervalSince1970: 0),
                         action: Action.Create,
                         params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
 
-        expectToJson(insert) == "{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        expectToJson(insert).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
 
         //MARK: Remove
 
         let remove = Remove(ref: Ref("classes/spells/123456"),
                             ts: Timestamp(timeIntervalSince1970: 0),
                             action: .Create)
-        expectToJson(remove) == "{\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        expectToJson(remove).to(satisfyAnyOf(equal("{\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
     }
 
     func testCollections() {
@@ -302,13 +302,13 @@ class SerializationTests: FaunaDBTests {
         //MARK: Drop
 
         let drop = Drop(count: 2, collection: Arr(1,2,3))
-        expectToJson(drop) == "{\"drop\":2,\"collection\":[1,2,3]}"
+        expectToJson(drop).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,2,3]}"), equal("{\"collection\":[1,2,3],\"drop\":2}")))
 
         let drop2 = Drop(count: 2 as Expr, collection: Arr(1, 2, 3))
-        expectToJson(drop2) == "{\"drop\":2,\"collection\":[1,2,3]}"
+        expectToJson(drop2).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,2,3]}"), equal("{\"collection\":[1,2,3],\"drop\":2}")))
 
         let drop3 = Drop(count: 2, collection: Arr(1, "Hi", 3))
-        expectToJson(drop3) == "{\"drop\":2,\"collection\":[1,\"Hi\",3]}"
+        expectToJson(drop3).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,\"Hi\",3]}"), equal("{\"collection\":[1,\"Hi\",3],\"drop\":2}")))
 
         //MARK: Prepend
 
@@ -331,7 +331,7 @@ class SerializationTests: FaunaDBTests {
         expectToJson(get) == "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
 
         get = Get(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
-        expectToJson(get) == "{\"get\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
+        expectToJson(get).to(satisfyAnyOf(equal("{\"get\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")))
 
         //MARK: Exists
 
@@ -364,17 +364,17 @@ class SerializationTests: FaunaDBTests {
         let paginate3 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
             Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  events: true)
-        expectToJson(paginate3) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"events\":true}"
+        expectToJson(paginate3).to(satisfyAnyOf(equal("{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"events\":true}"), equal("{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")))
         
         let paginate4 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
             Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  size: 4)
-        expectToJson(paginate4) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4}"
+        expectToJson(paginate4).to(satisfyAnyOf(equal("{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4}"), equal("{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")))
 
         let paginate5 = Paginate(Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
             Match(index: Ref("indexes/some_index"), terms: "term2")),
                                  size: 4, events: true, sources: true)
-        expectToJson(paginate5) == "{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4,\"sources\":true}"
+        expectToJson(paginate5).to(satisfyAnyOf(equal("{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4,\"sources\":true}"), equal("{\"size\":4,\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")))
     }
 
     func testMiscellaneousFunctions(){
@@ -413,7 +413,7 @@ class SerializationTests: FaunaDBTests {
                         "lunchings")
                 ])
             ]))
-        expectToJson(select) == "{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"
+        expectToJson(select).to(satisfyAnyOf(equal("{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"), equal("{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")))
 
         select = Select(path: Arr("favorites", "foods", 1), from:
             Obj(["favorites":
@@ -421,7 +421,7 @@ class SerializationTests: FaunaDBTests {
                     Arr("crunchings", "munchings", "lunchings")
                 ])
             ]))
-        expectToJson(select) == "{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"
+        expectToJson(select).to(satisfyAnyOf(equal("{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"), equal("{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")))
         
         expectToJson(Add(terms: 1, 2, 3)) == "{\"add\":[1,2,3]}"
 
@@ -495,7 +495,7 @@ class SerializationTests: FaunaDBTests {
         let join = Join(sourceSet: Match(index: Ref("indexes/spells_by_element"),
             terms: "fire"),
                         with: Lambda { value in return  Get(ref: value) })
-        expectToJson(join) == "{\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},\"with\":{\"expr\":{\"get\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}}"
+        expectToJson(join).to(satisfyAnyOf(equal("{\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},\"with\":{\"expr\":{\"get\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}}"), equal("{\"with\":{\"expr\":{\"get\":{\"var\":\"v1\"}},\"lambda\":\"v1\"},\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")))
     }
 
     func testBasicForms() {
@@ -516,20 +516,20 @@ class SerializationTests: FaunaDBTests {
         letExpr = Let(1, "Hi!", Create(ref: Ref("databases"), params: Obj(["name": "blog_db"]))) { x, y, z in
             Do(exprs: x, y, x, y, z)
         }
-        expectToJson(letExpr) == "{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v2\":\"Hi!\",\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"
+        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v2\":\"Hi!\",\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"), equal("{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}")))
         
         Var.resetIndex()
         letExpr = Let(1, 2, 3, 4) { x, y, z, a in
             Do(exprs: x, y, z, a)
         }
-        expectToJson(letExpr) == "{\"let\":{\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}"
+        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}")))
         
         
         Var.resetIndex()
         letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
             Do(exprs: x, y, z, a, t)
         }
-        expectToJson(letExpr) == "{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}"
+        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}")))
         
         
         Var.resetIndex()
@@ -538,18 +538,18 @@ class SerializationTests: FaunaDBTests {
                 Do(exprs: x, y, z, a, t, w)
             }
         }
-        expectToJson(letExpr) == "{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}"
+        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}")))
         
         // MARK: If
         var ifExpr = If(pred: true, then: "was true", else: "was false")
-        expectToJson(ifExpr) ==  "{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"
+        expectToJson(ifExpr).to(satisfyAnyOf(equal("{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"), equal("{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")))
         ifExpr = If(pred: true, then: {
                     return "was true"
                  }(),
                 else: {
                     return "was false"
                 }())
-        expectToJson(ifExpr) == "{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"
+        expectToJson(ifExpr).to(satisfyAnyOf(equal("{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"), equal("{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")))
         
         //MARK: Do
         

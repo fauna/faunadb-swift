@@ -2,12 +2,19 @@ language: objective-c
 osx_image: xcode7.3
 
 before_install:
+- set -o pipefail
+- xcodebuild -version
+- xcodebuild -showsdks
 - brew update
 - brew outdated carthage || brew upgrade carthage
-- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
-- carthage update --platform iOS --no-use-binaries
+- carthage update Result --platform all
+- carthage update Nimble --platform iOS,Mac,tvOS
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-
 script:
-- xctool clean build -project FaunaDB.xcodeproj -scheme FaunaDB -sdk iphonesimulator
-- xctool test -project FaunaDB.xcodeproj -scheme FaunaDB -sdk iphonesimulator
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB iOS" -sdk iphonesimulator | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB OSX" -sdk macosx | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB watchOS" -sdk watchsimulator | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c

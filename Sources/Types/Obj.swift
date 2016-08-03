@@ -61,7 +61,7 @@ extension Obj: Encodable {
 
     func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
-        for keyValue in dictionary{
+        for keyValue in dictionary {
             result[keyValue.0] = keyValue.1.toJSON()
         }
         if !fn {

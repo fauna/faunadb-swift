@@ -11,7 +11,7 @@ import Nimble
 
 class FaunaDBTests: XCTestCase {
 
-    static let secret = "your_admin_key"
+    static let secret = "kqnPAfLLB40gAAm0_caoNtQt_Gb4MSd4lBOAuulHtQc"
 
     lazy var client: Client = {
         return Client(secret: FaunaDBTests.secret)
