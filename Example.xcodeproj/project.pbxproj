@@ -19,6 +19,7 @@
 		28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */; };
 		28D89C701D50ED2C009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C6F1D50ED2C009AE721 /* Result.framework */; };
 		28D89C731D50EE02009AE721 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C721D50EE01009AE721 /* RxSwift.framework */; };
+		28D89C961D519939009AE721 /* RxHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D89C951D519939009AE721 /* RxHelpers.swift */; };
 		28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828CF1C4B714D00330CF4 /* AppDelegate.swift */; };
 		28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */; };
 		28F828D51C4B714D00330CF4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28F828D31C4B714D00330CF4 /* Main.storyboard */; };
@@ -131,6 +132,7 @@
 		28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		28D89C6F1D50ED2C009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		28D89C721D50EE01009AE721 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		28D89C951D519939009AE721 /* RxHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxHelpers.swift; path = Example/Helpers/RxHelpers.swift; sourceTree = "<group>"; };
 		28F828CC1C4B714D00330CF4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828CF1C4B714D00330CF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Example/AppDelegate.swift; sourceTree = "<group>"; };
 		28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SetUpFaunaController.swift; path = Example/SetUpFaunaController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -202,6 +204,7 @@
 				280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */,
 				28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */,
 				28B4E6DE1D2AC3B000FD948F /* Helpers.swift */,
+				28D89C951D519939009AE721 /* RxHelpers.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -460,6 +463,7 @@
 			files = (
 				28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */,
 				285835691D4007C5006DCEC8 /* StandaloneViewController.swift in Sources */,
+				28D89C961D519939009AE721 /* RxHelpers.swift in Sources */,
 				2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */,
 				28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */,
 				28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */,

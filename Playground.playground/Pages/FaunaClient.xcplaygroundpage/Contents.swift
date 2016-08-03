@@ -63,35 +63,6 @@ client.query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"]))) { 
  */
 
 
-/*:
- We can also make use of RxSwift reactive extensions provided within RxFauna module.
- 
- > we need to add it as a dependency and import it into our project. For more information about reactive programming, please visit: http://reactivex.io/ and its correspond swift implementation: https://github.com/ReactiveX/RxSwif.
- */
-import RxSwift
-import RxFaunaDB
-
-
-client.rx_query(Create(ref: Ref("databases"), params: Obj(["name": "db_name"])))
-    .mapWithField(["secret"])
-    .doOnNext { (secret: String) in
-        client = Client(secret: secret, observers: [Logger()])
-    }
-    .flatMap { _ in
-        return client.rx_query(Create(ref: Ref("classes"), params: Obj(["name": "posts"])))
-    }
-    .flatMap { _ in
-        return client.rx_query(Create(ref: Ref("indexes"), params: Obj(["name": "posts_by_tags_with_title",
-            "source": Ref("classes/posts"),
-            "terms": Arr(Obj(["field": Arr("data", "tags")])),
-            "values": Arr()
-            ])))
-    }
-    .subscribe()
-
-
-
-
 /* 
  > ExpressionConvertible protocol allows us to make the code safter.
  */

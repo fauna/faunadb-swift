@@ -11,9 +11,9 @@ import Result
 @testable import FaunaDB
 
 class ClientTests: FaunaDBTests {
-
+    
     private func setupFaunaDB(){
-
+        
         var value: Value?
 
         // Create a database
@@ -57,7 +57,11 @@ class ClientTests: FaunaDBTests {
         )
         expect(value).notTo(beNil())
     }
-
+    
+    override func tearDown() {
+        await(Delete(ref: testDbName))
+        super.tearDown()
+    }
 
     func testNotFoundException() {
         setupFaunaDB()

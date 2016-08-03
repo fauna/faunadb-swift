@@ -10,7 +10,6 @@
 		2816488D1D3EA163002F1BEE /* AuthenticationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816488C1D3EA163002F1BEE /* AuthenticationFunctions.swift */; };
 		287AB3481D0726930002B487 /* PathComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3471D0726930002B487 /* PathComponentType.swift */; };
 		287AB3681D0766970002B487 /* FieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB3671D0766970002B487 /* FieldType.swift */; };
-		287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */; };
 		287ED58B1D308ED6000E7BC6 /* TimeAndDateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */; };
 		287ED58D1D33DF80000E7BC6 /* StringFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */; };
 		28858D2B1D11C49400532DE7 /* WriteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28858D2A1D11C49400532DE7 /* WriteFunctions.swift */; };
@@ -19,9 +18,7 @@
 		288F0F781D0FA41D00079435 /* SetFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F0F771D0FA41D00079435 /* SetFunctions.swift */; };
 		28A1B1AE1D25C616006AA400 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1B1AD1D25C616006AA400 /* Helpers.swift */; };
 		28A1B1CF1D26C2A3006AA400 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF4F1CFF910100A813D3 /* Expr.swift */; };
-		28D89B711D4FD6D7009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B701D4FD6D7009AE721 /* Result.framework */; };
 		28D89B721D4FD73C009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B701D4FD6D7009AE721 /* Result.framework */; };
-		28D89B841D4FF1AA009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F8287D1C494B2C00330CF4 /* FaunaDB.framework */; };
 		28D89B941D4FFAB4009AE721 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */; };
 		28D89BA11D4FFAD2009AE721 /* FaunaDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */; };
 		28D89BA21D4FFAD2009AE721 /* ClientConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF3D1CFE37F400A813D3 /* ClientConfigurationTests.swift */; };
@@ -146,8 +143,6 @@
 		28DCFF5C1D01CBF800A813D3 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DCFF5B1D01CBF800A813D3 /* Value.swift */; };
 		28E9D8611D08EE7800A511AA /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8601D08EE7800A511AA /* Date.swift */; };
 		28E9D8631D08EE8700A511AA /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8621D08EE8700A511AA /* Timestamp.swift */; };
-		28E9D8AB1D09D6B500A511AA /* RxFaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28E9D8AA1D09D6B500A511AA /* RxFaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		28E9D8B21D09D95E00A511AA /* Client+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9D8B11D09D95E00A511AA /* Client+Rx.swift */; };
 		28F828811C494B2C00330CF4 /* FaunaDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F828801C494B2C00330CF4 /* FaunaDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F888521D3710C3005782E4 /* ValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888511D3710C3005782E4 /* ValueConvertible.swift */; };
 		28F888541D3710E6005782E4 /* DecodableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F888531D3710E6005782E4 /* DecodableValue.swift */; };
@@ -186,7 +181,6 @@
 		287AB3671D0766970002B487 /* FieldType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldType.swift; path = Types/FieldType.swift; sourceTree = "<group>"; };
 		287AB36C1D0782A50002B487 /* FieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldTests.swift; path = Tests/FieldTests.swift; sourceTree = SOURCE_ROOT; };
 		287D0A6D1C4B73BD004566D6 /* FaunaDBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = FaunaDBTests.swift; path = Tests/FaunaDBTests.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		287ED58A1D308ED6000E7BC6 /* TimeAndDateFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeAndDateFunctions.swift; path = Query/TimeAndDateFunctions.swift; sourceTree = "<group>"; };
 		287ED58C1D33DF80000E7BC6 /* StringFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFunctions.swift; path = Query/StringFunctions.swift; sourceTree = "<group>"; };
 		28858D2A1D11C49400532DE7 /* WriteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = WriteFunctions.swift; path = Query/WriteFunctions.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -223,10 +217,6 @@
 		28E9D83C1D0849CA00A511AA /* DeserializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = DeserializationTests.swift; path = Tests/DeserializationTests.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		28E9D8601D08EE7800A511AA /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Types/Date.swift; sourceTree = "<group>"; };
 		28E9D8621D08EE8700A511AA /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timestamp.swift; path = Types/Timestamp.swift; sourceTree = "<group>"; };
-		28E9D8A81D09D6B500A511AA /* RxFaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxFaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		28E9D8AA1D09D6B500A511AA /* RxFaunaDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RxFaunaDB.h; sourceTree = "<group>"; };
-		28E9D8AC1D09D6B500A511AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		28E9D8B11D09D95E00A511AA /* Client+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = "Client+Rx.swift"; path = "RxSources/Client+Rx.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		28F8287D1C494B2C00330CF4 /* FaunaDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FaunaDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828801C494B2C00330CF4 /* FaunaDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaunaDB.h; sourceTree = "<group>"; };
 		28F828821C494B2C00330CF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -294,16 +284,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		28E9D8A41D09D6B500A511AA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				28D89B711D4FD6D7009AE721 /* Result.framework in Frameworks */,
-				287ED54B1D2D71B7000E7BC6 /* RxSwift.framework in Frameworks */,
-				28D89B841D4FF1AA009AE721 /* FaunaDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		28F828791C494B2C00330CF4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -318,7 +298,6 @@
 		28D89B6F1D4FD596009AE721 /* Dependency Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				28D89B7B1D4FD7FA009AE721 /* RxFaunaDB */,
 				28D89B7A1D4FD7D2009AE721 /* FaunaDB */,
 				28D89B791D4FD7C8009AE721 /* Tests */,
 			);
@@ -344,14 +323,6 @@
 				28D89BA91D5006D8009AE721 /* Result.framework */,
 			);
 			name = FaunaDB;
-			sourceTree = "<group>";
-		};
-		28D89B7B1D4FD7FA009AE721 /* RxFaunaDB */ = {
-			isa = PBXGroup;
-			children = (
-				287ED54A1D2D71B7000E7BC6 /* RxSwift.framework */,
-			);
-			name = RxFaunaDB;
 			sourceTree = "<group>";
 		};
 		28DCFF451CFF903C00A813D3 /* Types */ = {
@@ -390,32 +361,13 @@
 			name = Query;
 			sourceTree = "<group>";
 		};
-		28E9D8A91D09D6B500A511AA /* RxFaunaDB */ = {
-			isa = PBXGroup;
-			children = (
-				28E9D8AA1D09D6B500A511AA /* RxFaunaDB.h */,
-				28E9D8AC1D09D6B500A511AA /* Info.plist */,
-			);
-			path = RxFaunaDB;
-			sourceTree = "<group>";
-		};
-		28E9D8B01D09D6E800A511AA /* RxSources */ = {
-			isa = PBXGroup;
-			children = (
-				28E9D8B11D09D95E00A511AA /* Client+Rx.swift */,
-			);
-			name = RxSources;
-			sourceTree = "<group>";
-		};
 		28F828731C494B2C00330CF4 = {
 			isa = PBXGroup;
 			children = (
 				28F8289B1C494BF100330CF4 /* Playground.playground */,
 				28F828971C494B4200330CF4 /* Sources */,
-				28E9D8B01D09D6E800A511AA /* RxSources */,
 				28F8288B1C494B2C00330CF4 /* Tests */,
 				28F8287F1C494B2C00330CF4 /* FaunaDB */,
-				28E9D8A91D09D6B500A511AA /* RxFaunaDB */,
 				28F8287E1C494B2C00330CF4 /* Products */,
 				28D89B6F1D4FD596009AE721 /* Dependency Frameworks */,
 			);
@@ -425,7 +377,6 @@
 			isa = PBXGroup;
 			children = (
 				28F8287D1C494B2C00330CF4 /* FaunaDB.framework */,
-				28E9D8A81D09D6B500A511AA /* RxFaunaDB.framework */,
 				28D89B8A1D4FFAB4009AE721 /* FaunaDB.framework */,
 				28D89B931D4FFAB4009AE721 /* FaunaDB OSXTests.xctest */,
 				28D89BD51D5020EB009AE721 /* FaunaDB iOSTests.xctest */,
@@ -498,14 +449,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28D89C581D504925009AE721 /* FaunaDB.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		28E9D8A51D09D6B500A511AA /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				28E9D8AB1D09D6B500A511AA /* RxFaunaDB.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,24 +572,6 @@
 			productReference = 28D89C361D5048CD009AE721 /* FaunaDB.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		28E9D8A71D09D6B500A511AA /* RxFaunaDB iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB iOS" */;
-			buildPhases = (
-				28E9D8A31D09D6B500A511AA /* Sources */,
-				28E9D8A41D09D6B500A511AA /* Frameworks */,
-				28E9D8A51D09D6B500A511AA /* Headers */,
-				28E9D8A61D09D6B500A511AA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "RxFaunaDB iOS";
-			productName = RxFaunaDB;
-			productReference = 28E9D8A81D09D6B500A511AA /* RxFaunaDB.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		28F8287C1C494B2C00330CF4 /* FaunaDB iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28F828911C494B2C00330CF4 /* Build configuration list for PBXNativeTarget "FaunaDB iOS" */;
@@ -692,9 +617,6 @@
 					28D89C351D5048CD009AE721 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
-					28E9D8A71D09D6B500A511AA = {
-						CreatedOnToolsVersion = 7.3.1;
-					};
 					28F8287C1C494B2C00330CF4 = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -719,7 +641,6 @@
 				28D89BD41D5020EB009AE721 /* FaunaDB iOSTests */,
 				28D89B921D4FFAB4009AE721 /* FaunaDB OSXTests */,
 				28D89BF81D503B6B009AE721 /* FaunaDB tvOSTests */,
-				28E9D8A71D09D6B500A511AA /* RxFaunaDB iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -747,13 +668,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		28D89C341D5048CD009AE721 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		28E9D8A61D09D6B500A511AA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -956,14 +870,6 @@
 				28D89C571D5048FE009AE721 /* Helpers.swift in Sources */,
 				28D89C561D5048FE009AE721 /* Error.swift in Sources */,
 				28D89C4A1D5048F8009AE721 /* DecodableValue.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		28E9D8A31D09D6B500A511AA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				28E9D8B21D09D95E00A511AA /* Client+Rx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1277,53 +1183,6 @@
 			};
 			name = Release;
 		};
-		28E9D8AE1D09D6B500A511AA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = RxFaunaDB/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB.RxFaunaDB;
-				PRODUCT_NAME = RxFaunaDB;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		28E9D8AF1D09D6B500A511AA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = RxFaunaDB/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB.RxFaunaDB;
-				PRODUCT_NAME = RxFaunaDB;
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 		28F8288F1C494B2C00330CF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1467,6 +1326,7 @@
 				28D89B9D1D4FFAB4009AE721 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		28D89B9E1D4FFAB4009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB OSXTests" */ = {
 			isa = XCConfigurationList;
@@ -1475,6 +1335,7 @@
 				28D89BA01D4FFAB4009AE721 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		28D89BDD1D5020EC009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -1483,6 +1344,7 @@
 				28D89BDF1D5020EC009AE721 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		28D89C011D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOS" */ = {
 			isa = XCConfigurationList;
@@ -1491,6 +1353,7 @@
 				28D89C031D503B6B009AE721 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		28D89C041D503B6B009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB tvOSTests" */ = {
 			isa = XCConfigurationList;
@@ -1499,20 +1362,13 @@
 				28D89C061D503B6B009AE721 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		28D89C3B1D5048CD009AE721 /* Build configuration list for PBXNativeTarget "FaunaDB watchOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28D89C3C1D5048CD009AE721 /* Debug */,
 				28D89C3D1D5048CD009AE721 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		28E9D8AD1D09D6B500A511AA /* Build configuration list for PBXNativeTarget "RxFaunaDB iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				28E9D8AE1D09D6B500A511AA /* Debug */,
-				28E9D8AF1D09D6B500A511AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

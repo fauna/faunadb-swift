@@ -45,7 +45,7 @@ class FaunaDBTests: XCTestCase {
 
     func awaitError(expr: Expr) -> Error? {
         var res: Error?
-        waitUntil(timeout: 5) { [weak self] done in
+        waitUntil(timeout: 10) { [weak self] done in
             self?.client.query(expr) { result in
                 res = result.error
                 done()
