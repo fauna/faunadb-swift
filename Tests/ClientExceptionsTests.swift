@@ -13,7 +13,7 @@ import Result
 class ClientExceptionsTests: FaunaDBTests {
 
     private func setupFaunaDB(){
-
+        
         let create = Create(ref: Ref("databases"),
                             params: Obj(["name": testDbName]))
         let dbRef: Ref? = await(create)?.get(field: Fields.ref)
@@ -36,6 +36,13 @@ class ClientExceptionsTests: FaunaDBTests {
         expect(value).notTo(beNil())
     }
 
+    
+    override func tearDown() {
+        await(Delete(ref: testDbName))
+        super.tearDown()
+    }
+    
+    
     func testNotFoundException(){
         // MARK: NotFoundException
 

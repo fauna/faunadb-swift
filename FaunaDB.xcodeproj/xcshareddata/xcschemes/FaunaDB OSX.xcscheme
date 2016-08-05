@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28E9D8A71D09D6B500A511AA"
-               BuildableName = "RxFaunaDB.framework"
-               BlueprintName = "RxFaunaDB"
+               BlueprintIdentifier = "28D89B891D4FFAB4009AE721"
+               BuildableName = "FaunaDB.framework"
+               BlueprintName = "FaunaDB OSX"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28D89B921D4FFAB4009AE721"
+               BuildableName = "FaunaDB OSXTests.xctest"
+               BlueprintName = "FaunaDB OSXTests"
+               ReferencedContainer = "container:FaunaDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "28D89B891D4FFAB4009AE721"
+            BuildableName = "FaunaDB.framework"
+            BlueprintName = "FaunaDB OSX"
+            ReferencedContainer = "container:FaunaDB.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -45,12 +64,19 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "28E9D8A71D09D6B500A511AA"
-            BuildableName = "RxFaunaDB.framework"
-            BlueprintName = "RxFaunaDB"
+            BlueprintIdentifier = "28D89B891D4FFAB4009AE721"
+            BuildableName = "FaunaDB.framework"
+            BlueprintName = "FaunaDB OSX"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FAUNA_ROOT_KEY"
+            value = "$(FAUNA_ROOT_KEY)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -63,9 +89,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "28E9D8A71D09D6B500A511AA"
-            BuildableName = "RxFaunaDB.framework"
-            BlueprintName = "RxFaunaDB"
+            BlueprintIdentifier = "28D89B891D4FFAB4009AE721"
+            BuildableName = "FaunaDB.framework"
+            BlueprintName = "FaunaDB OSX"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

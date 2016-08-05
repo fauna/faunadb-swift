@@ -12,13 +12,13 @@
 		2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2858356A1D400808006DCEC8 /* RxViewController.swift */; };
 		287D0A721C4B7877004566D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A711C4B7877004566D6 /* ExampleUITests.swift */; };
 		287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; };
-		287D0A7E1C4B7B55004566D6 /* FaunaDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		287ED5481D2D7101000E7BC6 /* RxFaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28773DD11D09DF96003CE59C /* RxFaunaDB.framework */; };
-		287ED5491D2D7113000E7BC6 /* RxFaunaDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28773DD11D09DF96003CE59C /* RxFaunaDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */; };
 		28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DE1D2AC3B000FD948F /* Helpers.swift */; };
-		28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B4E6E21D2B033200FD948F /* RxCocoa.framework */; };
 		28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9B7A51D42A90300749967 /* BlogPost.swift */; };
+		28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */; };
+		28D89C701D50ED2C009AE721 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C6F1D50ED2C009AE721 /* Result.framework */; };
+		28D89C731D50EE02009AE721 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D89C721D50EE01009AE721 /* RxSwift.framework */; };
+		28D89C961D519939009AE721 /* RxHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D89C951D519939009AE721 /* RxHelpers.swift */; };
 		28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828CF1C4B714D00330CF4 /* AppDelegate.swift */; };
 		28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */; };
 		28F828D51C4B714D00330CF4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28F828D31C4B714D00330CF4 /* Main.storyboard */; };
@@ -27,13 +27,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		28773DD01D09DF96003CE59C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 28E9D8A81D09D6B500A511AA;
-			remoteInfo = RxFaunaDB;
-		};
 		287D0A791C4B7B26004566D6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
@@ -41,19 +34,54 @@
 			remoteGlobalIDString = 28F8287D1C494B2C00330CF4;
 			remoteInfo = FaunaDB;
 		};
-		287D0A7B1C4B7B26004566D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 28F828871C494B2C00330CF4;
-			remoteInfo = FaunaDBTests;
-		};
-		287D0A7F1C4B7B55004566D6 /* PBXContainerItemProxy */ = {
+		28D89B821D4FF126009AE721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 28F8287C1C494B2C00330CF4;
 			remoteInfo = FaunaDB;
+		};
+		28D89C631D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89B8A1D4FFAB4009AE721;
+			remoteInfo = "FaunaDB OSX";
+		};
+		28D89C651D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89BF01D503B6A009AE721;
+			remoteInfo = "FaunaDB tvOS";
+		};
+		28D89C671D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89C361D5048CD009AE721;
+			remoteInfo = "FaunaDB watchOS";
+		};
+		28D89C691D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89BD51D5020EB009AE721;
+			remoteInfo = "FaunaDB iOSTests";
+		};
+		28D89C6B1D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89B931D4FFAB4009AE721;
+			remoteInfo = "FaunaDB OSXTests";
+		};
+		28D89C6D1D50E8FD009AE721 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D89BF91D503B6B009AE721;
+			remoteInfo = "FaunaDB tvOSTests";
 		};
 		28F828E11C4B714D00330CF4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -71,8 +99,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				287ED5491D2D7113000E7BC6 /* RxFaunaDB.framework in Embed Frameworks */,
-				287D0A7E1C4B7B55004566D6 /* FaunaDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,8 +113,11 @@
 		287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = FaunaDB.xcodeproj; sourceTree = "<group>"; };
 		28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaginationViewModel.swift; path = Example/Helpers/PaginationViewModel.swift; sourceTree = "<group>"; };
 		28B4E6DE1D2AC3B000FD948F /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = Helpers.swift; path = Example/Helpers/Helpers.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		28B4E6E21D2B033200FD948F /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		28B9B7A51D42A90300749967 /* BlogPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlogPost.swift; path = Example/Models/BlogPost.swift; sourceTree = "<group>"; };
+		28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		28D89C6F1D50ED2C009AE721 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		28D89C721D50EE01009AE721 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		28D89C951D519939009AE721 /* RxHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxHelpers.swift; path = Example/Helpers/RxHelpers.swift; sourceTree = "<group>"; };
 		28F828CC1C4B714D00330CF4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828CF1C4B714D00330CF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Example/AppDelegate.swift; sourceTree = "<group>"; };
 		28F828D11C4B714D00330CF4 /* SetUpFaunaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SetUpFaunaController.swift; path = Example/SetUpFaunaController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -105,9 +134,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28B4E6E31D2B033200FD948F /* RxCocoa.framework in Frameworks */,
+				28D89C701D50ED2C009AE721 /* Result.framework in Frameworks */,
 				287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */,
-				287ED5481D2D7101000E7BC6 /* RxFaunaDB.framework in Frameworks */,
+				28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */,
+				28D89C731D50EE02009AE721 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,8 +171,12 @@
 			isa = PBXGroup;
 			children = (
 				287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */,
-				28773DD11D09DF96003CE59C /* RxFaunaDB.framework */,
-				287D0A7C1C4B7B26004566D6 /* FaunaDBTests.xctest */,
+				28D89C641D50E8FD009AE721 /* FaunaDB.framework */,
+				28D89C661D50E8FD009AE721 /* FaunaDB.framework */,
+				28D89C681D50E8FD009AE721 /* FaunaDB.framework */,
+				28D89C6A1D50E8FD009AE721 /* FaunaDB iOSTests.xctest */,
+				28D89C6C1D50E8FD009AE721 /* FaunaDB OSXTests.xctest */,
+				28D89C6E1D50E8FD009AE721 /* FaunaDB tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -153,16 +187,19 @@
 				280D36D51D47D01E00DEF405 /* SyntacticSugars.swift */,
 				28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */,
 				28B4E6DE1D2AC3B000FD948F /* Helpers.swift */,
+				28D89C951D519939009AE721 /* RxHelpers.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
 		};
-		28B4E6E11D2B031D00FD948F /* Frameworks */ = {
+		28B4E6E11D2B031D00FD948F /* Dependency Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				28B4E6E21D2B033200FD948F /* RxCocoa.framework */,
+				28D89C721D50EE01009AE721 /* RxSwift.framework */,
+				28D89C6F1D50ED2C009AE721 /* Result.framework */,
+				28D89B7C1D4FD8E9009AE721 /* RxCocoa.framework */,
 			);
-			name = Frameworks;
+			name = "Dependency Frameworks";
 			sourceTree = "<group>";
 		};
 		28B9B7A21D42A8E100749967 /* Models */ = {
@@ -176,7 +213,7 @@
 		28F828C31C4B714D00330CF4 = {
 			isa = PBXGroup;
 			children = (
-				28B4E6E11D2B031D00FD948F /* Frameworks */,
+				28B4E6E11D2B031D00FD948F /* Dependency Frameworks */,
 				28F828CE1C4B714D00330CF4 /* Example */,
 				28F828E31C4B714D00330CF4 /* ExampleUITests */,
 				28F828CD1C4B714D00330CF4 /* Products */,
@@ -230,11 +267,12 @@
 				28F828C91C4B714D00330CF4 /* Frameworks */,
 				28F828CA1C4B714D00330CF4 /* Resources */,
 				287D0A811C4B7B55004566D6 /* Embed Frameworks */,
+				28D89C711D50ED80009AE721 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				287D0A801C4B7B55004566D6 /* PBXTargetDependency */,
+				28D89B831D4FF126009AE721 /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -303,13 +341,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		28773DD11D09DF96003CE59C /* RxFaunaDB.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxFaunaDB.framework;
-			remoteRef = 28773DD01D09DF96003CE59C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -317,11 +348,46 @@
 			remoteRef = 287D0A791C4B7B26004566D6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		287D0A7C1C4B7B26004566D6 /* FaunaDBTests.xctest */ = {
+		28D89C641D50E8FD009AE721 /* FaunaDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FaunaDB.framework;
+			remoteRef = 28D89C631D50E8FD009AE721 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D89C661D50E8FD009AE721 /* FaunaDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FaunaDB.framework;
+			remoteRef = 28D89C651D50E8FD009AE721 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D89C681D50E8FD009AE721 /* FaunaDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FaunaDB.framework;
+			remoteRef = 28D89C671D50E8FD009AE721 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D89C6A1D50E8FD009AE721 /* FaunaDB iOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = FaunaDBTests.xctest;
-			remoteRef = 287D0A7B1C4B7B26004566D6 /* PBXContainerItemProxy */;
+			path = "FaunaDB iOSTests.xctest";
+			remoteRef = 28D89C691D50E8FD009AE721 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D89C6C1D50E8FD009AE721 /* FaunaDB OSXTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "FaunaDB OSXTests.xctest";
+			remoteRef = 28D89C6B1D50E8FD009AE721 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D89C6E1D50E8FD009AE721 /* FaunaDB tvOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "FaunaDB tvOSTests.xctest";
+			remoteRef = 28D89C6D1D50E8FD009AE721 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -346,6 +412,25 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		28D89C711D50ED80009AE721 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		28F828C81C4B714D00330CF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -353,6 +438,7 @@
 			files = (
 				28F828D21C4B714D00330CF4 /* SetUpFaunaController.swift in Sources */,
 				285835691D4007C5006DCEC8 /* StandaloneViewController.swift in Sources */,
+				28D89C961D519939009AE721 /* RxHelpers.swift in Sources */,
 				2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */,
 				28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */,
 				28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */,
@@ -373,10 +459,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		287D0A801C4B7B55004566D6 /* PBXTargetDependency */ = {
+		28D89B831D4FF126009AE721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FaunaDB;
-			targetProxy = 287D0A7F1C4B7B55004566D6 /* PBXContainerItemProxy */;
+			targetProxy = 28D89B821D4FF126009AE721 /* PBXContainerItemProxy */;
 		};
 		28F828E21C4B714D00330CF4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -498,7 +584,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Example/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -514,7 +600,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Example/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

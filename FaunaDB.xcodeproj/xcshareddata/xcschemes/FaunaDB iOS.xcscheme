@@ -16,7 +16,21 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
                BuildableName = "FaunaDB.framework"
-               BlueprintName = "FaunaDB"
+               BlueprintName = "FaunaDB iOS"
+               ReferencedContainer = "container:FaunaDB.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28D89BD41D5020EB009AE721"
+               BuildableName = "FaunaDB iOSTests.xctest"
+               BlueprintName = "FaunaDB iOSTests"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,16 +40,15 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F828861C494B2C00330CF4"
-               BuildableName = "FaunaDBTests.xctest"
-               BlueprintName = "FaunaDBTests"
+               BlueprintIdentifier = "28D89BD41D5020EB009AE721"
+               BuildableName = "FaunaDB iOSTests.xctest"
+               BlueprintName = "FaunaDB iOSTests"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -45,7 +58,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
             BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB"
+            BlueprintName = "FaunaDB iOS"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,10 +80,17 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
             BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB"
+            BlueprintName = "FaunaDB iOS"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FAUNA_ROOT_KEY"
+            value = "$(FAUNA_ROOT_KEY)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -85,7 +105,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
             BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB"
+            BlueprintName = "FaunaDB iOS"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

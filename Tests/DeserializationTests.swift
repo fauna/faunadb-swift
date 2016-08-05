@@ -21,7 +21,7 @@ class DeserializationTests: FaunaDBTests {
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         let value =  Obj([  "ref": Ref("classes/derp/101192216816386048"),
                           "class": Ref("classes/derp"),
-                             "ts": Double(1432763268186882),
+                             "ts": Double(1432763268186882 as UInt64),
                            "data": Obj(["test": 1.0])])
         XCTAssertTrue(deseralizedValue.isEquals(value))
     }
@@ -38,7 +38,7 @@ class DeserializationTests: FaunaDBTests {
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         let value = Obj( [ "ref": Ref("classes/spells/93044099947429888"),
                          "class": Ref("classes/spells"),
-                            "ts": Double(1424992618413105),
+                            "ts": Double(1424992618413105 as UInt64),
                           "data": Obj(["refField": Ref("classes/spells/93044099909681152")])])
         XCTAssert(deseralizedValue.isEquals(value))
     }
@@ -55,7 +55,7 @@ class DeserializationTests: FaunaDBTests {
         let deseralizedValue = try! Mapper.fromString(toDeserialize)
         let value = Obj( [  "ref": Ref("classes/derp/101727203651223552"),
                           "class": Ref("classes/derp"),
-                             "ts": Double(1433273471399755),
+                             "ts": Double(1433273471399755 as UInt64),
                            "data": Obj(["test": Obj(["field1": Obj(["@name": "Test"])])])])
         XCTAssert(deseralizedValue.isEquals(value))
     }

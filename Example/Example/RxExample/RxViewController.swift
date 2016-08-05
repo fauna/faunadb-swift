@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import UIKit
 import FaunaDB
-import RxFaunaDB
 import RxSwift
 import RxCocoa
 

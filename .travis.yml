@@ -2,12 +2,26 @@ language: objective-c
 osx_image: xcode7.3
 
 before_install:
+- set -o pipefail
+- xcodebuild -version
+- xcodebuild -showsdks
 - brew update
 - brew outdated carthage || brew upgrade carthage
-- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
-- carthage update --platform iOS
+- carthage update Result --platform all
+- carthage update Nimble --platform iOS,Mac,tvOS
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-
+- defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO
 script:
-- xctool clean build -project FaunaDB.xcodeproj -scheme FaunaDB -sdk iphonesimulator
-- xctool test -project FaunaDB.xcodeproj -scheme FaunaDB -sdk iphonesimulator
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB iOS" -sdk iphonesimulator | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB OSX" -sdk macosx | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c
+- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB watchOS" -sdk watchsimulator | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+env:
+  global:
+    - secure: "LwWRjl61NfducqXwQA7bOQ6bcjWowjt8HeBD5b1FeNRUWKssKK252KtBmQlTdYD5c0OGM2T6EgzcuAU90nXWStSRBJbxBzJdS0nduWAJpzv86sbQd/kWjsRuHMSyV+F0cZp/QiQ2QsDIPYQuoTAjCN2IqSI6A1qvURh69uvfi7L+O9HukVAyjxLpFsZD0JjmXS8bf4n2G9pMfKc+AWnJxAXKNZpVPcob4JYj7TH4jlhWxT7aQ6QfNVmQWr92VqgXHTsmz+m1Zrl5GU7ADRh6lSO7wZm7KTa1jtwG9C84Jt/WrZp2kMb3pABiUpN6o1tiUrgydp/GyG5aCE0R7quFJgUtnXEvuRGqpIQ9vHXgZI+UIvPvjbX+eqJoGRjRQyT0uPzevqp1iw2D46hknLvm/EZLmPL8bsXvbkgP/ri/Fi5YffznGw6YqD1pSI6/52dxmYhB8lvt/yG6DW+1tGqHhLgYtqxjPRD7uUlXDdCiqYGdpXQaX/joOS+GwkzLtMRKnTn/G+CbJp6XSCG/lQONO8dLT7J+7FXufMWW1l+5K/LUZGbDFij3ZRqWsMgl59OfY8alb8Xtx4dZt0JdcRy/5y94kbpOARzzashJe7MoU2f5tBli83v/XB6j9190DuJtnLJcvNP86EGjOXc/fLuCGbxp2y9ccPQCJyATezH6VSs="
+branches:
+  only:
+    - master

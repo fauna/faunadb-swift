@@ -61,7 +61,7 @@ extension Obj: Encodable {
 
     func toJSON() -> AnyObject {
         var result = [String : AnyObject]()
-        for keyValue in dictionary{
+        for keyValue in dictionary {
             result[keyValue.0] = keyValue.1.toJSON()
         }
         if !fn {
@@ -89,12 +89,12 @@ extension Obj: CollectionType {
     /// Create an empty dictionary.
     public init(){}
 
-    public var startIndex: DictionaryIndex<String, ValueConvertible> { return dictionary.startIndex }
-    public var endIndex: DictionaryIndex<String, ValueConvertible> { return dictionary.endIndex }
-    public func indexForKey(key: String) -> DictionaryIndex<String, ValueConvertible>? {
+    public var startIndex: Index { return dictionary.startIndex }
+    public var endIndex: Index { return dictionary.endIndex }
+    public func indexForKey(key: String) -> Index? {
         return dictionary.indexForKey(key)
     }
-    public subscript (position: DictionaryIndex<String, ValueConvertible>) -> (String, ValueConvertible) {
+    public subscript (position: Index) -> Element {
         return dictionary[position]
     }
     public subscript (key: String) -> ValueConvertible? {
@@ -105,7 +105,7 @@ extension Obj: CollectionType {
     public mutating func updateValue(value: ValueConvertible, forKey key: String) -> ValueConvertible?{
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: DictionaryIndex<String, ValueConvertible>) -> (String, ValueConvertible) {
+    public mutating func removeAtIndex(index: Index) -> Element {
         return dictionary.removeAtIndex(index)
     }
     public mutating func removeValueForKey(key: String) -> ValueConvertible?{

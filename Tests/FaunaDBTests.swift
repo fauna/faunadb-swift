@@ -10,8 +10,15 @@ import Nimble
 @testable import FaunaDB
 
 class FaunaDBTests: XCTestCase {
-
-    static let secret = "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI"
+    
+    private static var secret: String {
+        if let envVarKey = NSProcessInfo.processInfo().environment["FAUNA_ROOT_KEY"] where !envVarKey.isEmpty {
+            return envVarKey
+        }
+        else {
+            return "HARDCODED_FAUNA_KEY"
+        }
+    }
 
     lazy var client: Client = {
         return Client(secret: FaunaDBTests.secret)
@@ -43,9 +50,9 @@ class FaunaDBTests: XCTestCase {
         return res
     }
 
-    func awaitError(expr: Expr) -> FaunaDB.Error? {
-        var res: FaunaDB.Error?
-        waitUntil(timeout: 5) { [weak self] done in
+    func awaitError(expr: Expr) -> Error? {
+        var res: Error?
+        waitUntil(timeout: 10) { [weak self] done in
             self?.client.query(expr) { result in
                 res = result.error
                 done()
@@ -141,9 +148,9 @@ extension String{
 }
 
 
-extension FaunaDB.Error {
+extension Error {
 
-    public func equalType(other: FaunaDB.Error) -> Bool {
+    public func equalType(other: Error) -> Bool {
         switch (self, other) {
         case (.UnavailableException(_, _), .UnavailableException(_, _)):
             return true

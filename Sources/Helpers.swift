@@ -9,11 +9,11 @@ import Foundation
 
 extension NSNumber {
 
-    func isBoolNumber() -> Bool{
+    internal func isBoolNumber() -> Bool{
         return CFGetTypeID(self) == CFBooleanGetTypeID()
     }
 
-    func isDoubleNumber() -> Bool{
+    internal func isDoubleNumber() -> Bool{
         return CFNumberGetType(self) == CFNumberType.DoubleType || CFNumberGetType(self) == CFNumberType.Float64Type
     }
 }

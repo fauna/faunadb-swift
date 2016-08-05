@@ -14,7 +14,11 @@ class SetUpFaunaController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        faunaClient = Client(secret: "kqnPAd6R_jhAAA20RPVgavy9e9kaW8bz-wWGX6DPNWI", observers: [Logger()])
+        #if DEBUG
+        faunaClient = Client(secret: secret, observers: [Logger()])
+        #else
+        faunaClient = Client(secret: secret)
+        #endif
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -49,8 +53,8 @@ class SetUpFaunaController: UITableViewController {
             if indexPath.row == 0 {
                 // Rx setup
                 let db_name = "app_db_\(arc4random())"
-                rxSetUpSchema(db_name).flatMap { _ in
-                    return self.rxCreateInstances()
+                rxSetUpSchema(db_name).flatMap { _ in 
+                    self.rxCreateInstances()
                 }
                 .doOnCompleted { [weak self] in
                     indicators?.forEach { $0.stopAnimating()}
@@ -73,19 +77,24 @@ class SetUpFaunaController: UITableViewController {
     func rxSetUpSchema(dbName: String) -> Observable<Value> {
 
         //MARK: Rx schema set up
-        return Create(ref: Ref("databases"), params: Obj(["name": dbName])).rx_query()
+        return faunaClient.rx_query(Create(ref: Ref("databases"), params: Obj(["name": dbName])))
             .flatMap { _ in
-                return Create(ref: Ref("keys"), params: Obj(["database": Ref("databases/\(dbName)"), "role": "server"])).rx_query()
+                return faunaClient.rx_query(Create(ref: Ref("keys"), params: Obj(["database": Ref("databases/\(dbName)"), "role": "server"])))
             }
             .mapWithField("secret")
             .doOnNext { (secret: String) in
+                #if DEBUG
                 faunaClient = Client(secret: secret, observers: [Logger()])
+                #else
+                faunaClient = Client(secret: secret)
+                #endif
             }
             .flatMap { _ in
-                return Create(ref: Ref("classes"), params: Obj(["name": "posts"])).rx_query()
+                return faunaClient.rx_query(Create(ref: Ref("classes"), params: Obj(["name": "posts"])))
             }
             .flatMap { _ in
-                return Do(exprs: Create(ref: Ref("indexes"), params: ["name": "posts_by_tags",
+                return faunaClient.rx_query(
+                        Do(exprs: Create(ref: Ref("indexes"), params: ["name": "posts_by_tags",
                                         "source": BlogPost.classRef,
                                         "terms": Arr(Obj(["field": Arr("data", "tags")])),
                                         "values": Arr()] as Obj),
@@ -93,16 +102,18 @@ class SetUpFaunaController: UITableViewController {
                                         "source": BlogPost.classRef,
                                         "terms": Arr(Obj(["field": Arr("data", "name")])),
                                         "values": Arr()] as Obj)
-                        ).rx_query()
+                        ))
             }
     }
 
     func rxCreateInstances() -> Observable<Value> {
-        return (1...100).map {
+        let blogPosts = (1...100).map {
             BlogPost(name: "Blog Post \($0)", author: "FaunaDB",  content: "content", tags: $0 % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
-        }.mapFauna { blogValue in
-            Create(ref: Ref("classes/posts"), params: ["data": blogValue] as Obj)
-        }.rx_query()
+        }
+        return faunaClient.rx_query(
+                        Map(collection: Arr(blogPosts)) { blogPost  in
+                            Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
+                        })
     }
  }
 
@@ -120,14 +131,18 @@ extension SetUpFaunaController{
                     return
                 }
                 let secret: String = try! result.get(path: "secret")
+                #if DEBUG
                 faunaClient = Client(secret: secret, observers: [Logger()])
+                #else
+                faunaClient = Client(secret: secret)
+                #endif
                 faunaClient.query(Create(ref: Ref("classes"), params: Obj(["name": "posts"]))) { createClassR in
                     guard let _ = try? createClassR.dematerialize() else {
                         callback(createClassR)
                         return
                     }
-                    faunaClient.query({
-                        return Do(exprs:
+                    faunaClient.query(
+                        Do(exprs:
                                         Create(ref: Ref("indexes"), params:["name": "posts_by_tags",
                                                                             "source": BlogPost.classRef,
                                                                             "terms": Arr(Obj(["field": Arr("data", "tags")])),
@@ -137,9 +152,7 @@ extension SetUpFaunaController{
                                                                             "terms": Arr(Obj(["field": Arr("data", "name")])),
                                                                             "values": Arr()] as Obj)
                                )
-                    }()) {  createIndexR in
-                        callback(createIndexR)
-                    }
+                    , completion: callback)
                 }
             }
         }
@@ -147,13 +160,12 @@ extension SetUpFaunaController{
 
     func createInstances(callback: (Result<Value, Error> -> ())) {
         faunaClient.query({
-            (1...100).map { int in
-                return BlogPost(name: "Blog Post \(int)", author: "FaunaDB",  content: "content", tags: int % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
-                }.mapFauna { blogPost in
-                    Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
-                }
-        }()) { result in
-            callback(result)
-        }
+            let blogPosts = (1...100).map {
+                BlogPost(name: "Blog Post \($0)", author: "FaunaDB",  content: "content", tags: $0 % 2 == 0 ? ["philosophy", "travel"] : ["travel"])
+            }
+            return Map(collection: Arr(blogPosts)) { blogPost  in
+                 Create(ref: Ref("classes/posts"), params: Obj(["data": blogPost]))
+            }
+        }(), completion: callback)
     }
 }
