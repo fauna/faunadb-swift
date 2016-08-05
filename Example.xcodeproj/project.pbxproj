@@ -12,7 +12,6 @@
 		2858356B1D400808006DCEC8 /* RxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2858356A1D400808006DCEC8 /* RxViewController.swift */; };
 		287D0A721C4B7877004566D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287D0A711C4B7877004566D6 /* ExampleUITests.swift */; };
 		287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */; };
-		287ED5481D2D7101000E7BC6 /* RxFaunaDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28773DD11D09DF96003CE59C /* RxFaunaDB.framework */; };
 		28B4E6DD1D2ABDE900FD948F /* PaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DC1D2ABDE900FD948F /* PaginationViewModel.swift */; };
 		28B4E6DF1D2AC3B000FD948F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B4E6DE1D2AC3B000FD948F /* Helpers.swift */; };
 		28B9B7A61D42A90300749967 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9B7A51D42A90300749967 /* BlogPost.swift */; };
@@ -28,26 +27,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		28773DD01D09DF96003CE59C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 28E9D8A81D09D6B500A511AA;
-			remoteInfo = RxFaunaDB;
-		};
 		287D0A791C4B7B26004566D6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 28F8287D1C494B2C00330CF4;
 			remoteInfo = FaunaDB;
-		};
-		28D89B801D4FF11F009AE721 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 287D0A741C4B7B26004566D6 /* FaunaDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 28E9D8A71D09D6B500A511AA;
-			remoteInfo = RxFaunaDB;
 		};
 		28D89B821D4FF126009AE721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -153,7 +138,6 @@
 				287D0A7D1C4B7B55004566D6 /* FaunaDB.framework in Frameworks */,
 				28D89B7E1D4FEEEB009AE721 /* RxCocoa.framework in Frameworks */,
 				28D89C731D50EE02009AE721 /* RxSwift.framework in Frameworks */,
-				287ED5481D2D7101000E7BC6 /* RxFaunaDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,7 +177,6 @@
 				28D89C6A1D50E8FD009AE721 /* FaunaDB iOSTests.xctest */,
 				28D89C6C1D50E8FD009AE721 /* FaunaDB OSXTests.xctest */,
 				28D89C6E1D50E8FD009AE721 /* FaunaDB tvOSTests.xctest */,
-				28773DD11D09DF96003CE59C /* RxFaunaDB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,7 +273,6 @@
 			);
 			dependencies = (
 				28D89B831D4FF126009AE721 /* PBXTargetDependency */,
-				28D89B811D4FF11F009AE721 /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -359,13 +341,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		28773DD11D09DF96003CE59C /* RxFaunaDB.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxFaunaDB.framework;
-			remoteRef = 28773DD01D09DF96003CE59C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		287D0A7A1C4B7B26004566D6 /* FaunaDB.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -484,11 +459,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		28D89B811D4FF11F009AE721 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RxFaunaDB;
-			targetProxy = 28D89B801D4FF11F009AE721 /* PBXContainerItemProxy */;
-		};
 		28D89B831D4FF126009AE721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FaunaDB;

@@ -15,6 +15,6 @@ script:
 - xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB OSX" -sdk macosx | xcpretty -c
 - xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c
 - xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB watchOS" -sdk watchsimulator | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
