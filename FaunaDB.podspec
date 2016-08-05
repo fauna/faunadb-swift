@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/faunadb/faunadb-swift"
   s.license          = { type: 'Mozilla Public License 2.0', file: 'LICENSE' }
   s.author           = { "Fauna, Inc" => "priority@faunadb.com" }
-  s.source           = { git: "git@github.com:faunadb/faunadb-swift.git", tag: s.version.to_s }
+  s.source           = { git: "https://github.com/faunadb/faunadb-swift.git", tag: s.version.to_s }
   s.social_media_url = 'https://twitter.com/faunadb'
   s.requires_arc = true
   s.source_files = 'Sources/**/*.swift'
