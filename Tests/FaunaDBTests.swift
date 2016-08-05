@@ -10,8 +10,15 @@ import Nimble
 @testable import FaunaDB
 
 class FaunaDBTests: XCTestCase {
-
-    static let secret = "kqnPAfLLB40gAAm0_caoNtQt_Gb4MSd4lBOAuulHtQc"
+    
+    private static var secret: String {
+        if let envVarKey = NSProcessInfo.processInfo().environment["FAUNA_ROOT_KEY"] where !envVarKey.isEmpty {
+            return envVarKey
+        }
+        else {
+            return "HARDCODED_FAUNA_KEY"
+        }
+    }
 
     lazy var client: Client = {
         return Client(secret: FaunaDBTests.secret)
