@@ -25,3 +25,5 @@ env:
 branches:
   only:
     - master
+notifications:
+  email: false
