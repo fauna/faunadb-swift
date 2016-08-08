@@ -21,7 +21,7 @@ class FaunaDBTests: XCTestCase {
     }
 
     lazy var client: Client = {
-        return Client(secret: FaunaDBTests.secret)
+        return Client(secret: FaunaDBTests.secret, endpoint: NSURL(string: "https://cloud.faunadb.com")!)
     }()
 
     let testDbName = "faunadb-swift-test-\(arc4random())"

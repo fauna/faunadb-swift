@@ -18,10 +18,10 @@ script:
 - xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB watchOS" -sdk watchsimulator | xcpretty -c
 - xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
 - xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator -destination="platform=tvOS Simulator" FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
 env:
   global:
-    - secure: "LwWRjl61NfducqXwQA7bOQ6bcjWowjt8HeBD5b1FeNRUWKssKK252KtBmQlTdYD5c0OGM2T6EgzcuAU90nXWStSRBJbxBzJdS0nduWAJpzv86sbQd/kWjsRuHMSyV+F0cZp/QiQ2QsDIPYQuoTAjCN2IqSI6A1qvURh69uvfi7L+O9HukVAyjxLpFsZD0JjmXS8bf4n2G9pMfKc+AWnJxAXKNZpVPcob4JYj7TH4jlhWxT7aQ6QfNVmQWr92VqgXHTsmz+m1Zrl5GU7ADRh6lSO7wZm7KTa1jtwG9C84Jt/WrZp2kMb3pABiUpN6o1tiUrgydp/GyG5aCE0R7quFJgUtnXEvuRGqpIQ9vHXgZI+UIvPvjbX+eqJoGRjRQyT0uPzevqp1iw2D46hknLvm/EZLmPL8bsXvbkgP/ri/Fi5YffznGw6YqD1pSI6/52dxmYhB8lvt/yG6DW+1tGqHhLgYtqxjPRD7uUlXDdCiqYGdpXQaX/joOS+GwkzLtMRKnTn/G+CbJp6XSCG/lQONO8dLT7J+7FXufMWW1l+5K/LUZGbDFij3ZRqWsMgl59OfY8alb8Xtx4dZt0JdcRy/5y94kbpOARzzashJe7MoU2f5tBli83v/XB6j9190DuJtnLJcvNP86EGjOXc/fLuCGbxp2y9ccPQCJyATezH6VSs="
+    - secure: "Mc/gjfA9ijal7xTCLt4FpRVlfWmZxdPWJmfHH7DObvLCXw0AGcBE8k15NXUmWAVIirCeuoed1TiAdSsFQu5JPWSRXrpRv6qz5UeiioCVMRzclkgTNFO2QeS4TWenJnqoet/NDSD+5gaBFnDZWd9lVC/SZD+N+ufNX+GWw1RK9SPogpEmyv13gnbVXDtv+qoV8Yb2HjyZ9wxSevPxC+O/oxXbOkgaxBQQcZU2v94DoamGUs+5dsiU07/AFh5aHtKzZD+byIzbEb2S+oaMUHJJ2DAPjlEZEa1OLPSElOy6DPY/NxRTiUmseGIHpg0695RtoG3RcIZ/U1I2YJMGuGypOTW7HcWK5A/3OkamHJiQKEddjrDEUvDLzNmqasc9pVHBy4to4muil2kMF6nXfyDt/k5Fx4Btq550uC0IO0LykdponCqqgSTTPZtJ7oen716B++TN0CAVmm+DCQP0/dpd3SI9vFc+xzO1FRppFd6YnJfYd0+UvC6VBgDM/M/VpGMgcpB+Pl1Jmzu7Xk89ZEsOaeOJJ4KeZkC4PkZnJWOZAIaLYqwTA1AarqLBw0ysI3YKX39EfiJPFFor6I87A/f3P/MprpWaMy5dGWMBmeQJYM/XYWfFd4Nlgv0Re4rZzn5zdD7AieSfgV0XSrLR34vKmG1FB4q+GtnCA85EfOiaJNk="
 branches:
   only:
     - master
