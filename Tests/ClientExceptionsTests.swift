@@ -21,7 +21,7 @@ class ClientExceptionsTests: FaunaDBTests {
         let secret: String? = await(Create(ref: Ref("keys"), params: Obj(["database": dbRef!, "role": "server"])))?.get(path: "secret")
         expect(secret).notTo(beNil())
 
-        client = Client(secret: secret!)
+        client = Client(secret: secret!, endpoint: NSURL(string: "https://cloud.faunadb.com")!)
 
         var value: Value?
         value = await(Create(ref: Ref("classes"), params: Obj(["name": "spells"])))
@@ -63,7 +63,7 @@ class ClientExceptionsTests: FaunaDBTests {
 
     func testUnauthorized(){
         // MARK: UnauthorizedException
-        client = Client(secret: "notavalidsecret")
+        client = Client(secret: "notavalidsecret", endpoint: NSURL(string: "https://cloud.faunadb.com")!)
 
         let error = awaitError(Get(ref: Ref("classes/spells/1234")))
         expect(error?.equalType(Error.UnauthorizedException(response: nil, errors: []))) == true
