@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  FaunaDB
+//  StandaloneViewController.swift
+//  Example
 //
 //  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
@@ -58,6 +58,10 @@ class StandaloneViewController: UIViewController {
         editButton.target = self
         editButton.action = #selector(StandaloneViewController.editControllerTapped)
         performQuery(cancelPendingRequest: true, backToFirstPage: true) { _ in }
+        
+        tableView.backgroundView = emptyStateLabel
+        emptyStateLabel.text = "No blog post found"
+        emptyStateLabel.hidden = true
     }
 }
 
@@ -127,7 +131,6 @@ extension StandaloneViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         guard editingStyle == .Delete else { return }
         let blogPost = items[indexPath.row]
-
         faunaClient.query(Delete(ref: blogPost.refId!)) { [weak self] result in
             if let index = self?.items.indexOf(blogPost) where result.error == nil {
                 self?.items.removeAtIndex(index)
@@ -160,12 +163,19 @@ extension StandaloneViewController {
             lastPageRetrieved = nil
             items = []
         }
+        else {
+            guard let _  = lastPageRetrieved?.afterCursor else {
+                return pendingRequest
+            }
+        }
         activityIndicator.startAnimating()
+        emptyStateLabel.hidden = true
         pendingRequest = faunaClient.query(predicateExpr) { [weak self] result in
             self?.activityIndicator.stopAnimating()
             self?.pendingRequest = nil
             switch result {
             case .Failure(let error):
+                self?.emptyStateLabel.hidden = true
                 self?.showAlertMessage(error)
                 callback(data: nil, error: error)
             case .Success(let value):
@@ -177,6 +187,7 @@ extension StandaloneViewController {
                 else {
                     self?.items = paginationData.items
                 }
+                self?.emptyStateLabel.hidden = self?.items.count != 0
                 callback(data: value, error: nil)
             }
         }
