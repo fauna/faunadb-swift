@@ -39,10 +39,11 @@ class RxViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad(){
 
         super.viewDidLoad()
+        let refreshControl = self.refreshControl
 
         tableView.backgroundView = emptyStateLabel
         tableView.keyboardDismissMode = .OnDrag
-        tableView.addSubview(self.refreshControl)
+        tableView.addSubview(refreshControl)
         tableView.delegate = self
         emptyStateLabel.text = "No blog post found"
 
@@ -95,7 +96,7 @@ class RxViewController: UIViewController, UITableViewDelegate {
 
         refreshControl.rx_valueChanged
             .filter {
-                return self.refreshControl.refreshing
+                return refreshControl.refreshing
             }
             .bindTo(viewModel.pullToRefreshTrigger)
             .addDisposableTo(disposeBag)
@@ -103,15 +104,10 @@ class RxViewController: UIViewController, UITableViewDelegate {
 
 
         viewModel.loading
-            .filter { !$0 && self.refreshControl.refreshing }
+            .filter { !$0 && refreshControl.refreshing }
             .driveNext { _ in
-                self.refreshControl.endRefreshing()
+                refreshControl.endRefreshing()
             }
-            .addDisposableTo(disposeBag)
-
-        viewModel.loading
-            .filter { !$0 && self.refreshControl.refreshing }
-            .driveNext { _ in self.refreshControl.endRefreshing() }
             .addDisposableTo(disposeBag)
 
         viewModel.emptyState
@@ -127,9 +123,7 @@ class RxViewController: UIViewController, UITableViewDelegate {
             Observable.just(elements).bindTo(self!.viewModel.elements).addDisposableTo(self!.disposeBag)
             return blogpost.fDelete()!.rx_query()
         }
-        .subscribeNext { (value: Value) in
-
-        }
+        .subscribeNext { (value: Value) in }
         .addDisposableTo(disposeBag)
 
         editButton
@@ -142,10 +136,8 @@ class RxViewController: UIViewController, UITableViewDelegate {
         .addDisposableTo(disposeBag)
     }
 
-
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
     }
-
 
 }

@@ -1,3 +1,10 @@
+//
+//  PaginationViewModel.swift
+//  Example
+//
+//  Copyright © 2016 Fauna, Inc. All rights reserved.
+//
+
 import Foundation
 import UIKit
 import RxSwift
@@ -110,7 +117,7 @@ extension PaginationRequestType where Response.Paginate.Element: DecodableValue,
                 let nextCursor = cursorData.map { Cursor.After(expr: $0)}
                 cursorData = value.get(path: "before")
                 let beforeCursor = cursorData.map { Cursor.Before(expr: $0)}
-                return Observable.just(Response.init(elements: elements, previousPage: beforeCursor, nextPage: nextCursor, paginate: myPage))
+                return Observable.just(Self.Response.init(elements: elements, previousPage: beforeCursor, nextPage: nextCursor, paginate: myPage))
             }
         }
 

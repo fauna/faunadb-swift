@@ -1,10 +1,9 @@
 //
 //  RxHelpers.swift
-//  FaunaDB
+//  Example
 //
 //  Copyright © 2016 Fauna, Inc. All rights reserved.
 //
-
 
 import Foundation
 import RxSwift
