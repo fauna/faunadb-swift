@@ -19,6 +19,8 @@ script:
 - xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
 - xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
 - xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator -destination="platform=tvOS Simulator" FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -J 'FaunaDB iOS'
 env:
   global:
     - secure: "Mc/gjfA9ijal7xTCLt4FpRVlfWmZxdPWJmfHH7DObvLCXw0AGcBE8k15NXUmWAVIirCeuoed1TiAdSsFQu5JPWSRXrpRv6qz5UeiioCVMRzclkgTNFO2QeS4TWenJnqoet/NDSD+5gaBFnDZWd9lVC/SZD+N+ufNX+GWw1RK9SPogpEmyv13gnbVXDtv+qoV8Yb2HjyZ9wxSevPxC+O/oxXbOkgaxBQQcZU2v94DoamGUs+5dsiU07/AFh5aHtKzZD+byIzbEb2S+oaMUHJJ2DAPjlEZEa1OLPSElOy6DPY/NxRTiUmseGIHpg0695RtoG3RcIZ/U1I2YJMGuGypOTW7HcWK5A/3OkamHJiQKEddjrDEUvDLzNmqasc9pVHBy4to4muil2kMF6nXfyDt/k5Fx4Btq550uC0IO0LykdponCqqgSTTPZtJ7oen716B++TN0CAVmm+DCQP0/dpd3SI9vFc+xzO1FRppFd6YnJfYd0+UvC6VBgDM/M/VpGMgcpB+Pl1Jmzu7Xk89ZEsOaeOJJ4KeZkC4PkZnJWOZAIaLYqwTA1AarqLBw0ysI3YKX39EfiJPFFor6I87A/f3P/MprpWaMy5dGWMBmeQJYM/XYWfFd4Nlgv0Re4rZzn5zdD7AieSfgV0XSrLR34vKmG1FB4q+GtnCA85EfOiaJNk="
