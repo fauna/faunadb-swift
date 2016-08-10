@@ -2,6 +2,9 @@
 
 <p align="left">
 <a href="https://travis-ci.org/faunadb/faunadb-swift"><img src="https://travis-ci.org/faunadb/faunadb-swift.svg?branch=master" alt="Build status" /></a>
+<a href="https://codecov.io/gh/faunadb/faunadb-swift">
+  <img src="https://codecov.io/gh/faunadb/faunadb-swift/branch/master/graph/badge.svg" alt="Codecov" />
+</a>
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift2-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" /></a>
