@@ -126,7 +126,10 @@ You can run the `Example` iOS app in the iPhone simulator by following these ste
 
 1. Clone this repository.
 2. Run `carthage update` from the repository root folder.
-3. Open `FaunaDB.xcworkspace` and run Example app.
+3. Open `FaunaDB.xcworkspace`.
+4. Set up your FaunaDB admin key [here](https://github.com/faunadb/faunadb-swift/blob/master/Example/Example/Helpers/Helpers.swift#L13).
+5. Run Example app using Xcode.
+
 
 ### Playground
 
