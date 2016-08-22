@@ -22,7 +22,7 @@ public final class Client {
     private var authHeader: String
 
     public init(secret:String,
-                endpoint: NSURL = NSURL(string: "https://rest.faunadb.com")!,
+                endpoint: NSURL = NSURL(string: "https://cloud.faunadb.com")!,
                 timeout: NSTimeInterval = 60, observers: [ClientObserverType] = []){
         self.endpoint = endpoint
         self.secret = secret
