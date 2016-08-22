@@ -34,16 +34,16 @@ client.query(Create(ref: Ref("databases"),  params: Obj(["name": "blog_db"]))){ 
 
 
 /*:
- Client initialiser has another parameters that we can set up such as `faunaRoot`, `timeoutInterval` and `observers`. "https://rest.faunadb.com", 60 are the default value of `faunaRoot` and `timeoutInterval` respectively. `observers` can be used to keep waching client networking status, you can add as many observers as you want. Basically Fauna client notify observers before and after a query is performed.
+ Client initialiser has another parameters that we can set up such as `faunaRoot`, `timeoutInterval` and `observers`. "https://cloud.faunadb.com", 60 are the default value of `faunaRoot` and `timeoutInterval` respectively. `observers` can be used to keep waching client networking status, you can add as many observers as you want. Basically Fauna client notify observers before and after a query is performed.
  */
 
 /*:
  ### Logger
- 
+
  Logger is a fauna client observer, which means it conforms to `ClientObserverType`. Basically it aims to be a networking logger and helps us to develop using fauna swift driver. It's up to you use it or create any other observer.
- 
+
  These is an example of what Logger displays in the Xcode console...
- 
+
  ````
  $ curl -i \
 	-X POST \
@@ -51,12 +51,12 @@ client.query(Create(ref: Ref("databases"),  params: Obj(["name": "blog_db"]))){ 
 	-H "X-FaunaDB-Formatted-JSON: 1" \
 	-H "Authorization: Basic <hidden>" \
 	-d "{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"app_db_3653666273\"}}}" \
-	"https://rest.faunadb.com"
- 
+	"https://cloud.faunadb.com"
+
  RESPONSE STATUS: 201
- 
+
  RESPONSE DATA:
- 
+
  {
      resource = {
         class = {
@@ -69,7 +69,7 @@ client.query(Create(ref: Ref("databases"),  params: Obj(["name": "blog_db"]))){ 
         ts = 1468333736839000;
      };
  }
- 
+
  ````
 
  */
