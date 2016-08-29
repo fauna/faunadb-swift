@@ -1,4 +1,4 @@
-# FaunaDB Swift Client
+# FaunaDB Swift Driver
 
 <p align="left">
 <a href="https://travis-ci.org/faunadb/faunadb-swift"><img src="https://travis-ci.org/faunadb/faunadb-swift.svg?branch=master" alt="Build status" /></a>
