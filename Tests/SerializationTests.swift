@@ -29,7 +29,7 @@ class SerializationTests: FaunaDBTests {
         let arr2Copy =  arr2
         expect(arr2 == arr2Copy).to(beTrue())
         expectToJson(arr2) == "[3,\"test\",null,2.4]"
-        arr2.replaceRange(1..<3, with: ["FaunaDB"])
+        arr2.replaceSubrange(1..<3, with: ["FaunaDB"])
         expectToJson(arr2) == "[3,\"FaunaDB\",2.4]"
         arr2[0] = 33
         expectToJson(arr2) == "[33,\"FaunaDB\",2.4]"
@@ -111,7 +111,7 @@ class SerializationTests: FaunaDBTests {
         let ts = Timestamp(timeIntervalSince1970: 0)
         expectToJson(ts) == "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}"
 
-        let ts2 = Timestamp(timeInterval: 5.MIN, sinceDate: ts)
+        let ts2 = Timestamp(timeInterval: 5.MIN, since: ts)
         expectToJson(ts2) == "{\"@ts\":\"1970-01-01T00:05:00.000Z\"}"
 
         let ts3 = Timestamp(iso8601: "1970-01-01T00:00:00.123Z")
@@ -122,10 +122,10 @@ class SerializationTests: FaunaDBTests {
 
         //MARK: Date
 
-        let date = Date(day: 18, month: 7, year: 1984)
+        let date = FaunaDB.Date(day: 18, month: 7, year: 1984)
         expectToJson(date) == "{\"@date\":\"1984-07-18\"}"
 
-        let date2 = Date(iso8601:"1984-07-18")
+        let date2 = FaunaDB.Date(iso8601:"1984-07-18")
         XCTAssertNotNil(date2)
         expectToJson(date2) == "{\"@date\":\"1984-07-18\"}"
     }

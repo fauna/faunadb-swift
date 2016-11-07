@@ -83,7 +83,7 @@ public struct Count: Expr {
      - returns: A Count expression.
      */
     public init(set: Expr, countEvents: Expr){
-        if let bool = countEvents.value as? Bool where bool == false{
+        if let bool = countEvents.value as? Bool, bool == false{
             value = Obj(fnCall:["count": set])
         }
         else{
@@ -96,8 +96,8 @@ public struct Count: Expr {
  Curors are used for retrieving pages before or after the current page. Indicates from where or up to where the page should be retrieved.
  */
 public enum Cursor {
-    case Before(expr: Expr)
-    case After(expr:Expr)
+    case before(expr: Expr)
+    case after(expr:Expr)
 }
 
 
@@ -142,9 +142,9 @@ public struct Paginate: Expr {
             var obj = Obj(fnCall: ["paginate": resource])
             if let cursor = cursor {
                 switch cursor {
-                case .Before(let expr):
+                case .before(let expr):
                     obj["before"] = expr
-                case .After(let expr):
+                case .after(let expr):
                     obj["after"] = expr
                 }
             }

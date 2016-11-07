@@ -36,7 +36,7 @@ extension BlogPost: ValueConvertible {
 }
 
 extension BlogPost: DecodableValue {
-    static func decode(value: Value) -> BlogPost? {
+    static func decode(_ value: Value) -> BlogPost? {
         return try? BlogPost(name: value.get(path: "name"), author: value.get(path: "author"), content: value.get(path: "content"))
     }
 }
@@ -68,22 +68,22 @@ class FieldTests: FaunaDBTests {
         let obj = Obj(["name": "my_db_name"])
         var arr = Arr(1, 2, 3)
 
-        XCTAssertThrows(FieldPathError.UnexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try arrField.get(obj) }
-        XCTAssertThrows(FieldPathError.UnexpectedType(value: arr, expectedType: Obj.self, path: ["data"])) { try objField.get(arr) }
+        XCTAssertThrows(FieldPathError.unexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try arrField.get(obj) }
+        XCTAssertThrows(FieldPathError.unexpectedType(value: arr, expectedType: Obj.self, path: ["data"])) { try objField.get(arr) }
 
         arr.removeAll()
-        XCTAssertThrows(FieldPathError.NotFound(value: arr, path: [9])) { try Field<Int>(9).get(arr) }
-        XCTAssertThrows(FieldPathError.NotFound(value: obj, path: ["data"])) { try objField.get(obj) }
+        XCTAssertThrows(FieldPathError.notFound(value: arr, path: [9])) { try Field<Int>(9).get(arr) }
+        XCTAssertThrows(FieldPathError.notFound(value: obj, path: ["data"])) { try objField.get(obj) }
     }
 
     func testFieldComposition() {
         let obj = Obj(["name": "my_db_name"])
         let arr = Arr(0, 1, 2, obj, "FaunaDB")
 
-        let zip1: (Value -> (Int, Int)?) = FieldComposition.zip(field1: 0, field2: 2)
-        let zip2: (Value -> (Int, Int, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
-        let zip3: (Value -> (Int, Int, String, Obj)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-        let zip4: (Value -> (Int, Int, String, Obj, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        let zip1: ((Value) -> (Int, Int)?) = FieldComposition.zip(field1: 0, field2: 2)
+        let zip2: ((Value) -> (Int, Int, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
+        let zip3: ((Value) -> (Int, Int, String, Obj)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let zip4: ((Value) -> (Int, Int, String, Obj, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
 
         let zip1R = zip1(arr)
         let zip2R = zip2(arr)
@@ -109,10 +109,10 @@ class FieldTests: FaunaDBTests {
         expect(fieldLiteralR).toNot(beNil())
 
 
-        let zip1T: (Value throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
-        let zip2T: (Value throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
-        let zip3T: (Value throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-        let zip4T: (Value throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
+        let zip1T: ((Value) throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
+        let zip2T: ((Value) throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
+        let zip3T: ((Value) throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
+        let zip4T: ((Value) throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
 
 
         let zip1TR: (Int, Int) = try! arr.get(fieldComposition: zip1T)

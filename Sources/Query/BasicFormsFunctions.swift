@@ -27,8 +27,8 @@ public struct Var: Expr {
 
     //MARK: Helpers
 
-    private static var index: Int64 = 0
-    private static var newName: String {
+    fileprivate static var index: Int64 = 0
+    fileprivate static var newName: String {
         return "v\(OSAtomicIncrement64(&index))"
     }
 
@@ -78,7 +78,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    init(v1: String, e1: Expr, @noescape `in`: (Expr -> Expr)){
+    init(v1: String, e1: Expr, in: ((Expr) -> Expr)){
         self.init(bindings: [(v1, e1)], in: `in`(Var(v1)))
     }
 
@@ -96,7 +96,7 @@ public struct Let: Expr {
      - returns: A Let expression.
      */
     init(v1: String, e1: Expr,
-         v2: String, e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)){
+         v2: String, e2: Expr, in: ((Expr, Expr) -> Expr)){
          self.init(bindings: [(v1, e1), (v2, e2)], in: `in`(Var(v1), Var(v2)))
     }
 
@@ -119,7 +119,7 @@ public struct Let: Expr {
     init(v1: String, e1: Expr,
          v2: String, e2: Expr,
          v3: String, e3: Expr ,
-         @noescape `in`: ((Expr, Expr, Expr) -> Expr)){
+         in: ((Expr, Expr, Expr) -> Expr)){
          self.init(bindings: [(v1, e1), (v2, e2), (v3, e3)], in: `in`(Var(v1), Var(v2), Var(v3)))
     }
 
@@ -142,7 +142,7 @@ public struct Let: Expr {
          v2: String, e2: Expr,
          v3: String, e3: Expr,
          v4: String, e4: Expr,
-         @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)){
+         in: ((Expr, Expr, Expr, Expr) -> Expr)){
          self.init(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4)], in: `in`(Var(v1), Var(v2), Var(v3), Var(v4)))
     }
 
@@ -170,7 +170,7 @@ public struct Let: Expr {
                 v3: String, e3: Expr,
                 v4: String, e4: Expr,
                 v5: String, e5: Expr,
-                @noescape `in`: ((Expr, Expr, Expr, Expr, Expr) -> Expr)){
+                in: ((Expr, Expr, Expr, Expr, Expr) -> Expr)){
         self.init(bindings: [(v1, e1), (v2, e2), (v3, e3), (v4, e4), (v5, e5)], in: `in`(Var(v1), Var(v2), Var(v3), Var(v4), Var(v5)))
     }
 
@@ -184,7 +184,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    public init(_ e1: Expr, @noescape `in`: (Expr -> Expr)){
+    public init(_ e1: Expr, in: ((Expr) -> Expr)){
         self.init(v1: Var.newName, e1: e1, in: `in`)
     }
 
@@ -199,7 +199,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    public init(_ e1: Expr, _ e2: Expr, @noescape `in`: ((Expr, Expr) -> Expr)){
+    public init(_ e1: Expr, _ e2: Expr, in: ((Expr, Expr) -> Expr)){
         self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, in: `in`)
     }
 
@@ -215,7 +215,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, @noescape `in`: ((Expr, Expr, Expr) -> Expr)){
+    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, in: ((Expr, Expr, Expr) -> Expr)){
         self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, in: `in`)
     }
 
@@ -232,7 +232,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, @noescape `in`: ((Expr, Expr, Expr, Expr) -> Expr)){
+    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, in: ((Expr, Expr, Expr, Expr) -> Expr)){
         self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, in: `in`)
     }
 
@@ -250,7 +250,7 @@ public struct Let: Expr {
 
      - returns: A Let expression.
      */
-    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, _ e5: Expr, @noescape `in`: ((Expr, Expr, Expr, Expr, Expr) -> Expr)){
+    public init(_ e1: Expr, _ e2: Expr, _ e3: Expr, _ e4: Expr, _ e5: Expr, in: ((Expr, Expr, Expr, Expr, Expr) -> Expr)){
         self.init(v1: Var.newName, e1: e1, v2: Var.newName, e2: e2, v3: Var.newName, e3: e3, v4: Var.newName, e4: e4, v5: Var.newName, e5: e5, in: `in`)
     }
 }
@@ -271,7 +271,7 @@ public struct If: Expr {
 
      - returns: An If expression.
      */
-    public init(pred: Expr, @autoclosure `then`: (()-> Expr), @autoclosure `else`: (()-> Expr)){
+    public init(pred: Expr, then: @autoclosure (()-> Expr), else: @autoclosure (()-> Expr)){
         value = Obj(fnCall:["if": pred, "then": `then`(), "else": `else`()])
     }
 }
@@ -323,7 +323,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr)-> Expr)){
+    public init(lambda: ((Expr)-> Expr)){
         let newVar = Var.newVar
         self.init(vars: newVar, expr: lambda(newVar))
     }
@@ -337,7 +337,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         self.init(vars: newVar, newVar2, expr: lambda(newVar, newVar2))
@@ -352,7 +352,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         let newVar3 = Var.newVar
@@ -368,7 +368,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr, Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr, Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         let newVar3 = Var.newVar
@@ -385,7 +385,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr, Expr, Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr, Expr, Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         let newVar3 = Var.newVar
@@ -403,7 +403,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         let newVar3 = Var.newVar
@@ -422,7 +422,7 @@ public struct Lambda: Expr {
 
      - returns: A Let expression.
      */
-    public init(@noescape lambda: ((Expr, Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)){
+    public init(lambda: ((Expr, Expr, Expr, Expr, Expr, Expr, Expr)-> Expr)){
         let newVar = Var.newVar
         let newVar2 = Var.newVar
         let newVar3 = Var.newVar

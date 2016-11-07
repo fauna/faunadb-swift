@@ -7,16 +7,16 @@
 
 import Foundation
 
-public enum Error: ErrorType {
-    case UnavailableException(response: NSURLResponse?, errors:[ErrorResponse])
-    case BadRequestException(response: NSURLResponse?, errors:[ErrorResponse])
-    case NotFoundException(response: NSURLResponse?, errors:[ErrorResponse])
-    case UnauthorizedException(response: NSURLResponse?, errors:[ErrorResponse])
-    case UnknownException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
-    case InternalException(response: NSURLResponse?, errors:[ErrorResponse], msg: String?)
-    case NetworkException(response: NSURLResponse?, error: NSError?, msg: String?)
-    case DriverException(data: Any?, msg: String?)
-    case UnparsedDataException(data: AnyObject, msg: String?)
+public enum Error: Error {
+    case unavailableException(response: URLResponse?, errors:[ErrorResponse])
+    case badRequestException(response: URLResponse?, errors:[ErrorResponse])
+    case notFoundException(response: URLResponse?, errors:[ErrorResponse])
+    case unauthorizedException(response: URLResponse?, errors:[ErrorResponse])
+    case unknownException(response: URLResponse?, errors:[ErrorResponse], msg: String?)
+    case internalException(response: URLResponse?, errors:[ErrorResponse], msg: String?)
+    case networkException(response: URLResponse?, error: NSError?, msg: String?)
+    case driverException(data: Any?, msg: String?)
+    case unparsedDataException(data: AnyObject, msg: String?)
 }
 
 
@@ -24,23 +24,23 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .UnavailableException(let response, let errors):
+        case .unavailableException(let response, let errors):
             return getDesc(response, errors: errors)
-        case .BadRequestException(let response, let errors):
+        case .badRequestException(let response, let errors):
             return getDesc(response, errors: errors)
-        case .NotFoundException(let response, let errors):
+        case .notFoundException(let response, let errors):
             return getDesc(response, errors: errors)
-        case .UnauthorizedException(let response, let errors):
+        case .unauthorizedException(let response, let errors):
             return getDesc(response, errors: errors)
-        case .UnknownException(let response, let errors, let msg):
+        case .unknownException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
-        case .InternalException(let response, let errors, let msg):
+        case .internalException(let response, let errors, let msg):
             return getDesc(response, errors: errors, msg: msg)
-        case .NetworkException(let response, let error, let msg):
+        case .networkException(let response, let error, let msg):
             return getDesc(response, msg: msg, error: error)
-        case .DriverException(_, let msg):
+        case .driverException(_, let msg):
             return getDesc(nil, msg: msg)
-        case .UnparsedDataException(let data, let msg):
+        case .unparsedDataException(let data, let msg):
             return getDesc(nil, msg: msg.map { "\($0): /n\(data)" } ?? "\(data)", error: nil)
         }
 
@@ -50,7 +50,7 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
         return description
     }
 
-    private func getDesc(response: NSURLResponse?, errors: [ErrorResponse] = [], msg: String? = nil, error: NSError? = nil) -> String{
+    fileprivate func getDesc(_ response: URLResponse?, errors: [ErrorResponse] = [], msg: String? = nil, error: NSError? = nil) -> String{
         var result = [String]()
         _ = msg.map { result.append("Error: \($0)") }
         _ = response.map { result.append("Response: " + $0.description) }
@@ -59,22 +59,22 @@ extension Error: CustomDebugStringConvertible, CustomStringConvertible {
             errors.forEach { result.append( $0.description ) }
         }
         _ = error.map { result.append("Error: \($0.description)") }
-        return result.joinWithSeparator("\n")
+        return result.joined(separator: "\n")
     }
 
     public var responseErrors: [ErrorResponse]{
         switch self {
-        case .UnavailableException(_, let errors):
+        case .unavailableException(_, let errors):
             return errors
-        case .BadRequestException(_, let errors):
+        case .badRequestException(_, let errors):
             return errors
-        case .NotFoundException(_, let errors):
+        case .notFoundException(_, let errors):
             return errors
-        case .UnauthorizedException(_, let errors):
+        case .unauthorizedException(_, let errors):
             return errors
-        case .UnknownException(_, let errors, _):
+        case .unknownException(_, let errors, _):
             return errors
-        case .InternalException(_, let errors, _):
+        case .internalException(_, let errors, _):
             return errors
         default: return []
         }

@@ -18,7 +18,7 @@ extension Value {
 
     public var value: Value { return self }
 
-    internal func isEquals(other: Value) -> Bool {
+    internal func isEquals(_ other: Value) -> Bool {
 
         switch (self, other) {
         case let (exp1 as Arr, exp2 as Arr):

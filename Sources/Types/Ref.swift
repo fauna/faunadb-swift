@@ -20,7 +20,7 @@ public struct Ref: ScalarValue {
     }
 
     init?(json: [String: AnyObject]){
-        guard let ref = json["@ref"] as? String where json.count == 1 else { return nil }
+        guard let ref = json["@ref"] as? String, json.count == 1 else { return nil }
         self.init(ref)
     }
 }

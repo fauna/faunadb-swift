@@ -9,7 +9,7 @@ import Foundation
 
 public struct Arr: Value {
 
-    private var array = [ValueConvertible]()
+    fileprivate var array = [ValueConvertible]()
 
     public init(){}
 
@@ -18,9 +18,9 @@ public struct Arr: Value {
         array = arr
     }
 
-    public init<C: SequenceType where C.Generator.Element: ValueConvertible>(_ sequence: C){
+    public init<C: Sequence>(_ sequence: C) where C.Iterator.Element: ValueConvertible{
         self.init()
-        array.appendContentsOf(sequence.map { $0 as ValueConvertible})
+        array.append(contentsOf: sequence.map { $0 as ValueConvertible})
     }
 
     public init(_ elements: ValueConvertible...){
@@ -37,7 +37,7 @@ extension Arr: Encodable {
     }
 }
 
-extension Arr: MutableCollectionType {
+extension Arr: MutableCollection {
 
     // MARK: MutableCollectionType
 
@@ -49,33 +49,33 @@ extension Arr: MutableCollectionType {
     }
 }
 
-extension Arr: RangeReplaceableCollectionType {
+extension Arr: RangeReplaceableCollection {
 
     // MARK: RangeReplaceableCollectionType
 
-    public mutating func append(exp: Value){
+    public mutating func append(_ exp: Value){
         array.append(exp)
     }
 
-    public mutating func appendContentsOf<S : SequenceType where S.Generator.Element == ValueConvertible>(newExprs: S) {
-        array.appendContentsOf(newExprs)
+    public mutating func append<S : Sequence>(contentsOf newExprs: S) where S.Iterator.Element == ValueConvertible {
+        array.append(contentsOf: newExprs)
     }
 
-    public mutating func reserveCapacity(n: Int){ array.reserveCapacity(n) }
+    public mutating func reserveCapacity(_ n: Int){ array.reserveCapacity(n) }
 
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == ValueConvertible>(subRange: Range<Int>, with newExprs: C) {
-        array.replaceRange(subRange, with: newExprs)
+    public mutating func replaceSubrange<C : Collection>(_ subRange: Range<Int>, with newExprs: C) where C.Iterator.Element == ValueConvertible {
+        array.replaceSubrange(subRange, with: newExprs)
     }
 
-    public mutating func removeAll(keepCapacity keepCapacity: Bool = false) {
-        array.removeAll(keepCapacity: keepCapacity)
+    public mutating func removeAll(keepingCapacity keepCapacity: Bool = false) {
+        array.removeAll(keepingCapacity: keepCapacity)
     }
 }
 
 extension Arr: CustomStringConvertible, CustomDebugStringConvertible {
 
     public var description: String{
-        return "Arr(\(array.map { String($0) }.joinWithSeparator(", ")))"
+        return "Arr(\(array.map { String(describing: $0) }.joined(separator: ", ")))"
     }
 
     public var debugDescription: String {
@@ -89,9 +89,9 @@ extension Arr: Equatable {}
 
 public func ==(lhs: Arr, rhs: Arr) -> Bool {
     guard lhs.count == rhs.count else { return false }
-    var i1 = lhs.generate()
-    var i2 = rhs.generate()
-    while let e1 = i1.next(), e2 = i2.next() {
+    var i1 = lhs.makeIterator()
+    var i2 = rhs.makeIterator()
+    while let e1 = i1.next(), let e2 = i2.next() {
         guard e1.value.isEquals(e2.value) else { return false }
     }
     return true

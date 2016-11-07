@@ -14,11 +14,11 @@ extension NSNumber {
     }
 
     internal func isDoubleNumber() -> Bool{
-        return CFNumberGetType(self) == CFNumberType.DoubleType || CFNumberGetType(self) == CFNumberType.Float64Type
+        return CFNumberGetType(self) == CFNumberType.doubleType || CFNumberGetType(self) == CFNumberType.float64Type
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C) -> ValueConvertible{
+func varargs<C: Collection>(_ collection: C) -> ValueConvertible where C.Iterator.Element == Expr{
     switch  collection.count {
     case 1:
         return collection.first!
@@ -27,7 +27,7 @@ func varargs<C: CollectionType where C.Generator.Element == Expr>(collection: C)
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(collection: C) -> ValueConvertible{
+func varargs<C: Collection>(_ collection: C) -> ValueConvertible where C.Iterator.Element: ValueConvertible{
     switch  collection.count {
     case 1:
         return collection.first!
@@ -36,7 +36,7 @@ func varargs<C: CollectionType where C.Generator.Element: ValueConvertible>(coll
     }
 }
 
-func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(collection: C) -> ValueConvertible{
+func varargs<C: Collection>(_ collection: C) -> ValueConvertible where C.Iterator.Element == PathComponentType{
     switch  collection.count {
     case 1:
         return collection.first!
@@ -48,15 +48,15 @@ func varargs<C: CollectionType where C.Generator.Element == PathComponentType>(c
 
 struct Mapper {
 
-    static func fromFaunaResponseData(data: NSData) throws -> Value{
-        let jsonData: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-        guard let res = jsonData.objectForKey("resource") else {
-            throw Error.DriverException(data: jsonData, msg: "Fauna response does not contain a resource key")
+    static func fromFaunaResponseData(_ data: Data) throws -> Value{
+        let jsonData: AnyObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        guard let res = jsonData.object(forKey: "resource") else {
+            throw Error.driverException(data: jsonData, msg: "Fauna response does not contain a resource key")
         }
-        return try Mapper.fromData(res)
+        return try Mapper.fromData(res as AnyObject)
     }
 
-    static func fromData(data: AnyObject) throws -> Value {
+    static func fromData(_ data: AnyObject) throws -> Value {
         switch data {
         case let strValue as String:
             return strValue
@@ -69,13 +69,13 @@ struct Mapper {
         case _ as NSNull:
             return Null()
         case let value as [AnyObject]:
-            guard let result = Arr(json: value) else { throw Error.UnparsedDataException(data: value, msg: "Unparseable data to Arr") }
+            guard let result = Arr(json: value) else { throw Error.unparsedDataException(data: value, msg: "Unparseable data to Arr") }
             return result
         case let value as [String: AnyObject]:
-            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? SetRef(json: value) ?? Obj(json: value)  else { throw Error.UnparsedDataException(data: value, msg: "Unparseable data") }
+            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? SetRef(json: value) ?? Obj(json: value)  else { throw Error.unparsedDataException(data: value, msg: "Unparseable data") }
             return result
         default:
-            throw Error.UnparsedDataException(data: data, msg: "Unparseable data")
+            throw Error.unparsedDataException(data: data, msg: "Unparseable data")
         }
     }
 }

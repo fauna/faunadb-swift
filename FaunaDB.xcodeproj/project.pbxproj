@@ -607,6 +607,7 @@
 					};
 					28D89BD41D5020EB009AE721 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0810;
 					};
 					28D89BEF1D503B6A009AE721 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -619,6 +620,7 @@
 					};
 					28F8287C1C494B2C00330CF4 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0810;
 					};
 				};
 			};
@@ -1032,6 +1034,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1048,6 +1051,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.faunadb.client.FaunaDB.FaunaDB-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1291,6 +1295,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
 				PRODUCT_NAME = FaunaDB;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1313,6 +1318,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.faunadb.client.FaunaDB;
 				PRODUCT_NAME = FaunaDB;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
