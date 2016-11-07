@@ -21,7 +21,7 @@ class ClientExceptionsTests: FaunaDBTests {
         let secret: String? = await(Create(ref: Ref("keys"), params: Obj(["database": dbRef!, "role": "server"])))?.get(path: "secret")
         expect(secret).notTo(beNil())
 
-        client = Client(secret: secret!, endpoint: NSURL(string: "https://cloud.faunadb.com")!)
+        client = Client(secret: secret!, endpoint: NSURL(string: "https://cloud.faunadb.com")! as URL)
 
         var value: Value?
         value = await(Create(ref: Ref("classes"), params: Obj(["name": "spells"])))
@@ -38,7 +38,7 @@ class ClientExceptionsTests: FaunaDBTests {
 
     
     override func tearDown() {
-        await(Delete(ref: testDbName))
+        _ = await(Delete(ref: testDbName))
         super.tearDown()
     }
     
@@ -49,7 +49,7 @@ class ClientExceptionsTests: FaunaDBTests {
         setupFaunaDB()
 
         let error = awaitError(Get(ref: Ref("classes/spells/1234")))
-        expect(error?.equalType(Error.NotFoundException(response: nil, errors: []))) == true
+        expect(error?.equalType(FaunaError.notFoundException(response: nil, errors: []))) == true
     }
 
     func testBadRequest() {
@@ -58,31 +58,31 @@ class ClientExceptionsTests: FaunaDBTests {
         setupFaunaDB()
 
         let error = awaitError(Get(ref: 3))
-        expect(error?.equalType(Error.BadRequestException(response: nil, errors: []))) == true
+        expect(error?.equalType(FaunaError.badRequestException(response: nil, errors: []))) == true
     }
 
     func testUnauthorized(){
         // MARK: UnauthorizedException
-        client = Client(secret: "notavalidsecret", endpoint: NSURL(string: "https://cloud.faunadb.com")!)
+        client = Client(secret: "notavalidsecret", endpoint: URL(string: "https://cloud.faunadb.com")!)
 
         let error = awaitError(Get(ref: Ref("classes/spells/1234")))
-        expect(error?.equalType(Error.UnauthorizedException(response: nil, errors: []))) == true
+        expect(error?.equalType(FaunaError.unauthorizedException(response: nil, errors: []))) == true
     }
 
 
     func testNetworkException(){
         // MARK: NetworkException
-        client = Client(secret: client.secret, endpoint: NSURL(string: "https://notValidSubdomain.faunadb.com")!)
+        client = Client(secret: client.secret, endpoint: URL(string: "https://notValidSubdomain.faunadb.com")!)
         let error = awaitError("Hi!")
-        expect(error?.equalType(Error.NetworkException(response: nil, error: nil, msg: nil))) == true
+        expect(error?.equalType(FaunaError.networkException(response: nil, error: nil, msg: nil))) == true
     }
 
     func testUnparseableDataException(){
         // MARK: UnparseableDataException
         do {
-            try Mapper.fromData([Float(3)])
+            try _ = Mapper.fromData([Float(3)] as AnyObject)
         }
-        catch Error.UnparsedDataException(data: _, msg: _) {}
+        catch FaunaError.unparsedDataException(data: _, msg: _) {}
         catch {
             fail()
         }
@@ -91,9 +91,9 @@ class ClientExceptionsTests: FaunaDBTests {
     func testDriverException(){
         // MARK: DriverException
         do {
-            try Client.toData(3)
+            try _ = Client.toData(3 as AnyObject)
         }
-        catch Error.DriverException(data: _, msg: _) {}
+        catch FaunaError.driverException(data: _, msg: _) {}
         catch {
             fail()
         }

@@ -41,6 +41,7 @@ public final class Client {
 
 extension Client {
 
+    @discardableResult
     public func query(_ expr: @autoclosure () -> Expr, completion: @escaping ((Result<Value, FaunaError>) -> Void)) -> URLSessionDataTask {
         let jsonData = try! Client.toData(expr().toJSON())
         return postJSON(jsonData) { [weak self] (data, response, error) in

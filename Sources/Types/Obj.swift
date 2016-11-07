@@ -24,7 +24,7 @@ public struct Obj: Value {
         self.dictionary = dictionary
     }
 
-    public init<V: ValueConvertible>(_ dictionary: [String: V]){
+    public init<V: ValueConvertible>(dict dictionary: [String: V]){
         var res = [String: ValueConvertible]()
         dictionary.forEach { k, v in res[k] = v }
         self.dictionary = res
