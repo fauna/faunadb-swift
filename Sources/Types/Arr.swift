@@ -33,19 +33,29 @@ extension Arr: Encodable {
     //MARK: Encodable
 
     func toJSON() -> AnyObject {
-        return array.map { $0.toJSON() }
+        return array.map { $0.toJSON() } as AnyObject
     }
 }
 
 extension Arr: MutableCollection {
-
+    
     // MARK: MutableCollectionType
 
-    public var startIndex: Int { return array.startIndex }
-    public var endIndex: Int { return array.endIndex }
+    public var startIndex: Int {
+        return array.startIndex
+    }
+    
+    public var endIndex: Int {
+        return array.endIndex
+    }
+    
     public subscript (position: Int) -> ValueConvertible {
-        get { return array[position] }
         set { array[position] = newValue }
+        get { return array[position] }
+    }
+    
+    public func index(after i: Int) -> Int {
+        return array.index(after: i)
     }
 }
 

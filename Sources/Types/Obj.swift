@@ -83,33 +83,48 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension Obj: Collection {
+    
     public typealias Element = (String, ValueConvertible)
     public typealias Index = DictionaryIndex<String, ValueConvertible>
 
     /// Create an empty dictionary.
-    public init(){}
+    public init() {}
 
-    public var startIndex: Index { return dictionary.startIndex }
-    public var endIndex: Index { return dictionary.endIndex }
+    public var startIndex: Index {
+        return dictionary.startIndex
+    }
+    
+    public var endIndex: Index {
+        return dictionary.endIndex
+    }
+    
     public func indexForKey(_ key: String) -> Index? {
         return dictionary.index(forKey: key)
     }
+    
     public subscript (position: Index) -> Element {
         return dictionary[position]
     }
+    
     public subscript (key: String) -> ValueConvertible? {
-        get{ return dictionary[key] }
         set(newValue) { dictionary[key] = newValue }
+        get{ return dictionary[key] }
     }
 
-    public mutating func updateValue(_ value: ValueConvertible, forKey key: String) -> ValueConvertible?{
+    public mutating func updateValue(_ value: ValueConvertible, forKey key: String) -> ValueConvertible? {
         return dictionary.updateValue(value, forKey: key)
     }
+    
     public mutating func removeAtIndex(_ index: Index) -> Element {
         return dictionary.remove(at: index)
     }
-    public mutating func removeValueForKey(_ key: String) -> ValueConvertible?{
+    
+    public mutating func removeValueForKey(_ key: String) -> ValueConvertible? {
         return dictionary.removeValue(forKey: key)
+    }
+    
+    public func index(after i: DictionaryIndex<String, ValueConvertible>) -> DictionaryIndex<String, ValueConvertible> {
+        return dictionary.index(after: i)
     }
 }
 

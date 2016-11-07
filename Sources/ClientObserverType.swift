@@ -91,7 +91,7 @@ extension URLRequest {
                 cookieStorage = session.configuration.httpCookieStorage,
                 let cookies = cookieStorage.cookies(for: URL), !cookies.isEmpty
             {
-                let string = cookies.reduce("") { $0 + "\($1.name)=\($1.value ?? String());" }
+                let string = cookies.reduce("") { $0 + "\($1.name)=\($1.value);" }
                 components.append("-b \"\(string.substring(to: string.characters.index(before: string.endIndex)))\"")
             }
         }
@@ -99,7 +99,7 @@ extension URLRequest {
         var headers: [AnyHashable: Any] = [:]
 
         if let additionalHeaders = session.configuration.httpAdditionalHeaders {
-            for (field, value) in additionalHeaders where field != "Cookie" {
+            for (field, value) in additionalHeaders where field as! String != "Cookie" {
                 headers[field] = value
             }
         }
@@ -111,7 +111,7 @@ extension URLRequest {
         }
 
         for (field, value) in headers {
-            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field ? value : "Basic <hidden>")\"")
+            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field as! String ? value : "Basic <hidden>")\"")
         }
 
         if let

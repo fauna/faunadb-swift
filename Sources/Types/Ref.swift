@@ -42,7 +42,7 @@ extension Ref: Encodable {
     //MARK: Encodable
 
     func toJSON() -> AnyObject {
-        return ["@ref": ref.toJSON()]
+        return ["@ref": ref.toJSON()] as AnyObject
     }
 }
 

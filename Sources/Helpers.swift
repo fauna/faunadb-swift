@@ -8,11 +8,11 @@
 import Foundation
 
 extension NSNumber {
-
+    
     internal func isBoolNumber() -> Bool{
         return CFGetTypeID(self) == CFBooleanGetTypeID()
     }
-
+    
     internal func isDoubleNumber() -> Bool{
         return CFNumberGetType(self) == CFNumberType.doubleType || CFNumberGetType(self) == CFNumberType.float64Type
     }
@@ -43,19 +43,19 @@ func varargs<C: Collection>(_ collection: C) -> ValueConvertible where C.Iterato
     default:
         return Arr(collection.map { $0 })
     }
-
+    
 }
 
 struct Mapper {
-
+    
     static func fromFaunaResponseData(_ data: Data) throws -> Value{
-        let jsonData: AnyObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        let jsonData: AnyObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
         guard let res = jsonData.object(forKey: "resource") else {
-            throw Error.driverException(data: jsonData, msg: "Fauna response does not contain a resource key")
+            throw FaunaError.driverException(data: jsonData, msg: "Fauna response does not contain a resource key")
         }
         return try Mapper.fromData(res as AnyObject)
     }
-
+    
     static func fromData(_ data: AnyObject) throws -> Value {
         switch data {
         case let strValue as String:
@@ -69,13 +69,13 @@ struct Mapper {
         case _ as NSNull:
             return Null()
         case let value as [AnyObject]:
-            guard let result = Arr(json: value) else { throw Error.unparsedDataException(data: value, msg: "Unparseable data to Arr") }
+            guard let result = Arr(json: value) else { throw FaunaError.unparsedDataException(data: value as AnyObject, msg: "Unparseable data to Arr") }
             return result
         case let value as [String: AnyObject]:
-            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? SetRef(json: value) ?? Obj(json: value)  else { throw Error.unparsedDataException(data: value, msg: "Unparseable data") }
+            guard let result: Value = Ref(json: value) ?? Timestamp(json: value) ?? Date(json: value) ?? SetRef(json: value) ?? Obj(json: value)  else { throw FaunaError.unparsedDataException(data: value as AnyObject, msg: "Unparseable data") }
             return result
         default:
-            throw Error.unparsedDataException(data: data, msg: "Unparseable data")
+            throw FaunaError.unparsedDataException(data: data, msg: "Unparseable data")
         }
     }
 }

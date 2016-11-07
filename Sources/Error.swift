@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Error: Error {
+public enum FaunaError: Error {
     case unavailableException(response: URLResponse?, errors:[ErrorResponse])
     case badRequestException(response: URLResponse?, errors:[ErrorResponse])
     case notFoundException(response: URLResponse?, errors:[ErrorResponse])
@@ -20,7 +20,7 @@ public enum Error: Error {
 }
 
 
-extension Error: CustomDebugStringConvertible, CustomStringConvertible {
+extension FaunaError: CustomDebugStringConvertible, CustomStringConvertible {
 
     public var description: String {
         switch self {

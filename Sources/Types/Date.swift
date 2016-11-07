@@ -40,7 +40,7 @@ extension Date: Encodable {
     func toJSON() -> AnyObject {
         let monthStr = month! < 9 ? "0\(month)" : String(describing: month)
         let dayStr = day! < 9 ? "0\(day)" : String(describing: day)
-        return ["@date": "\(year)-\(monthStr)-\(dayStr)"]
+        return ["@date": "\(year)-\(monthStr)-\(dayStr)"] as AnyObject
     }
 }
 

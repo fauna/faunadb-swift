@@ -271,7 +271,7 @@ public struct If: Expr {
 
      - returns: An If expression.
      */
-    public init(pred: Expr, then: @autoclosure (()-> Expr), else: @autoclosure (()-> Expr)){
+    public init(pred: Expr, then: @autoclosure () -> Expr, else: @autoclosure () -> Expr){
         value = Obj(fnCall:["if": pred, "then": `then`(), "else": `else`()])
     }
 }
