@@ -1,16 +1,9 @@
-//
-//  AuthenticationFunctions.swift
-//  FaunaDB
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import Foundation
 
-public struct Login: Expr{
+public struct Login: Fn {
 
-    public var value: Value
-    
+    var call: Fn.Call
+
     /**
      `Login` creates a token for the provided ref.
 
@@ -21,16 +14,15 @@ public struct Login: Expr{
 
      - returns: A `Login` expression.
      */
-    public init(ref: Expr, params: Expr){
-        value = Obj(fnCall:["login": ref, "params": params])
+    public init(for ref: Expr, _ params: Expr) {
+        self.call = fn("login" => ref, "params" => params)
     }
 
 }
 
+public struct Logout: Fn {
 
-public struct Logout: Expr{
-
-    public var value: Value
+    var call: Fn.Call
 
     /**
      `Logout` deletes all tokens associated with the current session if its parameter is `true`, or just the token used in this request otherwise.
@@ -39,27 +31,15 @@ public struct Logout: Expr{
 
      - returns: A `Logout` expression.
      */
-    public init(invalidateAll: Bool){
-        self.init(invalidateAll: invalidateAll as Expr)
-    }
-
-    /**
-     `Logout` deletes all tokens associated with the current session if its parameter is `true`, or just the token used in this request otherwise.
-
-     - parameter invalidateAll: if true deletes all tokens associated with the current session. If false it deletes just the token used in this request.
-
-     - returns: A `Logout` expression.
-     */
-    public init(invalidateAll: Expr){
-        value = Obj(fnCall:["logout": invalidateAll])
+    public init(all: Expr) {
+        self.call = fn("logout" => all)
     }
 
 }
 
+public struct Identify: Fn {
 
-public struct Identify: Expr{
-
-    public var value: Value
+    var call: Fn.Call
 
     /**
      `Identify` checks the given password against the ref’s credentials, returning `true` if the credentials are valid, or `false` otherwise.
@@ -69,7 +49,8 @@ public struct Identify: Expr{
 
      - returns: A `Identify` expression.
      */
-    public init(ref: Expr, password: Expr){
-        value = Obj(fnCall:["identify": ref, "password": password])
+    public init(ref: Expr, password: Expr) {
+        self.call = fn("identify" => ref, "password" => password)
     }
+
 }

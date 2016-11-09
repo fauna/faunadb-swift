@@ -1,580 +1,749 @@
-//
-//  ClientConfigurationTests.swift
-//  FaunaDBTests
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import XCTest
-import Nimble
+
 @testable import FaunaDB
 
-class SerializationTests: FaunaDBTests {
+class SerializationTests: XCTestCase {
 
-    func testRef() {
-
-        // MARK: Ref
-        expectToJson(Ref("some/ref")) == "{\"@ref\":\"some\\/ref\"}"
-
-        let classRef = Ref("classes/technology")
-        expectToJson(Ref(ref: classRef, id: "1234")) == "{\"@ref\":\"classes\\/technology\\/1234\"}"
-
-        expect(classRef.description) == classRef.debugDescription
+    override func setUp() {
+        Var.resetIndex()
     }
 
-    func testArr(){
+    func testString() {
+        assert(expr: StringV("a string"), toBecome: "\"a string\"")
+        assert(expr: "a string", toBecome: "\"a string\"")
+    }
 
-        // MARK: Arr
-        var arr2 = Arr(3, "test", Null(), 2.4)
-        let arr2Copy =  arr2
-        expect(arr2 == arr2Copy).to(beTrue())
-        expectToJson(arr2) == "[3,\"test\",null,2.4]"
-        arr2.replaceSubrange(1..<3, with: ["FaunaDB"])
-        expectToJson(arr2) == "[3,\"FaunaDB\",2.4]"
-        arr2[0] = 33
-        expectToJson(arr2) == "[33,\"FaunaDB\",2.4]"
-        arr2.removeAll()
-        expectToJson(arr2) == "[]"
-        arr2.reserveCapacity(100)
-        expect(arr2.description) == arr2.debugDescription
-        expect(arr2.description).to(beginWith("Arr("))
-        expect(arr2.description).to(endWith(")"))
-        expect(arr2 == arr2Copy).to(beFalse())
+    func testLong() {
+        assert(expr: LongV(42), toBecome: "42")
+        assert(expr: 42, toBecome: "42")
+    }
 
-        expectToJson(Arr([1, 2, 3])) == "[1,2,3]"
+    func testDouble() {
+        assert(expr: DoubleV(42.3), toBecome: "42.3")
+        assert(expr: 42.3, toBecome: "42.3")
+    }
 
-        expectToJson(Arr(["Hi", "Hi2", "Hi3"])) == "[\"Hi\",\"Hi2\",\"Hi3\"]"
+    func testBoolean() {
+        assert(expr: BooleanV(true), toBecome: "true")
+        assert(expr: BooleanV(false), toBecome: "false")
+        assert(expr: true, toBecome: "true")
+        assert(expr: false, toBecome: "false")
+    }
 
-        expectToJson(Arr([Timestamp(timeIntervalSince1970: 0)])) == "[{\"@ts\":\"1970-01-01T00:00:00.000Z\"}]"
+    func testRefV() {
+        assert(expr: RefV("classes/spells/42"), toBecome: "{\"@ref\":\"classes\\/spells\\/42\"}")
+    }
 
-        expectToJson(Arr([Ref("some/ref")])) == "[{\"@ref\":\"some\\/ref\"}]"
+    func testSetRefV() {
+        assert(
+            expr: SetRefV(["match": RefV("indexes/all_spells")]),
+            toBecome: "{\"@set\":{\"match\":{\"@ref\":\"indexes\\/all_spells\"}}}"
+        )
+    }
 
-        let valueArr: [ValueConvertible] = [3, "test", Timestamp(timeIntervalSince1970: 0), Double(3.5)]
-        expectToJson(Arr(valueArr)) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]"
+    func testTimeV() {
+        assert(expr: TimeV(Date(timeIntervalSince1970: 0)), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
+        assert(expr: Date(timeIntervalSince1970: 0), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
+    }
 
-        let complexValue = Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5, Arr(3, "test", Timestamp(timeIntervalSince1970: 0), 3.5))
+    func testDateV() {
+        assert(expr: DateV(Date(timeIntervalSince1970: 0)), toBecome: "{\"@date\":\"1970-01-01\"}")
+    }
 
-        expectToJson(complexValue) == "[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5,[3,\"test\",{\"@ts\":\"1970-01-01T00:00:00.000Z\"},3.5]]"
+    func testNullV() {
+        assert(expr: NullV(), toBecome: "null")
+        assert(expr: nil, toBecome: "null")
+    }
 
-        expectToJson(Arr(3, 4, 5, 6, Arr(3, 5, 6, 7))) == "[3,4,5,6,[3,5,6,7]]"
+    func testObjectV() {
+        assert(expr: ObjectV(["key": StringV("value")]), toBecome: "{\"object\":{\"key\":\"value\"}}")
+    }
 
-        expectToJson(Arr(Arr(3, 5, 6, 7))) == "[[3,5,6,7]]"
-
-        let intArr = Arr(3, 5, 6, 7)
-        expectToJson(Arr(intArr)) == "[[3,5,6,7]]"
-
+    func testArrayV() {
+        assert(expr: ArrayV([StringV("a"), LongV(10)]), toBecome: "[\"a\",10]")
     }
 
     func testObj() {
-
-        // MARK: Obj
-        let obj = Obj(["test": 1, "test2": Ref("some/ref")])
-        expectToJson(obj).to(satisfyAnyOf(equal("{\"object\":{\"test\":1,\"test2\":{\"@ref\":\"some\\/ref\"}}}"), equal("{\"object\":{\"test2\":{\"@ref\":\"some\\/ref\"},\"test\":1}}")))
-
-        var obj2 = Obj([:])
-        obj2["test"] = 1
-        obj2["test2"] =  Ref("some/ref")
-        expect(obj2) == obj
-
-        let obj3 = Obj(["key": 3, "key2": "test", "key3": Timestamp(timeIntervalSince1970: 0)])
-        expectToJson(obj3) == "{\"object\":{\"key2\":\"test\",\"key\":3,\"key3\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}}"
-
-
-        let obj4 = Obj(["key1": 1, "key2": 2])
-        expectToJson(obj4) == "{\"object\":{\"key1\":1,\"key2\":2}}"
-
-        let obj5 = Obj(["key1": 1, "key2": "faunaDB"])
-        expectToJson(obj5) == "{\"object\":{\"key1\":1,\"key2\":\"faunaDB\"}}"
-    }
-
-    func testArrWithObj() {
-        let arr = Arr(Arr(Obj(["test":"value"]), 2323, true), "hi", Obj(["test2": Null(),"test": "yo"]))
-        expectToJson(arr).to(satisfyAnyOf(equal("[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test\":\"yo\",\"test2\":null}}]"), equal("[[{\"object\":{\"test\":\"value\"}},2323,true],\"hi\",{\"object\":{\"test2\":null,\"test\":\"yo\"}}]")))
-    }
-
-    func testLiteralValues() {
-
-        // MARK: Literal Values
-
-        expect(true.toJSON() as? Bool) == true
-        expect(false.toJSON() as? Bool) ==  false
-        expect("test".toJSON() as? String) == "test"
-        expect(Int.max.toJSON() as? Int) == Int.max
-        expect(3.14.toJSON() as? Double) == Double(3.14)
-        expect(Null().toJSON() as? NSNull) == NSNull()
-    }
-
-    func testDateAndTimestamp() {
-
-        //MARK: Timestamp
-
-        let ts = Timestamp(timeIntervalSince1970: 0)
-        expectToJson(ts) == "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}"
-
-        let ts2 = Timestamp(timeInterval: 5.MIN, since: ts)
-        expectToJson(ts2) == "{\"@ts\":\"1970-01-01T00:05:00.000Z\"}"
-
-        let ts3 = Timestamp(iso8601: "1970-01-01T00:00:00.123Z")
-        expectToJson(ts3) == "{\"@ts\":\"1970-01-01T00:00:00.123Z\"}"
-
-        let ts4 = Timestamp(iso8601: "1970-01-01T00:00:00Z")
-        expectToJson(ts4) == "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}"
-
-        //MARK: Date
-
-        let date = FaunaDB.Date(day: 18, month: 7, year: 1984)
-        expectToJson(date) == "{\"@date\":\"1984-07-18\"}"
-
-        let date2 = FaunaDB.Date(iso8601:"1984-07-18")
-        XCTAssertNotNil(date2)
-        expectToJson(date2) == "{\"@date\":\"1984-07-18\"}"
-    }
-
-    func testStringFunctions() {
-
-        //MARK: Concat
-
-        expectToJson(Concat(strList: Arr("Hen", "Wen"))) == "{\"concat\":[\"Hen\",\"Wen\"]}"
-        expectToJson(Concat(strList: Arr("Hen", "Wen"), separator: " ")) == "{\"concat\":[\"Hen\",\"Wen\"],\"separator\":\" \"}"
-
-        //MARK: Casefold
-
-        expectToJson(Casefold(str: "Hen Wen")) == "{\"casefold\":\"Hen Wen\"}"
-    }
-
-    func testTimeAndDateFunctions() {
-
-        expectToJson(Time("1970-01-01T00:00:00+00:00")) == "{\"time\":\"1970-01-01T00:00:00+00:00\"}"
-
-        expectToJson(Epoch(offset: 10, unit: TimeUnit.second)) == "{\"unit\":\"second\",\"epoch\":10}"
-
-        expectToJson(Epoch(offset: 10, unit: "millisecond")) == "{\"unit\":\"millisecond\",\"epoch\":10}"
-
-        expectToJson(DateFn(iso8601: "1970-01-02")) == "{\"date\":\"1970-01-02\"}"
-
-    }
-
-    func testResourceModifications(){
-
-        //MARK: Create
-
-        let spell = Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])
-        var create = Create(ref: Ref("classes/spells"),
-                            params: Obj(["data": spell]))
-        expectToJson(create).to(satisfyAnyOf(equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"), equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")))
-
-        create = Create(ref: Ref("classes/spells"),
-                        params: Obj(["data": Obj(["name": "Mountainous Thunder", "element": "air", "cost": 15])]))
-        expectToJson(create).to(satisfyAnyOf(equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":\"air\",\"name\":\"Mountainous Thunder\",\"cost\":15}}}}}"), equal("{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountainous Thunder\",\"cost\":15,\"element\":\"air\"}}}}}")))
-        
-        
-        //MARK: Update
-
-        let update = Update(ref: Ref("classes/spells/123456"),
-                            params: Obj(["data": Obj(["name": "Mountain's Thunder", "cost": Null()])]))
-        expectToJson(update).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":null}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}"), equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"cost\":null,\"name\":\"Mountain\'s Thunder\"}}}},\"update\":{\"@ref\":\"classes\\/spells\\/123456\"}}")))
-
-        //MARK: Replace
-
-        var replaceSpell = spell
-        replaceSpell["name"] = "Mountain's Thunder"
-        replaceSpell["element"] = Arr("air", "earth")
-        replaceSpell["cost"] = 10
-        var replace = Replace(ref: Ref("classes/spells/123456"),
-                              params: Obj(["data": replaceSpell]))
-        expectToJson(replace).to(satisfyAnyOf(equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"), equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")))
-
-
-        replace = Replace(ref: Ref("classes/spells/123456"),
-                          params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
-        expectToJson(replace).to(satisfyAnyOf(equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain's Thunder\",\"cost\":10}}}}}"), equal("{\"replace\":{\"@ref\":\"classes\\/spells\\/123456\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain's Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}}}")))
-        
-        //MARK: Delete
-
-        var delete = Delete(ref: Ref("classes/spells/123456"))
-
-        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-
-        delete = Delete(ref: Ref("classes/spells/123456"))
-
-        expectToJson(delete) == "{\"delete\":{\"@ref\":\"classes\\/spells\\/123456\"}}"
-
-        //MARK: Insert
-        
-        var insert = Insert(ref: Ref("classes/spells/123456"),
-                            ts: Timestamp(timeIntervalSince1970: 0),
-                            action: .Create,
-                            params: Obj(["data": replaceSpell]))
-
-        expectToJson(insert).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
-
-        insert = Insert(ref: Ref("classes/spells/123456"),
-                        ts: Timestamp(timeIntervalSince1970: 0),
-                        action: Action.Create,
-                        params: Obj(["data": Obj(["name": "Mountain's Thunder", "element": Arr("air", "earth"), "cost": 10])]))
-
-        expectToJson(insert).to(satisfyAnyOf(equal("{\"params\":{\"object\":{\"data\":{\"object\":{\"element\":[\"air\",\"earth\"],\"name\":\"Mountain\'s Thunder\",\"cost\":10}}}},\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"insert\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Mountain\'s Thunder\",\"cost\":10,\"element\":[\"air\",\"earth\"]}}}},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
-
-        //MARK: Remove
-
-        let remove = Remove(ref: Ref("classes/spells/123456"),
-                            ts: Timestamp(timeIntervalSince1970: 0),
-                            action: .Create)
-        expectToJson(remove).to(satisfyAnyOf(equal("{\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"action\":\"create\",\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"action\":\"create\",\"remove\":{\"@ref\":\"classes\\/spells\\/123456\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}")))
-    }
-
-    func testCollections() {
-
-        //MARK: Map
-
-        Var.resetIndex()
-        var map = Map(collection: Arr(1,2,3),
-                      lambda: Lambda(vars: Var("munchings"), expr: Var("munchings")))
-        expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"munchings\"},\"lambda\":\"munchings\"}}"
-
-        Var.resetIndex()
-        map = Map(collection: Arr(1,2,3)) { x in
-                                                x
-                                          }
-        expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
-
-        Var.resetIndex()
-        map = Map(collection: Arr(1,2,3)) { $0 }
-        expectToJson(map) == "{\"collection\":[1,2,3],\"map\":{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}}"
-
-
-        //MARK: Foreach
-
-        Var.resetIndex()
-        var foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2")),
-                              lambda: Lambda(vars: Var("refData"),
-                                expr: Create(ref: Ref("some/ref"),
-                                    params: Obj(["data": Obj(["some": Var("refData")])])
-                                )))
-        expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"refData\"}}}}}},\"lambda\":\"refData\"}}"
-
-        Var.resetIndex()
-        foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2"))) { ref in
-            Create(ref: Ref("some/ref"), params: Obj(["data": Obj(["some": ref])]))
-        }
-        expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
-
-        Var.resetIndex()
-        foreach = Foreach(collection: Arr(Ref("another/ref/1"), Ref("another/ref/2"))) {
-            Create(ref: Ref("some/ref"), params: Obj(["data": Obj(["some": $0])]))
-        }
-        expectToJson(foreach) == "{\"collection\":[{\"@ref\":\"another\\/ref\\/1\"},{\"@ref\":\"another\\/ref\\/2\"}],\"foreach\":{\"expr\":{\"create\":{\"@ref\":\"some\\/ref\"},\"params\":{\"object\":{\"data\":{\"object\":{\"some\":{\"var\":\"v1\"}}}}}},\"lambda\":\"v1\"}}"
-
-        //MARK: Filter
-
-        Var.resetIndex()
-        var filter = Filter(collection: Arr(1,2,3), lambda: Lambda(lambda: { i in Equals(terms: 1, i) }))
-        expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
-
-        Var.resetIndex()
-        filter = Filter(collection: Arr(1,2,3)) { i in  Equals(terms: 1, i) }
-        expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
-
-        Var.resetIndex()
-        filter = Filter(collection: Arr(1,2,3)) { Equals(terms: 1, $0) }
-        expectToJson(filter) == "{\"collection\":[1,2,3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
-
-        Var.resetIndex()
-        filter = Filter(collection: Arr(1,"Hi",3),
-                        lambda: Lambda(lambda: { i in
-                            Equals(terms: 1, i)
-                        })
+        assert(
+            expr: Obj(wrap: [
+                "k1": "v1",
+                "k2": 10,
+                "k3": nil
+            ]),
+            toBecome: "{\"object\":{\"k2\":10,\"k3\":null,\"k1\":\"v1\"}}"
         )
-        expectToJson(filter) == "{\"collection\":[1,\"Hi\",3],\"filter\":{\"expr\":{\"equals\":[1,{\"var\":\"v1\"}]},\"lambda\":\"v1\"}}"
 
-        //MARK: Take
+        assert(
+            expr: Obj(
+                ("k1", "v1"),
+                ("k2", 10),
+                ("k3", nil)
+            ),
+            toBecome: "{\"object\":{\"k2\":10,\"k3\":null,\"k1\":\"v1\"}}"
+        )
 
-        let take = Take(count: 2, collection: Arr(1, 2, 3))
-        expectToJson(take) == "{\"collection\":[1,2,3],\"take\":2}"
-
-
-        let take2 = Take(count: 2 as Expr, collection: Arr(1, 2, 3))
-        expectToJson(take2) == "{\"collection\":[1,2,3],\"take\":2}"
-
-        let take3 = Take(count: 2, collection: Arr(1, "Hi", 3))
-        expectToJson(take3) == "{\"collection\":[1,\"Hi\",3],\"take\":2}"
-
-        //MARK: Drop
-
-        let drop = Drop(count: 2, collection: Arr(1,2,3))
-        expectToJson(drop).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,2,3]}"), equal("{\"collection\":[1,2,3],\"drop\":2}")))
-
-        let drop2 = Drop(count: 2 as Expr, collection: Arr(1, 2, 3))
-        expectToJson(drop2).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,2,3]}"), equal("{\"collection\":[1,2,3],\"drop\":2}")))
-
-        let drop3 = Drop(count: 2, collection: Arr(1, "Hi", 3))
-        expectToJson(drop3).to(satisfyAnyOf(equal("{\"drop\":2,\"collection\":[1,\"Hi\",3]}"), equal("{\"collection\":[1,\"Hi\",3],\"drop\":2}")))
-
-        //MARK: Prepend
-
-        let prepend = Prepend(elements: Arr(1,2,3), toCollection: Arr(4,5,6))
-        expectToJson(prepend) == "{\"collection\":[1,2,3],\"prepend\":[4,5,6]}"
-
-        //MARK: Append
-
-        let append = Append(elements: Arr(4,5,6), toCollection: Arr(1,2,3))
-        expectToJson(append) == "{\"collection\":[4,5,6],\"append\":[1,2,3]}"
-        
+        assert(
+            expr: Obj(
+                "k1" => "v1",
+                "k2" => 10,
+                "k3" => nil
+            ),
+            toBecome: "{\"object\":{\"k2\":10,\"k3\":null,\"k1\":\"v1\"}}"
+        )
     }
 
-    func testResourceRetrievals(){
+    func testArr() {
+        assert(
+            expr: Arr(wrap: ["a string", 1, 10.2, false, nil]),
+            toBecome: "[\"a string\",1,10.2,false,null]"
+        )
 
-        //MARK: Get
-
-        let ref = Ref("some/ref/1")
-        var get = Get(ref: ref)
-        expectToJson(get) == "{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}"
-
-        get = Get(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
-        expectToJson(get).to(satisfyAnyOf(equal("{\"get\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"), equal("{\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"},\"get\":{\"@ref\":\"some\\/ref\\/1\"}}")))
-
-        //MARK: Exists
-
-        var exists = Exists(ref: ref)
-        expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"}}"
-
-        exists = Exists(ref: ref, ts: Timestamp(timeIntervalSince1970: 0))
-        expectToJson(exists) == "{\"exists\":{\"@ref\":\"some\\/ref\\/1\"},\"ts\":{\"@ts\":\"1970-01-01T00:00:00.000Z\"}}"
-
-        //MARK: Count
-
-        var count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))
-        expectToJson(count) == "{\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
-
-        count = Count(set: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                      countEvents: true)
-        expectToJson(count) == "{\"events\":true,\"count\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
-
-        //MARK: Paginate
-
-        let paginate = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-            Match(index: Ref("indexes/some_index"), terms: "term2")))
-        expectToJson(paginate) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}"
-
-        let paginate2 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-            Match(index: Ref("indexes/some_index"), terms: "term2")),
-                                 sources: true)
-        expectToJson(paginate2) == "{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}"
-
-        let paginate3 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-            Match(index: Ref("indexes/some_index"), terms: "term2")),
-                                 events: true)
-        expectToJson(paginate3).to(satisfyAnyOf(equal("{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"events\":true}"), equal("{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")))
-        
-        let paginate4 = Paginate(resource: Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-            Match(index: Ref("indexes/some_index"), terms: "term2")),
-                                 size: 4)
-        expectToJson(paginate4).to(satisfyAnyOf(equal("{\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4}"), equal("{\"size\":4,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]}}")))
-
-        let paginate5 = Paginate(Union(sets: Match(index: Ref("indexes/some_index"), terms: "term"),
-            Match(index: Ref("indexes/some_index"), terms: "term2")),
-                                 size: 4, events: true, sources: true)
-        expectToJson(paginate5).to(satisfyAnyOf(equal("{\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"size\":4,\"sources\":true}"), equal("{\"size\":4,\"events\":true,\"paginate\":{\"union\":[{\"terms\":\"term\",\"match\":{\"@ref\":\"indexes\\/some_index\"}},{\"terms\":\"term2\",\"match\":{\"@ref\":\"indexes\\/some_index\"}}]},\"sources\":true}")))
+        assert(
+            expr: Arr("a string", 1, 10.2, false, nil),
+            toBecome: "[\"a string\",1,10.2,false,null]"
+        )
     }
 
-    func testMiscellaneousFunctions(){
+    func testRef() {
+        assert(
+            expr: Ref("classes/spells/42"),
+            toBecome: "{\"@ref\":\"classes\\/spells\\/42\"}"
+        )
 
-        //MARK: Equals
-
-        expectToJson(Equals(terms: 2, 2, Var("v2"))) == "{\"equals\":[2,2,{\"var\":\"v2\"}]}"
-
-        expectToJson(Equals(terms: Match(index: Ref("indexes/spells_by_element"), terms: "fire"))) ==
-        "{\"equals\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}"
-
-        //MARK: Contains
-
-        var contains = Contains(pathComponents: "favorites", "foods", inExpr:  Obj(["favorites":
-            Obj(["foods":
-                Arr("crunchings", "munchings", "lunchings")]
-                )]))
-
-        expectToJson(contains) == "{\"contains\":[\"favorites\",\"foods\"],\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
-
-
-        contains = Contains(path: "favorites", inExpr: Obj(["favorites":
-            Obj(["foods":
-                Arr("crunchings", "munchings", "lunchings")]
-                )]))
-
-        expectToJson(contains) == "{\"contains\":\"favorites\",\"in\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}"
-
-        //MARK: Select
-
-        var select = Select(pathComponents: "favorites", "foods", 1, from:
-            Obj(["favorites":
-                Obj(["foods":
-                    Arr("crunchings",
-                        "munchings",
-                        "lunchings")
-                ])
-            ]))
-        expectToJson(select).to(satisfyAnyOf(equal("{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"), equal("{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")))
-
-        select = Select(path: Arr("favorites", "foods", 1), from:
-            Obj(["favorites":
-                Obj(["foods":
-                    Arr("crunchings", "munchings", "lunchings")
-                ])
-            ]))
-        expectToJson(select).to(satisfyAnyOf(equal("{\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}},\"select\":[\"favorites\",\"foods\",1]}"), equal("{\"select\":[\"favorites\",\"foods\",1],\"from\":{\"object\":{\"favorites\":{\"object\":{\"foods\":[\"crunchings\",\"munchings\",\"lunchings\"]}}}}}")))
-        
-        expectToJson(Add(terms: 1, 2, 3)) == "{\"add\":[1,2,3]}"
-
-        expectToJson(Multiply(terms: 1, 2, 3)) == "{\"multiply\":[1,2,3]}"
-
-        expectToJson(Subtract(terms: 1, 2, 3)) == "{\"subtract\":[1,2,3]}"
-
-        expectToJson(Divide(terms: 1, 2, 3)) == "{\"divide\":[1,2,3]}"
-
-        expectToJson(Modulo(terms: 1, 2, 3)) == "{\"modulo\":[1,2,3]}"
-
-        expectToJson(LT(terms: 1, 2, 3)) == "{\"lt\":[1,2,3]}"
-
-        expectToJson(LTE(terms: 1, 2, 3)) == "{\"lte\":[1,2,3]}"
-
-        expectToJson(GT(terms: 1, 2, 3)) == "{\"gt\":[1,2,3]}"
-
-        expectToJson(GTE(terms: 1, 2, 3)) == "{\"gte\":[1,2,3]}"
-
-        expectToJson(And(terms: true, false, false)) == "{\"and\":[true,false,false]}"
-
-        expectToJson(Or(terms: true, false, false)) == "{\"or\":[true,false,false]}"
-
-        expectToJson(Not(boolExpr: true)) == "{\"not\":true}"
+        assert(
+            expr: Ref(class: "classes/spells", id: "42"),
+            toBecome: "{\"ref\":\"classes\\/spells\",\"id\":\"42\"}"
+        )
     }
 
-    func testSets(){
+    func testLet() {
+        assert(
+            expr: Let(bindings: [("a", 10)], in: Var("a")),
+            toBecome: "{\"let\":{\"a\":10},\"in\":{\"var\":\"a\"}}"
+        )
 
-        //MARK: Match
+        assert(
+            expr: Let(bindings: ["a" => 10], in: Var("a")),
+            toBecome: "{\"let\":{\"a\":10},\"in\":{\"var\":\"a\"}}"
+        )
 
-        var matchSet = Match(index: Ref("indexes/spells_by_elements"),
-                             terms: "fire")
-        expectToJson(matchSet) == "{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_elements\"}}"
+        assert(
+            expr: Let(bindings: "a" => 10) { Var("a") },
+            toBecome: "{\"let\":{\"a\":10},\"in\":{\"var\":\"a\"}}"
+        )
 
+        assert(
+            expr: Let(1) { Arr($0) },
+            toBecome: "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"}]}"
+        )
 
+        assert(
+            expr: Let(1, 2) { Arr($0, $1) },
+            toBecome: "{\"let\":{\"v3\":2,\"v2\":1},\"in\":[{\"var\":\"v2\"},{\"var\":\"v3\"}]}"
+        )
 
-        matchSet = Match(index: Ref("databases"))
-        expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
+        assert(
+            expr: Let(1, 2, 3) { Arr($0, $1, $2) },
+            toBecome: "{\"let\":{\"v5\":2,\"v4\":1,\"v6\":3},\"in\":[{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}"
+        )
 
+        assert(
+            expr: Let(1, 2, 3, 4) { Arr($0, $1, $2, $3) },
+            toBecome: "{\"let\":{\"v7\":1,\"v9\":3,\"v10\":4,\"v8\":2},\"in\":[{\"var\":\"v7\"},{\"var\":\"v8\"},{\"var\":\"v9\"},{\"var\":\"v10\"}]}"
+        )
 
-        matchSet = Match(index: Ref("indexes/spells_by_elements"),
-                         terms: "fire")
-        expectToJson(matchSet) == "{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_elements\"}}"
-
-
-
-        matchSet = Match(index: Ref("databases"))
-        expectToJson(matchSet) == "{\"match\":{\"@ref\":\"databases\"}}"
-
-        //MARK: Union
-
-        let union = Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                          Match(index: Ref("indexes/spells_by_element"), terms: "water"))
-        expectToJson(union) == "{\"union\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
-
-        //MARK: Intersection
-
-        let intersection = Intersection(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                                        Match(index: Ref("indexes/spells_by_element"), terms: "water"))
-        expectToJson(intersection) == "{\"intersection\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
-
-        //MARK: Difference
-
-        let difference = Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "fire"),
-                                    Match(index: Ref("indexes/spells_by_element"), terms: "water"))
-        expectToJson(difference) == "{\"difference\":[{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},{\"terms\":\"water\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}]}"
-
-        //MARK: Join
-
-        Var.resetIndex()
-        let join = Join(sourceSet: Match(index: Ref("indexes/spells_by_element"),
-            terms: "fire"),
-                        with: Lambda { value in return  Get(ref: value) })
-        expectToJson(join).to(satisfyAnyOf(equal("{\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}},\"with\":{\"expr\":{\"get\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}}"), equal("{\"with\":{\"expr\":{\"get\":{\"var\":\"v1\"}},\"lambda\":\"v1\"},\"join\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}")))
+        assert(
+            expr: Let(1, 2, 3, 4, 5) { Arr($0, $1, $2, $3, $4) },
+            toBecome: "{\"let\":{\"v12\":2,\"v13\":3,\"v14\":4,\"v11\":1,\"v15\":5},\"in\":[{\"var\":\"v11\"},{\"var\":\"v12\"},{\"var\":\"v13\"},{\"var\":\"v14\"},{\"var\":\"v15\"}]}"
+        )
     }
 
-    func testBasicForms() {
+    func testIf() {
+        assert(
+            expr: If(true, then: "was true", else: "was false"),
+            toBecome: "{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"
+        )
+    }
 
-        // MARK: Let
+    func testDo() {
+        assert(expr: Do(Arr(1, 2, 3)), toBecome: "{\"do\":[1,2,3]}")
+        assert(expr: Do(1, 2, 3), toBecome: "{\"do\":[1,2,3]}")
+    }
 
-        Var.resetIndex()
-        var letExpr = Let(1) { $0 }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":{\"var\":\"v1\"}}"
+    func testLambda() {
+        assert(
+            expr: Lambda(vars: "x", in: Var("x")),
+            toBecome: "{\"lambda\":\"x\",\"expr\":{\"var\":\"x\"}}"
+        )
 
-        Var.resetIndex()
-        letExpr = Let(1) { x in
-            Arr(x, 4)
-        }
-        expectToJson(letExpr) == "{\"let\":{\"v1\":1},\"in\":[{\"var\":\"v1\"},4]}"
+        assert(
+            expr: Lambda(vars: Arr("x", "_", "y"), in: Var("y")),
+            toBecome: "{\"lambda\":[\"x\",\"_\",\"y\"],\"expr\":{\"var\":\"y\"}}"
+        )
 
-        Var.resetIndex()
-        letExpr = Let(1, "Hi!", Create(ref: Ref("databases"), params: Obj(["name": "blog_db"]))) { x, y, z in
-            Do(exprs: x, y, x, y, z)
-        }
-        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v2\":\"Hi!\",\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}"), equal("{\"let\":{\"v3\":{\"create\":{\"@ref\":\"databases\"},\"params\":{\"object\":{\"name\":\"blog_db\"}}},\"v1\":1,\"v2\":\"Hi!\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"}]}}")))
-        
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4) { x, y, z, a in
-            Do(exprs: x, y, z, a)
-        }
-        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"}]}}")))
-        
-        
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
-            Do(exprs: x, y, z, a, t)
-        }
-        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"}]}}")))
-        
-        
-        Var.resetIndex()
-        letExpr = Let(1, 2, 3, 4, 5) { x, y, z, a, t in
-            Let("Hi") { w in
-                Do(exprs: x, y, z, a, t, w)
-            }
-        }
-        expectToJson(letExpr).to(satisfyAnyOf(equal("{\"let\":{\"v5\":5,\"v4\":4,\"v3\":3,\"v2\":2,\"v1\":1},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}"), equal("{\"let\":{\"v1\":1,\"v2\":2,\"v3\":3,\"v4\":4,\"v5\":5},\"in\":{\"let\":{\"v6\":\"Hi\"},\"in\":{\"do\":[{\"var\":\"v1\"},{\"var\":\"v2\"},{\"var\":\"v3\"},{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}}}")))
-        
-        // MARK: If
-        var ifExpr = If(pred: true, then: "was true", else: "was false")
-        expectToJson(ifExpr).to(satisfyAnyOf(equal("{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"), equal("{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")))
-        ifExpr = If(pred: true, then: {
-                    return "was true"
-                 }(),
-                else: {
-                    return "was false"
-                }())
-        expectToJson(ifExpr).to(satisfyAnyOf(equal("{\"if\":true,\"then\":\"was true\",\"else\":\"was false\"}"), equal("{\"then\":\"was true\",\"if\":true,\"else\":\"was false\"}")))
-        
-        //MARK: Do
-        
-        let doForm = Do(exprs: Create(ref: Ref("some/ref/1"), params: Obj(["data": Obj(["name": "Hen Wen"])])),
-                        Get(ref: Ref("some/ref/1")))
-        expectToJson(doForm) == "{\"do\":[{\"create\":{\"@ref\":\"some\\/ref\\/1\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"Hen Wen\"}}}}},{\"get\":{\"@ref\":\"some\\/ref\\/1\"}}]}"
-        
-        //MARK: Lambda
-        
-        Var.resetIndex()
-        let lambda1 = Lambda { a in a }
-        expectToJson(lambda1) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":\"v1\"}"
-        
-        Var.resetIndex()
-        let lambda2 = Lambda { a, b in Arr(b , a) }
-        expectToJson(lambda2) == "{\"expr\":[{\"var\":\"v2\"},{\"var\":\"v1\"}],\"lambda\":[\"v1\",\"v2\"]}"
-        
-        Var.resetIndex()
-        let lambda3 = Lambda { a, _, _ in a }
-        expectToJson(lambda3) == "{\"expr\":{\"var\":\"v1\"},\"lambda\":[\"v1\",\"v2\",\"v3\"]}"
-        
-        Var.resetIndex()
-        let lambda4 = Lambda { a in Not(boolExpr: a) }
-        expectToJson(lambda4) == "{\"expr\":{\"not\":{\"var\":\"v1\"}},\"lambda\":\"v1\"}"
-        
+        assert(
+            expr: Lambda(vars: "x", "_", "y", in: Var("y")),
+            toBecome: "{\"lambda\":[\"x\",\"_\",\"y\"],\"expr\":{\"var\":\"y\"}}"
+        )
+
+        assert(
+            expr: Lambda { $0 },
+            toBecome: "{\"lambda\":\"v1\",\"expr\":{\"var\":\"v1\"}}"
+        )
+
+        assert(
+            expr: Lambda { (a, b) in Arr(a, b) },
+            toBecome: "{\"lambda\":[\"v2\",\"v3\"],\"expr\":[{\"var\":\"v2\"},{\"var\":\"v3\"}]}"
+        )
+
+        assert(
+            expr: Lambda { (a, b, c) in Arr(a, b, c) },
+            toBecome: "{\"lambda\":[\"v4\",\"v5\",\"v6\"],\"expr\":[{\"var\":\"v4\"},{\"var\":\"v5\"},{\"var\":\"v6\"}]}"
+        )
+
+        assert(
+            expr: Lambda { (a, b, c, d) in Arr(a, b, c, d) },
+            toBecome: "{\"lambda\":[\"v7\",\"v8\",\"v9\",\"v10\"],\"expr\":[{\"var\":\"v7\"},{\"var\":\"v8\"},{\"var\":\"v9\"},{\"var\":\"v10\"}]}"
+        )
+
+        assert(
+            expr: Lambda { (a, b, c, d, e) in Arr(a, b, c, d, e) },
+            toBecome: "{\"lambda\":[\"v11\",\"v12\",\"v13\",\"v14\",\"v15\"],\"expr\":[{\"var\":\"v11\"},{\"var\":\"v12\"},{\"var\":\"v13\"},{\"var\":\"v14\"},{\"var\":\"v15\"}]}"
+        )
+    }
+
+    func testMap() {
+        assert(
+            expr: Map(collection: Arr(1, 2, 3), to: Lambda(vars: "i", in: Var("i"))),
+            toBecome: "{\"map\":{\"lambda\":\"i\",\"expr\":{\"var\":\"i\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Map(collection: Arr(1, 2, 3), to: Lambda { $0 }),
+            toBecome: "{\"map\":{\"lambda\":\"v1\",\"expr\":{\"var\":\"v1\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Map(Arr(1, 2, 3)) { $0 },
+            toBecome: "{\"map\":{\"lambda\":\"v2\",\"expr\":{\"var\":\"v2\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Map(Arr(Arr(1, 2))) { (a, b) in Arr(a, b) },
+            toBecome: "{\"map\":{\"lambda\":[\"v3\",\"v4\"],\"expr\":[{\"var\":\"v3\"},{\"var\":\"v4\"}]},\"collection\":[[1,2]]}"
+        )
+
+        assert(
+            expr: Map(Arr(Arr(1, 2, 3))) { (a, b, c) in Arr(a, b, c) },
+            toBecome: "{\"map\":{\"lambda\":[\"v5\",\"v6\",\"v7\"],\"expr\":[{\"var\":\"v5\"},{\"var\":\"v6\"},{\"var\":\"v7\"}]},\"collection\":[[1,2,3]]}"
+        )
+
+        assert(
+            expr: Map(Arr(Arr(1, 2, 3, 4))) { (a, b, c, d) in Arr(a, b, c, d) },
+            toBecome: "{\"map\":{\"lambda\":[\"v8\",\"v9\",\"v10\",\"v11\"],\"expr\":[{\"var\":\"v8\"},{\"var\":\"v9\"},{\"var\":\"v10\"},{\"var\":\"v11\"}]},\"collection\":[[1,2,3,4]]}"
+        )
+
+        assert(
+            expr: Map(Arr(Arr(1, 2, 3, 4, 5))) { (a, b, c, d, e) in Arr(a, b, c, d, e) },
+            toBecome: "{\"map\":{\"lambda\":[\"v12\",\"v13\",\"v14\",\"v15\",\"v16\"],\"expr\":[{\"var\":\"v12\"},{\"var\":\"v13\"},{\"var\":\"v14\"},{\"var\":\"v15\"},{\"var\":\"v16\"}]},\"collection\":[[1,2,3,4,5]]}"
+        )
+    }
+
+    func testForeach() {
+        assert(
+            expr: Foreach(collection: Arr(1, 2, 3), in: Lambda(vars: "i", in: Var("i"))),
+            toBecome: "{\"foreach\":{\"lambda\":\"i\",\"expr\":{\"var\":\"i\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Foreach(collection: Arr(1, 2, 3), in: Lambda { $0 }),
+            toBecome: "{\"foreach\":{\"lambda\":\"v1\",\"expr\":{\"var\":\"v1\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Foreach(Arr(1, 2, 3)) { $0 },
+            toBecome: "{\"foreach\":{\"lambda\":\"v2\",\"expr\":{\"var\":\"v2\"}},\"collection\":[1,2,3]}"
+        )
+
+        assert(
+            expr: Foreach(Arr(Arr(1, 2))) { (a, b) in Arr(a, b) },
+            toBecome: "{\"foreach\":{\"lambda\":[\"v3\",\"v4\"],\"expr\":[{\"var\":\"v3\"},{\"var\":\"v4\"}]},\"collection\":[[1,2]]}"
+        )
+
+        assert(
+            expr: Foreach(Arr(Arr(1, 2, 3))) { (a, b, c) in Arr(a, b, c) },
+            toBecome: "{\"foreach\":{\"lambda\":[\"v5\",\"v6\",\"v7\"],\"expr\":[{\"var\":\"v5\"},{\"var\":\"v6\"},{\"var\":\"v7\"}]},\"collection\":[[1,2,3]]}"
+        )
+
+        assert(
+            expr: Foreach(Arr(Arr(1, 2, 3, 4))) { (a, b, c, d) in Arr(a, b, c, d) },
+            toBecome: "{\"foreach\":{\"lambda\":[\"v8\",\"v9\",\"v10\",\"v11\"],\"expr\":[{\"var\":\"v8\"},{\"var\":\"v9\"},{\"var\":\"v10\"},{\"var\":\"v11\"}]},\"collection\":[[1,2,3,4]]}"
+        )
+
+        assert(
+            expr: Foreach(Arr(Arr(1, 2, 3, 4, 5))) { (a, b, c, d, e) in Arr(a, b, c, d, e) },
+            toBecome: "{\"foreach\":{\"lambda\":[\"v12\",\"v13\",\"v14\",\"v15\",\"v16\"],\"expr\":[{\"var\":\"v12\"},{\"var\":\"v13\"},{\"var\":\"v14\"},{\"var\":\"v15\"},{\"var\":\"v16\"}]},\"collection\":[[1,2,3,4,5]]}"
+        )
+    }
+
+    func testFilter() {
+        assert(
+            expr: Filter(collection: Arr(true, false, true), with: Lambda(vars: "i", in: Var("i"))),
+            toBecome: "{\"filter\":{\"lambda\":\"i\",\"expr\":{\"var\":\"i\"}},\"collection\":[true,false,true]}"
+        )
+
+        assert(
+            expr: Filter(collection: Arr(true, false, true), with: Lambda { $0 }),
+            toBecome: "{\"filter\":{\"lambda\":\"v1\",\"expr\":{\"var\":\"v1\"}},\"collection\":[true,false,true]}"
+        )
+
+        assert(
+            expr: Filter(Arr(true, false, true)) { $0 },
+            toBecome: "{\"filter\":{\"lambda\":\"v2\",\"expr\":{\"var\":\"v2\"}},\"collection\":[true,false,true]}"
+        )
+
+        assert(
+            expr: Filter(Arr(Arr(true, false))) { (a, b) in And(a, b) },
+            toBecome: "{\"filter\":{\"lambda\":[\"v3\",\"v4\"],\"expr\":{\"and\":[{\"var\":\"v3\"},{\"var\":\"v4\"}]}},\"collection\":[[true,false]]}"
+        )
+
+        assert(
+            expr: Filter(Arr(Arr(true, false, true))) { (a, b, c) in And(a, b, c) },
+            toBecome: "{\"filter\":{\"lambda\":[\"v5\",\"v6\",\"v7\"],\"expr\":{\"and\":[{\"var\":\"v5\"},{\"var\":\"v6\"},{\"var\":\"v7\"}]}},\"collection\":[[true,false,true]]}"
+        )
+
+        assert(
+            expr: Filter(Arr(Arr(true, false, true, false))) { (a, b, c, d) in And(a, b, c, d) },
+            toBecome: "{\"filter\":{\"lambda\":[\"v8\",\"v9\",\"v10\",\"v11\"],\"expr\":{\"and\":[{\"var\":\"v8\"},{\"var\":\"v9\"},{\"var\":\"v10\"},{\"var\":\"v11\"}]}},\"collection\":[[true,false,true,false]]}"
+        )
+
+        assert(
+            expr: Filter(Arr(Arr(true, false, true, false, true))) { (a, b, c, d, e) in And(a, b, c, d, e) },
+            toBecome: "{\"filter\":{\"lambda\":[\"v12\",\"v13\",\"v14\",\"v15\",\"v16\"],\"expr\":{\"and\":[{\"var\":\"v12\"},{\"var\":\"v13\"},{\"var\":\"v14\"},{\"var\":\"v15\"},{\"var\":\"v16\"}]}},\"collection\":[[true,false,true,false,true]]}"
+        )
+    }
+
+    func testTake() {
+        assert(expr: Take(count: 2, from: Arr(1, 2, 3)), toBecome: "{\"take\":2,\"collection\":[1,2,3]}")
+    }
+
+    func testDrop() {
+        assert(expr: Drop(count: 2, from: Arr(1, 2, 3)), toBecome: "{\"drop\":2,\"collection\":[1,2,3]}")
+    }
+
+    func testPrepend() {
+        assert(
+            expr: Prepend(elements: Arr(1, 2), to: Arr(3, 4)),
+            toBecome: "{\"prepend\":[1,2],\"collection\":[3,4]}"
+        )
+    }
+
+    func testAppend() {
+        assert(
+            expr: Append(elements: Arr(3, 4), to: Arr(1, 2)),
+            toBecome: "{\"append\":[3,4],\"collection\":[1,2]}"
+        )
+    }
+
+    func testGet() {
+        assert(
+            expr: Get(Ref("classes/spells/42")),
+            toBecome: "{\"get\":{\"@ref\":\"classes\\/spells\\/42\"}}"
+        )
+
+        assert(
+            expr: Get(Ref("classes/spells/42"), ts: 123),
+            toBecome: "{\"ts\":123,\"get\":{\"@ref\":\"classes\\/spells\\/42\"}}"
+        )
+    }
+
+    func testPaginate() {
+        assert(
+            expr: Paginate(Ref("indexes")),
+            toBecome: "{\"paginate\":{\"@ref\":\"indexes\"}}"
+        )
+
+        assert(
+            expr: Paginate(Ref("indexes"), ts: 123),
+            toBecome: "{\"paginate\":{\"@ref\":\"indexes\"},\"ts\":123}"
+        )
+
+        assert(
+            expr: Paginate(
+                Ref("indexes"),
+                before: Ref("indexes/ten"),
+                after: Ref("indexes/two"),
+                ts: 123,
+                size: 4,
+                events: true,
+                sources: true
+            ),
+            toBecome: "{\"sources\":true,\"paginate\":{\"@ref\":\"indexes\"},\"after\":{\"@ref\":\"indexes\\/two\"},\"size\":4,\"events\":true,\"ts\":123,\"before\":{\"@ref\":\"indexes\\/ten\"}}"
+        )
+    }
+
+    func testExists() {
+        assert(
+            expr: Exists(Ref("classes/spells")),
+            toBecome: "{\"exists\":{\"@ref\":\"classes\\/spells\"}}"
+        )
+
+        assert(
+            expr: Exists(Ref("classes/spells"), ts: 123),
+            toBecome: "{\"ts\":123,\"exists\":{\"@ref\":\"classes\\/spells\"}}"
+        )
+    }
+
+    func testCreate() {
+        assert(
+            expr: Create(at: Ref("classes/spells"), Obj("data" => Obj("name" => "fireball"))),
+            toBecome: "{\"create\":{\"@ref\":\"classes\\/spells\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"fireball\"}}}}}")
+    }
+
+    func testUpdate() {
+        assert(
+            expr: Update(ref: Ref("classes/spells/42"), to: Obj("data" => Obj("name" => "fireball"))),
+            toBecome: "{\"update\":{\"@ref\":\"classes\\/spells\\/42\"},\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"fireball\"}}}}}")
+    }
+
+    func testReplace() {
+        assert(
+            expr: Replace(ref: Ref("classes/spells/42"), with: Obj("data" => Obj("name" => "fireball"))),
+            toBecome: "{\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"fireball\"}}}},\"replace\":{\"@ref\":\"classes\\/spells\\/42\"}}")
+    }
+
+    func testDelete() {
+        assert(
+            expr: Delete(ref: Ref("classes/spells/42")),
+            toBecome: "{\"delete\":{\"@ref\":\"classes\\/spells\\/42\"}}")
+    }
+
+    func testInsert() {
+        assert(
+            expr: Insert(
+                ref: Ref("classes/spells/42"),
+                ts: 123,
+                action: "create",
+                params: Obj("data" => Obj("name" => "fireball"))
+            ),
+            toBecome: "{\"insert\":{\"@ref\":\"classes\\/spells\\/42\"},\"action\":\"create\",\"ts\":123,\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"fireball\"}}}}}")
+
+        assert(
+            expr: Insert(
+                in: Ref("classes/spells/42"),
+                ts: 123,
+                action: .create,
+                params: Obj("data" => Obj("name" => "fireball"))
+            ),
+            toBecome: "{\"insert\":{\"@ref\":\"classes\\/spells\\/42\"},\"action\":\"create\",\"ts\":123,\"params\":{\"object\":{\"data\":{\"object\":{\"name\":\"fireball\"}}}}}")
+    }
+
+    func testRemove() {
+        assert(
+            expr: Remove(
+                ref: Ref("classes/spells/42"),
+                ts: 123,
+                action: "delete"
+            ),
+            toBecome: "{\"remove\":{\"@ref\":\"classes\\/spells\\/42\"},\"action\":\"delete\",\"ts\":123}")
+
+        assert(
+            expr: Remove(
+                from: Ref("classes/spells/42"),
+                ts: 123,
+                action: .delete
+            ),
+            toBecome: "{\"remove\":{\"@ref\":\"classes\\/spells\\/42\"},\"action\":\"delete\",\"ts\":123}")
+    }
+
+    func testCreateClass() {
+        assert(
+            expr: CreateClass(Obj("name" => "spells")),
+            toBecome: "{\"create_class\":{\"object\":{\"name\":\"spells\"}}}"
+        )
+    }
+
+    func testCreateDatabase() {
+        assert(
+            expr: CreateDatabase(Obj("name" => "test-db")),
+            toBecome: "{\"create_database\":{\"object\":{\"name\":\"test-db\"}}}"
+        )
+    }
+
+    func testCreateIndex() {
+        assert(
+            expr: CreateIndex(Obj("name" => "all_spells", "source" => Ref("classes/spells"))),
+            toBecome: "{\"create_index\":{\"object\":{\"name\":\"all_spells\",\"source\":{\"@ref\":\"classes\\/spells\"}}}}"
+        )
+    }
+
+    func testCreateKey() {
+        assert(
+            expr: CreateKey(Obj("role" => "server", "database" => Ref("databases/test-db"))),
+            toBecome: "{\"create_key\":{\"object\":{\"role\":\"server\",\"database\":{\"@ref\":\"databases\\/test-db\"}}}}"
+        )
+    }
+
+    func testMatch() {
+        assert(
+            expr: Match(index: Ref("indexes/all_spells")),
+            toBecome: "{\"match\":{\"@ref\":\"indexes\\/all_spells\"}}"
+        )
+
+        assert(
+            expr: Match(index: Ref("indexes/spells_by_name"), terms: "fireball"),
+            toBecome: "{\"terms\":\"fireball\",\"match\":{\"@ref\":\"indexes\\/spells_by_name\"}}"
+        )
+
+        assert(
+            expr: Match(index: Ref("indexes/spells_by_name_and_power"), terms: Arr("fireball", 10)),
+            toBecome: "{\"terms\":[\"fireball\",10],\"match\":{\"@ref\":\"indexes\\/spells_by_name_and_power\"}}"
+        )
+
+        assert(
+            expr: Match(index: Ref("indexes/spells_by_name_and_power"), terms: "fireball", 10),
+            toBecome: "{\"terms\":[\"fireball\",10],\"match\":{\"@ref\":\"indexes\\/spells_by_name_and_power\"}}"
+        )
+    }
+
+    func testUnion() {
+        assert(
+            expr: Union(Arr(Ref("set1"), Ref("set2"))),
+            toBecome: "{\"union\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+
+        assert(
+            expr: Union(Ref("set1"), Ref("set2")),
+            toBecome: "{\"union\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+    }
+
+    func testIntersection() {
+        assert(
+            expr: Intersection(Arr(Ref("set1"), Ref("set2"))),
+            toBecome: "{\"intersection\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+
+        assert(
+            expr: Intersection(Ref("set1"), Ref("set2")),
+            toBecome: "{\"intersection\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+    }
+
+    func testDifference() {
+        assert(
+            expr: Difference(Arr(Ref("set1"), Ref("set2"))),
+            toBecome: "{\"difference\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+
+        assert(
+            expr: Difference(Ref("set1"), Ref("set2")),
+            toBecome: "{\"difference\":[{\"@ref\":\"set1\"},{\"@ref\":\"set2\"}]}"
+        )
+    }
+
+    func testDistinct() {
+        assert(expr: Distinct(Arr(1, 2, 1)), toBecome: "{\"distinct\":[1,2,1]}")
+    }
+
+    func testJoin() {
+        assert(
+            expr: Join(Ref("aSet"), with: Ref("otherSet")),
+            toBecome: "{\"with\":{\"@ref\":\"otherSet\"},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet"), with: Lambda { $0 }),
+            toBecome: "{\"with\":{\"lambda\":\"v1\",\"expr\":{\"var\":\"v1\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet")) { $0 },
+            toBecome: "{\"with\":{\"lambda\":\"v2\",\"expr\":{\"var\":\"v2\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet")) { (a, b) in b },
+            toBecome: "{\"with\":{\"lambda\":[\"v3\",\"v4\"],\"expr\":{\"var\":\"v4\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet")) { (a, b, c) in c },
+            toBecome: "{\"with\":{\"lambda\":[\"v5\",\"v6\",\"v7\"],\"expr\":{\"var\":\"v7\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet")) { (a, b, c, d) in d },
+            toBecome: "{\"with\":{\"lambda\":[\"v8\",\"v9\",\"v10\",\"v11\"],\"expr\":{\"var\":\"v11\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+
+        assert(
+            expr: Join(Ref("aSet")) { (a, b, c, d, e) in e },
+            toBecome: "{\"with\":{\"lambda\":[\"v12\",\"v13\",\"v14\",\"v15\",\"v16\"],\"expr\":{\"var\":\"v16\"}},\"join\":{\"@ref\":\"aSet\"}}"
+        )
+    }
+
+    func testLogin() {
+        assert(
+            expr: Login(for: Ref("classes/users/1"), Obj("password" => "abracadabra")),
+            toBecome: "{\"login\":{\"@ref\":\"classes\\/users\\/1\"},\"params\":{\"object\":{\"password\":\"abracadabra\"}}}"
+        )
+    }
+
+    func testLogout() {
+        assert(expr: Logout(all: true), toBecome: "{\"logout\":true}")
+    }
+
+    func testIdentity() {
+        assert(
+            expr: Identify(ref: Ref("classes/users/1"), password: "abracadabra"),
+            toBecome: "{\"password\":\"abracadabra\",\"identify\":{\"@ref\":\"classes\\/users\\/1\"}}"
+        )
+    }
+
+    func testConcat() {
+        assert(expr: Concat(Arr("Hellow", "World")), toBecome: "{\"concat\":[\"Hellow\",\"World\"]}")
+        assert(expr: Concat("Hellow", "World"), toBecome: "{\"concat\":[\"Hellow\",\"World\"]}")
+        assert(expr: Concat("Hellow", "World", separator: ","), toBecome: "{\"concat\":[\"Hellow\",\"World\"],\"separator\":\",\"}")
+    }
+
+    func testCasefold() {
+        assert(expr: Casefold("HELLOW"), toBecome: "{\"casefold\":\"HELLOW\"}")
+    }
+
+    func testTime() {
+        assert(expr: Time(fromString: "now"), toBecome: "{\"time\":\"now\"}")
+    }
+
+    func testEpoch() {
+        assert(expr: Epoch(10, "second"), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
+        assert(expr: Epoch(offset: 10, unit: .second), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
+        assert(expr: Epoch(offset: 10, unit: .millisecond), toBecome: "{\"unit\":\"millisecond\",\"epoch\":10}")
+    }
+
+    func testDate() {
+        assert(expr: DateFn(string: "1970-01-01"), toBecome: "{\"date\":\"1970-01-01\"}")
+    }
+
+    func testNextId() {
+        assert(expr: NextId(), toBecome: "{\"next_id\":null}")
+    }
+
+    func testDatabase() {
+        assert(expr: Database("db-test"), toBecome: "{\"database\":\"db-test\"}")
+    }
+
+    func testIndex() {
+        assert(expr: Index("all_spells"), toBecome: "{\"index\":\"all_spells\"}")
+    }
+
+    func testClass() {
+        assert(expr: Class("spells"), toBecome: "{\"class\":\"spells\"}")
+    }
+
+    func testEquals() {
+        assert(expr: Equals(Arr(1, 1)), toBecome: "{\"equals\":[1,1]}")
+        assert(expr: Equals(1, 1), toBecome: "{\"equals\":[1,1]}")
+    }
+
+    func testContains() {
+        assert(
+            expr: Contains(path: Arr("favorite", "foods"), in: Var("obj")),
+            toBecome: "{\"contains\":[\"favorite\",\"foods\"],\"in\":{\"var\":\"obj\"}}"
+        )
+
+        assert(
+            expr: Contains(path: "favorite", "foods", in: Var("obj")),
+            toBecome: "{\"contains\":[\"favorite\",\"foods\"],\"in\":{\"var\":\"obj\"}}"
+        )
+
+    }
+
+    func testSelect() {
+        assert(
+            expr: Select(path: Arr("data", "name"), from: Var("obj")),
+            toBecome: "{\"from\":{\"var\":\"obj\"},\"select\":[\"data\",\"name\"]}"
+        )
+
+        assert(
+            expr: Select(path: "data", "name", from: Var("obj")),
+            toBecome: "{\"from\":{\"var\":\"obj\"},\"select\":[\"data\",\"name\"]}"
+        )
+
+        assert(
+            expr: Select(path: "data", "name", from: Var("obj"), default: 1),
+            toBecome: "{\"from\":{\"var\":\"obj\"},\"default\":1,\"select\":[\"data\",\"name\"]}"
+        )
+    }
+
+    func testAdd() {
+        assert(expr: Add(Arr(1, 1)), toBecome: "{\"add\":[1,1]}")
+        assert(expr: Add(1, 1), toBecome: "{\"add\":[1,1]}")
+    }
+
+    func testMultiply() {
+        assert(expr: Multiply(Arr(1, 1)), toBecome: "{\"multiply\":[1,1]}")
+        assert(expr: Multiply(1, 1), toBecome: "{\"multiply\":[1,1]}")
+    }
+
+    func testSubtract() {
+        assert(expr: Subtract(Arr(1, 1)), toBecome: "{\"subtract\":[1,1]}")
+        assert(expr: Subtract(1, 1), toBecome: "{\"subtract\":[1,1]}")
+    }
+
+    func testDivide() {
+        assert(expr: Divide(Arr(1, 1)), toBecome: "{\"divide\":[1,1]}")
+        assert(expr: Divide(1, 1), toBecome: "{\"divide\":[1,1]}")
+    }
+
+    func testModulo() {
+        assert(expr: Modulo(Arr(1, 1)), toBecome: "{\"modulo\":[1,1]}")
+        assert(expr: Modulo(1, 1), toBecome: "{\"modulo\":[1,1]}")
+    }
+
+    func testLT() {
+        assert(expr: LT(Arr(1, 1)), toBecome: "{\"lt\":[1,1]}")
+        assert(expr: LT(1, 1), toBecome: "{\"lt\":[1,1]}")
+    }
+
+    func testLTE() {
+        assert(expr: LTE(Arr(1, 1)), toBecome: "{\"lte\":[1,1]}")
+        assert(expr: LTE(1, 1), toBecome: "{\"lte\":[1,1]}")
+    }
+
+    func testGT() {
+        assert(expr: GT(Arr(1, 1)), toBecome: "{\"gt\":[1,1]}")
+        assert(expr: GT(1, 1), toBecome: "{\"gt\":[1,1]}")
+    }
+
+    func testGTE() {
+        assert(expr: GTE(Arr(1, 1)), toBecome: "{\"gte\":[1,1]}")
+        assert(expr: GTE(1, 1), toBecome: "{\"gte\":[1,1]}")
+    }
+
+    func testAnd() {
+        assert(expr: And(Arr(true, false)), toBecome: "{\"and\":[true,false]}")
+        assert(expr: And(true, false), toBecome: "{\"and\":[true,false]}")
+    }
+
+    func testOr() {
+        assert(expr: Or(Arr(true, false)), toBecome: "{\"or\":[true,false]}")
+        assert(expr: Or(true, false), toBecome: "{\"or\":[true,false]}")
+    }
+
+    func testNot() {
+        assert(expr: Not(false), toBecome: "{\"not\":false}")
+    }
+
+    private func assert(expr: Expr?, toBecome jsonString: String) {
+        XCTAssertEqual(JSON.stringify(expr: expr as Any), jsonString)
     }
 
 }
+
+fileprivate extension JSON {
+    static func stringify(expr: Any) -> String {
+        return String(data: try! data(value: expr), encoding: .utf8)!
+    }
+}
+

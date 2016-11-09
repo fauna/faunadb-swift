@@ -1,17 +1,8 @@
-//
-//  SetFunctions.swift
-//  FaunaDB
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import Foundation
 
+public struct Match: Fn {
 
-
-public struct Match: Expr {
-
-    public let value: Value
+    var call: Fn.Call
 
     /**
      `Match` returns the set of instances that match the terms, based on the configuration of the specified index. terms can be either a single value, or an array.
@@ -23,19 +14,17 @@ public struct Match: Expr {
 
      - returns: a Match expression.
      */
-    public init(index: Expr, terms: Expr...){
-        value = {
-            var obj = Obj(fnCall:["match": index])
-            obj["terms"] = terms.count > 0 ? varargs(terms) : nil
-            return obj
-        }()
+    public init(index: Expr, terms: Expr...) {
+        self.call = fn(
+            "match" => index,
+            "terms" => (terms.count > 0 ? varargs(terms) : nil)
+        )
     }
 }
 
-public struct Union: Expr {
+public struct Union: Fn {
 
-    public let value: Value
-
+    var call: Fn.Call
 
     /**
      `Union` represents the set of resources that are present in at least one of the specified sets.
@@ -46,14 +35,15 @@ public struct Union: Expr {
 
      - returns: An Union Expression.
      */
-    public init(sets: Expr...){
-        value = Obj(fnCall:["union": varargs(sets)])
+    public init(_ sets: Expr...) {
+        self.call = fn("union" => varargs(sets))
     }
+
 }
 
-public struct Intersection: Expr {
+public struct Intersection: Fn {
 
-    public let value: Value
+    var call: Fn.Call
 
     /**
      `Intersection` represents the set of resources that are present in all of the specified sets.
@@ -64,14 +54,15 @@ public struct Intersection: Expr {
 
      - returns: An Intersection expression.
      */
-    public init(sets: Expr...){
-        value = Obj(fnCall:["intersection": varargs(sets)])
+    public init(_ sets: Expr...) {
+        self.call = fn("intersection" => varargs(sets))
     }
+
 }
 
-public struct Difference: Expr {
+public struct Difference: Fn {
 
-    public let value: Value
+    var call: Fn.Call
 
     /**
      `Difference` represents the set of resources present in the source set and not in any of the other specified sets.
@@ -82,14 +73,15 @@ public struct Difference: Expr {
 
      - returns: An Intersection expression.
      */
-    public init(sets: Expr...){
-        value = Obj(fnCall:["difference": varargs(sets)])
+    public init(_ sets: Expr...) {
+        self.call = fn("difference" => varargs(sets))
     }
+
 }
 
-public struct Distinct: Expr {
+public struct Distinct: Fn {
 
-    public let value: Value
+    var call: Fn.Call
 
     /**
      Distinct function returns the set after removing duplicates.
@@ -100,14 +92,15 @@ public struct Distinct: Expr {
 
      - returns: A Distinct expression.
      */
-    public init(set: Expr){
-        value = Obj(fnCall:["distinct": set])
+    public init(_ set: Expr) {
+        self.call = fn("distinct" => set)
     }
+
 }
 
-public struct Join: Expr {
+public struct Join: Fn {
 
-    public let value: Value
+    var call: Fn.Call
 
     /**
      `Join` derives a set of resources from target by applying each instance in `sourceSet` to `with` target. Target can be either an index reference or a lambda function.
@@ -120,7 +113,28 @@ public struct Join: Expr {
 
      - returns: A `Join` expression.
      */
-    public init(sourceSet: Expr, with: Expr){
-        value = Obj(fnCall:["join": sourceSet, "with": with])
+    public init(_ sourceSet: Expr, with: Expr) {
+        self.call = fn("join" => sourceSet, "with" => with)
     }
+
+    public init(_ sourceSet: Expr, fn: (Expr) -> Expr) {
+        self.init(sourceSet, with: Lambda(fn))
+    }
+
+    public init(_ sourceSet: Expr, fn: ((Expr, Expr)) -> Expr) {
+        self.init(sourceSet, with: Lambda(fn))
+    }
+
+    public init(_ sourceSet: Expr, fn: ((Expr, Expr, Expr)) -> Expr) {
+        self.init(sourceSet, with: Lambda(fn))
+    }
+
+    public init(_ sourceSet: Expr, fn: ((Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(sourceSet, with: Lambda(fn))
+    }
+
+    public init(_ sourceSet: Expr, fn: ((Expr, Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(sourceSet, with: Lambda(fn))
+    }
+
 }

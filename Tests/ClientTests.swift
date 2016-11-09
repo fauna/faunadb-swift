@@ -1,652 +1,610 @@
-//
-//  ClientTests.swift
-//  FaunaDBTests
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import XCTest
-import Nimble
-import Result
-@testable import FaunaDB
+import FaunaDB
 
 class ClientTests: FaunaDBTests {
-    
-    private func setupFaunaDB(){
-        
-        var value: Value?
 
-        // Create a database
-        value = await(
-            Create(ref: Ref("databases"),
-                params: Obj(["name": testDbName]))
-        )
-        expect(value).notTo(beNil())
+    private typealias `Self` = ClientTests
 
-        let dbRef: Ref? = value?.get(field: Fields.ref)
-        expect(dbRef) == Ref("databases/\(testDbName)")
+    private static var
+        randomClass,
+        characters,
+        spells,
+        spellbook,
+        allSpells,
+        spellsByElement,
+        elementsOfSpells,
+        spellbookByOwner,
+        spellsBySpellbook,
+        magicMissile,
+        fireball,
+        faerieFire,
+        thor,
+        thorsSpellbook: RefV!
 
-        // Get a new key
-        value = await(
-            Create(ref: Ref("keys"),
-                params: Obj(["database": dbRef!, "role": "server"]))
-        )
-        expect(value).notTo(beNil())
+    override class func setUp() {
+        super.setUp()
 
-        let secret: String = try! value!.get(path: "secret")
+        randomClass = queryForRef(CreateClass(Obj("name" => "some_random_class")))
+        spells = queryForRef(CreateClass(Obj("name" => "spells")))
+        spellbook = queryForRef(CreateClass(Obj("name" => "spellbook")))
+        characters = queryForRef(CreateClass(Obj("name" => "characters")))
 
-        // set up client using the new secret
-        client = Client(secret: secret, endpoint: URL(string: "https://cloud.faunadb.com")!)
+        allSpells = queryForRef(CreateIndex(Obj(
+            "name" => "all_spells",
+            "source" => spells
+        )))
 
+        spellsByElement = queryForRef(CreateIndex(Obj(
+            "name" => "spells_by_element",
+            "source" => spells,
+            "terms" => Arr(Obj("field" => Arr("data", "elements")))
+        )))
 
-        // Create spells class
-        value = await(
-            Create(ref: Ref("classes"),
-                params: Obj(["name": "spells"]))
-        )
-        expect(value).notTo(beNil())
+        elementsOfSpells = queryForRef(CreateIndex(Obj(
+            "name" => "elements_of_spells",
+            "source" => spells,
+            "values" => Arr(Obj("field" => Arr("data", "elements")))
+        )))
 
+        spellbookByOwner = queryForRef(CreateIndex(Obj(
+            "name" => "spellbook_by_owner",
+            "source" => spellbook,
+            "terms" => Arr(Obj("field" => Arr("data", "owner")))
+        )))
 
-        // Create an index
-        value = await(
-            Create(ref: Ref("indexes"),
-                params: Obj(["name": "spells_by_element",
-                         "source": Ref("classes/spells"),
-                         "terms": Arr(Obj(("field",  Arr("data", "element")))),
-                         "active": true]))
-        )
-        expect(value).notTo(beNil())
-    }
-    
-    override func tearDown() {
-        _ = await(Delete(ref: testDbName))
-        super.tearDown()
-    }
+        spellsBySpellbook = queryForRef(CreateIndex(Obj(
+            "name" => "spells_by_spellbook",
+            "source" => spells,
+            "terms" => Arr(Obj("field" => Arr("data", "book")))
+        )))
 
-    func testNotFoundException() {
-        setupFaunaDB()
-
-        let expr: Expr = Ref("classes/spells/1234")
-        let error = awaitError(Get(ref: expr))
-        expect(error?.equalType(FaunaError.notFoundException(response: nil, errors: []))) == true
-    }
-
-
-    func testEchoValues(){
-        setupFaunaDB()
-
-        // MARK: echo values
-        var value: Value?
-        value = await(Obj(["foo": "bar"]))
-        expect(value).notTo(beNil())
-        let objResult: Obj? = value?.get()
-        expect(objResult) == Obj(("foo", "bar"))
-
-        value = await(Arr(1, 2, "foo"))
-        expect(value).notTo(beNil())
-        let arrResult: Arr? = value?.get()
-        expect(arrResult) == Arr(Double(1), Double(2), "foo")
-
-        value = await("qux")
-        expect(value).notTo(beNil())
-        expect(value?.get()) == "qux"
-
-    }
-
-
-    func testCreateAnInstance(){
-        setupFaunaDB()
-
-        var value: Value?
-
-        // Create an instance
-
-        value = await(
-            Create(ref: Ref("classes/spells"),
-                params: Obj(["data": Obj(["testField": "testValue"])]))
-        )
-        expect(value).notTo(beNil())
-
-        expect(value?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
-        expect(value?.get(field: Fields.`class`)) == Ref("classes/spells")
-        expect(value?.get(path: "data", "testField")) == "testValue"
-
-        // Check that it exists
-        let ref: Ref? = value?.get(field: Fields.ref)
-        value = await(
-            Exists(ref: ref!)
-        )
-        expect(value?.get()) == true
-
-
-        value = await(
-            Create(ref: Ref("classes/spells"),
-                params:  Obj(["data": Obj([ "testData" : Obj([ "array": Arr(1, "2", 3.4),
-                    "bool": true,
-                    "num": 1234,
-                    "string": "sup",
-                    "float": 1.234,
-                    "null": Null()])
-                    ])
-                ])
+        thor = queryForRef(
+            Create(at: characters, Obj(
+                "data" => Obj(
+                    "name" => "thor"
+                )
             ))
+        )
 
-        let testData: Obj? = value?.get(path: "data", "testData")
-        expect(testData).notTo(beNil())
-        expect(testData?.get(path: "array", 0)) == Double(1)
-        expect(testData?.get(path: "array", 1)) == "2"
-        expect(testData?.get(path: "array", 2)) == 3.4
-        expect(testData?.get(path: "string")) == "sup"
-        expect(testData?.get(path: "num")) == Double(1234)
+        thorsSpellbook = queryForRef(
+            Create(at: spellbook, Obj("data" => Obj("owner" => thor)))
+        )
+
+        magicMissile = queryForRef(
+            Create(at: spells, Obj(
+                "data" => Obj(
+                    "name" => "Magic Missile",
+                    "elements" => Arr("arcane"),
+                    "cost" => 10
+                )
+            ))
+        )
+
+        fireball = queryForRef(
+            Create(at: spells, Obj(
+                "data" => Obj(
+                    "name" => "Fireball",
+                    "elements" => Arr("fire"),
+                    "cost" => 10,
+                    "book" => thorsSpellbook
+                )
+            ))
+        )
+
+        faerieFire = queryForRef(
+            Create(at: spells, Obj(
+                "data" => Obj(
+                    "name" => "Faerie Fire",
+                    "elements" => Arr("arcane", "nature"),
+                    "cost" => 10
+                )
+            ))
+        )
     }
 
-
-    func testBatcheQuery() {
-        setupFaunaDB()
-
-        //MARK: Issue a batched query
-
-        let classRef = Ref("classes/spells")
-        let randomText1 = String.random(length: 8)
-        let randomText2 = String.random(length: 8)
-        let expr1 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest1": randomText1])]))
-        let expr2 = Create(ref: classRef, params: Obj(["data": Obj(["queryTest2": randomText2])]))
-
-        let value = await(Arr(expr1, expr2))
-        let arr: Arr? = value?.get()
-        expect(arr?.count) == 2
-        expect(arr?[0].get(path: "data", "queryTest1")) == randomText1
-        expect(arr?[1].get(path: "data", "queryTest2")) == randomText2
-
-        let value2 = await(Arr(expr1, expr2))
-        let arr2: Arr? = value2?.get()
-        expect(arr2?.count) == 2
-        expect(arr2?[0].get(path: "data", "queryTest1")) == randomText1
-        expect(arr2?[1].get(path: "data", "queryTest2")) == randomText2
-    }
-
-
-
-
-    func testPaginatedQuery() {
-        setupFaunaDB()
-
-        //MARK: "issue a paginated query"
-        let randomClassName = String.random(length: 8)
-        var value: Value?
-        value = await(Create(ref: Ref("classes"),
-                          params: Obj(["name": randomClassName]))
-        )
-        expect(value).notTo(beNil())
-
-        let randomClassRef: Ref? = value?.get(field: Fields.ref)
-        expect(randomClassRef) == Ref("classes/" + randomClassName)
-
-
-        value = await(Create(ref: Ref("indexes"),
-                    params: Obj( ["name": "\(randomClassName)_class_index",
-                                "source": randomClassRef!,
-                                "active": true,
-                                "unique": false])))
-        expect(value).notTo(beNil())
-        let randomClassIndex: Ref? = value?.get(field: Fields.ref)
-        expect(randomClassIndex) == Ref("indexes/\(randomClassName)_class_index")
-
-
-        value = await(Create(ref: Ref("indexes"),
-                           params: Obj(["name": "\(randomClassName)_test_index",
-                                  "source": randomClassRef!,
-                                  "active": true,
-                                  "unique": false,
-                                   "terms": Arr(Obj(["field": Arr("data", "queryTest1")]))]))
-        )
-        expect(value).notTo(beNil())
-        let testIndex: Ref? = value?.get(field: Fields.ref)
-        expect(testIndex) == Ref("indexes/\(randomClassName)_test_index")
-
-
-        let randomText1 = String.random(length: 8)
-        let randomText2 = String.random(length: 8)
-        let randomText3 = String.random(length: 8)
-
-        let create1Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText1])])))
-        expect(create1Value).notTo(beNil())
-        let create2Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText2])])))
-        expect(create2Value).notTo(beNil())
-        let create3Value = await(Create(ref: randomClassRef!, params: Obj(["data": Obj(["queryTest1": randomText3])])))
-        expect(create3Value).notTo(beNil())
-
-
-        let queryMatchValue = await(
-            Paginate(resource: Match(index: testIndex!,
-                                     terms: randomText1))
-        )
-        expect(queryMatchValue).notTo(beNil())
-
-        let createValue1Ref: Ref = try! create1Value!.get(field: Fields.ref)
-        let arr: [Ref]? = try? queryMatchValue!.get(path: "data")
-        expect(arr) == [createValue1Ref]
-
-
-        value = await(
-            Paginate(resource: Match(index:randomClassIndex!),
-                         size:1)
-        )
-        expect(value).notTo(beNil())
-
-        var paginateArr: Arr = try! value!.get(path: "data")
-        expect(paginateArr.count) == 1
-
-        var after: Arr? = value?.get(path: "after")
-        var before: Arr? = value?.get(path: "before")
-        expect(after).notTo(beNil())
-        expect(before).to(beNil())
-
-
-
-        value = await(Paginate(resource: Match(index:randomClassIndex!),
-                               cursor: .after(expr: after!),
-                               size: 1))
-        expect(value).notTo(beNil())
-
-        paginateArr = try! value!.get(path: "data")
-        expect(paginateArr.count) == 1
-
-        after = value?.get(path: "after")
-        before = value?.get(path: "before")
-        expect(after).notTo(beNil())
-        expect(before).notTo(beNil())
-
-
-        value = await(Count(set: Match(index: randomClassIndex!)))
-        expect(value).notTo(beNil())
-        expect(value?.get()) == 3.0
-    }
-
-    func testHandleConstraintViolation() {
-        setupFaunaDB()
-
-        let randomClassName = String.random(length: 8)
-        let value = await(
-            Create(ref: Ref("classes"),
-                params: Obj(["name": randomClassName]))
-        )
-        expect(value).notTo(beNil())
-        let classRef: Ref? = value?.get(field: Fields.ref)
-
-
-
-        let uniqueIndexRes = await(
-            Create(ref: Ref("indexes"),
-                params: Obj([ "name": randomClassName + "_by_unique_test",
-                            "source": classRef!,
-                             "terms": Arr(Obj(["field": Arr("data", "uniqueTest1")])),
-                            "unique": true,
-                            "active": true]))
-        )
-        expect(uniqueIndexRes).notTo(beNil())
-
-        let randomText = String.random(length: 8)
-        let create: Create = Create(ref: classRef!,
-                            params: Obj(["data": Obj(["uniqueTest1": randomText])]))
-        let cretate = await(create)
-        expect(cretate).notTo(beNil())
-        let error = awaitError(create)
-        expect(error?.equalType(FaunaError.badRequestException(response: nil, errors: []))) == true
-        expect(error?.responseErrors.count) == 1
-        expect("validation failed") == error?.responseErrors[0].code
-        expect("duplicate value") == error?.responseErrors[0].failures.filter { $0.field == ["data", "uniqueTest1"] }.first?.code
-    }
-
-    func testTypes() {
-        setupFaunaDB()
-
-        let value = await(Match(index: Ref("indexes/spells_by_element"),
-                                terms: "arcane" as Expr))
-        expect(value).notTo(beNil())
-        let set: SetRef? = value?.get()
-
-        expect(Ref("indexes/spells_by_element")) == set?.parameters.get(path: "match")
-        expect("arcane") == set?.parameters.get(path: "terms")
-    }
-
-    func testBasicForms() {
-        setupFaunaDB()
-
-        let letR = await(Let(1, 2) { x, _ in x })
-        expect(Double(1)) == letR?.get()
-
-        let ifR = await(If(pred: true, then: "was true", else: "was false"))
-        expect("was true") == ifR?.get()
-
-        let randomRef: Ref = Ref("classes/spells/" + String.random(nums: 8))
-        let doR = await(
-            Do(exprs: Create(ref: randomRef,
-                          params: Obj(["data": Obj(["name": "Magic Missile"])])),
-                      Get(ref: randomRef))
-        )
-        expect(randomRef) == doR?.get(field: Fields.ref)
-
-
-        let objectR = await(Obj(["name": "Hen Wen", "age": 123]))
-        expect(objectR?.get(path:"name")) == "Hen Wen"
-        expect(objectR?.get(path: "age")) == Double(123)
-    }
-
-    func testCollections(){
-        setupFaunaDB()
-
-        let mapR = await(
-            Map(collection: Arr(1, 2, 3)) { x in Add(terms: x, 1) }
-        )
-        expect(mapR?.get()) == [2.0, 3.0, 4.0]
-
-
-        let foreachR = await(
-            Foreach(collection:  Arr("Fireball Level 1", "Fireball Level 2")) { spell in
-                Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": spell])]))
-            }
-        )
-        expect(foreachR?.get()) == ["Fireball Level 1", "Fireball Level 2"]
-
-        let filterR = await(
-            Filter(collection: Arr(1, 2, 11, 12)) {
-                GT(terms: $0, 10)
-            }
-        )
-        expect(filterR?.get()) == [11.0, 12.0]
-    }
-
-    func testResourceModification() {
-        setupFaunaDB()
-
-        let createR = await(
-            Create(ref: Ref("classes/spells"),
-                params: Obj(["data": Obj([ "name": "Magic Missile",
-                                        "element": "arcane",
-                                           "cost": Double(10)]
-                                    )
-                        ])
-            )
-        )
-        expect(createR?.get(field: Fields.ref)?.ref).to(beginWith("classes/spells/"))
-        expect(createR?.get(path: "data", "name")) == "Magic Missile"
-        expect(createR?.get(path: "data", "element")) == "arcane"
-        expect(createR?.get(path: "data", "cost")) == 10.0
-
-
-        let updateR = await(
-            try! Update(ref: createR!.get(field: Fields.ref),
-                params: Obj(["data": Obj(["name": "Faerie Fire",
-                                  "cost": Null()])]))
-        )
-        let updateRef: Ref? = updateR?.get(field: Fields.ref)
-        expect(updateRef) == createR?.get(field: Fields.ref)
-        expect(updateR?.get(path: "data", "name")) == "Faerie Fire"
-        expect(updateR?.get(path: "data", "element")) == "arcane"
-        let nullCost: Double? = updateR?.get(path: "data", "cost")
-        expect(nullCost).to(beNil())
-
-
-        let replaceR = await(
-            Replace(ref: try! createR!.get(path: "ref") as Ref,
-                                  params: Obj(["data": Obj(["name": "Volcano",
-                                                 "element": Arr("fire", "earth"),
-                                                    "cost": 10.0])]))
-        )
-        let replaceRef: Ref? = replaceR?.get(field: Fields.ref)
-        expect(replaceRef) == createR?.get(field: Fields.ref)
-        expect(replaceR?.get(path: "data", "name")) == "Volcano"
-        expect(replaceR?.get(path: "data", "element")) == ["fire", "earth"]
-        expect(replaceR?.get(path: "data", "cost")) == 10.0
-
-
-        let insertR = await(
-            Insert(
-                    ref: try! createR!.get(path: "ref"),
-                    ts: Timestamp(timeIntervalSince1970: 1),
-                action: Action.Create,
-                params: Obj(["data": Obj(["cooldown": 5.0])])
-            )
-        )
-        let insertRef: Ref? = insertR?.get(field: Fields.ref)
-        expect(insertRef) == createR?.get(field: Fields.ref)
-        expect(insertR?.get(path: "data")) == Obj(["cooldown": 5.0])
-
-        let removeR = await(
-            Remove(ref: try! createR!.get(path: "ref"),
-                    ts: Timestamp(timeIntervalSince1970: 2),
-                action: Action.Delete)
-        )
-        expect(removeR as? Null) == Null()
-
-
-        let deleteR = await(
-            Delete(ref: try! createR!.get(path: "ref") as Ref)
-        )
-        expect(deleteR).notTo(beNil())
-        let notFoundError = awaitError(Get(ref: try! createR!.get(path: "ref") as Ref))
-        expect(notFoundError?.equalType(FaunaError.notFoundException(response: nil, errors: []))) == true
-    }
-
-    struct Ev: DecodableValue {
-        let ref: Ref
-        let ts: Double
-        let action: String
-
-        static func decode(_ value: Value) -> Ev?{
-            return try? Ev(ref: value.get(path: "resource"), ts: value.get(path: "ts"), action: value.get(path: "action"))
+    func testReturnUnauthorizedOnInvalidSecret() {
+        let invalidClient = client.newSessionClient(secret: "invalid-secret")
+        let query = invalidClient.query(Get(Ref("classes/spells/42")))
+
+        XCTAssertThrowsError(try query.await()) { error in
+            XCTAssert(error is Unauthorized)
         }
     }
 
-    func testSets() {
-        setupFaunaDB()
-
-        let create1R = await(
-            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Magic Missile",
-                                                                 "element": "arcane",
-                                                                 "cost": 10.0])]))
+    func testReturnNotFoundOnNonExistingInstance() {
+        let res = client.query(
+            Get(Ref(class: Self.randomClass, id: String.random()))
         )
-        expect(create1R).notTo(beNil())
-        let create1Ref: Ref = try! create1R!.get(path: "ref")
 
-        let create2R = await(
-            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Fireball",
-                                                                 "element": "fire",
-                                                                 "cost": 10.0])]))
-        )
-        expect(create2R).notTo(beNil())
-        let create2Ref: Ref = try! create2R!.get(path: "ref")
-
-        let create3R = await(
-            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Faerie Fire",
-                                                                 "element": Arr("arcane", "nature"),
-                                                                 "cost": 10.0])]))
-        )
-        expect(create3R).notTo(beNil())
-        let create3Ref: Ref = try! create3R!.get(path: "ref")
-
-        let create4R = await(
-            Create(ref: Ref("classes/spells"), params: Obj(["data": Obj(["name": "Summon Animal Companion",
-                                                              "element": "nature",
-                                                                 "cost": 10.0])]))
-        )
-        expect(create4R).notTo(beNil())
-        let create4Ref: Ref = try! create4R!.get(path: "ref")
-
-
-        let matchR = await(Paginate(resource: Match(index: Ref("indexes/spells_by_element"), terms: "arcane")))
-        expect(matchR?.get(path: "data") as [Ref]?).to(contain(create1Ref))
-
-        let matchEventsR = await(
-            Paginate(resource: Match(index: Ref("indexes/spells_by_element"),
-                                     terms: "arcane"),
-                       events: true)
-        )
-        let pageEv: [Ev] = try! matchEventsR!.get(path: "data")
-        expect(pageEv.map { $0.ref }).to(contain(create1Ref))
-
-
-        let unionR = await(
-            Paginate(resource: Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
-                                           Match(index: Ref("indexes/spells_by_element"), terms: "fire")))
-
-        )
-        expect(unionR?.get(path: "data") as [Ref]?).to(contain(create1Ref, create2Ref))
-
-
-        let unionEventsR = await(
-            Paginate(resource: Union(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
-                                           Match(index: Ref("indexes/spells_by_element"), terms: "fire")),
-                       events: true)
-
-        )
-        let unionEventsPageEv: [Ev] = try! unionEventsR!.get(path: "data")
-        expect(unionEventsPageEv.filter { $0.action == "create" }.map { $0.ref }).to(contain(create1Ref, create2Ref))
-
-
-        let intersectionR = await(
-            Paginate(resource: Intersection(sets: Match(index: Ref("indexes/spells_by_element"), terms: "arcane"),
-                                                  Match(index: Ref("indexes/spells_by_element"), terms: "nature")))
-        )
-        let refs: [Ref]? = intersectionR?.get(path: "data")
-        expect(refs).to(contain(create3Ref))
-
-        let differenceR = await(
-            Paginate(resource: Difference(sets: Match(index: Ref("indexes/spells_by_element"), terms: "nature"),
-                                                Distinct(set:Match(index: Ref("indexes/spells_by_element"), terms: "arcane"))))
-        )
-        expect(differenceR?.get(path: "data") as [Ref]?).to(contain(create4Ref))
+        XCTAssertThrowsError(try res.await()) { error in
+            XCTAssert(error is NotFound)
+        }
     }
 
-    func testMiscellaneous() {
-        let equalsR = await(
-            Equals(terms: "fire", "fire")
-        )
-        expect(equalsR?.get()) == true
+    func testCreateAComplexInstance() {
+        let instance = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj(
+                    "string" => "a string",
+                    "int" => 42,
+                    "double" => 42.2,
+                    "bool" => true,
+                    "arr" => Arr(
+                        1,
+                        true,
+                        Obj("key" => "value")
+                    ),
+                    "obj" => Obj("nested" => "obj")
+                )
+            ))
+        ).await()
 
-
-        let concatR = await(
-            Concat(strList: Arr("Magic", "Missile"))
-        )
-        expect(concatR?.get()) == "MagicMissile"
-
-
-        let concatR2 = await(
-            Concat(strList: Arr("Magic", "Missile"),
-                 separator: " ")
-        )
-        expect(concatR2?.get()) == "Magic Missile"
-
-
-        let containsR = await(
-            Contains(pathComponents: "favorites", "foods",
-                             inExpr: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings")])]))
-        )
-        expect(containsR?.get()) == true
-
-
-        let containsR2 = await(
-            Contains(path: Arr("favorites", "foods"),
-                inExpr: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings")])]))
-        )
-        expect(containsR2?.get()) == true
-
-
-        let selectR = await(
-            Select(pathComponents: "favorites", "foods", 1, from: Obj(["favorites": Obj(["foods": Arr("crunchings", "munchings", "lunchings")])]))
-        )
-        expect(selectR?.get()) == "munchings"
-
-        let addR = await(
-            Add(terms:100.0, 10.0)
-        )
-        expect(addR?.get()) == 110.0
-
-        let multiplyR = await(
-            Multiply(terms:100.0, 10.0)
-        )
-        expect(multiplyR?.get()) == 1000.0
-
-        let subtractR = await(
-            Subtract(terms:100.0, 10.0)
-        )
-        expect(subtractR?.get()) == 90.0
-
-        let divideR = await(
-            Divide(terms:100.0, 10.0)
-        )
-        expect(divideR?.get()) == 10.0
-
-        let moduloR = await(
-            Modulo(terms:101.0, 10.0)
-        )
-        expect(moduloR?.get()) == 1.0
-
-        let andR = await(
-            And(terms:true, false)
-        )
-        expect(andR?.get()) == false
-
-        let orR = await(
-            Or(terms:true, false)
-        )
-        expect(orR?.get()) == true
-
-        let notR = await(
-            Not(boolExpr:false)
-        )
-        expect(notR?.get()) == true
+        XCTAssertEqual(try instance.get("data", "string"), "a string")
+        XCTAssertEqual(try instance.get("data", "int"), 42)
+        XCTAssertEqual(try instance.get("data", "double"), 42.2)
+        XCTAssertEqual(try instance.get("data", "bool"), true)
+        XCTAssertEqual(try instance.get("data", "arr", 0), 1)
+        XCTAssertEqual(try instance.get("data", "arr", 1), true)
+        XCTAssertEqual(try instance.get("data", "arr", 2, "key"), "value")
+        XCTAssertEqual(try instance.get("data", "obj", "nested"), "obj")
     }
 
-    func testDateAndTime(){
-
-        let timeR = await(Time("1970-01-01T00:00:00-04:00"))
-        expect(timeR?.get()) == Timestamp(iso8601: "1970-01-01T00:00:00-04:00")
-
-        var epochR = await(Epoch(offset: 30, unit: TimeUnit.second))
-        expect(epochR?.get()) == Timestamp(timeIntervalSince1970: 30)
-
-        epochR = await(Epoch(offset: 40 * 1000, unit: TimeUnit.millisecond))
-        expect(epochR?.get()) == Timestamp(timeIntervalSince1970: 40)
-
-        epochR = await(Epoch(offset: 12345, unit: TimeUnit.millisecond))
-        expect(epochR?.get()) == Timestamp(iso8601: "1970-01-01T00:00:12.345Z")
-
-        //TODO: reenable this once we figure out where the equals is being defined
-        //let dateR = await(DateFn(iso8601: "1970-01-02"))
-        //expect(dateR?.get()) == Date(iso8601: "1970-01-02")
+    func testGetAnInstance() {
+        assert(
+            query: Get(Self.magicMissile),
+            toReturn: "Magic Missile",
+            atPath: "data", "name"
+        )
     }
 
+    func testBatchQuery() {
+        let instances = try! client.query(batch: [
+            Get(Self.magicMissile),
+            Get(Self.thor)
+        ]).await()
 
-    func  testAuthentication() {
-        setupFaunaDB()
-
-        let createR = await(
-            Create(ref: Ref("classes/spells"), params: Obj(["credentials": Obj(["password": "abcdefg"])]))
-        )
-        let createRef: Ref? = createR?.get(path: "ref")
-        expect(createRef).toNot(beNil())
-
-        let secret: String? = await(
-            Login(ref: createRef!, params: Obj(["password": "abcdefg"]))
-            )?.get(path: "secret")
-        expect(secret).toNot(beNil())
-        let oldSecret = client.secret
-        client = Client(secret: secret!, endpoint: URL(string: "https://cloud.faunadb.com")!)
-
-        let logoutR: Bool? = await(
-            Logout(invalidateAll: false)
-        )?.get()
-
-        expect(logoutR) == true
-
-
-        client = Client(secret: oldSecret, endpoint: URL(string: "https://cloud.faunadb.com")!)
-
-        let identifyR = await(
-            Identify(ref: createRef!, password: "abcdefg")
-        )
-        expect(identifyR?.get()) == true
+        XCTAssertEqual(instances.count, 2)
     }
+
+    func testUpdateAnInstance() {
+        let instance = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("name" => "bob", "age" => 21)
+            ))
+        ).await()
+
+        let updated = try! client.query(
+            Update(ref: try! instance.get("ref")!, to: Obj(
+                "data" => Obj("name" => "jhon")
+            ))
+        ).await()
+
+        XCTAssertEqual(try! updated.get("data", "name"), "jhon")
+        XCTAssertEqual(try! updated.get("data", "age"), 21)
+    }
+
+    func testReplaceAnInstance() {
+        let instance = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("name" => "bob", "age" => 21)
+            ))
+        ).await()
+
+        let replaced = try! client.query(
+            Replace(ref: try! instance.get("ref")!, with: Obj(
+                "data" => Obj("name" => "jhon")
+            ))
+        ).await()
+
+        XCTAssertEqual(try! replaced.get("data", "name"), "jhon")
+        XCTAssertNil(try! replaced.get("data", "age"))
+    }
+
+    func testDeleteAnInstance() {
+        let instance: RefV! = try! client.query(
+            Create(
+                at: Self.randomClass,
+                Obj("data" => Obj("name" => "jhon"))
+            )
+        )
+        .await()
+        .get("ref")
+
+        try! client.query(Delete(ref: instance)).await()
+        assert(query: Exists(instance), toReturn: false)
+    }
+
+    func testLet() {
+        assert(
+            query: Let(1, 2) { a, b in
+                Arr(b, a)
+            },
+            toReturn: [2, 1]
+        )
+    }
+
+    func testDo() {
+        let refToCreate = RefV(String.random(startingWith: Self.randomClass.value + "/"))
+
+        assert(
+            query: Do(
+                Create(at: refToCreate, Obj("data" => Obj())),
+                Get(refToCreate)
+            ),
+            toReturn: refToCreate,
+            atPath: "ref"
+        )
+    }
+
+    func testMapOverACollection() {
+        assert(
+            query: Map(Arr(1, 2, 3)) { Add(1, $0) },
+            toReturn: [2, 3, 4]
+        )
+    }
+
+    func testExecuteForeach() {
+        assert(
+            query: Foreach(Arr("Fireball level 1", "Fireball level 2")) { name in
+                Create(at: Self.randomClass, Obj(
+                    "data" => Obj("name" => name)
+                ))
+            },
+            toReturn: ["Fireball level 1", "Fireball level 2"]
+        )
+    }
+
+    func testFilterACollection() {
+        assert(
+            query: Filter(Arr(1, 2, 3)) { Equals(0, Modulo($0, 2)) },
+            toReturn: [2]
+        )
+    }
+
+    func testTakeElementsFromCollection() {
+        assert(
+            query: Take(count: 2, from: Arr(1, 2, 3)),
+            toReturn: [1, 2]
+        )
+    }
+
+    func testDropElementsFromCollection() {
+        assert(
+            query: Drop(count: 2, from: Arr(1, 2, 3)),
+            toReturn: [3]
+        )
+    }
+
+    func testPrependElementsToCollection() {
+        assert(
+            query: Prepend(elements: Arr(1, 2), to: Arr(3, 4)),
+            toReturn: [1, 2, 3, 4]
+        )
+    }
+
+    func testAppendElementsToCollection() {
+        assert(
+            query: Append(elements: Arr(1, 2), to: Arr(3, 4)),
+            toReturn: [3, 4, 1, 2]
+        )
+    }
+
+    func testPaginateOverAnIndex() {
+        var page = try! client.query(
+            Paginate(
+                Match(index: Self.allSpells),
+                size: 1
+            )
+        ).await()
+
+        XCTAssertEqual(try page.get("data"), [Self.magicMissile])
+
+        page = try! client.query(
+            Paginate(
+                Match(index: Self.allSpells),
+                after: page.get("after"),
+                size: 1
+            )
+        ).await()
+
+        XCTAssertEqual(try page.get("data"), [Self.fireball])
+
+        page = try! client.query(
+            Paginate(
+                Match(index: Self.allSpells),
+                before: page.get("before"),
+                size: 1
+            )
+        ).await()
+
+        XCTAssertEqual(try page.get("data"), [Self.magicMissile])
+    }
+
+    func testFindSingleInstanceOnAnIndex() {
+        assert(query:
+            Paginate(
+                Match(
+                    index: Self.spellsByElement,
+                    terms: "fire"
+                )
+            ),
+            toReturn: [Self.fireball],
+            atPath: "data"
+        )
+    }
+
+    func testUnion() {
+        assert(
+            query: Paginate(
+                Union(
+                    Match(index: Self.spellsByElement, terms: "arcane"),
+                    Match(index: Self.spellsByElement, terms: "fire")
+                )
+            ),
+            toReturn: [Self.magicMissile, Self.fireball, Self.faerieFire],
+            atPath: "data"
+        )
+    }
+
+    func testIntersection() {
+        assert(
+            query: Paginate(
+                Intersection(
+                    Match(index: Self.spellsByElement, terms: "arcane"),
+                    Match(index: Self.spellsByElement, terms: "nature")
+                )
+            ),
+            toReturn: [Self.faerieFire],
+            atPath: "data"
+        )
+    }
+
+    func testDifference() {
+        assert(
+            query: Paginate(
+                Difference(
+                    Match(index: Self.spellsByElement, terms: "arcane"),
+                    Match(index: Self.spellsByElement, terms: "nature")
+                )
+            ),
+            toReturn: [Self.magicMissile],
+            atPath: "data"
+        )
+    }
+
+    func testDistinct() {
+        assert(
+            query: Paginate(
+                Distinct(
+                    Match(index: Self.elementsOfSpells)
+                )
+            ),
+            toReturn: ["arcane", "fire", "nature"],
+            atPath: "data"
+        )
+    }
+
+    func testJoin() {
+        assert(
+            query: Paginate(
+                Join(Match(index: Self.spellbookByOwner, terms: Self.thor)) { book in
+                    Match(index: Self.spellsBySpellbook, terms: book)
+                }
+            ),
+            toReturn: [Self.fireball],
+            atPath: "data"
+        )
+    }
+
+    func testConcat() {
+        assert(query: Concat("Hellow", "World"), toReturn: "HellowWorld")
+        assert(query: Concat("Hellow", "World", separator: " " ), toReturn: "Hellow World")
+    }
+
+    func testCasefold() {
+        assert(query: Casefold("GET DOWN"), toReturn: "get down")
+    }
+
+    func testTime() {
+        assert(
+            query: Time(fromString: "1970-01-01T00:00:00-00:00:05"),
+            toReturn: Date(timeIntervalSince1970: 5)
+        )
+    }
+
+    func testEpoch() {
+        assert(query: Epoch(offset: 30, unit: .second), toReturn: Date(timeIntervalSince1970: 30))
+        assert(query: Epoch(offset: 30, unit: .millisecond), toReturn: Date(timeIntervalSince1970: 30 / 1_000))
+    }
+
+    func testDate() {
+        assert(
+            query: DateFn(string: "1970-01-01"),
+            toReturn: Date(timeIntervalSince1970: 0)
+        )
+    }
+
+    func testAuthenticate() {
+        let user: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "credentials" => Obj(
+                    "password" => "abcd"
+                )
+            ))
+        ).await().get("ref")
+
+        let auth = try! client.query(
+            Login(for: user, Obj(
+                "password" => "abcd"
+            ))
+        ).await()
+
+        let sessionClient = try! client.newSessionClient(secret: auth.get("secret")!)
+
+        XCTAssertTrue(
+            try! sessionClient.query(
+                Logout(all: true)
+            )
+            .await()
+            .get()!
+        )
+
+        XCTAssertFalse(
+            try! client.query(
+                Identify(
+                    ref: user,
+                    password: "wrong-password"
+                )
+            ).await().get()!
+        )
+    }
+
+    func testNextId() {
+        let id: String! = try! client.query(NextId()).await().get()
+        XCTAssertNotNil(id)
+    }
+
+    func testRefFunctions() {
+        assert(
+            query: Arr(
+                Index("all_spells"),
+                Class("spells")
+            ),
+            toReturn: [Self.allSpells, Self.spells]
+        )
+    }
+
+    func testEquals() {
+        assert(query: Equals("fire", "fire"), toReturn: true)
+    }
+
+    func testContains() {
+        assert(
+            query: Contains(path: "favorites", "foods", in: Obj(
+                "favorites" => Obj(
+                    "foods" => Arr("crunchings", "munchings")
+                )
+            )),
+            toReturn: true
+        )
+    }
+
+    func testSelect() {
+        assert(
+            query: Select(path: "favorites", "foods", 1, from: Obj(
+                "favorites" => Obj(
+                    "foods" => Arr("crunchings", "munchings")
+                )
+            )),
+            toReturn: "munchings"
+        )
+
+        assert(
+            query: Select(
+                path: "favorites", "foods", 2,
+                from: Obj(
+                    "favorites" => Obj(
+                        "foods" => Arr("crunchings", "munchings")
+                    )
+                ),
+                default: "bananas"
+            ),
+            toReturn: "bananas"
+        )
+    }
+
+    func testAdd() {
+        assert(query: Add(1, 2), toReturn: 3)
+    }
+
+    func testMultiply() {
+        assert(query: Multiply(2, 2), toReturn: 4)
+    }
+
+    func testSubtract() {
+        assert(query: Subtract(5, 3), toReturn: 2)
+    }
+
+    func testDivide() {
+        assert(query: Divide(10, 5), toReturn: 2)
+    }
+
+    func testModulo() {
+        assert(query: Modulo(10, 5), toReturn: 0)
+    }
+
+    func testLT() {
+        assert(query: LT(0, 1), toReturn: true)
+    }
+
+    func testLTE() {
+        assert(query: LTE(1, 1), toReturn: true)
+    }
+
+    func testGT() {
+        assert(query: GT(1, 0), toReturn: true)
+    }
+
+    func testGTE() {
+        assert(query: GTE(0, 0), toReturn: true)
+    }
+
+    func testAnd() {
+        assert(query: And(true, true), toReturn: true)
+    }
+
+    func testOr() {
+        assert(query: Or(false, true), toReturn: true)
+    }
+
+    func testNot() {
+        assert(query: Not(false), toReturn: true)
+    }
+
+    func testSetRefV() {
+        let match: SetRefV! = try! client.query(
+            Match(
+                index: Self.spellsByElement,
+                terms: "arcane"
+            )
+        ).await().get()
+
+        XCTAssertEqual(try! match.value["match"]?.get(), Self.spellsByElement)
+        XCTAssertEqual(try! match.value["terms"]?.get(), "arcane")
+    }
+
+    func testEchoAObjectBack() {
+        assert(query: Obj("key" => "value"), toReturn: ["key": "value"])
+    }
+
+    private static func queryForRef(_ expr: Expr) -> RefV {
+        return try! client.query(expr).await().get("ref")!
+    }
+
+    private func assert<T: Equatable>(query expr: Expr, toReturn expected: T, atPath: Segment...) {
+        XCTAssertEqual(try! client.query(expr).await().get(path: atPath), expected)
+    }
+
+    private func assert<T: Equatable>(query expr: Expr, toReturn expected: [T], atPath: Segment...) {
+        XCTAssertEqual(try! client.query(expr).await().get(path: atPath), expected)
+    }
+
+    private func assert<T: Equatable>(query expr: Expr, toReturn expected: [String: T], atPath: Segment...) {
+        XCTAssertEqual(try! client.query(expr).await().get(path: atPath), expected)
+    }
+
+}
+
+fileprivate extension String {
+
+    static func random(startingWith prefix: String = "", size: Int = 10) -> String {
+        var res = prefix
+
+        for _ in 1...size {
+            res.append("\(Int(arc4random()) % 10)")
+        }
+
+        return res
+    }
+
 }

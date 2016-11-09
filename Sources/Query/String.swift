@@ -1,15 +1,8 @@
-//
-//  StringFunctions.swift
-//  FaunaDB
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import Foundation
 
-public struct Concat: Expr{
+public struct Concat: Fn {
 
-    public var value: Value
+    var call: Fn.Call
 
     /**
      `Concat` joins a list of strings into a single string value.
@@ -21,19 +14,14 @@ public struct Concat: Expr{
 
      - returns: A Concat expression.
      */
-    public init(strList: Expr, separator: Expr? = nil){
-        value = {
-            var obj = Obj(fnCall: ["concat": strList])
-            obj["separator"] = separator
-            return obj
-        }()
+    public init(_ strings: Expr..., separator: Expr? = nil) {
+        self.call = fn("concat" => varargs(strings), "separator" => separator)
     }
 }
 
+public struct Casefold: Fn {
 
-public struct Casefold: Expr{
-
-    public var value: Value
+    var call: Fn.Call
 
     /**
      `Casefold` normalizes strings according to the Unicode Standard section 5.18 “Case Mappings”.
@@ -46,7 +34,8 @@ public struct Casefold: Expr{
 
      - returns: A Casefold expression.
      */
-    public init(str: Expr){
-        value = Obj(fnCall:["casefold": str])
+    public init(_ str: Expr) {
+        self.call = fn("casefold" => str)
     }
+
 }

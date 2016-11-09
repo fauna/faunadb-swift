@@ -1,98 +1,122 @@
-//
-//  ClientConfigurationTests.swift
-//  FaunaDBTests
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import XCTest
+
 @testable import FaunaDB
 
-class DeserializationTests: FaunaDBTests {
+class DeserializationTests: XCTestCase {
 
-    func testQueryResponse() {
-        let toDeserialize =
-            "{" +
-                "\"class\":{\"@ref\":\"classes/derp\"}," +
-                "\"data\":{\"test\":1}," +
-                "\"ref\":{\"@ref\":\"classes/derp/101192216816386048\"}," +
-                "\"ts\":1432763268186882" +
-        "}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value =  Obj([  "ref": Ref("classes/derp/101192216816386048"),
-                          "class": Ref("classes/derp"),
-                             "ts": Double(1432763268186882 as UInt64),
-                           "data": Obj(["test": 1.0])])
-        XCTAssertTrue(deseralizedValue.isEquals(value))
+    func testStringV() {
+        assert(parse: "\"a string\"", to: StringV("a string"))
     }
 
-
-    func testQueryResponseWithRef() {
-        let toDeserialize =
-            "{" +
-                "\"ref\":{\"@ref\":\"classes/spells/93044099947429888\"}," +
-                "\"class\":{\"@ref\":\"classes/spells\"}," +
-                "\"ts\":1424992618413105," +
-                "\"data\":{\"refField\":{\"@ref\":\"classes/spells/93044099909681152\"}}" +
-            "}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value = Obj( [ "ref": Ref("classes/spells/93044099947429888"),
-                         "class": Ref("classes/spells"),
-                            "ts": Double(1424992618413105 as UInt64),
-                          "data": Obj(["refField": Ref("classes/spells/93044099909681152")])])
-        XCTAssert(deseralizedValue.isEquals(value))
+    func testLongV() {
+        assert(parse: "10", to: LongV(10))
     }
 
-
-    func testQueryResponseWithLiteralObject(){
-        let toDeserialize =
-        "{" +
-            "\"class\":{\"@ref\":\"classes/derp\"}," +
-            "\"data\":{\"test\":{\"field1\":{\"@obj\":{\"@name\":\"Test\"}}}}," +
-            "\"ref\":{\"@ref\":\"classes/derp/101727203651223552\"}," +
-            "\"ts\":1433273471399755" +
-        "}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let value = Obj( [  "ref": Ref("classes/derp/101727203651223552"),
-                          "class": Ref("classes/derp"),
-                             "ts": Double(1433273471399755 as UInt64),
-                           "data": Obj(["test": Obj(["field1": Obj(["@name": "Test"])])])])
-        XCTAssert(deseralizedValue.isEquals(value))
+    func testDoubleV() {
+        assert(parse: "2.142", to: DoubleV(2.142))
     }
 
-    func testEmptyObject(){
-        let toDeserialize = "{}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        XCTAssert(deseralizedValue.isEquals(Obj()))
+    func testBooleanV() {
+        assert(parse: "true", to: BooleanV(true))
+        assert(parse: "false", to: BooleanV(false))
     }
 
-
-    func testTs(){
-        let toDeserialize =  "{\"@ts\":\"1970-01-01T00:05:00Z\"}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        XCTAssert(deseralizedValue.isEquals(Timestamp(timeIntervalSince1970: 5.MIN)))
+    func testNullV() {
+        assert(parse: "null", to: NullV())
     }
 
-    func testDate(){
-        let toDeserialize = "{\"@date\":\"1970-01-03\"}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let date = FaunaDB.Date(iso8601: "1970-01-03")
-        XCTAssertNotNil(date)
-        XCTAssert(deseralizedValue.isEquals(date!))
+    func testArrayV() {
+        assert(
+            parse: "[1,2,\"a string\"]",
+            to: ArrayV([
+                LongV(1),
+                LongV(2),
+                StringV("a string")
+            ])
+        )
     }
 
-    func testBool(){
-        let toDeserialize = "{\"bool\": true}"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-         XCTAssert(deseralizedValue.isEquals(Obj(["bool": true])))
+    func testEmptyArray() {
+        assert(parse: "[]", to: ArrayV([]))
     }
 
-    func testArr(){
-        let toDeserialize = "[0, true, 1, false, \"Hi\", {\"@date\":\"1970-01-03\"}, {\"@ts\":\"1970-01-01T00:05:00Z\"}]"
-        let deseralizedValue = try! Mapper.fromString(toDeserialize)
-        let date = FaunaDB.Date(iso8601: "1970-01-03")
-        XCTAssertNotNil(date)
-        let arr = Arr(Double(0), true, Double(1), false, "Hi", date!,  Timestamp(timeIntervalSince1970: 5.MIN))
-        XCTAssert(deseralizedValue.isEquals(arr))
+    func testObjectV() {
+        assert(
+            parse: "{\"key1\":42,\"key2\":{\"inner\":\"value\"}}",
+            to: ObjectV([
+                "key1": LongV(42),
+                "key2": ObjectV([
+                    "inner": StringV("value")
+                ])
+            ])
+        )
+    }
+
+    func testLiteralObjectV() {
+        assert(
+            parse: "{\"@obj\":{\"@name\":\"Hen Wen\"}}",
+            to: ObjectV([
+                "@name": StringV("Hen Wen")
+            ])
+        )
+    }
+
+    func testEmptyObjectV() {
+        assert(parse: "{}", to: ObjectV([:]))
+    }
+
+    func testTimeV() {
+        assert(parse: "{\"@ts\":\"1970-01-01T00:05:00.000Z\"}",
+                to: TimeV(Date(timeIntervalSince1970: 5*60)))
+    }
+
+    func testInvalidTime() {
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ts\":\"abc\"}")) { error in
+            XCTAssertEqual("\(error)", "Invalid date \"abc\"")
+        }
+    }
+
+    func testDateV() {
+        assert(parse: "{\"@date\":\"1970-01-01\"}",
+                to: DateV(Date(timeIntervalSince1970: 0)))
+    }
+
+    func testInvalidDate() {
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@date\":\"abc\"}")) { error in
+            XCTAssertEqual("\(error)", "Invalid date \"abc\"")
+        }
+    }
+
+    func testRefV() {
+        assert(parse: "{\"@ref\":\"classes\\/spells\\/42\"}",
+                to: RefV("classes/spells/42"))
+    }
+
+    func testSetRefV() {
+        assert(
+            parse: "{\"@set\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}",
+            to: SetRefV([
+                "match": RefV("indexes/spells_by_element"),
+                "terms": StringV("fire")
+            ])
+        )
+    }
+
+    private func assert<T: Value & Equatable>(parse json: String, to expected: T) {
+        let assertd = try! JSON.parse(string: json)
+
+        guard let actual = assertd as? T else {
+            XCTFail("assertd JSON value type is different than expected type. Actual: \(assertd). Expected: \(expected)")
+            return
+        }
+
+        XCTAssertEqual(actual, expected)
+    }
+
+}
+
+fileprivate extension JSON {
+    static func parse(string: String) throws -> Value {
+        return try parse(data: string.data(using: .utf8)!)
     }
 }

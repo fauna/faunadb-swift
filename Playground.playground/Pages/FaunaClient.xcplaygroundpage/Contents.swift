@@ -4,8 +4,6 @@ import Foundation
 import FaunaDB
 import Result
 
-
-
 let ourClientSecret = "our_secret"
 var client = Client(secret: ourClientSecret, observers: [Logger()])
 

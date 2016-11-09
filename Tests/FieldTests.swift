@@ -1,224 +1,252 @@
-//
-//  ClientConfigurationTests.swift
-//  FaunaDBTests
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import XCTest
-import Nimble
+
 @testable import FaunaDB
 
-struct BlogPost {
+struct Pet {
     let name: String
-    let author: String
-    let content: String
-    let tags: [String]
-
-    init(name:String, author: String, content: String, tags: [String] = []){
-        self.name = name
-        self.author = author
-        self.content = content
-        self.tags = tags
-    }
-
-    var fId: String?
+    let age: Int?
 }
 
-extension BlogPost: ValueConvertible {
-
-    var value: Value {
-        return Obj([  "name": name,
-                "author": author,
-               "content": content,
-                  "tags": Arr(tags)])
+extension Pet {
+    init?(value: Value) throws {
+        self.name = try value.get("name")!
+        self.age = try value.get("age")
     }
 }
 
-extension BlogPost: DecodableValue {
-    static func decode(_ value: Value) -> BlogPost? {
-        return try? BlogPost(name: value.get(path: "name"), author: value.get(path: "author"), content: value.get(path: "content"))
+extension Pet: Equatable {
+    static func == (left: Pet, right: Pet) -> Bool {
+        return left.name == right.name && left.age == right.age
     }
 }
 
+class FieldTests: XCTestCase {
 
-class FieldTests: FaunaDBTests {
+    let data: Value = ObjectV([
+        "int": LongV(10),
+        "arr": ArrayV([
+            LongV(42),
+            ObjectV([
+                "int": LongV(25)
+            ])
+        ]),
+        "nested": ObjectV(["key": StringV("value")])
+    ])
 
-
-    func testStandaloneField() {
-        let arrField = Field<Int>(0)
-
-        let arr = Arr(3, "Hi", Ref("classes/my_class"))
-        let arrInt = try? arrField.get(arr)
-        expect(arrInt) ==  3
-        expect(try! arrField.get(arr)) == 3
-
-        let objField = Field<Int>("data", 0)
-        let obj = Obj(["data" : Arr(3, "Hi", Ref("classes/my_class"))])
-        let objInt = try? objField.get(obj)
-        expect(objInt) ==  3
-        expect(try! arrField.get(arr)) == 3
-
+    func testStringField() {
+        XCTAssertEqual(try! StringV("test").get(), "test")
     }
 
-
-    func testFieldErrors() {
-        let arrField = Field<Int>(0)
-        let objField = Field<Int>("data")
-        let obj = Obj(["name": "my_db_name"])
-        var arr = Arr(1, 2, 3)
-
-        XCTAssertThrows(error: FieldPathError.unexpectedType(value: obj, expectedType: Arr.self, path: [0])) { try _ = arrField.get(obj) }
-        XCTAssertThrows(error: FieldPathError.unexpectedType(value: arr, expectedType: Obj.self, path: ["data"])) { try _ = objField.get(arr) }
-
-        arr.removeAll()
-        XCTAssertThrows(error: FieldPathError.notFound(value: arr, path: [9])) { try _ = Field<Int>(9).get(arr) }
-        XCTAssertThrows(error: FieldPathError.notFound(value: obj, path: ["data"])) { try _ = objField.get(obj) }
+    func testIntField() {
+        XCTAssertEqual(try! LongV(10).get(), 10)
     }
 
-//    func testFieldComposition() {
-//        let obj = Obj(["name": "my_db_name"])
-//        let arr = Arr(0, 1, 2, obj, "FaunaDB")
-//
-//        let zip1: ((Value) -> (Int, Int)?) = FieldComposition.zip(field1: 0, field2: 2)
-//        let zip2: ((Value) -> (Int, Int, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
-//        let zip3: ((Value) -> (Int, Int, String, Obj)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-//        let zip4: ((Value) -> (Int, Int, String, Obj, String)?) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
-//
-//        let zip1R = zip1(arr)
-//        let zip2R = zip2(arr)
-//        let zip3R = zip3(arr)
-//        let zip4R = zip4(arr)
-//
-//        expect(zip1R).toNot(beNil())
-//        expect(zip2R).toNot(beNil())
-//        expect(zip3R).toNot(beNil())
-//        expect(zip4R).toNot(beNil())
-//        expect((0, 2) == zip1R!).to(beTrue())
-//        expect((0, 2, "my_db_name") == zip2R!).to(beTrue())
-//        expect((0, 2, "my_db_name", obj) == zip3R!).to(beTrue())
-//        expect((0, 2, "my_db_name", obj) == zip3R!).to(beTrue())
-//        expect((0, 2, "my_db_name", obj, "FaunaDB") == zip4R!).to(beTrue())
-//
-//
-//        var fieldLiteralR: Field<Int>? = "data"
-//        expect(fieldLiteralR).toNot(beNil())
-//        fieldLiteralR = 3
-//        expect(fieldLiteralR).toNot(beNil())
-//        fieldLiteralR = ["data", 3]
-//        expect(fieldLiteralR).toNot(beNil())
-//
-//
-//        let zip1T: ((Value) throws -> (Int, Int)) = FieldComposition.zip(field1: 0, field2: 2)
-//        let zip2T: ((Value) throws -> (Int, Int, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"])
-//        let zip3T: ((Value) throws -> (Int, Int, String, Obj)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-//        let zip4T: ((Value) throws -> (Int, Int, String, Obj, String)) = FieldComposition.zip(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
-//
-//
-//        let zip1TR: (Int, Int) = try! arr.get(fieldComposition: zip1T)
-//        let zip2TR: (Int, Int, String) = try! arr.get(fieldComposition: zip2T)
-//        let zip3TR: (Int, Int, String, Obj) = try! arr.get(fieldComposition: zip3T)
-//        let zip4TR: (Int, Int, String, Obj, String) = try! arr.get(fieldComposition: zip4T)
-//        expect(zip1TR == zip1R!).to(beTrue())
-//        expect(zip2TR == zip2R!).to(beTrue())
-//        expect(zip3TR == zip3R!).to(beTrue())
-//        expect(zip4TR == zip4R!).to(beTrue())
-//
-//
-//        let zip1FR: (Int, Int)? = arr.get(field1: 0, field2: 2)
-//        let zip2FR: (Int, Int, String)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"])
-//        let zip3FR: (Int, Int, String, Obj)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"], field4: 3)
-//        let zip4FR: (Int, Int, String, Obj, String)? = arr.get(field1: 0, field2: 2, field3: [3 , "name"], field4: 3, field5: 4)
-//        expect(zip1FR).toNot(beNil())
-//        expect(zip2FR).toNot(beNil())
-//        expect(zip3FR).toNot(beNil())
-//        expect(zip4FR).toNot(beNil())
-//        expect(zip1FR! == zip1R!).to(beTrue())
-//        expect(zip2FR! == zip2R!).to(beTrue())
-//        expect(zip3FR! == zip3R!).to(beTrue())
-//        expect(zip4FR! == zip4R!).to(beTrue())
-//    }
-
-
-    func testAtMehod() {
-        let field = Field<Int>("data", 3, "fauna")
-        let field2 = field.at(Field<String>("FaunaDB"))
-        expect(field2.path.count) == 4
-        expect(field2.path[3] as? String) == "FaunaDB"
+    func testDoubleField() {
+        XCTAssertEqual(try! DoubleV(10.2).get(), 10.2)
     }
 
-
-    func testField(){
-        var arr = Arr(1, 2, 3)
-        arr.append(Obj(["key": Ref("classes")]))
-        let field2 = Field<Ref>(3, "key")
-        let ref = try! field2.get(arr)
-        expect(ref) == Ref("classes")
-
-        let homogeneousArray = Arr(1, 2, 3)
-        let int: Int = try! homogeneousArray.get(path: 0)
-        expect(int) ==  1
-
-        let homogeneousArray2 = Arr("Hi", "Hi2")
-        let string: String = try! homogeneousArray2.get(path: 1)
-        expect(string) == "Hi2"
-
-        let homogeneousArray3 = Arr(Timestamp())
-        let timestamp: Timestamp? = homogeneousArray3.get(path: 0)
-        expect(timestamp).notTo(beNil())
-
-        let complexArr = Arr(3, 5, Obj(["test": Obj(["test2": Obj(["test3": Arr(1,2,3)])])]))
-        let int2: Int = try! complexArr.get(path: 2, "test", "test2", "test3", 0)
-        expect(int2) ==  1
+    func testBooleanField() {
+        XCTAssertEqual(try! BooleanV(true).get(), true)
     }
 
-
-    func testFieldUsingACustomDecodableValue(){
-        //MARK: DecodableValue
-        let blogField = Field<BlogPost>(0, "data")
-
-        let blogPostData = Obj(["name": "My Blog Post", "author": "FaunaDB Inc", "content": "My Content", "tags": Arr("DB", "Performance")])
-        let objContainingPost = Arr(Obj(["data" : blogPostData]))
-
-        let post: BlogPost? = objContainingPost.get(path: 0, "data")
-        expect(post?.name) == "My Blog Post"
-        expect(post?.author) == "FaunaDB Inc"
-        expect(post?.content) == "My Content"
-
-        // checking non-collection item using Field instance.
-        let post2: BlogPost? = blogField.getOptional(objContainingPost)
-        expect(post2?.name) == "My Blog Post"
-        expect(post2?.author) == "FaunaDB Inc"
-        expect(post2?.content) == "My Content"
-
-
-        let post3: BlogPost = try! blogField.get(objContainingPost)
-        expect(post3.name) == "My Blog Post"
-        expect(post3.author) == "FaunaDB Inc"
-        expect(post3.content) == "My Content"
-
-        // check decoding an array of a DecodableValue
-        let blogPostArr = Arr(Obj(["data": Arr(blogPostData, blogPostData, blogPostData, blogPostData, blogPostData)]))
-        let postArray: [BlogPost]? = blogPostArr.get(path: 0, "data")
-        expect(postArray?.count) == 5
-
-        // check collections using Fields
-
-        let postArray2: [BlogPost]? = blogField.collectOptional(blogPostArr)
-        expect(postArray2?.count) == 5
-        let postArray2C: [BlogPost]? = blogPostArr.get(field: [0, "data"])
-        expect(postArray2C?.count) == 5
-
-        let postArray3: [BlogPost] = try! blogField.collect(blogPostArr)
-        expect(postArray3.count) == 5
-
-
+    func testTimeField() {
+        let time = Date()
+        XCTAssertEqual(try! TimeV(time).get(), time)
     }
 
-//    func testFieldFromAValueConvertible(){
-//        let blogPost = BlogPost(name: "My Blogpost", author: "FaunaDB", content: "My content")
-//        expect(blogPost.get(field: "name")) == "My Blogpost"
-//        expect(blogPost.get(path: "author")) == "FaunaDB"
-//        expect(blogPost.get(field: Field("content"))) == "My content"
-//    }
+    func testDateField() {
+        let time = Date()
+        XCTAssertEqual(try! DateV(time).get(), time)
+    }
+
+    func testRefField() {
+        XCTAssertEqual(try! RefV("classes/users").get()!, RefV("classes/users"))
+    }
+
+    func testSetRefField() {
+        let value = SetRefV([
+            "match": RefV("indexes/all_spells")
+        ])
+
+        let set: SetRefV = try! value.get()!
+        XCTAssertEqual(try! set.value["match"]!.get()!, RefV("indexes/all_spells"))
+    }
+
+    func testNullField() {
+        let str: String? = try! NullV().get()
+        XCTAssertEqual(str, nil)
+    }
+
+    func testObjectField() {
+        let int = Field<Int>("int")
+        XCTAssertEqual(try! data.get(field: int), 10)
+    }
+
+    func testArrayField() {
+        let zero = Field<Int>("arr", 0)
+        XCTAssertEqual(try! data.get(field: zero), 42)
+    }
+
+    func testNestedFields() {
+        let int = Field<Int>("arr", 1, "int")
+        XCTAssertEqual(try! data.get(field: int), 25)
+        XCTAssertEqual(try! data.get("nested"), ["key": "value"])
+    }
+
+    func testFieldComposition() {
+        let field1 = Field<Int>("arr", 1, "int")
+        let field2 = Field<Int>("arr").at(field: Field<Int>(1, "int"))
+        let field3 = Field<Int>("arr").at(1).at("int")
+
+        XCTAssertEqual(try! data.get(field: field1) as Int?, try! data.get(field: field2) as Int?)
+        XCTAssertEqual(try! data.get(field: field1) as Int?, try! data.get(field: field3) as Int?)
+    }
+
+    func testValueField() {
+        let value: Value = try! data.get("arr", 1, "int")!
+        XCTAssertEqual(try! value.get(), 25)
+    }
+
+    func testCollectFields() {
+        let arr = ArrayV([
+            LongV(1),
+            LongV(2),
+            LongV(3)
+        ])
+
+        XCTAssertEqual(try! arr.collect(), [1, 2, 3])
+        XCTAssertEqual(try! arr.get(field: Field<Int>.collect(arrayOf: Field<Int>())), [1, 2, 3])
+    }
+
+    func testCollectFieldsAtNullValue() {
+        let arr = NullV()
+        XCTAssertEqual(try! arr.collect(), [Int]())
+    }
+
+    func testDictionaryFields() {
+        let obj = ObjectV([
+            "k1": LongV(1),
+            "k2": LongV(2),
+            "k3": LongV(3)
+        ])
+
+        XCTAssertEqual(try! obj.collect(), ["k1": 1, "k2": 2, "k3": 3])
+        XCTAssertEqual(try! obj.get(field: Field<Int>.collect(dictionaryOf: Field<Int>())), ["k1": 1, "k2": 2, "k3": 3])
+    }
+
+    func testDictionaryFieldsAtNullValue() {
+        XCTAssertEqual(try! NullV().collect(), [String: Int]())
+    }
+
+    func testMapField() {
+        let obj = ObjectV([
+            "name": StringV("Bob the cat"),
+            "age": LongV(5)
+        ])
+
+        XCTAssertEqual(try! obj.map(Pet.init)!, Pet(name: "Bob the cat", age: 5))
+    }
+
+    func testMapToNilIfNoValueToMap() {
+        let obj = ObjectV([
+            "name": NullV()
+        ])
+
+        let name: String? = try! obj.get(field: Field<String>("name").map { "Hi \($0)" })
+        XCTAssertNil(name)
+    }
+
+    func testTransverseToAValue() {
+        XCTAssertEqual(try! data.at("int").get()!, 10)
+        XCTAssertNil(try! data.at("non-existing-field").get(field: Field<Int>()))
+    }
+
+    func testFailOnInvalidField() {
+        let value = StringV("a string")
+
+        XCTAssertThrowsError(try (value.get() as Int?)) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at <root>: Can not decode value of type \"String\" to desired type \"Int\""
+            )
+        }
+    }
+
+    func testFailOnInvalidSegment() {
+        let value = ObjectV([
+            "not-object": StringV("a string"),
+            "not-array": StringV("a string")
+        ])
+
+        XCTAssertThrowsError(try (value.get("not-object", "key") as String?)) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at \"not-object\" / \"key\": " +
+                "Can not extract key \"key\" from non object value \"StringV\""
+            )
+        }
+
+        XCTAssertThrowsError(try (value.get("not-array", 1) as String?)) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at \"not-array\" / 1: " +
+                "Can not extract index 1 from non array value \"StringV\""
+            )
+        }
+    }
+
+    func testFailCollectingOnNonArrayValue() {
+        let value = StringV("a string")
+
+        XCTAssertThrowsError(try value.collect(arrayOf: Field<Value>())) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at <root>: " +
+                "Can not collect fields from non array type \"StringV\""
+            )
+        }
+    }
+
+    func testFailCollectingOnNonObjectValue() {
+        let value = StringV("a string")
+
+        XCTAssertThrowsError(try value.collect(dictionaryOf: Field<Value>())) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at <root>: " +
+                "Can not collect fields from non object type \"StringV\""
+            )
+        }
+    }
+
+    func testFailCollectingOnWrongType() {
+        let value = ArrayV([
+            StringV("aString"),
+            LongV(1)
+        ])
+
+        XCTAssertThrowsError(try value.collect(arrayOf: Field<String>())) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at <root>: " +
+                "Error at field 1: Can not decode value of type \"Int\" to desired type \"String\""
+            )
+        }
+    }
+
+    func testFailCollectingDictionaryOnWrongType() {
+        let value = ObjectV([
+            "key": StringV("value"),
+            "key2": LongV(2)
+        ])
+
+        XCTAssertThrowsError(try value.collect(dictionaryOf: Field<String>())) { error in
+            XCTAssertEqual(
+                "\(error)",
+                "Error while extracting field at <root>: " +
+                "Error at field \"key2\": Can not decode value of type \"Int\" to desired type \"String\""
+            )
+        }
+    }
+
 }
