@@ -38,7 +38,7 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     
@@ -54,7 +54,7 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr, Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr, Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     
@@ -70,7 +70,7 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr, Expr, Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     
@@ -87,7 +87,7 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr, Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr, Expr, Expr, Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     
@@ -104,7 +104,7 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr, Expr, Expr, Expr, Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr, Expr, Expr, Expr, Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
 }
@@ -140,7 +140,7 @@ public struct Foreach: Expr {
      
      - returns: A Foreach expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr)-> Expr) {
+    public init(collection: Expr, lambda: (Expr)-> Expr) {
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     
@@ -177,7 +177,7 @@ public struct Filter: Expr {
      
      - returns: A Filter expression.
      */
-    public init(collection: Expr, @noescape lambda: (Expr)-> Expr){
+    public init(collection: Expr, lambda: (Expr)-> Expr){
         self.init(collection: collection, lambda: Lambda(lambda: lambda))
     }
     

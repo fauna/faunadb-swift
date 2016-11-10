@@ -24,7 +24,7 @@ public struct Obj: Value {
         self.dictionary = dictionary
     }
 
-    public init<V: ValueConvertible>(_ dictionary: [String: V]){
+    public init<V: ValueConvertible>(dict dictionary: [String: V]){
         var res = [String: ValueConvertible]()
         dictionary.forEach { k, v in res[k] = v }
         self.dictionary = res
@@ -37,7 +37,7 @@ public struct Obj: Value {
     init?(json: [String: AnyObject]){
         var dictionary = [String: ValueConvertible]()
         var json = json
-        if let objData = json["@obj"] as? [String: AnyObject] where json.count == 1 {
+        if let objData = json["@obj"] as? [String: AnyObject], json.count == 1 {
             json = objData
         }
         do {
@@ -65,16 +65,16 @@ extension Obj: Encodable {
             result[keyValue.0] = keyValue.1.toJSON()
         }
         if !fn {
-            result = ["object": result]
+            result = ["object": result as AnyObject]
         }
-        return result
+        return result as AnyObject
     }
 }
 
 extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
 
     public var description: String{
-        return "Obj(\(dictionary.map { "\($0.0): \($0.1)" }.joinWithSeparator(", ")))"
+        return "Obj(\(dictionary.map { "\($0.0): \($0.1)" }.joined(separator: ", ")))"
     }
 
     public var debugDescription: String{
@@ -82,34 +82,49 @@ extension Obj: CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
-extension Obj: CollectionType {
+extension Obj: Collection {
+    
     public typealias Element = (String, ValueConvertible)
     public typealias Index = DictionaryIndex<String, ValueConvertible>
 
     /// Create an empty dictionary.
-    public init(){}
+    public init() {}
 
-    public var startIndex: Index { return dictionary.startIndex }
-    public var endIndex: Index { return dictionary.endIndex }
-    public func indexForKey(key: String) -> Index? {
-        return dictionary.indexForKey(key)
+    public var startIndex: Index {
+        return dictionary.startIndex
     }
+    
+    public var endIndex: Index {
+        return dictionary.endIndex
+    }
+    
+    public func indexForKey(_ key: String) -> Index? {
+        return dictionary.index(forKey: key)
+    }
+    
     public subscript (position: Index) -> Element {
         return dictionary[position]
     }
+    
     public subscript (key: String) -> ValueConvertible? {
-        get{ return dictionary[key] }
         set(newValue) { dictionary[key] = newValue }
+        get{ return dictionary[key] }
     }
 
-    public mutating func updateValue(value: ValueConvertible, forKey key: String) -> ValueConvertible?{
+    public mutating func updateValue(_ value: ValueConvertible, forKey key: String) -> ValueConvertible? {
         return dictionary.updateValue(value, forKey: key)
     }
-    public mutating func removeAtIndex(index: Index) -> Element {
-        return dictionary.removeAtIndex(index)
+    
+    public mutating func removeAtIndex(_ index: Index) -> Element {
+        return dictionary.remove(at: index)
     }
-    public mutating func removeValueForKey(key: String) -> ValueConvertible?{
-        return dictionary.removeValueForKey(key)
+    
+    public mutating func removeValueForKey(_ key: String) -> ValueConvertible? {
+        return dictionary.removeValue(forKey: key)
+    }
+    
+    public func index(after i: DictionaryIndex<String, ValueConvertible>) -> DictionaryIndex<String, ValueConvertible> {
+        return dictionary.index(after: i)
     }
 }
 
@@ -120,7 +135,7 @@ extension Obj: Equatable {}
 public func ==(lhs: Obj, rhs: Obj) -> Bool {
     guard lhs.count == rhs.count else { return false }
     for (key, value) in lhs {
-        guard let rValue = rhs[key] where value.value.isEquals(rValue.value) else { return false }
+        guard let rValue = rhs[key], value.value.isEquals(rValue.value) else { return false }
     }
     return true
 }

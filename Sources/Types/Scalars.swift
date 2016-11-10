@@ -11,7 +11,7 @@ extension Int: ScalarValue{}
 extension Int: Encodable {
 
     func toJSON() -> AnyObject {
-        return self
+        return self as AnyObject
     }
 }
 
@@ -19,7 +19,7 @@ extension Double: ScalarValue{}
 extension Double: Encodable {
 
     func toJSON() -> AnyObject {
-        return self
+        return self as AnyObject
     }
 }
 
@@ -27,7 +27,7 @@ extension String: ScalarValue{}
 extension String: Encodable {
 
     func toJSON() -> AnyObject {
-        return self
+        return self as AnyObject
     }
 }
 
@@ -35,7 +35,7 @@ extension Bool: ScalarValue{}
 extension Bool: Encodable {
 
     func toJSON() -> AnyObject {
-        return self
+        return self as AnyObject
     }
 }
 

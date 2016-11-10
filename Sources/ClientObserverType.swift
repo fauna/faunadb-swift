@@ -9,8 +9,8 @@ import Foundation
 
 public protocol ClientObserverType {
 
-    func willSendRequest(request: NSURLRequest, session: NSURLSession)
-    func didReceiveResponse(response: NSURLResponse?, data: NSData?, error: NSError?, request: NSURLRequest?)
+    func willSendRequest(_ request: URLRequest, session: URLSession)
+    func didReceiveResponse(_ response: URLResponse?, data: Data?, error: NSError?, request: URLRequest?)
 }
 
 
@@ -18,25 +18,25 @@ public struct Logger: ClientObserverType {
 
     public init() {}
 
-    public func willSendRequest(request: NSURLRequest, session: NSURLSession){
+    public func willSendRequest(_ request: URLRequest, session: URLSession){
         print(request.cURLRepresentation(session))
     }
 
-    public func didReceiveResponse(response: NSURLResponse?, data: NSData?, error: NSError?, request: NSURLRequest?) {
+    public func didReceiveResponse(_ response: URLResponse?, data: Data?, error: NSError?, request: URLRequest?) {
         if let error = error {
             print("\nRESPONSE ERROR: \(error)")
         }
-        if let response = response as? NSHTTPURLResponse {
+        if let response = response as? HTTPURLResponse {
             print("\nRESPONSE STATUS: \(response.statusCode)")
         }
         if let data = data {
-            if let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) where NSJSONSerialization.isValidJSONObject(jsonData){
+            if let jsonData = try? JSONSerialization.jsonObject(with: data, options: .allowFragments), JSONSerialization.isValidJSONObject(jsonData){
                 print("\nRESPONSE DATA:")
-                print("\n\(prettyJSON(jsonData))")
+                print("\n\(prettyJSON(jsonData as AnyObject))")
             }
             else {
                 print("\nRESPONSE RAW DATA (NOT A VALID JSON):")
-                print("\n\(String(data: data, encoding: NSUTF8StringEncoding))")
+                print("\n\(String(data: data, encoding: String.Encoding.utf8))")
 
             }
         }
@@ -46,60 +46,60 @@ public struct Logger: ClientObserverType {
     }
 
 
-    private func prettyJSON(value: AnyObject, prettyPrinted: Bool = true) -> String {
-        guard let prettyData = try? NSJSONSerialization.dataWithJSONObject(value, options: prettyPrinted ? NSJSONWritingOptions.PrettyPrinted : []), string = NSString(data: prettyData, encoding: NSUTF8StringEncoding) else{
+    fileprivate func prettyJSON(_ value: AnyObject, prettyPrinted: Bool = true) -> String {
+        guard let prettyData = try? JSONSerialization.data(withJSONObject: value, options: prettyPrinted ? JSONSerialization.WritingOptions.prettyPrinted : []), let string = NSString(data: prettyData, encoding: String.Encoding.utf8.rawValue) else{
             return String()
         }
         return string as String
     }
 }
 
-extension NSURLRequest {
+extension URLRequest {
 
-    func cURLRepresentation(session: NSURLSession) -> String {
+    func cURLRepresentation(_ session: URLSession) -> String {
         var components = ["\n$ curl -i"]
 
         guard let
-            URL = URL,
-            host = URL.host
+            URL = url,
+            let host = URL.host
             else {
                 return "$ curl command could not be created"
         }
 
-        if let HTTPMethod = HTTPMethod where HTTPMethod != "GET" {
+        if let HTTPMethod = httpMethod, HTTPMethod != "GET" {
             components.append("-X \(HTTPMethod)")
         }
 
-        if let credentialStorage =  session.configuration.URLCredentialStorage {
-            let protectionSpace = NSURLProtectionSpace(
+        if let credentialStorage =  session.configuration.urlCredentialStorage {
+            let protectionSpace = URLProtectionSpace(
                 host: host,
-                port: URL.port?.integerValue ?? 0,
+                port: (URL as NSURL).port?.intValue ?? 0,
                 protocol: URL.scheme,
                 realm: host,
                 authenticationMethod: NSURLAuthenticationMethodHTTPBasic
             )
 
-            if let credentials = credentialStorage.credentialsForProtectionSpace(protectionSpace)?.values {
+            if let credentials = credentialStorage.credentials(for: protectionSpace)?.values {
                 for credential in credentials {
                     components.append("-u \(credential.user!):\(credential.password!)")
                 }
             }
         }
 
-        if session.configuration.HTTPShouldSetCookies {
+        if session.configuration.httpShouldSetCookies {
             if let
-                cookieStorage = session.configuration.HTTPCookieStorage,
-                cookies = cookieStorage.cookiesForURL(URL) where !cookies.isEmpty
+                cookieStorage = session.configuration.httpCookieStorage,
+                let cookies = cookieStorage.cookies(for: URL), !cookies.isEmpty
             {
-                let string = cookies.reduce("") { $0 + "\($1.name)=\($1.value ?? String());" }
-                components.append("-b \"\(string.substringToIndex(string.endIndex.predecessor()))\"")
+                let string = cookies.reduce("") { $0 + "\($1.name)=\($1.value);" }
+                components.append("-b \"\(string.substring(to: string.characters.index(before: string.endIndex)))\"")
             }
         }
 
-        var headers: [NSObject: AnyObject] = [:]
+        var headers: [AnyHashable: Any] = [:]
 
-        if let additionalHeaders = session.configuration.HTTPAdditionalHeaders {
-            for (field, value) in additionalHeaders where field != "Cookie" {
+        if let additionalHeaders = session.configuration.httpAdditionalHeaders {
+            for (field, value) in additionalHeaders where field as! String != "Cookie" {
                 headers[field] = value
             }
         }
@@ -111,22 +111,22 @@ extension NSURLRequest {
         }
 
         for (field, value) in headers {
-            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field ? value : "Basic <hidden>")\"")
+            components.append("-H \"\(field): \(ClientHeaders.Authorization.rawValue != field as! String ? value : "Basic <hidden>")\"")
         }
 
         if let
-            HTTPBodyData = HTTPBody,
-            HTTPBody = String(data: HTTPBodyData, encoding: NSUTF8StringEncoding)
+            HTTPBodyData = httpBody,
+            let HTTPBody = String(data: HTTPBodyData, encoding: String.Encoding.utf8)
         {
-            var escapedBody = HTTPBody.stringByReplacingOccurrencesOfString("\\\"", withString: "\\\\\"")
-            escapedBody = escapedBody.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+            var escapedBody = HTTPBody.replacingOccurrences(of: "\\\"", with: "\\\\\"")
+            escapedBody = escapedBody.replacingOccurrences(of: "\"", with: "\\\"")
 
             components.append("-d \"\(escapedBody)\"")
         }
 
         components.append("\"\(URL.absoluteString)\"")
 
-        return components.joinWithSeparator(" \\\n\t")
+        return components.joined(separator: " \\\n\t")
     }
 
 }

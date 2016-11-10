@@ -12,16 +12,16 @@ import Nimble
 class FaunaDBTests: XCTestCase {
     
     private static var secret: String {
-        if let envVarKey = NSProcessInfo.processInfo().environment["FAUNA_ROOT_KEY"] where !envVarKey.isEmpty {
+        if let envVarKey = ProcessInfo.processInfo.environment["FAUNA_ROOT_KEY"], !envVarKey.isEmpty {
             return envVarKey
         }
         else {
-            return "HARDCODED_FAUNA_KEY"
+            return "secret"
         }
     }
 
     lazy var client: Client = {
-        return Client(secret: FaunaDBTests.secret, endpoint: NSURL(string: "https://cloud.faunadb.com")!)
+        return Client(secret: FaunaDBTests.secret, endpoint: URL(string: "https://localhost:8443")!)
     }()
 
     let testDbName = "faunadb-swift-test-\(arc4random())"
@@ -39,31 +39,35 @@ class FaunaDBTests: XCTestCase {
 
     // MARK: Helpers
 
-    func await(expr: Expr) -> Value? {
+    func await(_ expr: Expr) -> Value? {
         var res: Value?
+        
         waitUntil(timeout: 10) { [weak self] done in
-            self?.client.query(expr) { result in
+            _ = self?.client.query(expr) { result in
                 res = try? result.dematerialize()
                 done()
             }
         }
+        
         return res
     }
 
-    func awaitError(expr: Expr) -> Error? {
-        var res: Error?
+    func awaitError(_ expr: Expr) -> FaunaError? {
+        var res: FaunaError?
+        
         waitUntil(timeout: 10) { [weak self] done in
-            self?.client.query(expr) { result in
+            _ = self?.client.query(expr) { result in
                 res = result.error
                 done()
             }
         }
+        
         return res
     }
 
 }
 
-func XCTAssertThrows<T: ErrorType where T: Equatable>(error: T, block: () throws -> ()) {
+func XCTAssertThrows<T: Error>(error: T, block: () throws -> ()) where T: Equatable {
     do {
         try block()
     }
@@ -78,26 +82,26 @@ func XCTAssertThrows<T: ErrorType where T: Equatable>(error: T, block: () throws
 extension ValueConvertible {
 
     var jsonString: String {
-        let data = try! NSJSONSerialization.dataWithJSONObject(toJSON(), options: [])
-        return String(data: data, encoding: NSUTF8StringEncoding) ?? ""
+        let data = try! JSONSerialization.data(withJSONObject: toJSON(), options: [])
+        return String(data: data, encoding: String.Encoding.utf8) ?? ""
     }
 }
 
 extension Mapper {
-    static func fromString(strData: String) throws -> Value {
-        let data = strData.dataUsingEncoding(NSUTF8StringEncoding)
-        let jsonData: AnyObject = try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+    static func fromString(_ strData: String) throws -> Value {
+        let data = strData.data(using: String.Encoding.utf8)
+        let jsonData: AnyObject = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as AnyObject
         return try Mapper.fromData(jsonData)
     }
 }
 
 extension Int {
-    var MIN: NSTimeInterval { return Double(self) * 60 }
-    var SEC: NSTimeInterval { return Double(self) }
+    var MIN: TimeInterval { return Double(self) * 60 }
+    var SEC: TimeInterval { return Double(self) }
 }
 
-@warn_unused_result(message="Follow 'expect(…)' with '.to(…)', '.toNot(…)', 'toEventually(…)', '==', etc.")
-public func expectToJson<T: ValueConvertible>(@autoclosure(escaping) expression: () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
+
+public func expectToJson<T: ValueConvertible>(_ expression: @autoclosure @escaping () throws -> T?, file: Nimble.FileString = #file, line: UInt = #line) -> Nimble.Expectation<String>{
     return try expect(expression()?.jsonString)
 }
 
@@ -107,68 +111,51 @@ struct Fields {
     static let secret = Field<String>("secret")
 }
 
-extension CollectionType where Index.Distance == Int{
-
-
-    public var sample: Self.Generator.Element? {
-        if !isEmpty {
-            let randomIndex = startIndex.advancedBy(Int(arc4random_uniform(UInt32(count))))
-            return self[randomIndex]
-        }
-        return nil
+extension String {
+    
+    public static func random(length: Int) -> String {
+        return randomSample(source: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", length: length)
     }
-
-    public func sample(size size: Int) -> [Self.Generator.Element]? {
-
-        if !self.isEmpty {
-            var sampleElements: [Self.Generator.Element] = []
-
-            for _ in 1...size {
-                sampleElements.append(sample!)
-            }
-            return sampleElements
-        }
-        return nil
+    
+    public static func random(nums length: Int) -> String {
+        return randomSample(source: "123456789", length: length)
     }
-
-
+    
+    private static func randomSample(source: String, length: Int) -> String {
+        var res = ""
+        
+        for _ in 0 ..< length {
+            let rand = arc4random_uniform(UInt32(source.characters.count))
+            res += "\(source[source.index(source.startIndex, offsetBy: IndexDistance(rand))])"
+        }
+        
+        return res
+    }
+    
 }
 
 
-extension String{
+extension FaunaError {
 
-    public init(randomWithLength length: Int) {
-        self.init("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".characters.sample(size: length)!)
-
-    }
-
-    public init(randomNumWithLength length: Int) {
-        self.init(["123456789".characters.sample!] + "0123456789".characters.sample(size: length - 1)!)
-    }
-}
-
-
-extension Error {
-
-    public func equalType(other: Error) -> Bool {
+    public func equalType(_ other: FaunaError) -> Bool {
         switch (self, other) {
-        case (.UnavailableException(_, _), .UnavailableException(_, _)):
+        case (.unavailableException(_, _), .unavailableException(_, _)):
             return true
-        case (.BadRequestException(_, _), .BadRequestException(_, _)):
+        case (.badRequestException(_, _), .badRequestException(_, _)):
             return true
-        case (.NotFoundException(_, _), .NotFoundException(_, _)):
+        case (.notFoundException(_, _), .notFoundException(_, _)):
             return true
-        case (.UnauthorizedException(_, _), .UnauthorizedException(_, _)):
+        case (.unauthorizedException(_, _), .unauthorizedException(_, _)):
             return true
-        case (.UnknownException(_, _, _), .UnknownException(_, _, _)):
+        case (.unknownException(_, _, _), .unknownException(_, _, _)):
             return true
-        case (.InternalException(_, _, _), .InternalException(_, _, _)):
+        case (.internalException(_, _, _), .internalException(_, _, _)):
             return true
-        case (.NetworkException(_, _, _), .NetworkException(_, _, _)):
+        case (.networkException(_, _, _), .networkException(_, _, _)):
             return true
-        case (.DriverException(_, _), .DriverException(_, _)):
+        case (.driverException(_, _), .driverException(_, _)):
             return true
-        case (.UnparsedDataException(_, _), .UnparsedDataException(_, _)):
+        case (.unparsedDataException(_, _), .unparsedDataException(_, _)):
             return true
         default:
             return false

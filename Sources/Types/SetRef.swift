@@ -16,7 +16,7 @@ public struct SetRef: ScalarValue {
     }
 
     init?(json: [String: AnyObject]){
-        guard let jsonData = json["@set"] where json.count == 1 else { return nil }
+        guard let jsonData = json["@set"], json.count == 1 else { return nil }
         guard let param = try? Mapper.fromData(jsonData) else { return nil }
         self.init(param)
     }

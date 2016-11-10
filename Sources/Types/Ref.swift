@@ -20,7 +20,7 @@ public struct Ref: ScalarValue {
     }
 
     init?(json: [String: AnyObject]){
-        guard let ref = json["@ref"] as? String where json.count == 1 else { return nil }
+        guard let ref = json["@ref"] as? String, json.count == 1 else { return nil }
         self.init(ref)
     }
 }
@@ -42,7 +42,7 @@ extension Ref: Encodable {
     //MARK: Encodable
 
     func toJSON() -> AnyObject {
-        return ["@ref": ref.toJSON()]
+        return ["@ref": ref.toJSON()] as AnyObject
     }
 }
 
