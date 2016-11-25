@@ -2,7 +2,9 @@ import Foundation
 
 internal struct Errors {
 
-    private static let errorField = Field<Value>("errors").collect(arrayOf: Field.map(QueryError.init))
+    private static let errorField = Fields.at("errors").collect(arrayOf:
+        Fields.map(QueryError.init)
+    )
 
     static func errorFor(response: HTTPURLResponse, json: Data) -> FaunaError? {
         guard !(200 ..< 300 ~= response.statusCode) else { return nil }
@@ -149,15 +151,18 @@ public struct QueryError {
 
 extension QueryError {
 
-    private static let positionToString: Field<String> = Field<Value>.map { value in
-        guard let long = value as? LongV else {
-            return try value.get()
+    private static let positionField = Fields.at("position").collect(arrayOf:
+        Fields.map { value -> String? in
+            guard let long = value as? LongV else {
+                return try value.get()
+            }
+            return String(long.value)
         }
-        return String(long.value)
-    }
+    )
 
-    private static let positionField = Field<Value>("position").collect(arrayOf: positionToString)
-    private static let failuresField = Field<Value>("failures").collect(arrayOf: Field.map(ValidationFailure.init))
+    private static let failuresField = Fields.at("failures").collect(arrayOf:
+        Fields.map(ValidationFailure.init)
+    )
 
     fileprivate init?(value: Value) throws {
         try self.init(

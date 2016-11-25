@@ -115,7 +115,7 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! arr.collect(), [1, 2, 3])
-        XCTAssertEqual(try! arr.get(field: Field<Int>.collect()), [1, 2, 3])
+        XCTAssertEqual(try! arr.get(field: Fields.collect()), [1, 2, 3])
     }
 
     func testCollectFieldsAtNullValue() {
@@ -131,23 +131,24 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! obj.collect(), ["k1": 1, "k2": 2, "k3": 3])
-        XCTAssertEqual(try! obj.get(field: Field<Int>.collect()), ["k1": 1, "k2": 2, "k3": 3])
+        XCTAssertEqual(try! obj.get(field: Fields.collect()), ["k1": 1, "k2": 2, "k3": 3])
     }
 
     func testDictionaryFieldsAtNullValue() {
         XCTAssertEqual(try! NullV().collect(), [String: Int]())
     }
 
-    func testMapField() {
+    func testMapToAType() {
         let obj = ObjectV([
             "name": StringV("Bob the cat"),
             "age": LongV(5)
         ])
 
         XCTAssertEqual(try! obj.map(Pet.init)!, Pet(name: "Bob the cat", age: 5))
+        XCTAssertEqual(try! obj.get(field: Fields.map(Pet.init))!, Pet(name: "Bob the cat", age: 5))
     }
 
-    func testIgnoreNullVOnMap() {
+    func testIgnoreNullVWhenMapping() {
         XCTAssertNil(try! NullV().map(Pet.init))
     }
 
@@ -162,6 +163,7 @@ class FieldTests: XCTestCase {
 
     func testTransverseToAValue() {
         XCTAssertEqual(try! data.at("int").get()!, 10)
+        XCTAssertEqual(try! data.get(field: Fields.at("int"))!.get()!, 10)
         XCTAssertNil(try! data.at("non-existing-field").get(field: Field<Int>()))
     }
 
