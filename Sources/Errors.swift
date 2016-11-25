@@ -153,10 +153,7 @@ extension QueryError {
 
     private static let positionField = Fields.at("position").collect(arrayOf:
         Fields.map { value -> String? in
-            guard let long = value as? LongV else {
-                return try value.get()
-            }
-            return String(long.value)
+            "\(value)"
         }
     )
 
@@ -198,9 +195,16 @@ public struct ValidationFailure {
 }
 
 extension ValidationFailure {
+
+    private static let fieldAsString = Fields.at("field").collect(arrayOf:
+        Fields.map { value -> String? in
+            "\(value)"
+        }
+    )
+
     init?(value: Value) throws {
         try self.init(
-            field: value.get("field"),
+            field: value.get(field: ValidationFailure.fieldAsString),
             code: value.get("code"),
             description: value.get("description")
         )
