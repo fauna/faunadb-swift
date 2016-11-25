@@ -13,7 +13,7 @@ internal class Latch<T> {
 
     func await(timeout: DispatchTime) throws -> T {
         if case .timedOut = lock.wait(timeout: timeout) { throw LatchTimeout() }
-        guard let value = value else { fatalError("Latch released without with no value set") }
+        guard let value = value else { fatalError("Latch released with no value set") }
         return try value.unwrap()
     }
 }
