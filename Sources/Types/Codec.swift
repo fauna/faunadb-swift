@@ -30,12 +30,13 @@ extension DecodeError: CustomStringConvertible {
 fileprivate struct NativeTypesCodec: Codec {
 
     func decode<T>(value: Value) throws -> T? {
+        guard !(value is NullV) else { return nil }
+
         if let coerced = value as? T {
             return coerced
         }
 
         switch value {
-        case is NullV:             return nil
         case let str as StringV:   return try cast(str.value)
         case let num as LongV:     return try cast(num.value)
         case let num as DoubleV:   return try cast(num.value)
