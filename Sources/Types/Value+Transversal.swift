@@ -39,15 +39,15 @@ extension Value {
     }
 
     public func get<T>(path: [Segment]) throws -> [T] {
-        return try at(path: path).collect(arrayOf: Field())
+        return try at(path: path).get(asArrayOf: Field())
     }
 
     public func get<T>(field: Field<[T]>) throws -> [T] {
         return try field.get(from: self) ?? [T]()
     }
 
-    public func collect<T>(arrayOf field: Field<T>) throws -> [T] {
-        return try get(field: rootField.collect(arrayOf: field))
+    public func get<T>(asArrayOf field: Field<T>) throws -> [T] {
+        return try get(field: rootField.get(asArrayOf: field))
     }
 
 }
@@ -59,15 +59,15 @@ extension Value {
     }
 
     public func get<T>(path: [Segment]) throws -> [String: T] {
-        return try at(path: path).collect(dictionaryOf: Field())
+        return try at(path: path).get(asDictionaryOf: Field())
     }
 
     public func get<T>(field: Field<[String: T]>) throws -> [String: T] {
         return try field.get(from: self) ?? [String: T]()
     }
 
-    public func collect<T>(dictionaryOf field: Field<T>) throws -> [String: T] {
-        return try get(field: rootField.collect(dictionaryOf: field))
+    public func get<T>(asDictionaryOf field: Field<T>) throws -> [String: T] {
+        return try get(field: rootField.get(asDictionaryOf: field))
     }
 
 }

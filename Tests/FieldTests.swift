@@ -119,7 +119,7 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! arr.get(), [1, 2, 3])
-        XCTAssertEqual(try! arr.get(field: Fields.collect(arrayOf: Field<Int>())), [1, 2, 3])
+        XCTAssertEqual(try! arr.get(field: Fields.get(asArrayOf: Field<Int>())), [1, 2, 3])
     }
 
     func testCollectFieldsAtNullValue() {
@@ -135,7 +135,7 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! obj.get(), ["k1": 1, "k2": 2, "k3": 3])
-        XCTAssertEqual(try! obj.get(field: Fields.collect(dictionaryOf: Field<Int>())), ["k1": 1, "k2": 2, "k3": 3])
+        XCTAssertEqual(try! obj.get(field: Fields.get(asDictionaryOf: Field<Int>())), ["k1": 1, "k2": 2, "k3": 3])
     }
 
     func testDictionaryFieldsAtNullValue() {
@@ -173,7 +173,7 @@ class FieldTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            try! arr.collect(arrayOf: Fields.flatMap(Pet.init)),
+            try! arr.get(asArrayOf: Fields.flatMap(Pet.init)),
             [Pet(name: "Bob the cat", age: 5)]
         )
     }
@@ -234,7 +234,7 @@ class FieldTests: XCTestCase {
     func testFailCollectingOnNonArrayValue() {
         let value = StringV("a string")
 
-        XCTAssertThrowsError(try value.collect(arrayOf: Field<Value>())) { error in
+        XCTAssertThrowsError(try value.get(asArrayOf: Field<Value>())) { error in
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +
@@ -246,7 +246,7 @@ class FieldTests: XCTestCase {
     func testFailCollectingOnNonObjectValue() {
         let value = StringV("a string")
 
-        XCTAssertThrowsError(try value.collect(dictionaryOf: Field<Value>())) { error in
+        XCTAssertThrowsError(try value.get(asDictionaryOf: Field<Value>())) { error in
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +
@@ -261,7 +261,7 @@ class FieldTests: XCTestCase {
             LongV(1)
         ])
 
-        XCTAssertThrowsError(try value.collect(arrayOf: Field<String>())) { error in
+        XCTAssertThrowsError(try value.get(asArrayOf: Field<String>())) { error in
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +
@@ -276,7 +276,7 @@ class FieldTests: XCTestCase {
             "key2": LongV(2)
         ])
 
-        XCTAssertThrowsError(try value.collect(dictionaryOf: Field<String>())) { error in
+        XCTAssertThrowsError(try value.get(asDictionaryOf: Field<String>())) { error in
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +

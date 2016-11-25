@@ -2,7 +2,7 @@ import Foundation
 
 internal struct Errors {
 
-    private static let errorField = Fields.at("errors").collect(arrayOf:
+    private static let errorField = Fields.at("errors").get(asArrayOf:
         Fields.map(QueryError.init)
     )
 
@@ -151,13 +151,13 @@ public struct QueryError {
 
 extension QueryError {
 
-    private static let positionField = Fields.at("position").collect(arrayOf:
+    private static let positionField = Fields.at("position").get(asArrayOf:
         Fields.map { value in
             "\(value)"
         }
     )
 
-    private static let failuresField = Fields.at("failures").collect(arrayOf:
+    private static let failuresField = Fields.at("failures").get(asArrayOf:
         Fields.map(ValidationFailure.init)
     )
 
@@ -196,7 +196,7 @@ public struct ValidationFailure {
 
 extension ValidationFailure {
 
-    private static let fieldAsString = Fields.at("field").collect(arrayOf:
+    private static let fieldAsString = Fields.at("field").get(asArrayOf:
         Fields.map { value in
             "\(value)"
         }
