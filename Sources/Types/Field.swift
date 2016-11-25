@@ -53,7 +53,11 @@ extension Field {
     }
 
     public func map<A>(_ f: @escaping (T) throws -> A) -> Field<A> {
-        return Field<A>(path: path, codec: ApplyFunction<T, A>(codec: codec, fn: f))
+        return Field<A>(path: path, codec: MapFunction<T, A>(codec: codec, fn: f))
+    }
+
+    public func flatMap<A>(_ f: @escaping (T) throws -> A?) -> Field<A> {
+        return Field<A>(path: path, codec: FlatMapFunction<T, A>(codec: codec, fn: f))
     }
 
 }
@@ -77,7 +81,11 @@ public struct Fields {
     }
 
     public static func map<A>(_ f: @escaping (Value) throws -> A) -> Field<A> {
-        return Field(path: Path.root, codec: ApplyFunction<Value, A>(codec: defaultCodec, fn: f))
+        return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: f))
+    }
+
+    public static func flatMap<A>(_ f: @escaping (Value) throws -> A?) -> Field<A> {
+        return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: f))
     }
 
 }
@@ -167,14 +175,27 @@ fileprivate struct DictionaryFieds<E>: Collect {
     }
 }
 
-fileprivate struct ApplyFunction<IN, OUT>: Codec {
-
+fileprivate struct MapFunction<IN, OUT>: Codec {
     let codec: Codec
     let fn: (IN) throws -> OUT
 
     func decode<T>(value: Value) throws -> T? {
         guard let input: IN = try codec.decode(value: value) else { return nil }
         return try cast(fn(input))
+    }
+}
+
+fileprivate struct FlatMapFunction<IN, OUT>: Codec {
+    let codec: Codec
+    let fn: (IN) throws -> OUT?
+
+    func decode<T>(value: Value) throws -> T? {
+        guard
+            let input: IN = try codec.decode(value: value),
+            let output = try fn(input)
+            else { return nil }
+
+        return try cast(output)
     }
 }
 

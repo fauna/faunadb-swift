@@ -73,7 +73,13 @@ extension Value {
 }
 
 extension Value {
+
     public func map<T>(_ f: @escaping (Value) throws -> T) throws -> T? {
         return try get(field: rootField.map(f))
     }
+
+    public func flatMap<T>(_ f: @escaping (Value) throws -> T?) throws -> T? {
+        return try get(field: rootField.flatMap(f))
+    }
+
 }

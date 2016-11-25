@@ -8,8 +8,12 @@ struct Pet {
 }
 
 extension Pet {
-    init(value: Value) throws {
-        self.name = try value.get("name")!
+    init?(value: Value) throws {
+        guard
+            let name: String = try value.get("name")
+            else { return nil }
+
+        self.name = name
         self.age = try value.get("age")
     }
 }
@@ -144,8 +148,34 @@ class FieldTests: XCTestCase {
             "age": LongV(5)
         ])
 
-        XCTAssertEqual(try! obj.map(Pet.init), Pet(name: "Bob the cat", age: 5))
+        XCTAssertEqual(try! obj.map(Pet.init)!, Pet(name: "Bob the cat", age: 5))
         XCTAssertEqual(try! obj.get(field: Fields.map(Pet.init))!, Pet(name: "Bob the cat", age: 5))
+    }
+
+    func testFlatMapToAType() {
+        let arr = ArrayV([
+            NullV(),
+            ObjectV(["name": StringV("Bob the cat"), "age": LongV(5)]),
+            ObjectV(["age": LongV(5)])
+        ])
+
+        XCTAssertNil(try! arr.at(0).flatMap(Pet.init))
+        XCTAssertNil(try! arr.at(0).get(field: Fields.flatMap(Pet.init)))
+
+        XCTAssertEqual(
+            try! arr.at(1).flatMap(Pet.init),
+            Pet(name: "Bob the cat", age: 5)
+        )
+
+        XCTAssertEqual(
+            try! arr.at(1).get(field: Fields.flatMap(Pet.init)),
+            Pet(name: "Bob the cat", age: 5)
+        )
+
+        XCTAssertEqual(
+            try! arr.collect(arrayOf: Fields.flatMap(Pet.init)),
+            [Pet(name: "Bob the cat", age: 5)]
+        )
     }
 
     func testIgnoreNullVWhenMapping() {
