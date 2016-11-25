@@ -152,7 +152,7 @@ public struct QueryError {
 extension QueryError {
 
     private static let positionField = Fields.at("position").collect(arrayOf:
-        Fields.map { value -> String? in
+        Fields.map { value in
             "\(value)"
         }
     )
@@ -161,7 +161,7 @@ extension QueryError {
         Fields.map(ValidationFailure.init)
     )
 
-    fileprivate init?(value: Value) throws {
+    fileprivate init(value: Value) throws {
         try self.init(
             position: value.get(field: QueryError.positionField),
             code: value.get("code"),
@@ -197,12 +197,12 @@ public struct ValidationFailure {
 extension ValidationFailure {
 
     private static let fieldAsString = Fields.at("field").collect(arrayOf:
-        Fields.map { value -> String? in
+        Fields.map { value in
             "\(value)"
         }
     )
 
-    init?(value: Value) throws {
+    init(value: Value) throws {
         try self.init(
             field: value.get(field: ValidationFailure.fieldAsString),
             code: value.get("code"),

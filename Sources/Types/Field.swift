@@ -52,7 +52,7 @@ extension Field {
         return Field<[String: A]>(path: path, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    public func map<A>(_ f: @escaping (T) throws -> A?) -> Field<A> {
+    public func map<A>(_ f: @escaping (T) throws -> A) -> Field<A> {
         return Field<A>(path: path, codec: ApplyFunction<T, A>(codec: codec, fn: f))
     }
 
@@ -76,7 +76,7 @@ public struct Fields {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    public static func map<A>(_ f: @escaping (Value) throws -> A?) -> Field<A> {
+    public static func map<A>(_ f: @escaping (Value) throws -> A) -> Field<A> {
         return Field(path: Path.root, codec: ApplyFunction<Value, A>(codec: defaultCodec, fn: f))
     }
 
@@ -100,11 +100,13 @@ extension Collect {
             return try cast(convert(collected: []))
         }
 
-        let res = try decompose(value: value).flatMap {
-            try collectField(segment: $0.0, value: $0.1)
-        }
-
-        return try cast(convert(collected: res))
+        return try cast(
+            convert(collected:
+                try decompose(value: value).flatMap {
+                    try collectField(segment: $0.0, value: $0.1)
+                }
+            )
+        )
     }
 
     private func collectField(segment: SegmentType, value: Value) throws -> (SegmentType, Element)? {
@@ -168,7 +170,7 @@ fileprivate struct DictionaryFieds<E>: Collect {
 fileprivate struct ApplyFunction<IN, OUT>: Codec {
 
     let codec: Codec
-    let fn: (IN) throws -> OUT?
+    let fn: (IN) throws -> OUT
 
     func decode<T>(value: Value) throws -> T? {
         guard let input: IN = try codec.decode(value: value) else { return nil }

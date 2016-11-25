@@ -8,7 +8,7 @@ struct Pet {
 }
 
 extension Pet {
-    init?(value: Value) throws {
+    init(value: Value) throws {
         self.name = try value.get("name")!
         self.age = try value.get("age")
     }
@@ -144,7 +144,7 @@ class FieldTests: XCTestCase {
             "age": LongV(5)
         ])
 
-        XCTAssertEqual(try! obj.map(Pet.init)!, Pet(name: "Bob the cat", age: 5))
+        XCTAssertEqual(try! obj.map(Pet.init), Pet(name: "Bob the cat", age: 5))
         XCTAssertEqual(try! obj.get(field: Fields.map(Pet.init))!, Pet(name: "Bob the cat", age: 5))
     }
 
