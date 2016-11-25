@@ -115,7 +115,7 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! arr.get(), [1, 2, 3])
-        XCTAssertEqual(try! arr.get(field: Fields.collect()), [1, 2, 3])
+        XCTAssertEqual(try! arr.get(field: Fields.collect(arrayOf: Field<Int>())), [1, 2, 3])
     }
 
     func testCollectFieldsAtNullValue() {
@@ -131,7 +131,7 @@ class FieldTests: XCTestCase {
         ])
 
         XCTAssertEqual(try! obj.get(), ["k1": 1, "k2": 2, "k3": 3])
-        XCTAssertEqual(try! obj.get(field: Fields.collect()), ["k1": 1, "k2": 2, "k3": 3])
+        XCTAssertEqual(try! obj.get(field: Fields.collect(dictionaryOf: Field<Int>())), ["k1": 1, "k2": 2, "k3": 3])
     }
 
     func testDictionaryFieldsAtNullValue() {

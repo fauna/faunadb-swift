@@ -44,11 +44,11 @@ extension Field {
         return Field<A>(path: self.path.subpath(field.path), codec: field.codec)
     }
 
-    public func collect<A>(arrayOf field: Field<A> = Field<A>()) -> Field<[A]> {
+    public func collect<A>(arrayOf field: Field<A>) -> Field<[A]> {
         return Field<[A]>(path: path, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
-    public func collect<A>(dictionaryOf field: Field<A> = Field<A>()) -> Field<[String: A]> {
+    public func collect<A>(dictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field<[String: A]>(path: path, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
@@ -68,11 +68,11 @@ public struct Fields {
         return Field(path: segments)
     }
 
-    public static func collect<A>(arrayOf field: Field<A> = Field<A>()) -> Field<[A]> {
+    public static func collect<A>(arrayOf field: Field<A>) -> Field<[A]> {
         return Field(path: Path.root, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
-    public static func collect<A>(dictionaryOf field: Field<A> = Field<A>()) -> Field<[String: A]> {
+    public static func collect<A>(dictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 

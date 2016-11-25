@@ -46,7 +46,7 @@ public final class Client {
 
     public func query(batch: [Expr]) -> QueryResult<[Value]> {
         return query(Arr(wrap: batch)).map { value in
-            try value.collect()
+            try value.get()
         }
     }
 
