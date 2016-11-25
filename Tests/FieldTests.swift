@@ -114,13 +114,13 @@ class FieldTests: XCTestCase {
             LongV(3)
         ])
 
-        XCTAssertEqual(try! arr.collect(), [1, 2, 3])
+        XCTAssertEqual(try! arr.get(), [1, 2, 3])
         XCTAssertEqual(try! arr.get(field: Fields.collect()), [1, 2, 3])
     }
 
     func testCollectFieldsAtNullValue() {
         let arr = NullV()
-        XCTAssertEqual(try! arr.collect(), [Int]())
+        XCTAssertEqual(try! arr.get(), [Int]())
     }
 
     func testDictionaryFields() {
@@ -130,12 +130,12 @@ class FieldTests: XCTestCase {
             "k3": LongV(3)
         ])
 
-        XCTAssertEqual(try! obj.collect(), ["k1": 1, "k2": 2, "k3": 3])
+        XCTAssertEqual(try! obj.get(), ["k1": 1, "k2": 2, "k3": 3])
         XCTAssertEqual(try! obj.get(field: Fields.collect()), ["k1": 1, "k2": 2, "k3": 3])
     }
 
     func testDictionaryFieldsAtNullValue() {
-        XCTAssertEqual(try! NullV().collect(), [String: Int]())
+        XCTAssertEqual(try! NullV().get(), [String: Int]())
     }
 
     func testMapToAType() {
