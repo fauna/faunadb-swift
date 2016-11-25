@@ -147,6 +147,10 @@ class FieldTests: XCTestCase {
         XCTAssertEqual(try! obj.map(Pet.init)!, Pet(name: "Bob the cat", age: 5))
     }
 
+    func testIgnoreNullVOnMap() {
+        XCTAssertNil(try! NullV().map(Pet.init))
+    }
+
     func testMapToNilIfNoValueToMap() {
         let obj = ObjectV([
             "name": NullV()

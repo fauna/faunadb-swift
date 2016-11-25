@@ -164,6 +164,8 @@ fileprivate struct ApplyFunction<IN, OUT>: Codec {
 
     func decode<T>(value: Value) throws -> T? {
         guard let input: IN = try codec.decode(value: value) else { return nil }
+        if input is NullV { return nil }
+
         return try cast(fn(input))
     }
 }
