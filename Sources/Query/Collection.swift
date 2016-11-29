@@ -1,14 +1,8 @@
-//
-//  CollectionFunctions.swift
-//  FaunaDB
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import Foundation
 
-public struct Map: Expr {
-    public let value: Value
+public struct Map: Fn {
+
+    var call: Fn.Call
 
     /**
      `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
@@ -22,8 +16,8 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: Expr) {
-        value = Obj(fnCall:["map": lambda, "collection": collection])
+    public init(collection: Expr, to lambda: Expr) {
+        self.call = fn("map" => lambda, "collection" => collection)
     }
 
     /**
@@ -38,10 +32,10 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: (Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: (Expr) -> Expr) {
+        self.init(collection: collection, to: Lambda(fn))
     }
-    
+
     /**
      `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
      
@@ -54,10 +48,10 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: (Expr, Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: ((Expr, Expr)) -> Expr) {
+        self.init(collection: collection, to: Lambda(fn))
     }
-    
+
     /**
      `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
      
@@ -70,10 +64,10 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: (Expr, Expr, Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, to: Lambda(fn))
     }
-    
+
     /**
      `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
      
@@ -87,10 +81,10 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: (Expr, Expr, Expr, Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, to: Lambda(fn))
     }
-    
+
     /**
      `Map` applies `lambda` expression to each member of the Array or Page collection, and returns the results of each application in a new collection of the same type. If a Page is passed, its cursor is preserved in the result.
      
@@ -104,29 +98,14 @@ public struct Map: Expr {
      
      - returns: A Map expression.
      */
-    public init(collection: Expr, lambda: (Expr, Expr, Expr, Expr, Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, to: Lambda(fn))
     }
 }
 
-public struct Foreach: Expr {
-    public let value: Value
-    
-    /**
-     `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
-     
-     `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
-     
-     [Reference](https://faunadb.com/documentation/queries#collection_functions)
-     
-     - parameter collection: collection to perform foreach expression.
-     - parameter lambda:     lambda expression to apply to each collection item.
-     
-     - returns: A Foreach expression.
-     */
-    public init(collection: Expr, lambda: Expr){
-        value = Obj(fnCall:["foreach": lambda, "collection": collection])
-    }
+public struct Foreach: Fn {
+
+    var call: Fn.Call
 
     /**
      `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
@@ -140,15 +119,47 @@ public struct Foreach: Expr {
      
      - returns: A Foreach expression.
      */
-    public init(collection: Expr, lambda: (Expr)-> Expr) {
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(collection: Expr, in lambda: Expr) {
+        self.call = fn("foreach" => lambda, "collection" => collection)
     }
-    
+
+    /**
+     `Foreach` applies `lambda` expr to each member of the Array or Page coll. The original collection is returned.
+     
+     `Foreach` applies the lambda_expr concurrently to each element of the collection. Side-effects, such as writes, do not affect evaluation of other lambda applications. The order of possible refs being generated within the lambda are non-deterministic.
+     
+     [Reference](https://faunadb.com/documentation/queries#collection_functions)
+     
+     - parameter collection: collection to perform foreach expression.
+     - parameter lambda:     lambda expression to apply to each collection item.
+     
+     - returns: A Foreach expression.
+     */
+    public init(_ collection: Expr, _ fn: (Expr) -> Expr) {
+        self.init(collection: collection, in: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr)) -> Expr) {
+        self.init(collection: collection, in: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, in: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, in: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, in: Lambda(fn))
+    }
 }
 
-public struct Filter: Expr {
-    public let value: Value
-   
+public struct Filter: Fn {
+
+    var call: Fn.Call
+
     /**
      `Filter` applies `lambda` expr to each member of the Array or Page collection, and returns a new collection of the same type containing only those elements for which `lambda` expr returned true. If a Page is passed, its cursor is preserved in the result.
      
@@ -161,8 +172,8 @@ public struct Filter: Expr {
      
      - returns: A Filter expression.
      */
-    public init(collection: Expr, lambda: Expr) {
-        value = Obj(fnCall:["filter": lambda, "collection": collection])
+    public init(collection: Expr, with lambda: Expr) {
+        self.call = fn("filter" => lambda, "collection" => collection)
     }
 
     /**
@@ -177,16 +188,32 @@ public struct Filter: Expr {
      
      - returns: A Filter expression.
      */
-    public init(collection: Expr, lambda: (Expr)-> Expr){
-        self.init(collection: collection, lambda: Lambda(lambda: lambda))
+    public init(_ collection: Expr, _ fn: (Expr) -> Expr) {
+        self.init(collection: collection, with: Lambda(fn))
     }
-    
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr)) -> Expr) {
+        self.init(collection: collection, with: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, with: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, with: Lambda(fn))
+    }
+
+    public init(_ collection: Expr, _ fn: ((Expr, Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(collection: collection, with: Lambda(fn))
+    }
+
 }
 
-public struct Take: Expr {
-    
-    public var value: Value
-    
+public struct Take: Fn {
+
+    var call: Fn.Call
+
     /**
      `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll.
      If `take` value is zero or negative, the resulting collection is empty.
@@ -197,39 +224,20 @@ public struct Take: Expr {
      * If all elements from the original page were taken, after does not change.
      
      [Reference](https://faunadb.com/documentation/queries#collection_functions)
-
-     - parameter count:      number of items to take.
-     - parameter collection: collection or page.
-     
-     - returns: A take expression.
-     */
-    public init(count: Int, collection: Expr){
-        self.init(count: count as Expr, collection: collection)
-    }
-
-    /**
-     `Take` returns a new Collection or Page that contains num elements from the head of the Collection or Page coll.
-     If `take` value is zero or negative, the resulting collection is empty.
-     When applied to a page, the returned page’s after cursor is adjusted to only cover the taken elements.
-     
-     As special cases:
-     * If `take` value is negative, after will be set to the same value as the original page’s  before.
-     * If all elements from the original page were taken, after does not change.
-     
-     [Reference](https://faunadb.com/documentation/queries#collection_functions)
      
      - parameter count:      number of items to take.
      - parameter collection: collection or page.
      
      - returns: A take expression.
      */
-    public init (count: Expr, collection: Expr){
-        value = Obj(fnCall:["take": count, "collection": collection])
+    public init(count: Expr, from collection: Expr) {
+        self.call = fn("take" => count, "collection" => collection)
     }
 }
 
-public struct Drop: Expr {
-    public var value: Value
+public struct Drop: Fn {
+
+    var call: Fn.Call
 
     /**
      `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
@@ -245,34 +253,16 @@ public struct Drop: Expr {
      
      - returns: A Drop expression.
      */
-    public init(count: Int, collection: Expr){
-        self.init(count: count as Expr, collection: collection)
+    public init(count: Expr, from collection: Expr) {
+        self.call = fn("drop" => count, "collection" => collection)
     }
 
-    /**
-     `Drop` returns a new Arr or Page that contains the remaining elements, after num have been removed from the head of the Arr or Page coll. If `drop` value is zero or negative, elements of coll are returned unmodified.
-     
-     When applied to a page, the returned page’s before cursor is adjusted to exclude the dropped elements. As special cases:
-     * If `drop` value is negative, before does not change.
-     * Otherwise if all elements from the original page were dropped (including the case where the page was already empty), before will be set to same value as the original page’s after.
-     
-     [Reference](https://faunadb.com/documentation/queries#collection_functions)
-     
-     - parameter count:      number of items to drop.
-     - parameter collection: collection or page.
-     
-     - returns: A Drop expression.
-     */
-    public init(count: Expr, collection: Expr) {
-        value = Obj(fnCall:["drop": count, "collection": collection])
-    }
-    
 }
 
-public struct Prepend: Expr {
+public struct Prepend: Fn {
 
-    public var value: Value
-    
+    var call: Fn.Call
+
     /**
      `Prepend` returns a new Array that is the result of prepending `elements` onto the Array `toCollection`.
      
@@ -283,15 +273,14 @@ public struct Prepend: Expr {
      
      - returns: A Prepend expression.
      */
-    public init(elements: Expr, toCollection collection: Expr){
-        value = Obj(fnCall:["collection": elements, "prepend": collection])
+    public init(elements: Expr, to collection: Expr) {
+        self.call = fn("prepend" => elements, "collection" => collection)
     }
 }
 
+public struct Append: Fn {
 
-public struct Append: Expr {
-    
-    public var value: Value
+    var call: Fn.Call
 
     /**
      `Append` returns a new Array that is the result of appending `elements` onto the `toCollection` array.
@@ -303,7 +292,8 @@ public struct Append: Expr {
      
      - returns: An Append expression.
      */
-    public init(elements: Expr, toCollection collection: Expr){
-        value = Obj(fnCall:["collection": elements, "append": collection])
+    public init(elements: Expr, to collection: Expr) {
+        self.call = fn("append" => elements, "collection" => collection)
     }
+
 }

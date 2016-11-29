@@ -1,0 +1,8 @@
+disabled_rules:
+    - line_length
+    - variable_name
+    - type_name
+    - function_parameter_count
+
+included:
+  - Sources

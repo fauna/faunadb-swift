@@ -1,158 +1,123 @@
-//
-//  Client.swift
-//  FaunaDB
-//
-//  Copyright © 2016 Fauna, Inc. All rights reserved.
-//
-
 import Foundation
-import Result
-
-enum ClientHeaders: String {
-    case PrettyPrintJSONResponses = "X-FaunaDB-Formatted-JSON"
-    case Authorization = "Authorization"
-}
 
 public final class Client {
-    let session: URLSession
-    let endpoint: URL
-    let secret: String
 
-    fileprivate let observers: [ClientObserverType]
-    fileprivate var authHeader: String
+    private static let defaultEndpoint: URL! = URL(string: "https://cloud.faunadb.com")
+    private static let resourcesField = Field<Value>("resource")
 
-    public init(secret:String,
-                endpoint: URL = URL(string: "https://rest.faunadb.com")!,
-                timeout: TimeInterval = 60, observers: [ClientObserverType] = []){
+    private let session: URLSession
+    private let endpoint: URL
+    private let auth: String
+
+    public init(secret: String, endpoint: URL = defaultEndpoint, session: URLSession? = nil) {
+        self.auth = "Basic \((secret.data(using: .ascii) ?? Data()).base64EncodedString()):"
         self.endpoint = endpoint
-        self.secret = secret
-        self.observers = observers
-        authHeader = Client.authHeaderValue(secret)
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForRequest = timeout
-        var headers = sessionConfig.httpAdditionalHeaders ?? [AnyHashable: Any]()
-        headers[ClientHeaders.Authorization.rawValue] = authHeader
-        sessionConfig.httpAdditionalHeaders = headers
-        session =  URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: .main)
-    }
 
-}
-
-
-extension Client {
-
-    @discardableResult
-    public func query(_ expr: @autoclosure () -> Expr, completion: @escaping ((Result<Value, FaunaError>) -> Void)) -> URLSessionDataTask {
-        let jsonData = try! Client.toData(expr().toJSON())
-        return postJSON(jsonData) { [weak self] (data, response, error) in
-            do {
-                guard let mySelf = self else {
-                    completion(.failure(.unknownException(response: response, errors: [], msg: "Client has been released")))
-                    return
-                }
-                try mySelf.handleNetworkingErrors(response, error: error)
-                guard let data = data else {
-                    throw FaunaError.unknownException(response: response, errors: [], msg: "Empty server response")
-                }
-                try mySelf.handleQueryErrors(response, data: data)
-                let result = try Mapper.fromFaunaResponseData(data)
-                completion(Result.success(result))
-            }
-            catch {
-                guard let faunaError = error as? FaunaError else {
-                    completion(.failure(.unknownException(response: response, errors: [], msg: (error as NSError).description)))
-                    return
-                }
-                completion(.failure(faunaError))
-            }
+        if let session = session {
+            self.session = session
+        } else {
+            self.session = URLSession(configuration: URLSessionConfiguration.default)
         }
     }
-}
 
-extension Client {
+    public func newSessionClient(secret: String) -> Client {
+        return Client(
+            secret: secret,
+            endpoint: endpoint,
+            session: session
+        )
+    }
 
-    fileprivate func postJSON(_ data: Data, completion: @escaping ((Data?, URLResponse?, NSError?) -> Void)) -> URLSessionDataTask{
+    public func query(_ expr: Expr) -> QueryResult<Value> {
+        let res = QueryResult<Value>()
+
+        do {
+            try send(
+                request: httpRequestFor(expr),
+                ifSuccess: { res.value = .success($0) },
+                ifFailure: { res.value = .failure($0) }
+            )
+        } catch let e {
+            res.value = .failure(e)
+        }
+
+        return res
+    }
+
+    public func query(batch: [Expr]) -> QueryResult<[Value]> {
+        return query(Arr(wrap: batch)).map { value in
+            try value.get()
+        }
+    }
+
+    private func httpRequestFor(_ expr: Expr) throws -> URLRequest {
         let request = NSMutableURLRequest(url: endpoint)
-        request.httpBody = data
+
         request.httpMethod = "POST"
-        var headers = request.allHTTPHeaderFields ?? [String: String]()
-        headers["Content-Type"] = "application/json; charset=utf-8"
-        request.allHTTPHeaderFields = headers
-        return performRequest(request as URLRequest, completion: completion);
+        request.httpBody = try JSON.data(value: expr)
+        request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue(auth, forHTTPHeaderField: "Authorization")
+
+        return request as URLRequest
     }
 
-    fileprivate func performRequest(_ request: URLRequest, completion: @escaping ((Data?, URLResponse?, NSError?) -> Void)) -> URLSessionDataTask {
+    private func send(request: URLRequest,
+                      ifSuccess successCallback: @escaping (Value) -> Void,
+                      ifFailure failureCallback: @escaping (Error) -> Void) {
 
-        let dataTask = session.dataTask(with: request, completionHandler: { [weak self] data, response, error  in
-            self?.observers.forEach { $0.didReceiveResponse(response, data: data, error: error as NSError?, request: request) }
-            completion(data, response, error as NSError?)
-        }) 
-        observers.forEach { $0.willSendRequest(dataTask.currentRequest ?? dataTask.originalRequest ?? request, session: session) }
-        dataTask.resume()
-        return dataTask
-    }
+        let task = session.dataTask(with: request) { [weak self] data, response, error in
+            guard let this = self else { return }
 
-}
-
-extension Client {
-
-
-    fileprivate func handleNetworkingErrors(_ response: URLResponse?, error: NSError?) throws {
-        guard let error = error else { return }
-        throw FaunaError.networkException(response: response, error: error, msg: error.description)
-    }
-
-    fileprivate func handleQueryErrors(_ response: URLResponse?, data: Data) throws {
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw FaunaError.networkException(response: response, error: nil, msg: "Fail to parse network response. Invalid response type.")
-        }
-
-        if httpResponse.statusCode >= 300 {
-            var errors = [ErrorResponse]()
-            do {
-                let json: AnyObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
-                let array = json.object(forKey: "errors") as! [[String: AnyObject]]
-                errors = array.map { ErrorResponse(json: $0)! }
-            }
-            catch {
-                if httpResponse.statusCode == 503 {
-                    throw FaunaError.unavailableException(response: response, errors: [])
-                }
-                throw FaunaError.unknownException(response: response, errors: [], msg: "Unparsable service \(httpResponse.statusCode) response.")
-            }
-            switch httpResponse.statusCode {
-            case 400:
-                throw FaunaError.badRequestException(response: response, errors: errors)
-            case 401:
-                throw FaunaError.unauthorizedException(response: response, errors: errors)
-            case 404:
-                throw FaunaError.notFoundException(response: response, errors: errors)
-            case 500:
-                throw FaunaError.internalException(response: response, errors: errors, msg: nil)
-            case 503:
-                throw FaunaError.unavailableException(response: response, errors: errors)
-            default:
-                throw FaunaError.unknownException(response: response, errors: errors, msg: nil)
+            guard this.handle(error: error, with: failureCallback) else {
+                this.handle(response: response,
+                            data: data,
+                            ifSuccess: successCallback,
+                            ifFailure: failureCallback)
+                return
             }
         }
-    }
-}
 
-
-extension Client {
-
-    fileprivate static func authHeaderValue(_ token: String) -> String {
-        return "Basic " + "\(token):".data(using: String.Encoding.ascii)!.base64EncodedString(options: [])
+        task.resume()
     }
 
-    static func toData(_ object: AnyObject) throws -> Data {
-        if object is [AnyObject] || object is [String: AnyObject] {
-            return try JSONSerialization.data(withJSONObject: object, options: [])
+    private func handle(error: Error?, with callback: @escaping (Error) -> Void) -> Bool {
+        guard let error = error else { return false }
+
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            callback(TimeoutError(message: "Request timed out."))
+        } else {
+            callback(UnknowError(cause: error))
         }
-        else if let str = object as? String, let data = "\"\(str)\"".data(using: String.Encoding.utf8) {
-            return data
+
+        return true
+    }
+
+    private func handle(response: URLResponse?, data: Data?,
+                        ifSuccess successCallback: @escaping (Value) -> Void,
+                        ifFailure failureCallback: @escaping (Error) -> Void) {
+
+        guard let response = response as? HTTPURLResponse, let data = data else {
+            failureCallback(UnknowError(message: "Invalid server response."))
+            return
         }
-        throw FaunaError.driverException(data: object, msg: "Unsupported JSON type: \(type(of: object))")
+
+        if let error = Errors.errorFor(response: response, json: data) {
+            failureCallback(error)
+            return
+        }
+
+        do {
+            let parsed = try JSON.parse(data: data)
+
+            guard let resources = try parsed.get(field: Client.resourcesField) else {
+                failureCallback(UnknowError(message: "Invalid server response: \"resource\" key not found."))
+                return
+            }
+
+            successCallback(resources)
+        } catch let error {
+            failureCallback(error)
+        }
     }
 
 }
