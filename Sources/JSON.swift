@@ -157,8 +157,8 @@ fileprivate extension JsonType {
         case ("@ref", .string(let str)):  return RefV(str)
         case ("@set", .object(let obj)):  return try convert(to: SetRefV.init, object: obj)
         case ("@obj", .object(let obj)):  return try convert(to: ObjectV.init, object: obj)
-        case ("@ts", .string(let str)):   return try convert(to: TimeV.init, time: str, as: ISO8601.time)
-        case ("@date", .string(let str)): return try convert(to: DateV.init, time: str, as: ISO8601.date)
+        case ("@ts", .string(let str)):   return try convert(to: TimeV.init, time: str)
+        case ("@date", .string(let str)): return try convert(to: DateV.init, time: str)
         default:                          return try convert(to: ObjectV.init, object: special)
         }
     }
@@ -171,9 +171,9 @@ fileprivate extension JsonType {
         )
     }
 
-    private func convert(to type: (Date) -> Value, time: String, as fn: (String) -> Date?) throws -> Value {
-        guard let parsed = fn(time) else { throw JsonError.invalidDate(time) }
-        return type(parsed)
+    private func convert(to type: (String) -> Value?, time: String) throws -> Value {
+        if let parsed = type(time) { return parsed }
+        throw JsonError.invalidDate(time)
     }
 
 }

@@ -41,10 +41,18 @@ fileprivate struct NativeTypesCodec: Codec {
         case let num as LongV:     return try cast(num.value)
         case let num as DoubleV:   return try cast(num.value)
         case let bool as BooleanV: return try cast(bool.value)
-        case let ts as TimeV:      return try cast(ts.value)
         case let date as DateV:    return try cast(date.value)
+        case let ts as TimeV:      return try castHighPrecisionTime(ts.value)
         default:                   return try cast(value)
         }
+    }
+
+    private func castHighPrecisionTime<T>(_ ts: HighPrecisionTime) throws -> T? {
+        if T.self == Date.self {
+            return try cast(ts.toDate())
+        }
+
+        return try cast(ts)
     }
 
 }

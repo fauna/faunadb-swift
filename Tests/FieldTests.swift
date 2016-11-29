@@ -54,8 +54,13 @@ class FieldTests: XCTestCase {
     }
 
     func testTimeField() {
-        let time = Date()
-        XCTAssertEqual(try! TimeV(time).get(), time)
+        let time = Date(timeIntervalSince1970: 1)
+        XCTAssertEqual(try! TimeV(date: time).get(), time)
+    }
+
+    func testHighPrecisionTime() {
+        let time = Date(timeIntervalSince1970: 1)
+        XCTAssertEqual(try! TimeV(date: time).get(), HighPrecisionTime(secondsSince1970: 1))
     }
 
     func testDateField() {

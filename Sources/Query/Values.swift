@@ -95,6 +95,12 @@ extension Optional: Expr, AsJson {
 
 extension Date: Expr, AsJson {
     func escape() -> JsonType {
+        return TimeV(date: self).escape()
+    }
+}
+
+extension HighPrecisionTime: Expr, AsJson {
+    func escape() -> JsonType {
         return TimeV(self).escape()
     }
 }

@@ -66,8 +66,11 @@ class DeserializationTests: XCTestCase {
     }
 
     func testTimeV() {
-        assert(parse: "{\"@ts\":\"1970-01-01T00:05:00.000Z\"}",
-                to: TimeV(Date(timeIntervalSince1970: 5*60)))
+        assert(parse: "{\"@ts\":\"1970-01-01T00:05:00Z\"}", to: TimeV(date: Date(timeIntervalSince1970: 5 * 60)))
+        assert(parse: "{\"@ts\":\"1970-01-01T00:00:01Z\"}", to: TimeV(date: Date(timeIntervalSince1970: 1)))
+        assert(parse: "{\"@ts\":\"1970-01-01T00:00:00.001Z\"}", to: TimeV(HighPrecisionTime(secondsSince1970: 0, millisecondsOffset: 1)))
+        assert(parse: "{\"@ts\":\"1970-01-01T00:00:00.000001Z\"}", to: TimeV(HighPrecisionTime(secondsSince1970: 0, microsecondsOffset: 1)))
+        assert(parse: "{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"}", to: TimeV(HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1)))
     }
 
     func testInvalidTime() {
@@ -103,10 +106,10 @@ class DeserializationTests: XCTestCase {
     }
 
     private func assert<T: Value & Equatable>(parse json: String, to expected: T) {
-        let assertd = try! JSON.parse(string: json)
+        let parsed = try! JSON.parse(string: json)
 
-        guard let actual = assertd as? T else {
-            XCTFail("assertd JSON value type is different than expected type. Actual: \(assertd). Expected: \(expected)")
+        guard let actual = parsed as? T else {
+            XCTFail("assertd JSON value type is different than expected type. Actual: \(parsed). Expected: \(expected)")
             return
         }
 

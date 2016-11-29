@@ -22,6 +22,8 @@ public struct Time: Fn {
 public enum TimeUnit: String {
     case second = "second"
     case millisecond = "millisecond"
+    case microsecond = "microsecond"
+    case nanosecond = "nanosecond"
 }
 
 extension TimeUnit: Expr, AsJson {
