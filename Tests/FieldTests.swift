@@ -2,12 +2,12 @@ import XCTest
 
 @testable import FaunaDB
 
-struct Pet {
+fileprivate struct Pet {
     let name: String
     let age: Int?
 }
 
-extension Pet {
+extension Pet: Decodable {
     init?(value: Value) throws {
         guard
             let name: String = try value.get("name")
@@ -197,13 +197,23 @@ class FieldTests: XCTestCase {
         XCTAssertNil(try! data.at("non-existing-field").get(field: Field<Int>()))
     }
 
+    func testDecodableValue() {
+        let obj = ObjectV([
+            "name": StringV("Bob"),
+            "age": LongV(3)
+        ])
+
+        XCTAssertEqual(try obj.get(), Pet(name: "Bob", age: 3))
+    }
+
     func testFailOnInvalidField() {
         let value = StringV("a string")
 
         XCTAssertThrowsError(try (value.get() as Int?)) { error in
             XCTAssertEqual(
                 "\(error)",
-                "Error while extracting field at <root>: Can not decode value of type \"String\" to desired type \"Int\""
+                "Error while extracting field at <root>: Can not decode value of type \"String\" to desired type \"Int\". " +
+                "You can implement the Decodable protocol if you want to create custom data convertions."
             )
         }
     }
@@ -265,7 +275,8 @@ class FieldTests: XCTestCase {
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +
-                "Error at field 1: Can not decode value of type \"Int\" to desired type \"String\""
+                "Error at field 1: Can not decode value of type \"Int\" to desired type \"String\". " +
+                "You can implement the Decodable protocol if you want to create custom data convertions."
             )
         }
     }
@@ -280,7 +291,8 @@ class FieldTests: XCTestCase {
             XCTAssertEqual(
                 "\(error)",
                 "Error while extracting field at <root>: " +
-                "Error at field \"key2\": Can not decode value of type \"Int\" to desired type \"String\""
+                "Error at field \"key2\": Can not decode value of type \"Int\" to desired type \"String\". " +
+                "You can implement the Decodable protocol if you want to create custom data convertions."
             )
         }
     }
