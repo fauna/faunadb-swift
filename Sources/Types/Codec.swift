@@ -1,6 +1,10 @@
 import Foundation
 
-internal let defaultCodec: Codec = NativeTypesCodec()
+public protocol Decodable {
+    init?(value: Value) throws
+}
+
+internal let defaultCodec: Codec = SupportedTypesCodec()
 
 internal protocol Codec {
     func decode<T>(value: Value) throws -> T?
@@ -23,15 +27,26 @@ fileprivate struct DecodeError<Expected, Actual>: Error {
 
 extension DecodeError: CustomStringConvertible {
     var description: String {
-        return "Can not decode value of type \"\(actual)\" to desired type \"\(expected)\""
+        return
+            "Can not decode value of type \"\(actual)\" to desired type \"\(expected)\". " +
+            "You can implement the Decodable protocol if you want to create custom data convertions."
     }
 }
 
-fileprivate struct NativeTypesCodec: Codec {
+fileprivate struct SupportedTypesCodec: Codec {
 
     func decode<T>(value: Value) throws -> T? {
         guard !(value is NullV) else { return nil }
 
+        if let decodable = T.self as? Decodable.Type {
+            guard let decoded = try decodable.init(value: value) else { return nil }
+            return try cast(decoded)
+        }
+
+        return try decodeValue(value)
+    }
+
+    private func decodeValue<T>(_ value: Value) throws -> T? {
         if let coerced = value as? T {
             return coerced
         }

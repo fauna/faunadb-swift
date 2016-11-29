@@ -1,21 +1,7 @@
 import Foundation
 
-public enum JsonError: Error {
-    case unsupportedType(Any)
-    case invalidObjectKeyType(Any)
-    case invalidLiteral(Any)
-    case invalidDate(String)
-}
-
-extension JsonError: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .unsupportedType(let type):     return "Can not parse JSON type \"\(type)\""
-        case .invalidObjectKeyType(let key): return "Invalid JSON object key \"\(key)\""
-        case .invalidLiteral(let literal):   return "Invalid JSON literal \"\(literal)\""
-        case .invalidDate(let string):       return "Invalid date \"\(string)\""
-        }
-    }
+public protocol Encodable: Expr {
+    func encode() -> Expr
 }
 
 internal protocol AsJson {
@@ -39,10 +25,15 @@ internal struct JSON {
     }
 
     static func escape(value: Any) -> JsonType {
+        if let encodable = value as? Encodable {
+            return escape(value: encodable.encode())
+        }
+
         guard let asJson = value as? AsJson else {
             fatalError(
                 "Can not convert value <\(type(of: value)):\(value)> to JSON. " +
-                "Custom implementations of Expr and Value protocols are supported."
+                "Custom implementations of Expr and Value protocols are supported. " +
+                "You can implement the Encodable protocol instead."
             )
         }
 
@@ -176,4 +167,22 @@ fileprivate extension JsonType {
         return type(parsed)
     }
 
+}
+
+public enum JsonError: Error {
+    case unsupportedType(Any)
+    case invalidObjectKeyType(Any)
+    case invalidLiteral(Any)
+    case invalidDate(String)
+}
+
+extension JsonError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .unsupportedType(let type):     return "Can not parse JSON type \"\(type)\""
+        case .invalidObjectKeyType(let key): return "Invalid JSON object key \"\(key)\""
+        case .invalidLiteral(let literal):   return "Invalid JSON literal \"\(literal)\""
+        case .invalidDate(let string):       return "Invalid date \"\(string)\""
+        }
+    }
 }

@@ -2,6 +2,16 @@ import XCTest
 
 @testable import FaunaDB
 
+fileprivate struct Point {
+    let x, y: Int
+}
+
+extension Point: Encodable {
+    func encode() -> Expr {
+        return Obj("x" => x, "y" => y)
+    }
+}
+
 class SerializationTests: XCTestCase {
 
     override func setUp() {
@@ -61,6 +71,10 @@ class SerializationTests: XCTestCase {
 
     func testArrayV() {
         assert(expr: ArrayV([StringV("a"), LongV(10)]), toBecome: "[\"a\",10]")
+    }
+
+    func testEncodable() {
+        assert(expr: Point(x: 10, y: 4), toBecome: "{\"object\":{\"y\":4,\"x\":10}}")
     }
 
     func testObj() {
