@@ -1,5 +1,3 @@
-import Foundation
-
 internal enum Try<Value> {
     case success(Value)
     case failure(Error)

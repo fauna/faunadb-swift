@@ -1,7 +1,52 @@
 import XCTest
 import FaunaDB
 
-class ClientTests: FaunaDBTests {
+fileprivate let dbName = String.random(startingWith: "faunadb-swift-test-")
+
+fileprivate let endpoint: URL? = {
+    guard let url = env("FAUNA_ENDPOINT") else { return nil }
+    return URL(string: url)
+}()
+
+fileprivate let secret: String = {
+    guard let key = env("FAUNA_ROOT_KEY") else {
+        fatalError(
+            "Environment variable FAUNA_ROOT_KEY not defined. " +
+            "Check your scheme run configuration. " +
+            "Tip: You can also set FAUNA_ENDPOINT if you want to run " +
+            "the tests against a different Fauna instance. Fauna Cloud is used by default."
+        )
+    }
+    return key
+}()
+
+fileprivate let adminClient: Client = {
+    guard let endpoint = endpoint else { return Client(secret: secret) }
+    return Client(secret: secret, endpoint: endpoint)
+}()
+
+fileprivate let client: Client = {
+    return try!
+        adminClient.query(
+            CreateDatabase(Obj("name" => dbName))
+        )
+        .flatMap {
+            adminClient.query(
+                CreateKey(Obj(
+                    "database" => try $0.get("ref"),
+                    "role" => "server"
+                ))
+            )
+        }
+        .map {
+            adminClient.newSessionClient(
+                secret: try $0.get("secret")!
+            )
+        }
+        .await()
+}()
+
+class ClientTests: XCTestCase {
 
     private typealias `Self` = ClientTests
 
@@ -100,6 +145,13 @@ class ClientTests: FaunaDBTests {
                 )
             ))
         )
+    }
+
+    override class func tearDown() {
+        super.tearDown()
+        try! adminClient
+            .query(Delete(ref: Database(dbName)))
+            .await()
     }
 
     func testReturnUnauthorizedOnInvalidSecret() {
@@ -594,20 +646,6 @@ class ClientTests: FaunaDBTests {
 
     private func assert<T: Equatable>(query expr: Expr, toReturn expected: [String: T], atPath: Segment...) {
         XCTAssertEqual(try! client.query(expr).await().get(path: atPath), expected)
-    }
-
-}
-
-fileprivate extension String {
-
-    static func random(startingWith prefix: String = "", size: Int = 10) -> String {
-        var res = prefix
-
-        for _ in 1...size {
-            res.append("\(Int(arc4random()) % 10)")
-        }
-
-        return res
     }
 
 }

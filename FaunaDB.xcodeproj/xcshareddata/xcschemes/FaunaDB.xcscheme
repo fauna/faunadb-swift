@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
+               BlueprintIdentifier = "OBJ_39"
                BuildableName = "FaunaDB.framework"
-               BlueprintName = "FaunaDB iOS"
-               ReferencedContainer = "container:FaunaDB.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28D89BD41D5020EB009AE721"
-               BuildableName = "FaunaDB iOSTests.xctest"
-               BlueprintName = "FaunaDB iOSTests"
+               BlueprintName = "FaunaDB"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,29 +26,19 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28D89BD41D5020EB009AE721"
-               BuildableName = "FaunaDB iOSTests.xctest"
-               BlueprintName = "FaunaDB iOSTests"
+               BlueprintIdentifier = "OBJ_62"
+               BuildableName = "FaunaDBTests.xctest"
+               BlueprintName = "FaunaDBTests"
                ReferencedContainer = "container:FaunaDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
-            BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB iOS"
-            ReferencedContainer = "container:FaunaDB.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -79,12 +55,24 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
+            BlueprintIdentifier = "OBJ_39"
             BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB iOS"
+            BlueprintName = "FaunaDB"
             ReferencedContainer = "container:FaunaDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FAUNA_ROOT_KEY"
+            value = "Add your root key secret here."
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "FAUNA_ENDPOINT"
+            value = "Set this to your custom endpoint. It&apos;ll use Fauna Cloud by default."
+            isEnabled = "NO">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -94,15 +82,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "28F8287C1C494B2C00330CF4"
-            BuildableName = "FaunaDB.framework"
-            BlueprintName = "FaunaDB iOS"
-            ReferencedContainer = "container:FaunaDB.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

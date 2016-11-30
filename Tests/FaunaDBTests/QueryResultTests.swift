@@ -2,6 +2,8 @@ import XCTest
 
 @testable import FaunaDB
 
+fileprivate struct TestError: Error {}
+
 class QueryResultTests: XCTestCase {
 
     private let queue = DispatchQueue.global(qos: .utility)
@@ -124,5 +126,3 @@ class QueryResultTests: XCTestCase {
     }
 
 }
-
-fileprivate struct TestError: Error {}

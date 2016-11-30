@@ -117,9 +117,3 @@ class DeserializationTests: XCTestCase {
     }
 
 }
-
-fileprivate extension JSON {
-    static func parse(string: String) throws -> Value {
-        return try parse(data: string.data(using: .utf8)!)
-    }
-}
