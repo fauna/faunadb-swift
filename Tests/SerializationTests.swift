@@ -52,8 +52,20 @@ class SerializationTests: XCTestCase {
     }
 
     func testTimeV() {
-        assert(expr: TimeV(Date(timeIntervalSince1970: 0)), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
-        assert(expr: Date(timeIntervalSince1970: 0), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000Z\"}")
+        assert(expr: TimeV(date: Date(timeIntervalSince1970: 5 * 60)), toBecome: "{\"@ts\":\"1970-01-01T00:05:00.000000000Z\"}")
+        assert(expr: TimeV(date: Date(timeIntervalSince1970: 1)), toBecome: "{\"@ts\":\"1970-01-01T00:00:01.000000000Z\"}")
+        assert(expr: TimeV(HighPrecisionTime(secondsSince1970: 0, millisecondsOffset: 1)), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.001000000Z\"}")
+        assert(expr: TimeV(HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1_000)), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000001000Z\"}")
+        assert(expr: TimeV(HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1)), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"}")
+        assert(expr: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"}")
+        assert(expr: Date(timeIntervalSince1970: 0), toBecome: "{\"@ts\":\"1970-01-01T00:00:00.000000000Z\"}")
+    }
+
+    func testTimeVOverflow() {
+        assert(expr: HighPrecisionTime(secondsSince1970: 0, millisecondsOffset: 1_001), toBecome: "{\"@ts\":\"1970-01-01T00:00:01.001000000Z\"}")
+        assert(expr: HighPrecisionTime(secondsSince1970: 0, microsecondsOffset: 1_001_001), toBecome: "{\"@ts\":\"1970-01-01T00:00:01.001001000Z\"}")
+        assert(expr: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1_001_001_001), toBecome: "{\"@ts\":\"1970-01-01T00:00:01.001001001Z\"}")
+
     }
 
     func testDateV() {
@@ -633,6 +645,8 @@ class SerializationTests: XCTestCase {
         assert(expr: Epoch(10, "second"), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
         assert(expr: Epoch(offset: 10, unit: .second), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
         assert(expr: Epoch(offset: 10, unit: .millisecond), toBecome: "{\"unit\":\"millisecond\",\"epoch\":10}")
+        assert(expr: Epoch(offset: 10, unit: .microsecond), toBecome: "{\"unit\":\"microsecond\",\"epoch\":10}")
+        assert(expr: Epoch(offset: 10, unit: .nanosecond), toBecome: "{\"unit\":\"nanosecond\",\"epoch\":10}")
     }
 
     func testDate() {

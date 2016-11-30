@@ -71,30 +71,46 @@ public struct BooleanV: ScalarValue, AsJson {
 
 public struct TimeV: ScalarValue, AsJson {
 
-    public var value: Date
+    public var value: HighPrecisionTime
 
-    public init(_ value: Date) {
+    public init(_ value: HighPrecisionTime) {
         self.value = value
+    }
+
+    public init(date: Date) {
+        self.value = HighPrecisionTime(date: date)
+    }
+
+    init?(from string: String) {
+        guard let time = HighPrecisionTime(parse: string) else { return nil }
+        self.value = time
     }
 
     func escape() -> JsonType {
         return .object([
-            "@ts": .string(ISO8601.stringify(time: value))
+            "@ts": .string(value.description)
         ])
     }
 }
 
 public struct DateV: ScalarValue, AsJson {
 
+    private static let formatter = ISO8601Formatter(with: "yyyy-MM-dd")
+
     public var value: Date
 
     public init(_ value: Date) {
         self.value = value
     }
 
+    init?(from string: String) {
+        guard let time = DateV.formatter.parse(from: string) else { return nil }
+        self.value = time
+    }
+
     func escape() -> JsonType {
         return .object([
-            "@date": .string(ISO8601.stringify(date: value))
+            "@date": .string(DateV.formatter.string(for: value))
         ])
     }
 }

@@ -414,7 +414,10 @@ class ClientTests: FaunaDBTests {
 
     func testEpoch() {
         assert(query: Epoch(offset: 30, unit: .second), toReturn: Date(timeIntervalSince1970: 30))
-        assert(query: Epoch(offset: 30, unit: .millisecond), toReturn: Date(timeIntervalSince1970: 30 / 1_000))
+        assert(query: Epoch(offset: 30, unit: .second), toReturn: HighPrecisionTime(secondsSince1970: 30))
+        assert(query: Epoch(offset: 30, unit: .millisecond), toReturn: HighPrecisionTime(secondsSince1970: 0, millisecondsOffset: 30))
+        assert(query: Epoch(offset: 30, unit: .microsecond), toReturn: HighPrecisionTime(secondsSince1970: 0, microsecondsOffset: 30))
+        assert(query: Epoch(offset: 30, unit: .nanosecond), toReturn: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 30))
     }
 
     func testDate() {
