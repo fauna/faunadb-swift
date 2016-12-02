@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2Du-wf-K5Z">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--All Posts-->
+        <scene sceneID="krN-dd-vbs">
+            <objects>
+                <tableViewController id="hM2-wo-rZx" customClass="ListPostsController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="IU3-0v-IdG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="P68-rT-PlK">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P68-rT-PlK" id="pi5-mC-xoZ">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="G0R-ED-5Fv" kind="show" identifier="ViewPost" id="KKz-5f-s4g"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="hM2-wo-rZx" id="jrb-2B-69s"/>
+                            <outlet property="delegate" destination="hM2-wo-rZx" id="L3a-Kx-5Xl"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="All Posts" id="3bK-jH-6N0">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="wa6-lr-Mab">
+                            <connections>
+                                <segue destination="baN-cs-K2M" kind="show" identifier="NewPost" id="c0B-MV-krU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="57O-0F-umH">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N1h-SL-Rtv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-324" y="108"/>
+        </scene>
+        <!--View Post-->
+        <scene sceneID="aml-pf-Dio">
+            <objects>
+                <viewController id="G0R-ED-5Fv" customClass="ViewPostController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="N3E-PC-cWt"/>
+                        <viewControllerLayoutGuide type="bottom" id="BHw-JE-rLn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Duf-HC-A33">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="csm-Am-EDX">
+                                <rect key="frame" x="16" y="72" width="343" height="543"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="View Post" id="fdU-k0-XPX">
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="trash" id="dTn-3A-LRs">
+                                <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="deletePost:" destination="G0R-ED-5Fv" id="zCi-7x-XUR"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="edit" id="SzZ-Ks-bpJ">
+                                <connections>
+                                    <segue destination="baN-cs-K2M" kind="show" identifier="EditPost" id="rw8-xN-xwa"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="automaticallyAdjustsScrollViewInsets" value="NO"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="editPost" destination="SzZ-Ks-bpJ" id="A16-jQ-P2t"/>
+                        <outlet property="postBody" destination="csm-Am-EDX" id="MJR-Iy-R7q"/>
+                        <outlet property="postTitle" destination="fdU-k0-XPX" id="Wt6-Tu-yL6"/>
+                        <segue destination="XHm-KE-Bhl" kind="unwind" identifier="postDeleted" unwindAction="unwindToListPostsWithSender:" id="p6p-oe-LLr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lhe-s0-cw1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="XHm-KE-Bhl" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="630"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4qp-4i-fp3">
+            <objects>
+                <navigationController id="2Du-wf-K5Z" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rND-Rk-85B">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="hM2-wo-rZx" kind="relationship" relationship="rootViewController" id="I1d-ny-tQG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uq3-bj-mwE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1078" y="107"/>
+        </scene>
+        <!--New Post-->
+        <scene sceneID="P3F-02-j4s">
+            <objects>
+                <viewController id="baN-cs-K2M" customClass="EditPostController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Zpb-h1-WlP"/>
+                        <viewControllerLayoutGuide type="bottom" id="8IB-d5-saZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nLh-O0-FHE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PBe-xo-BOl">
+                                <rect key="frame" x="16" y="72" width="343" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="X4c-8O-GfL">
+                                <rect key="frame" x="16" y="110" width="343" height="513"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.uiBorderColor">
+                                        <color key="value" red="0.90193527936935425" green="0.89806860685348511" blue="0.90184265375137329" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="New Post" id="4CP-bf-MSd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="3Dm-wM-Dif">
+                            <connections>
+                                <action selector="savePost:" destination="baN-cs-K2M" id="71N-6n-pcP"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="pageTitle" destination="4CP-bf-MSd" id="ZLJ-je-7LP"/>
+                        <outlet property="postText" destination="X4c-8O-GfL" id="sm1-Ru-Vhm"/>
+                        <outlet property="postTitle" destination="PBe-xo-BOl" id="5ao-rx-GCe"/>
+                        <segue destination="Dht-bP-9fq" kind="unwind" identifier="postAdded" unwindAction="unwindToListPostsWithSender:" id="mad-Mb-52K"/>
+                        <segue destination="Dht-bP-9fq" kind="unwind" identifier="postUpdated" unwindAction="unwindToViewPostWithSender:" id="gz0-iT-cqi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kh6-ue-Ru7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Dht-bP-9fq" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1250" y="107"/>
+        </scene>
+    </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="rw8-xN-xwa"/>
+    </inferredMetricsTieBreakers>
+</document>
