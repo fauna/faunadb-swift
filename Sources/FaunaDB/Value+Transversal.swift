@@ -1,5 +1,3 @@
-import Foundation
-
 extension Value {
 
     public func get<T>(_ path: Segment...) throws -> T? {

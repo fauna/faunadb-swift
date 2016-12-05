@@ -1,5 +1,3 @@
-import Foundation
-
 internal let rootField = Field<Value>()
 
 public struct Field<T> {

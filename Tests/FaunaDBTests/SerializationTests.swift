@@ -768,10 +768,3 @@ class SerializationTests: XCTestCase {
     }
 
 }
-
-fileprivate extension JSON {
-    static func stringify(expr: Any) -> String {
-        return String(data: try! data(value: expr), encoding: .utf8)!
-    }
-}
-
