@@ -1,5 +1,10 @@
 import FaunaDB
 
+// This database setup would be probably done somewhere else in a real
+// application, like in your provision scripts. But here we are setting up a
+// simple database just so you don't have to while playing with this example
+// app.
+
 fileprivate let dbName = "faunadb-example-ios"
 fileprivate let database = Ref("databases/" + dbName)
 
@@ -43,6 +48,7 @@ fileprivate func createDatabase(with adminClient: FaunaDB.Client) -> QueryResult
         )
         .flatMap { _ in
             client.query(
+                // The index will be a sequence of tuples like (RefV, String)
                 CreateIndex(Obj(
                     "name" => "all_posts_refs_and_titles",
                     "source" => Class("posts"),

@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidFinishLaunching(_ application: UIApplication) {
         do {
+            // In general, await should be avoided in production code.
+            // `map` and `flatMap` are preferable.
             faunaClient = try
                 setupDatabase(rootKey: secret, endpoint: endpoint)
                 .await(timeout: .now() + 5)

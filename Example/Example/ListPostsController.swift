@@ -17,6 +17,8 @@ class ListPostsController: UITableViewController {
     }
 
     @objc private func handleRefresh(refreshControl: UIRefreshControl) {
+        // Map using the .main DispatchQueue because that is the only
+        // queue allowed to update the UI
         reloadPosts().map(at: .main) {
             refreshControl.endRefreshing()
         }
