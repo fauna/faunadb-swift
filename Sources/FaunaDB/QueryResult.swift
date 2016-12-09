@@ -40,22 +40,22 @@ public class QueryResult<T> {
 
 extension QueryResult {
 
-    public func map<A>(at queue: DispatchQueue? = nil, _ fn: @escaping (T) throws -> A) -> QueryResult<A> {
+    public func map<A>(at queue: DispatchQueue? = nil, _ transform: @escaping (T) throws -> A) -> QueryResult<A> {
         let res = QueryResult<A>()
 
         onComplete(at: queue) { result in
-            res.value = result.map(fn)
+            res.value = result.map(transform)
         }
 
         return res
     }
 
-    public func flatMap<A>(at queue: DispatchQueue? = nil, _ fn: @escaping (T) throws -> QueryResult<A>) -> QueryResult<A> {
+    public func flatMap<A>(at queue: DispatchQueue? = nil, _ transform: @escaping (T) throws -> QueryResult<A>) -> QueryResult<A> {
         let res = QueryResult<A>()
 
         onComplete(at: queue) { result in
             _ = result.map { value in
-                try fn(value).onComplete { nested in
+                try transform(value).onComplete { nested in
                     res.value = nested
                 }
             }.mapErr { error in
@@ -70,22 +70,22 @@ extension QueryResult {
 
 extension QueryResult {
 
-    public func mapErr(at queue: DispatchQueue? = nil, _ fn: @escaping (Error) throws -> T) -> QueryResult {
+    public func mapErr(at queue: DispatchQueue? = nil, _ transform: @escaping (Error) throws -> T) -> QueryResult {
         let res = QueryResult()
 
         onComplete(at: queue) { result in
-            res.value = result.mapErr(fn)
+            res.value = result.mapErr(transform)
         }
 
         return res
     }
 
-    public func flatMapErr(at queue: DispatchQueue? = nil, _ fn: @escaping (Error) throws -> QueryResult) -> QueryResult {
+    public func flatMapErr(at queue: DispatchQueue? = nil, _ transform: @escaping (Error) throws -> QueryResult) -> QueryResult {
         let res = QueryResult()
 
         onComplete(at: queue) { result in
             _ = result.map { value in res.value = result }.mapErr { error in
-                try fn(error).onComplete { nested in
+                try transform(error).onComplete { nested in
                     res.value = nested
                 }
             }

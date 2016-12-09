@@ -72,12 +72,12 @@ extension Value {
 
 extension Value {
 
-    public func map<T>(_ f: @escaping (Value) throws -> T) throws -> T? {
-        return try get(field: rootField.map(f))
+    public func map<T>(_ transform: @escaping (Value) throws -> T) throws -> T? {
+        return try get(field: rootField.map(transform))
     }
 
-    public func flatMap<T>(_ f: @escaping (Value) throws -> T?) throws -> T? {
-        return try get(field: rootField.flatMap(f))
+    public func flatMap<T>(_ transform: @escaping (Value) throws -> T?) throws -> T? {
+        return try get(field: rootField.flatMap(transform))
     }
 
 }
