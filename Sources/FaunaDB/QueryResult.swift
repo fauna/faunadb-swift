@@ -40,7 +40,6 @@ public class QueryResult<T> {
 
 extension QueryResult {
 
-    @discardableResult
     public func map<A>(at queue: DispatchQueue? = nil, _ fn: @escaping (T) throws -> A) -> QueryResult<A> {
         let res = QueryResult<A>()
 
@@ -51,7 +50,6 @@ extension QueryResult {
         return res
     }
 
-    @discardableResult
     public func flatMap<A>(at queue: DispatchQueue? = nil, _ fn: @escaping (T) throws -> QueryResult<A>) -> QueryResult<A> {
         let res = QueryResult<A>()
 
@@ -72,7 +70,6 @@ extension QueryResult {
 
 extension QueryResult {
 
-    @discardableResult
     public func mapErr(at queue: DispatchQueue? = nil, _ fn: @escaping (Error) throws -> T) -> QueryResult {
         let res = QueryResult()
 
@@ -83,7 +80,6 @@ extension QueryResult {
         return res
     }
 
-    @discardableResult
     public func flatMapErr(at queue: DispatchQueue? = nil, _ fn: @escaping (Error) throws -> QueryResult) -> QueryResult {
         let res = QueryResult()
 
@@ -96,6 +92,26 @@ extension QueryResult {
         }
 
         return res
+    }
+
+}
+
+extension QueryResult {
+
+    @discardableResult
+    public func onSuccess(at queue: DispatchQueue? = nil, _ callback: @escaping (T) throws -> Void) -> QueryResult {
+        return map(at: queue) { res in
+            try callback(res)
+            return res
+        }
+    }
+
+    @discardableResult
+    public func onFailure(at queue: DispatchQueue? = nil, _ callback: @escaping (Error) throws -> Void) -> QueryResult {
+        return mapErr(at: queue) { error in
+            try callback(error)
+            throw error
+        }
     }
 
 }
