@@ -1,14 +1,50 @@
 internal let rootField = Field<Value>()
 
+/**
+    `Field` represents a field extractor for database entries returned by the
+    server.
+
+    For example:
+
+        let nameField = Field<String>("data", "name")
+
+        let user = try! client.query(
+            Get(
+                Ref("classes/user/42")
+            )
+        ).await(timeout: .now() + 5)
+
+        let userName = user.get(field: nameField)
+
+    Every field has a path which is composed by a sequence of segments.
+    A segment can be:
+
+    - `String`: when the desired field is contained into an object;
+    - `Int`: when the desired field is contained into an array.
+
+    ## Rules for field extraction and data conversion:
+
+    - If the field is not present, it returns nil;
+    - If the field can't be converted to the expected type, it throws an
+        exception.  E.g.: `Field<String>("data", "name")` expects the "name"
+        field to be a `String`. If the end result is not a `String`, it will fail;
+    - If the path assumes a type that is not correct, it throws an exception.
+        E.g.: `Field<String>("data", "name")` expects the target value to contain
+        a nested object at the key "data" in which there should be a `String`
+        field at the key "name". If "data" field is not an object, it will fail.
+
+*/
 public struct Field<T> {
 
     fileprivate let path: Path
     fileprivate let codec: Codec
 
+    /// Initializes a new field extractor with a path containing the informed path segments.
     public init(_ segments: Segment...) {
         self.init(path: segments)
     }
 
+    /// Converts an array of path segments into a field extractor.
     public init(path segments: [Segment]) {
         self.init(path: Path(segments))
     }
@@ -30,58 +66,84 @@ public struct Field<T> {
 
 extension Field {
 
+    /// Creates a new nested field extractor based on its parent's path.
     public func at(_ segments: Segment...) -> Field {
         return at(path: segments)
     }
 
+    /// Creates a new nested field extractor based on its parent's path.
     public func at(path segments: [Segment]) -> Field {
         return at(field: Field(path: Path(segments), codec: codec))
     }
 
+    /// Combine two field extractors to create a nested field.
     public func at<A>(field: Field<A>) -> Field<A> {
         return Field<A>(path: self.path.subpath(field.path), codec: field.codec)
     }
 
+    /// Combine two field extractors to create a nested array field.
     public func get<A>(asArrayOf field: Field<A>) -> Field<[A]> {
         return Field<[A]>(path: path, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
+    /// Combine two field extractors to create a nested object field.
     public func get<A>(asDictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field<[String: A]>(path: path, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
+    /// Creates a new field by mapping the result of its parent's extracted value.
     public func map<A>(_ transform: @escaping (T) throws -> A) -> Field<A> {
         return Field<A>(path: path, codec: MapFunction<T, A>(codec: codec, fn: transform))
     }
 
+    /// Creates a new field by flat mapping the result of its parent's extracted value.
     public func flatMap<A>(_ transform: @escaping (T) throws -> A?) -> Field<A> {
         return Field<A>(path: path, codec: FlatMapFunction<T, A>(codec: codec, fn: transform))
     }
 
 }
 
+/**
+    `Fields` has static constructors for field extractors when the result value is still
+    undefined. This constructors are useful for complex field compositions.
+
+    For example:
+
+        Fields.at("data", "arrayOfArrays").get(
+            asArrayOf: Fields.get(asArrayOf: Field<String>())
+        )
+
+        // Resulting type: Field<[[String]]>
+
+*/
 public struct Fields {
 
+    // Creates a field extractor with the segments informed
     public static func at(_ segments: Segment...) -> Field<Value> {
         return at(path: segments)
     }
 
+    // Creates a field extractor with the path informed
     public static func at(path segments: [Segment]) -> Field<Value> {
         return Field(path: segments)
     }
 
+    // Uses the field extractor informed to create new array field
     public static func get<A>(asArrayOf field: Field<A>) -> Field<[A]> {
         return Field(path: Path.root, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
+    // Uses the field extractor informed to create new object field
     public static func get<A>(asDictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
+    // Creates a field extractor by mapping its result to the function informed
     public static func map<A>(_ transform: @escaping (Value) throws -> A) -> Field<A> {
         return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }
 
+    // Creates a field extractor by flat mapping its result to the function informed
     public static func flatMap<A>(_ transform: @escaping (Value) throws -> A?) -> Field<A> {
         return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }

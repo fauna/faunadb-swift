@@ -8,11 +8,20 @@ fileprivate let nanosInASecond  = 1_000_000_000
 fileprivate let nanosInAMicro   = 1_000
 fileprivate let nanosInAMilli   = 1_000_000
 
+/// Represents a high precision time starting from UNIX epoch: "1970-01-01".
 public struct HighPrecisionTime {
 
+    /// Current date represented in seconds passed since January 1st, 1970.
     public let secondsSince1970: Int
+
+    /// Nanoseconds offset added to the current date.
     public let nanosecondsOffset: Int
 
+    /**
+        - Parameters:
+            - secondsSince1970:  Number of seconds passed January 1st, 1970
+            - nanosecondsOffset: Nanoseconds to be added to the initial date
+    */
     public init(secondsSince1970: Int, nanosecondsOffset: Int = 0) {
         self.init(
             secondsSince1970: secondsSince1970,
@@ -26,6 +35,8 @@ public struct HighPrecisionTime {
         self.nanosecondsOffset = (adjust % limit) * factor
     }
 
+    /// Converts to a `Foundation.Date`.
+    /// - Note: Ignores the nanoseconds precision.
     public func toDate() -> Date {
         return Date(timeIntervalSince1970: Double(secondsSince1970))
     }
@@ -34,10 +45,17 @@ public struct HighPrecisionTime {
 
 extension HighPrecisionTime {
 
+    /// Converts a `Foundation.Date` into an instance of `HighPrecisionTime`.
+    /// - Note: Ignores anything lower than seconds precision.
     public init(date: Date) {
         self.init(secondsSince1970: Int(date.timeIntervalSince1970))
     }
 
+    /**
+        - Parameters:
+            - secondsSince1970:   Number of seconds passed January 1st, 1970
+            - millisecondsOffset: Milliseconds to be added to the initial date
+    */
     public init(secondsSince1970: Int, millisecondsOffset: Int) {
         self.init(
             secondsSince1970: secondsSince1970,
@@ -47,6 +65,11 @@ extension HighPrecisionTime {
         )
     }
 
+    /**
+        - Parameters:
+            - secondsSince1970:   Number of seconds passed January 1st, 1970
+            - microsecondsOffset: Microseconds to be added to the initial date
+    */
     public init(secondsSince1970: Int, microsecondsOffset: Int) {
         self.init(
             secondsSince1970: secondsSince1970,

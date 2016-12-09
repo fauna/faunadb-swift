@@ -27,6 +27,8 @@ extension Path: CustomStringConvertible {
     }
 }
 
+/// Represents a path segment to a field value.
+/// See `FaunaDB.Field` for more information.
 public protocol Segment {}
 
 extension String: Segment {}

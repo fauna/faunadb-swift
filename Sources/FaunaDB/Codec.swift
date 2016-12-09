@@ -1,5 +1,27 @@
 import Foundation
 
+/**
+    `Decodable` protocol is used to specify how a database entry returned
+    by FaunaDB is converted to a custom data structure.
+
+    For example:
+
+        struct Point { let x, y: Int }
+
+        extension Point: Decodable {
+            init?(value: Value) throws {
+                try self.init(
+                    x: value.get("data", "position", "x") ?? 0
+                    y: value.get("data", "position", "y") ?? 0
+            }
+        }
+
+        //...
+
+        let point: Point? = databaseValue.get()
+
+    Check the rules for data conversion at `FaunaDB.Field` struct.
+*/
 public protocol Decodable {
     init?(value: Value) throws
 }

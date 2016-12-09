@@ -4,22 +4,22 @@ internal struct Errors {
 
     private static let errorField = Fields.at("errors").get(asArrayOf:
         Fields.map(QueryError.init)
-    )
+        )
 
     static func errorFor(response: HTTPURLResponse, json: Data) -> FaunaError? {
         guard !(200 ..< 300 ~= response.statusCode) else { return nil }
 
         guard let errors = try? parseErrors(from: json) else {
             return errorTypeFor(
-                status: response.statusCode,
-                message: "Unparseable server response"
-            )
+   status: response.statusCode,
+   message: "Unparseable server response"
+   )
         }
 
         return errorTypeFor(
-            status: response.statusCode,
-            errors: errors
-        )
+   status: response.statusCode,
+   errors: errors
+   )
     }
 
     private static func errorTypeFor(status: Int, errors: [QueryError] = [], message: String? = nil) -> FaunaError {
@@ -41,10 +41,16 @@ internal struct Errors {
     }
 }
 
+/// Represents an error while executing a FaunaDB query.
 public class FaunaError: Error {
 
+    /// The error message.
     public let message: String?
+
+    /// The HTTP status code.
     public let status: Int?
+
+    /// The errors found by FaunDB while executing the query.
     public let errors: [QueryError]
 
     fileprivate init(status: Int? = nil, errors: [QueryError] = [], message: String? = nil) {
@@ -89,12 +95,14 @@ extension FaunaError: CustomStringConvertible {
 
 }
 
+/// Wraps a HTTP 400 error response.
 public final class BadRequest: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 400, errors: errors, message: message)
     }
 }
 
+/// Wraps a HTTP 401 error response.
 public final class Unauthorized: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 401, errors: errors, message: message)
@@ -108,24 +116,28 @@ public final class PermissionDenied: FaunaError {
     }
 }
 
+/// Wraps a HTTP 404 error response.
 public final class NotFound: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 404, errors: errors, message: message)
     }
 }
 
+/// Wraps a HTTP 500 error response.
 public final class InternalError: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 500, errors: errors, message: message)
     }
 }
 
+/// Wraps a HTTP 503 error response.
 public final class Unavailable: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 503, errors: errors, message: message)
     }
 }
 
+/// Wraps any unknown error.
 public final class UnknowError: FaunaError {
     public override init(status: Int? = nil, errors: [QueryError] = [], message: String? = nil) {
         super.init(status: status, errors: errors, message: message)
@@ -136,17 +148,26 @@ public final class UnknowError: FaunaError {
     }
 }
 
+/// Error returned when a timeout occurs during the query execution.
 public final class TimeoutError: FaunaError {
     public init(message: String? = nil) {
         super.init(message: message)
     }
 }
 
+/// Represents an error found by FaunaDB while executing a query.
 public struct QueryError {
 
+    /// The position of the field containing the error.
     public let position: [String]
+
+    /// The FaunaDB error code.
     public let code: String?
+
+    /// The description of the error found.
     public let description: String?
+
+    /// A list of validation failures that occurred during the query execution.
     public let failures: [ValidationFailure]
 
     public init(position: [String], code: String?, description: String?, failures: [ValidationFailure]) {
@@ -189,10 +210,16 @@ extension QueryError: Equatable {
     }
 }
 
+/// Represents a validation failure while executing a FaunaDB query.
 public struct ValidationFailure {
 
+    /// The position of the field that triggered the validation failure.
     public let field: [String]
+
+    /// The FaunaDB error code.
     public let code: String?
+
+    /// The description of the validation failure.
     public let description: String?
 
     public init(field: [String], code: String?, description: String?) {

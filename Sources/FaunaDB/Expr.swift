@@ -1,5 +1,47 @@
 import Foundation
 
+/**
+    `Expr` is the top level of the query language expression tree.
+
+    For convenience, some native types are considered valid expressions:
+    `String`, `Int`, `Double`, `Bool`, `Optional`, and `Date`.
+
+    ## Motivation
+
+    The FaunaDB query language is a non-typed expression based language.
+    You can think about it as an actual programming language.
+
+    In order to express the whole power and flexibility of the query language,
+    we need to express our DSL in a way that allows the same combinations as a
+    non-typed language supports.
+
+    In practice, query language functions will always receive and return pure `Expr`
+    types. That means you can compose your queries by combining functions together.
+
+    For example:
+
+        // Just return a reference to a user
+        client.query(
+            Ref("classes/users/42")
+        )
+
+        // Combine Ref and Get to return the user with id 42
+        client.query(
+            Get(
+                Ref("classes/users/42")
+            )
+        )
+
+        // Combine Ref, Get, and Select to return the user name only
+        client.query(
+            Select(
+                path: "data", "name"
+                from: Get(
+                    Ref("classes/users/42")
+                )
+            )
+        )
+*/
 public protocol Expr {}
 
 precedencegroup ExprTuplePrecedence {
@@ -9,6 +51,8 @@ precedencegroup ExprTuplePrecedence {
 }
 
 infix operator => : ExprTuplePrecedence
+
+/// Expression tuple constructor. See `FaunaDB.Obj` for more information.
 public func => (key: String, value: Expr?) -> (String, Expr?) {
     return (key, value)
 }
@@ -47,6 +91,20 @@ internal func varargs(_ args: [Expr]) -> Expr {
     return Arr(wrap: args)
 }
 
+/**
+    Represents a hash map at FaunaDB where the key is always a `String`
+    and the value can be a primitive value or a expression to be evaluated.
+
+    You can use the operator `=>` as a syntax sugar while building new objects.
+
+    For example:
+
+        // Using a primitive value
+        Obj("name" => "Jhon")
+
+        // Using a call to `Time` function
+        Obj("created_at" => Time("now"))
+*/
 public struct Obj: Expr, AsJson, CustomStringConvertible {
 
     private let wrapped: [String: Expr?]
@@ -55,10 +113,13 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
         return wrapped.description
     }
 
+    /// Converts a native dictionary to a `Obj` instance.
     public init(wrap: [String: Expr?]) {
         self.wrapped = wrap
     }
 
+    /// Initializes a new `Obj` instance with the key value tuples informed.
+    /// You can use the operator `=>` as a syntax sugar while building new objects.
     public init(_ pairs: (String, Expr?)...) {
         self.wrapped = Dictionary(pairs: pairs)
     }
@@ -71,6 +132,18 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
 
 }
 
+/**
+    Represents an array at FaunaDB where its elements can be a primitive value
+    or a expression to be evaluated.
+
+    For example:
+
+        // Using a primitive value
+        Arr(1, "Two", 3)
+
+        // Using a call to `Time` function
+        Arr(Time("now"))
+*/
 public struct Arr: Expr, AsJson, CustomStringConvertible {
 
     private let wrapped: [Expr?]
@@ -79,10 +152,12 @@ public struct Arr: Expr, AsJson, CustomStringConvertible {
         return wrapped.description
     }
 
+    /// Initializes a new `Arr` instance with the elements informed.
     public init(_ elements: Expr?...) {
         self.wrapped = elements
     }
 
+    /// Converts a primitive array to a `Arr` instance.
     public init(wrap: [Expr?]) {
         self.wrapped = wrap
     }
