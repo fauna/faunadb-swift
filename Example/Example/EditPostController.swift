@@ -33,7 +33,7 @@ class EditPostController: UIViewController {
             text: postText.text.trim()
         )
 
-        Post.save(postToSave).map(at: .main) { [weak self] savedPost in
+        Post.save(postToSave).onSuccess(at: .main) { [weak self] savedPost in
             self?.post = savedPost
             self?.goBackToPreviousView()
         }

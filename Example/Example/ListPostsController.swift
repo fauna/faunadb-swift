@@ -19,13 +19,13 @@ class ListPostsController: UITableViewController {
     @objc private func handleRefresh(refreshControl: UIRefreshControl) {
         // Map using the .main DispatchQueue because that is the only
         // queue allowed to update the UI
-        reloadPosts().map(at: .main) {
+        reloadPosts().onSuccess(at: .main) {
             refreshControl.endRefreshing()
         }
     }
 
     @discardableResult private func reloadPosts() -> QueryResult<Void> {
-        return Post.loadRefsAndTitles().map(at: .main) { [weak self] page -> Void in
+        return Post.loadRefsAndTitles().map(at: .main) { [weak self] page in
             if let `self` = self {
                 self.refsAndTitles = page.refsAndTitles
                 self.nextPage = page.nextPage
@@ -59,7 +59,7 @@ class ListPostsController: UITableViewController {
     @discardableResult private func loadMorePosts() {
         guard let nextPage = nextPage else { return }
 
-        Post.loadRefsAndTitles(cursor: nextPage).map(at: .main) { [weak self] page in
+        Post.loadRefsAndTitles(cursor: nextPage).onSuccess(at: .main) { [weak self] page in
             self?.refsAndTitles.append(contentsOf: page.refsAndTitles)
             self?.nextPage = page.nextPage
             self?.tableView.reloadData()

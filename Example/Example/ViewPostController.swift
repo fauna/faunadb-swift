@@ -16,7 +16,7 @@ class ViewPostController: UIViewController {
         postTitle.title = refAndTitle.title
         postBody.text = "Loading..."
 
-        Post.load(byRef: refAndTitle.ref).map(at: .main) { [weak self] post in
+        Post.load(byRef: refAndTitle.ref).onSuccess(at: .main) { [weak self] post in
             self?.post = post
             self?.updateView()
         }
@@ -43,7 +43,7 @@ class ViewPostController: UIViewController {
     private func deleteSelectedPost(_ action: UIAlertAction) {
         guard let ref = post?.ref else { return }
 
-        Post.delete(at: ref).map(at: .main) { [weak self] in
+        Post.delete(at: ref).onSuccess(at: .main) { [weak self] in
             self?.performSegue(withIdentifier: "postDeleted", sender: self)
         }
     }
