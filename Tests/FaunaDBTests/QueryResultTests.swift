@@ -41,6 +41,44 @@ class QueryResultTests: XCTestCase {
 
     }
 
+    func testOnSuccess() {
+        var called = 0
+
+        try! successfulQueryResult(value: 1).onSuccess { called += $0 }.await()
+        try! successfulQueryResult(value: 1).onSuccess(at: queue) { called += $0 }.await()
+
+        XCTAssertEqual(called, 2)
+    }
+
+    func testOnFailure() {
+        var called = 0
+
+        _ = try? failedQueryResult().onFailure { _ in called += 1 }.await()
+        _ = try? failedQueryResult().onFailure(at: queue) { _ in called += 1 }.await()
+
+        XCTAssertEqual(called, 2)
+    }
+
+    func testCanCallOnSucessMoreThanOnce() {
+        var called = 0
+
+        successfulQueryResult(value: 1)
+            .onSuccess { called += $0 }
+            .onSuccess { called += $0 }
+
+        XCTAssertEqual(called, 2)
+    }
+
+    func testCanCallOnFailureMoreThanOnce() {
+        var called = 0
+
+        failedQueryResult()
+            .onFailure { _ in called += 1 }
+            .onFailure { _ in called += 1 }
+
+        XCTAssertEqual(called, 2)
+    }
+
     func testDoNotExecuteCallbacksIfNilValue() {
         let res = QueryResult<Int>()
         _ = res.map { _ in XCTFail("Should not map nil value") }

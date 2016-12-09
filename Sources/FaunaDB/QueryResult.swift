@@ -98,6 +98,26 @@ extension QueryResult {
 
 extension QueryResult {
 
+    @discardableResult
+    public func onSuccess(at queue: DispatchQueue? = nil, _ callback: @escaping (T) throws -> Void) -> QueryResult {
+        return map(at: queue) { res in
+            try callback(res)
+            return res
+        }
+    }
+
+    @discardableResult
+    public func onFailure(at queue: DispatchQueue? = nil, _ callback: @escaping (Error) throws -> Void) -> QueryResult {
+        return mapErr(at: queue) { error in
+            try callback(error)
+            throw error
+        }
+    }
+
+}
+
+extension QueryResult {
+
     public func await(timeout: DispatchTime) throws -> T {
         do {
             return try Latch.await(timeout: timeout) { done in
