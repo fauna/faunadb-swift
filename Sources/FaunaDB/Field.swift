@@ -50,12 +50,12 @@ extension Field {
         return Field<[String: A]>(path: path, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    public func map<A>(_ f: @escaping (T) throws -> A) -> Field<A> {
-        return Field<A>(path: path, codec: MapFunction<T, A>(codec: codec, fn: f))
+    public func map<A>(_ transform: @escaping (T) throws -> A) -> Field<A> {
+        return Field<A>(path: path, codec: MapFunction<T, A>(codec: codec, fn: transform))
     }
 
-    public func flatMap<A>(_ f: @escaping (T) throws -> A?) -> Field<A> {
-        return Field<A>(path: path, codec: FlatMapFunction<T, A>(codec: codec, fn: f))
+    public func flatMap<A>(_ transform: @escaping (T) throws -> A?) -> Field<A> {
+        return Field<A>(path: path, codec: FlatMapFunction<T, A>(codec: codec, fn: transform))
     }
 
 }
@@ -78,12 +78,12 @@ public struct Fields {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    public static func map<A>(_ f: @escaping (Value) throws -> A) -> Field<A> {
-        return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: f))
+    public static func map<A>(_ transform: @escaping (Value) throws -> A) -> Field<A> {
+        return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }
 
-    public static func flatMap<A>(_ f: @escaping (Value) throws -> A?) -> Field<A> {
-        return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: f))
+    public static func flatMap<A>(_ transform: @escaping (Value) throws -> A?) -> Field<A> {
+        return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }
 
 }
