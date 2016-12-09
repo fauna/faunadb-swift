@@ -8,7 +8,7 @@ internal extension Dictionary {
     }
 
     func mapT<K, V>(_ f: (Element) throws -> (K, V)) rethrows -> [K: V] {
-        return try Dictionary<K, V>(pairs: self.map(f))
+        return try [K: V](pairs: self.map(f))
     }
 
     func mapValuesT<V>(_ f: (Value) throws -> V) rethrows -> [Key: V] {
