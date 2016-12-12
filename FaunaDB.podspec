@@ -9,9 +9,8 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/faunadb'
   s.requires_arc = true
   s.source_files = 'Sources/**/*.swift'
-  s.ios.deployment_target = '8.4'
-  s.osx.deployment_target = '10.9'
-  s.watchos.deployment_target = '2.2'
-  s.tvos.deployment_target = '9.2'
-  s.dependency 'Result', '~> 2.0'
+  s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.10'
+  s.tvos.deployment_target = '9.0'
+  s.watchos.deployment_target = '2.0'
 end
