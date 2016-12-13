@@ -1,29 +1,27 @@
 language: objective-c
-osx_image: xcode7.3
+osx_image: xcode8.2
 
-before_install:
-- set -o pipefail
-- xcodebuild -version
-- xcodebuild -showsdks
-- brew update
-- brew outdated carthage || brew upgrade carthage
-- carthage update Result --platform all
-- carthage update Nimble --platform iOS,Mac,tvOS
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-- defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO
-script:
-- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB iOS" -sdk iphonesimulator | xcpretty -c
-- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB OSX" -sdk macosx | xcpretty -c
-- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB tvOS" -sdk appletvsimulator | xcpretty -c
-- xcodebuild clean build -project FaunaDB.xcodeproj -scheme  "FaunaDB watchOS" -sdk watchsimulator | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB iOS" -sdk iphonesimulator FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB OSX" -sdk macosx FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
-- xcodebuild test -project FaunaDB.xcodeproj -scheme "FaunaDB tvOS" -sdk appletvsimulator -destination="platform=tvOS Simulator" FAUNA_ROOT_KEY=$FAUNA_ROOT_KEY | xcpretty -c
 env:
   global:
-    - secure: "Mc/gjfA9ijal7xTCLt4FpRVlfWmZxdPWJmfHH7DObvLCXw0AGcBE8k15NXUmWAVIirCeuoed1TiAdSsFQu5JPWSRXrpRv6qz5UeiioCVMRzclkgTNFO2QeS4TWenJnqoet/NDSD+5gaBFnDZWd9lVC/SZD+N+ufNX+GWw1RK9SPogpEmyv13gnbVXDtv+qoV8Yb2HjyZ9wxSevPxC+O/oxXbOkgaxBQQcZU2v94DoamGUs+5dsiU07/AFh5aHtKzZD+byIzbEb2S+oaMUHJJ2DAPjlEZEa1OLPSElOy6DPY/NxRTiUmseGIHpg0695RtoG3RcIZ/U1I2YJMGuGypOTW7HcWK5A/3OkamHJiQKEddjrDEUvDLzNmqasc9pVHBy4to4muil2kMF6nXfyDt/k5Fx4Btq550uC0IO0LykdponCqqgSTTPZtJ7oen716B++TN0CAVmm+DCQP0/dpd3SI9vFc+xzO1FRppFd6YnJfYd0+UvC6VBgDM/M/VpGMgcpB+Pl1Jmzu7Xk89ZEsOaeOJJ4KeZkC4PkZnJWOZAIaLYqwTA1AarqLBw0ysI3YKX39EfiJPFFor6I87A/f3P/MprpWaMy5dGWMBmeQJYM/XYWfFd4Nlgv0Re4rZzn5zdD7AieSfgV0XSrLR34vKmG1FB4q+GtnCA85EfOiaJNk="
+    - FAUNA_ENDPOINT=https://db.fauna.com
+    - secure: Mc/gjfA9ijal7xTCLt4FpRVlfWmZxdPWJmfHH7DObvLCXw0AGcBE8k15NXUmWAVIirCeuoed1TiAdSsFQu5JPWSRXrpRv6qz5UeiioCVMRzclkgTNFO2QeS4TWenJnqoet/NDSD+5gaBFnDZWd9lVC/SZD+N+ufNX+GWw1RK9SPogpEmyv13gnbVXDtv+qoV8Yb2HjyZ9wxSevPxC+O/oxXbOkgaxBQQcZU2v94DoamGUs+5dsiU07/AFh5aHtKzZD+byIzbEb2S+oaMUHJJ2DAPjlEZEa1OLPSElOy6DPY/NxRTiUmseGIHpg0695RtoG3RcIZ/U1I2YJMGuGypOTW7HcWK5A/3OkamHJiQKEddjrDEUvDLzNmqasc9pVHBy4to4muil2kMF6nXfyDt/k5Fx4Btq550uC0IO0LykdponCqqgSTTPZtJ7oen716B++TN0CAVmm+DCQP0/dpd3SI9vFc+xzO1FRppFd6YnJfYd0+UvC6VBgDM/M/VpGMgcpB+Pl1Jmzu7Xk89ZEsOaeOJJ4KeZkC4PkZnJWOZAIaLYqwTA1AarqLBw0ysI3YKX39EfiJPFFor6I87A/f3P/MprpWaMy5dGWMBmeQJYM/XYWfFd4Nlgv0Re4rZzn5zdD7AieSfgV0XSrLR34vKmG1FB4q+GtnCA85EfOiaJNk=
+  matrix:
+    - PLATFORM='macOS' ACTION='test' DESTINATION='platform=OS X' COVERAGE="-enableCodeCoverage YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES"
+    - PLATFORM='iOS' ACTION='test' DESTINATION='platform=iOS Simulator,OS=10.1,name=iPhone 6' COVERAGE=
+    - PLATFORM='tvOS' ACTION='test' DESTINATION='platform=tvOS Simulator,name=Apple TV 1080p' COVERAGE=
+    - PLATFORM='watchOS' ACTION='build' DESTINATION='platform=watchOS Simulator,name=Apple Watch - 38mm' COVERAGE=
+
+script:
+  - set -o pipefail && xcodebuild $ACTION -scheme "FaunaDB" -destination "$DESTINATION" -configuration Release $COVERAGE FAUNA_ROOT_KEY="$FAUNA_ROOT_KEY" FAUNA_ENDPOINT="$FAUNA_ENDPOINT" | xcpretty
+
+after_success:
+  - if [[ "$PLATFORM" == "macOS" ]]; then bash <(curl -s https://codecov.io/bash); fi
+
 branches:
   only:
     - master
+
 notifications:
   email: false
+  slack:
+    secure: faDQKBMA/B501n+F1X8VCCBk6qvonOUZsGWOK68OEWpqcpIKc4i0vDFYQCsJi6eKwNTD7SFAGvfi8VwoB/3qkBU9s7N9z2mLHpBmu8jndl6r5xt+r1vdwGl9zYPDYjdCEx6MXkJwg1HZ38Kd/QLUFqf93JNcn9/yBRVqri81XQ5IWqpxRMmhPxTjvuAWWskapBNutD+Cf27ZJrdkYrG+G6yUY29Dkez5b1M4TFe7sarFReqb5WAUVGjU/4dT6PVcVv45nIu+9G5iuqVSIczE9/7eLEbbzLFZzr/Ki/4Qr08i9POCdarYL7moBxpgnYGGIH1RedugRGjSXpd6C4VxgSBlpg/6aavl4C/6PHzmC8Oiuder3hHS/0CP+qdjBJCRHdfKpzChbB4w8kG7jAGobFp2BbcrlxqYObubsknjkb1RXVZ89X0PViAJk71ziitoEO4GZNA4tBXcMx5dQ0/zDpbHZmRgl4iM0hbh3lF1SOfxrM3Q65Jbb/Bn5fnYL1b9LpqoL4CPF/jt09Cd5S7U5WbI2mj9/Usw7Z7AgRvu5tHv7MZdvytDwNjEzbGtcTJAp4qiMkav8O2jK/EjlHcPhGXdYg/qO+9yuo8zO311S/4LjPOkCfncWJFC+1FAZJK0WMJF/xrG+9P8GvFYsRCqlmfVQK0WHSRiZ8LRfocpAk0=
