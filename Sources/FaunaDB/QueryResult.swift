@@ -3,7 +3,7 @@ import Foundation
 /**
     Represent the result of an asynchronous query executed in a FaunaDB server.
 
-    - Note: All methods available to handle `QueryResult` success of failure.
+    - Note: All methods available to handle `QueryResult` success or failure.
     will optionally receive a `DispatchQueue`. The only `DispatchQueue` allowed
     to update the UI is `DispatchQueue.main`.
 */
@@ -99,7 +99,7 @@ extension QueryResult {
         Apply a transformation if an error has occurred during the query execution.
 
         If `mapErr` returns a value, the resulting `QueryResult` will be considered a success.
-        If you which to handle an error but still return a failing `QueryResult`, you must rethrow
+        If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
         the original exception.
 
         - Parameters:
@@ -122,7 +122,7 @@ extension QueryResult {
         Apply a transformation if an error has occurred during the query execution.
 
         If `flatMapErr` returns a value, the resulting `QueryResult` will be considered a success.
-        If you which to handle an error but still return a failing `QueryResult`, you must rethrow
+        If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
         the original exception.
 
         - Parameters:
