@@ -77,7 +77,6 @@ public struct Let: Fn {
         )
     }
 
-
     /// - Parameter bindings: Each tuple contains the variable name and its corresponding value.
     /// - Parameter expr:     Lambda expression where binding variables are available to use.
     public init(bindings: (String, Expr?)..., in: () -> Expr) {
@@ -174,7 +173,6 @@ public struct Let: Fn {
     }
 }
 
-
 /// If evaluates and returns then expr or else expr depending on the value of
 /// pred. If pred evaluates to anything other than a boolean, if returns an
 /// “invalid argument” error.
@@ -192,7 +190,6 @@ public struct If: Fn {
     }
 }
 
-
 /// Do sequentially evaluates its arguments, and returns the evaluation of the
 /// last expression. If no expressions are provided, do returns an error.
 ///
@@ -207,7 +204,6 @@ public struct Do: Fn {
     }
 
 }
-
 
 /// `Lambda` creates an anonymous function that binds one or more variables in the
 /// expression at `expr`. The lambda form is only permitted as a direct argument
