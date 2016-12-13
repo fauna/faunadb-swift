@@ -173,6 +173,22 @@ class ClientTests: XCTestCase {
         }
     }
 
+    func testPermissionDeniedWhenAccessingRestrictedResource() {
+        let key = try! adminClient.query(
+            CreateKey(Obj(
+                "database" => Database(dbName),
+                "role" => "client"
+            ))
+        ).await()
+
+        let client = adminClient.newSessionClient(secret: try! key.get("secret")!)
+        let restrictedQuery = client.query(Paginate(Ref("databases")))
+
+        XCTAssertThrowsError(try restrictedQuery.await()) { error in
+            XCTAssert(error is PermissionDenied)
+        }
+    }
+
     func testCreateAComplexInstance() {
         let instance = try! client.query(
             Create(at: Self.randomClass, Obj(

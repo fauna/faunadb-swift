@@ -12,6 +12,10 @@ class ErrorsTests: XCTestCase {
         assertFail(httpCode: 401, error: Unauthorized())
     }
 
+    func testPermissionDenied() {
+        assertFail(httpCode: 403, error: PermissionDenied())
+    }
+
     func testNotFound() {
         assertFail(httpCode: 404, error: NotFound())
     }
