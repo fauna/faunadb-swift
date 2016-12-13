@@ -102,6 +102,28 @@ extension QueryResult {
         If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
         the original exception.
 
+        For example:
+
+            // Revover form an error
+            client.query(/* some query */)
+                .map { value in
+                    try value.get() as Int?
+                }
+                .mapErr { error in
+                    debugPrint(error)
+                    return nil
+                }
+
+            // Handle but don't recover from an error
+            client.query(/* some query */)
+                .map { value in
+                    try value.get() as Int?
+                }
+                .mapErr { error in
+                    debugPrint(error)
+                    throw error
+                }
+
         - Parameters:
             - queue:     The dispatch queue in which the transformation will be performed.
             - transform: The transformation to be applied on the resulting error.
@@ -124,6 +146,31 @@ extension QueryResult {
         If `flatMapErr` returns a value, the resulting `QueryResult` will be considered a success.
         If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
         the original exception.
+
+        For example:
+
+            // Revover form an error
+            client.query(/* some query */)
+                .map { value in
+                    try value.get() as Int?
+                }
+                .flatMapErr { error in
+                    debugPrint(error)
+                    return client.query(/* other query */)
+                        .map { value in
+                            try value.get() as Int?
+                        }
+                }
+
+            // Handle but don't recover from an error
+            client.query(/* some query */)
+                .map { value in
+                    try value.get() as Int?
+                }
+                .flatMapErr { error in
+                    debugPrint(error)
+                    throw error
+                }
 
         - Parameters:
             - queue:     The dispatch queue in which the transformation will be performed.
