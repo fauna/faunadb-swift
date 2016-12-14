@@ -64,13 +64,13 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "FAUNA_ROOT_KEY"
-            value = "Add your root key secret here."
-            isEnabled = "NO">
+            value = "$(FAUNA_ROOT_KEY)"
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "FAUNA_ENDPOINT"
-            value = "Set this to your custom endpoint. It&apos;ll use Fauna Cloud by default."
-            isEnabled = "NO">
+            value = "$(FAUNA_ENDPOINT)"
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>

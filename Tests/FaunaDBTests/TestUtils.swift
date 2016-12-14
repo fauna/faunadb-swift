@@ -17,7 +17,10 @@ internal extension String {
         var res = prefix
 
         for _ in 1...size {
-            res.append("\(Int(arc4random()) % 10)")
+            // must avoid zero because Ref("classes/any/0123")
+            // becomes Ref("classes/any/123") once it goes to the server
+            let random = (arc4random() % 9) + 1
+            res.append("\(random)")
         }
 
         return res
