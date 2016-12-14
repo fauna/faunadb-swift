@@ -12,6 +12,10 @@ class ErrorsTests: XCTestCase {
         assertFail(httpCode: 401, error: Unauthorized())
     }
 
+    func testPermissionDenied() {
+        assertFail(httpCode: 403, error: PermissionDenied())
+    }
+
     func testNotFound() {
         assertFail(httpCode: 404, error: NotFound())
     }
@@ -101,7 +105,7 @@ class ErrorsTests: XCTestCase {
         )
     }
 
-    private func assertFail<E: FaunaError>(httpCode: Int, json: Data = "{ \"errors\": [] }".data(using: .utf8)!, error: E) {
+    private func assertFail(httpCode: Int, json: Data = "{ \"errors\": [] }".data(using: .utf8)!, error expected: FaunaError) {
         let res = HTTPURLResponse(
             url: URL(string: "http://localhost:8443")!,
             statusCode: httpCode,
@@ -109,7 +113,20 @@ class ErrorsTests: XCTestCase {
             headerFields: nil
         )!
 
-        XCTAssertEqual(Errors.errorFor(response: res, json: json), error)
+        guard let actual = Errors.errorFor(response: res, json: json) else {
+            XCTFail("Expected an error but nil was returned")
+            return
+        }
+
+        let actualType = type(of: actual)
+        let expectedType = type(of: expected)
+
+        XCTAssert(
+            actualType == expectedType,
+            "Error types are different: Expected \(expectedType), Actual: \(actualType)"
+        )
+
+        XCTAssertEqual(actual, expected)
     }
 
 }

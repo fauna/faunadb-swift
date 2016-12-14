@@ -26,6 +26,7 @@ internal struct Errors {
         switch status {
         case 400: return BadRequest(errors: errors, message: message)
         case 401: return Unauthorized(errors: errors, message: message)
+        case 403: return PermissionDenied(errors: errors, message: message)
         case 404: return NotFound(errors: errors, message: message)
         case 500: return InternalError(errors: errors, message: message)
         case 503: return Unavailable(errors: errors, message: message)
@@ -97,6 +98,13 @@ public final class BadRequest: FaunaError {
 public final class Unauthorized: FaunaError {
     public init(errors: [QueryError] = [], message: String? = nil) {
         super.init(status: 401, errors: errors, message: message)
+    }
+}
+
+/// Wraps a HTTP 403 error response.
+public final class PermissionDenied: FaunaError {
+    public init(errors: [QueryError] = [], message: String? = nil) {
+        super.init(status: 403, errors: errors, message: message)
     }
 }
 
