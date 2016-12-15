@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		450077621DF08D7B0064C81B /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450077611DF08D7B0064C81B /* TestUtils.swift */; };
+		45F357401E02CD6C002A45B2 /* AtomicIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F3573F1E02CD6C002A45B2 /* AtomicIntTests.swift */; };
 		OBJ_44 /* AtomicInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AtomicInt.swift */; };
 		OBJ_45 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Client.swift */; };
 		OBJ_46 /* Codec.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Codec.swift */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		450077611DF08D7B0064C81B /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		45F3573F1E02CD6C002A45B2 /* AtomicIntTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicIntTests.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Codec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codec.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		OBJ_27 /* FaunaDBTests */ = {
 			isa = PBXGroup;
 			children = (
+				45F3573F1E02CD6C002A45B2 /* AtomicIntTests.swift */,
 				OBJ_28 /* ClientTests.swift */,
 				OBJ_29 /* DeserializationTests.swift */,
 				OBJ_30 /* ErrorsTests.swift */,
@@ -278,6 +281,7 @@
 			files = (
 				OBJ_67 /* ClientTests.swift in Sources */,
 				OBJ_68 /* DeserializationTests.swift in Sources */,
+				45F357401E02CD6C002A45B2 /* AtomicIntTests.swift in Sources */,
 				OBJ_69 /* ErrorsTests.swift in Sources */,
 				OBJ_71 /* FieldTests.swift in Sources */,
 				450077621DF08D7B0064C81B /* TestUtils.swift in Sources */,
