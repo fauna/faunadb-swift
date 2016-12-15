@@ -1,6 +1,8 @@
 import Foundation
 
-internal struct LatchTimeout: Error {}
+internal struct LatchTimeout: Error {
+    let uptimeNanoseconds: UInt64
+}
 
 internal class Latch<T> {
 
@@ -12,8 +14,16 @@ internal class Latch<T> {
     }
 
     func await(timeout: DispatchTime) throws -> T {
-        if case .timedOut = lock.wait(timeout: timeout) { throw LatchTimeout() }
-        guard let value = value else { fatalError("Latch released with no value set") }
+        if case .timedOut = lock.wait(timeout: timeout) {
+            let now = DispatchTime.now()
+            let uptime = now.uptimeNanoseconds - timeout.uptimeNanoseconds
+            throw LatchTimeout(uptimeNanoseconds: uptime)
+        }
+
+        guard let value = value else {
+            fatalError("Latch released with no value set.")
+        }
+
         return try value.unwrap()
     }
 }

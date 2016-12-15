@@ -123,8 +123,8 @@ extension QueryResult {
             return try Latch.await(timeout: timeout) { done in
                 self.onComplete(callback: done)
             }
-        } catch is LatchTimeout {
-            throw TimeoutError(message: "Timed out while waiting for resource.")
+        } catch let timeout as LatchTimeout {
+            throw TimeoutError(message: "Operation timed out after \(timeout.uptimeNanoseconds) nanoseconds.")
         }
     }
 
