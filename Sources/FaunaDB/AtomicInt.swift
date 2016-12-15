@@ -5,9 +5,9 @@ internal final class AtomicInt {
     private let lock: DispatchQueue
     private var current: Int
 
-    init(label: String) {
+    init(label: String, initial: Int = 0) {
         self.lock = DispatchQueue(label: label)
-        self.current = 0
+        self.current = initial
     }
 
     func incrementAndGet() -> Int {
