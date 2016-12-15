@@ -142,11 +142,11 @@ class QueryResultTests: XCTestCase {
     func testTimesOutOnLongOperations() {
         let res = QueryResult<Int>()
 
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + 3) {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(3)) {
             res.value = .success(1)
         }
 
-        XCTAssertThrowsError(try res.await(timeout: DispatchTime.now() + 1)) { error in
+        XCTAssertThrowsError(try res.await(timeout: .now() + .seconds(1))) { error in
             XCTAssert(error is TimeoutError)
         }
     }
