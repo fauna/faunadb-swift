@@ -33,9 +33,9 @@ internal extension QueryResult {
     @discardableResult
     func await() throws -> T {
         #if DEBUG
-            return try await(timeout: DispatchTime.now() + 120)
+            return try await(timeout: .distantFuture)
         #else
-            return try await(timeout: DispatchTime.now() + 5)
+            return try await(timeout: .now() + .seconds(10))
         #endif
     }
     
