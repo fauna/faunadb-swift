@@ -185,7 +185,7 @@ extension QueryError: Equatable {
         return left.position == right.position &&
             left.code == right.code &&
             left.description == right.description &&
-            left.failures == left.failures
+            left.failures == right.failures
     }
 }
 

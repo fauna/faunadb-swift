@@ -43,7 +43,7 @@ class ErrorsTests: XCTestCase {
                         [
                             "field": ["data", "token"],
                             "code": "invalid token",
-                            "description": "Ivalid token"
+                            "description": "Invalid token"
                         ]
                     ]
                 ]
