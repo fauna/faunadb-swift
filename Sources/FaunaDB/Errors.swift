@@ -4,22 +4,22 @@ internal struct Errors {
 
     private static let errorField = Fields.at("errors").get(asArrayOf:
         Fields.map(QueryError.init)
-        )
+    )
 
     static func errorFor(response: HTTPURLResponse, json: Data) -> FaunaError? {
         guard !(200 ..< 300 ~= response.statusCode) else { return nil }
 
         guard let errors = try? parseErrors(from: json) else {
             return errorTypeFor(
-   status: response.statusCode,
-   message: "Unparseable server response"
-   )
+                status: response.statusCode,
+                message: "Unparseable server response"
+            )
         }
 
         return errorTypeFor(
-   status: response.statusCode,
-   errors: errors
-   )
+            status: response.statusCode,
+            errors: errors
+        )
     }
 
     private static func errorTypeFor(status: Int, errors: [QueryError] = [], message: String? = nil) -> FaunaError {
