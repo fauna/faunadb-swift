@@ -121,7 +121,7 @@ public final class Client {
         if let urlError = error as? URLError, urlError.code == .timedOut {
             callback(TimeoutError(message: "Request timed out."))
         } else {
-            callback(UnknowError(cause: error))
+            callback(UnknownError(cause: error))
         }
 
         return true
@@ -132,7 +132,7 @@ public final class Client {
                         ifFailure failureCallback: @escaping (Error) -> Void) {
 
         guard let response = response as? HTTPURLResponse, let data = data else {
-            failureCallback(UnknowError(message: "Invalid server response."))
+            failureCallback(UnknownError(message: "Invalid server response."))
             return
         }
 
@@ -145,7 +145,7 @@ public final class Client {
             let parsed = try JSON.parse(data: data)
 
             guard let resources = try parsed.get(field: Client.resourcesField) else {
-                failureCallback(UnknowError(message: "Invalid server response: \"resource\" key not found."))
+                failureCallback(UnknownError(message: "Invalid server response: \"resource\" key not found."))
                 return
             }
 

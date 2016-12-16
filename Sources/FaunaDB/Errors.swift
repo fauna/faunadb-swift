@@ -30,7 +30,7 @@ internal struct Errors {
         case 404: return NotFound(errors: errors, message: message)
         case 500: return InternalError(errors: errors, message: message)
         case 503: return Unavailable(errors: errors, message: message)
-        default:  return UnknowError(status: status, errors: errors, message: message)
+        default:  return UnknownError(status: status, errors: errors, message: message)
         }
     }
 
@@ -138,7 +138,7 @@ public final class Unavailable: FaunaError {
 }
 
 /// Wraps any unknown error.
-public final class UnknowError: FaunaError {
+public final class UnknownError: FaunaError {
     public override init(status: Int? = nil, errors: [QueryError] = [], message: String? = nil) {
         super.init(status: status, errors: errors, message: message)
     }
