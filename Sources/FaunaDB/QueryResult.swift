@@ -1,11 +1,11 @@
 import Foundation
 
 /**
-    Represent the result of an asynchronous query executed in a FaunaDB server.
+    Represent the result of an asynchronous query executed by FaunaDB.
 
-    - Note: All methods available to handle `QueryResult` success or failure.
-    will optionally receive a `DispatchQueue`. The only `DispatchQueue` allowed
-    to update the UI is `DispatchQueue.main`.
+    - Note: All methods available to handle `QueryResult` success or failure
+    will optionally receive a `DispatchQueue`. Remember, the only
+    `DispatchQueue` allowed to update the UI is `DispatchQueue.main`.
 */
 public class QueryResult<T> {
 
@@ -48,7 +48,7 @@ public class QueryResult<T> {
 extension QueryResult {
 
     /**
-        Maps the result returned by the server using the function informed.
+        Maps the result returned by the server using the function provided.
 
         - Parameters:
             - queue:     The dispatch queue in which the transformation will be performed.
@@ -67,7 +67,7 @@ extension QueryResult {
     }
 
     /**
-        Flat maps the result returned by the server using the function informed.
+        Flat maps the result returned by the server using the function provided.
 
         - Parameters:
             - queue:     The dispatch queue in which the transformation will be performed.
@@ -98,13 +98,13 @@ extension QueryResult {
     /**
         Apply a transformation if an error has occurred during the query execution.
 
-        If `mapErr` returns a value, the resulting `QueryResult` will be considered a success.
-        If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
-        the original exception.
+        If `mapErr` returns a value, the resulting `QueryResult` will be transformed
+        into a success result. If you wish to handle an error but still return a
+        failing `QueryResult`, you must rethrow an exception.
 
         For example:
 
-            // Revover form an error
+            // Revover from an error
             client.query(/* some query */)
                 .map { value in
                     try value.get() as Int?
@@ -143,13 +143,13 @@ extension QueryResult {
     /**
         Apply a transformation if an error has occurred during the query execution.
 
-        If `flatMapErr` returns a value, the resulting `QueryResult` will be considered a success.
-        If you wish to handle an error but still return a failing `QueryResult`, you must rethrow
-        the original exception.
+        If `flatMapErr` returns a value, the resulting `QueryResult` will be transformed
+        into a success result. If you wish to handle an error but still return a
+        failing `QueryResult`, you must rethrow an exception.
 
         For example:
 
-            // Revover form an error
+            // Revover from an error
             client.query(/* some query */)
                 .map { value in
                     try value.get() as Int?
@@ -197,10 +197,10 @@ extension QueryResult {
 extension QueryResult {
 
     /**
-        Execute a callback when the resulting value is available.
+        Execute the provided callback when the resulting `QueryResult` is successful.
 
         - Parameters:
-            - queue:    The dispatch queue in which the callback will be called.
+            - queue:    The dispatch queue in which the callback will be executed.
             - callback: The callback to be called when the resulting value is available.
     */
     @discardableResult
@@ -212,10 +212,10 @@ extension QueryResult {
     }
 
     /**
-        Execute a callback when an error occurred during the query execution.
+        Execute the provided callback when an error occurs during the query execution.
 
         - Parameters:
-            - queue:    The dispatch queue in which the callback will be called.
+            - queue:    The dispatch queue in which the callback will be executed.
             - callback: The callback to be called when an error occurs.
     */
     @discardableResult
@@ -231,7 +231,7 @@ extension QueryResult {
 extension QueryResult {
 
     /**
-        Blocks the current thread waiting for the query to be executed.
+        Blocks the current thread, waiting for the query to be executed.
 
         - Note: This method is discouraged due to its blocking nature.
         Prefer `map`, `onSuccess`, and their variations to prevent your code from

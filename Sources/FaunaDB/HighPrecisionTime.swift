@@ -8,7 +8,7 @@ fileprivate let nanosInASecond  = 1_000_000_000
 fileprivate let nanosInAMicro   = 1_000
 fileprivate let nanosInAMilli   = 1_000_000
 
-/// Represents a high precision time starting from UNIX epoch: "1970-01-01".
+/// Represents a high precision timestamp starting from UNIX epoch: "1970-01-01".
 public struct HighPrecisionTime {
 
     /// Current date represented in seconds passed since January 1st, 1970.
@@ -36,7 +36,7 @@ public struct HighPrecisionTime {
     }
 
     /// Converts to a `Foundation.Date`.
-    /// - Note: Ignores the nanoseconds precision.
+    /// - Note: Truncates the nanosecond component.
     public func toDate() -> Date {
         return Date(timeIntervalSince1970: Double(secondsSince1970))
     }
@@ -46,7 +46,7 @@ public struct HighPrecisionTime {
 extension HighPrecisionTime {
 
     /// Converts a `Foundation.Date` into an instance of `HighPrecisionTime`.
-    /// - Note: Ignores anything lower than seconds precision.
+    /// - Note: Sub-second components default to 0.
     public init(date: Date) {
         self.init(secondsSince1970: Int(date.timeIntervalSince1970))
     }

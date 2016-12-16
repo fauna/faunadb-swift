@@ -6,33 +6,35 @@ import Foundation
     For convenience, some native types are considered valid expressions:
     `String`, `Int`, `Double`, `Bool`, `Optional`, and `Date`.
 
+    [Reference](https://fauna.com/documentation/queries#values)
+
     ## Motivation
 
     The FaunaDB query language is a non-typed expression based language.
     You can think about it as an actual programming language.
 
-    In order to express the whole power and flexibility of the query language,
-    we need to express our DSL in a way that allows the same combinations as a
-    non-typed language supports.
+    In order to express an non-typed language in a typed language like Swift,
+    we need to remove the types from the provided DSL so that we don't restrict
+    function composition with type constraints.
 
     In practice, query language functions will always receive and return pure `Expr`
     types. That means you can compose your queries by combining functions together.
 
     For example:
 
-        // Just return a reference to a user
+        // Just return a reference to an user
         client.query(
             Ref("classes/users/42")
         )
 
-        // Combine Ref and Get to return the user with id 42
+        // Combine Ref and Get to return the user entry
         client.query(
             Get(
                 Ref("classes/users/42")
             )
         )
 
-        // Combine Ref, Get, and Select to return the user name only
+        // Combine Ref, Get, and Select to return the user name
         client.query(
             Select(
                 path: "data", "name"
@@ -92,15 +94,17 @@ internal func varargs(_ args: [Expr]) -> Expr {
 }
 
 /**
-    Represents a hash map at FaunaDB where the key is always a `String`
-    and the value can be a primitive value or a expression to be evaluated.
+    Represents a hash map in FaunaDB where the key is always a `String`
+    and the value can be a primitive value or an expression to be evaluated.
 
     You can use the operator `=>` as a syntax sugar while building new objects.
+
+    [Reference](https://fauna.com/documentation/queries#values)
 
     For example:
 
         // Using a primitive value
-        Obj("name" => "Jhon")
+        Obj("name" => "John")
 
         // Using a call to `Time` function
         Obj("created_at" => Time("now"))
@@ -113,7 +117,7 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
         return wrapped.description
     }
 
-    /// Converts a native dictionary to a `Obj` instance.
+    /// Converts an native dictionary to a `Obj` instance.
     public init(wrap: [String: Expr?]) {
         self.wrapped = wrap
     }
@@ -133,8 +137,10 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
 }
 
 /**
-    Represents an array at FaunaDB where its elements can be a primitive value
-    or a expression to be evaluated.
+    Represents an array in FaunaDB where its elements can be a primitive value
+    or an expression to be evaluated.
+
+    [Reference](https://fauna.com/documentation/queries#values)
 
     For example:
 

@@ -1,7 +1,7 @@
 import Foundation
 
 /**
-    Client represents a HTTP client for a FaunaDB server. It provides
+    `Client` represents a HTTP client for a FaunaDB server. It provides
     methods, such as `query` and `query(batch:)` that you can use to execute
     queries in your server.
 
@@ -75,7 +75,8 @@ public final class Client {
 
     /**
         Sends a batch of queries to the FaunaDB server. All queries are executed asynchronously.
-        `QueryResult` will be fulfilled once the query finishes to run, or fail.
+        `QueryResult` will be fulfilled once all queries finishes to run, or fail. The result array
+        will be in the same order as the request array.
 
         - Parameter batch: A sequence of query expressions to be sent to FaunaDB.
     */

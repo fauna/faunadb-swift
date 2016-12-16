@@ -1,8 +1,8 @@
 import Foundation
 
 /**
-    `Decodable` protocol is used to specify how a database entry returned
-    by FaunaDB is converted to a custom data structure.
+    `Decodable` protocol is used to specify how a FaunaDB value returned
+    by the server is converted to other Swift data structures.
 
     For example:
 
@@ -20,7 +20,8 @@ import Foundation
 
         let point: Point? = databaseValue.get()
 
-    Check the rules for data conversion at `FaunaDB.Field` struct.
+    Documentation describing data conversion can be found in the
+    `FaunaDB.Field` struct.
 */
 public protocol Decodable {
     init?(value: Value) throws

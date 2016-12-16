@@ -19,8 +19,10 @@ internal let rootField = Field<Value>()
     Every field has a path which is composed by a sequence of segments.
     A segment can be:
 
-    - `String`: when the desired field is contained into an object;
-    - `Int`: when the desired field is contained into an array.
+    - `String`: when the desired field is contained in an object in which the
+        segment will be used as  the object key;
+    - `Int`: when the desired field is contained in an array in which the
+        segment will be used as the array index.
 
     ## Rules for field extraction and data conversion:
 
@@ -39,7 +41,7 @@ public struct Field<T> {
     fileprivate let path: Path
     fileprivate let codec: Codec
 
-    /// Initializes a new field extractor with a path containing the informed path segments.
+    /// Initializes a new field extractor with a path containing the provided path segments.
     public init(_ segments: Segment...) {
         self.init(path: segments)
     }
@@ -104,8 +106,9 @@ extension Field {
 }
 
 /**
-    `Fields` has static constructors for field extractors when the result value is still
-    undefined. This constructors are useful for complex field compositions.
+    `Fields` has static constructors for field extractors that can be used when
+    the result value is still undefined. These constructors are useful for complex
+    field compositions.
 
     For example:
 
@@ -118,32 +121,32 @@ extension Field {
 */
 public struct Fields {
 
-    // Creates a field extractor with the segments informed
+    // Creates a field extractor with the provided segments.
     public static func at(_ segments: Segment...) -> Field<Value> {
         return at(path: segments)
     }
 
-    // Creates a field extractor with the path informed
+    // Creates a field extractor with the provided path.
     public static func at(path segments: [Segment]) -> Field<Value> {
         return Field(path: segments)
     }
 
-    // Uses the field extractor informed to create new array field
+    // Uses the field extractor provided to create new array field.
     public static func get<A>(asArrayOf field: Field<A>) -> Field<[A]> {
         return Field(path: Path.root, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
-    // Uses the field extractor informed to create new object field
+    // Uses the field extractor provided to create new object field.
     public static func get<A>(asDictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    // Creates a field extractor by mapping its result to the function informed
+    // Creates a field extractor by mapping its result to the function provided.
     public static func map<A>(_ transform: @escaping (Value) throws -> A) -> Field<A> {
         return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }
 
-    // Creates a field extractor by flat mapping its result to the function informed
+    // Creates a field extractor by flat mapping its result to the function provided.
     public static func flatMap<A>(_ transform: @escaping (Value) throws -> A?) -> Field<A> {
         return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }

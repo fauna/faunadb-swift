@@ -671,7 +671,7 @@ public struct Insert: Fn {
 }
 
 /// Deletes an event from an instance’s history. The ref must refer to an instance
-/// of a user-defined class - all other refs result in an “invalid argument” error.
+/// of an user-defined class - all other refs result in an “invalid argument” error.
 ///
 /// [Reference](https://fauna.com/documentation/queries#write_functions).
 public struct Remove: Fn {

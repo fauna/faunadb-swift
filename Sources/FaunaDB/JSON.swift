@@ -1,7 +1,7 @@
 import Foundation
 
 /**
-    `Encodable` protocol is used to specify how a custom data structure
+    `Encodable` protocol is used to specify how a Swift data structure
     is converted to a valid FaunaDB value when sending data to the server.
 
     For example:
@@ -196,12 +196,12 @@ fileprivate extension JsonType {
 }
 
 /**
-    Represents all possible errors when parsing from JSON or encoding data to JSON.
+    Represents all possible errors when decoding or encoding JSON.
 
-    - unsupportedType: When the data being parsed has a type that is not supported by the driver.
+    - unsupportedType: When the data being decoded has a type that is not supported by the driver.
     - invalidObjectKeyType: When a JSON object has a non-string key.
     - invalidLiteral: When the driver can't convert a literal type to a valid JSON type.
-    - invalidDate: When the driver can't convert a date from or to JSON.
+    - invalidDate: When the driver can't convert a date to or from JSON.
 */
 public enum JsonError: Error {
     case unsupportedType(Any)
