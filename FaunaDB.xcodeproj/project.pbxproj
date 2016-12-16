@@ -24,7 +24,7 @@
 		OBJ_56 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* Query.swift */; };
 		OBJ_57 /* QueryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* QueryResult.swift */; };
 		OBJ_58 /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Try.swift */; };
-		OBJ_59 /* Value+Transversal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Value+Transversal.swift */; };
+		OBJ_59 /* Value+Traversal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Value+Traversal.swift */; };
 		OBJ_60 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Value.swift */; };
 		OBJ_67 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ClientTests.swift */; };
 		OBJ_68 /* DeserializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* DeserializationTests.swift */; };
@@ -62,7 +62,7 @@
 		OBJ_21 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		OBJ_22 /* QueryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryResult.swift; sourceTree = "<group>"; };
 		OBJ_23 /* Try.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
-		OBJ_24 /* Value+Transversal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Value+Transversal.swift"; sourceTree = "<group>"; };
+		OBJ_24 /* Value+Traversal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Value+Traversal.swift"; sourceTree = "<group>"; };
 		OBJ_25 /* Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		OBJ_28 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
 		OBJ_29 /* DeserializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeserializationTests.swift; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 				OBJ_21 /* Query.swift */,
 				OBJ_22 /* QueryResult.swift */,
 				OBJ_23 /* Try.swift */,
-				OBJ_24 /* Value+Transversal.swift */,
+				OBJ_24 /* Value+Traversal.swift */,
 				OBJ_25 /* Value.swift */,
 			);
 			name = FaunaDB;
@@ -270,7 +270,7 @@
 				OBJ_56 /* Query.swift in Sources */,
 				OBJ_57 /* QueryResult.swift in Sources */,
 				OBJ_58 /* Try.swift in Sources */,
-				OBJ_59 /* Value+Transversal.swift in Sources */,
+				OBJ_59 /* Value+Traversal.swift in Sources */,
 				OBJ_60 /* Value.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

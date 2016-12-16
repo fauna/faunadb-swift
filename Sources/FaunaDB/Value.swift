@@ -6,15 +6,15 @@ import Foundation
 
     [Reference](https://fauna.com/documentation/queries#values)
 
-    ## Transversal API
+    ## Traversal API
 
-    You can use the transversal API to transverse and convert a database entry
-    to a native type.
+    You can use the traversal API to transverse and convert a database entry
+    to an native type.
 
-    The transversal API uses type inference to convert the returned value to
+    The traversal API uses type inference to convert the returned value to
     the desired type.
 
-    The transversal API methods are shortcuts for field extractors.  See
+    The traversal API methods are shortcuts for field extractors.  See
     `FaunaDB.Field` for more information.
 
     Examples of fields extractions and type conversions:
@@ -23,7 +23,7 @@ import Foundation
         let name: String? = try! value.get()
 
         // Transverses to the path "array" -> 1 -> "value" and
-        // attempts to convert its result to a Int
+        // attempts to convert its result to an Int
         let count: Int? = try! value.get("array", 1, "count")
 
         // Using a predefined field
