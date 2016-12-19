@@ -8,7 +8,7 @@ import Foundation
 
     ## Traversal API
 
-    You can use the traversal API to transverse and convert a database entry
+    You can use the traversal API to traverse and convert a database entry
     to an native type.
 
     The traversal API uses type inference to convert the returned value to
@@ -17,7 +17,7 @@ import Foundation
     The traversal API methods are shortcuts for field extractors.  See
     `FaunaDB.Field` for more information.
 
-    Examples of fields extractions and type conversions:
+    Examples of field extractions and type conversions:
 
         // Attempts to convert the root value to a String
         let name: String? = try! value.get()
@@ -146,9 +146,9 @@ public struct TimeV: ScalarValue, AsJson {
         self.value = value
     }
 
-    /// Creates a new TimeV instance considering the `Date` informed
-    /// - Note: The timestamp created will contain only up the seconds precision.
-    /// If you need more granularity, consider to use a `HighPrecisionTime` instance.
+    /// Creates a new TimeV instance considering the `Date` provided.
+    /// - Note: The timestamp created will only have seconds precision.
+    /// If you need more granularity, consider using a `HighPrecisionTime` instance.
     public init(date: Date) {
         self.value = HighPrecisionTime(date: date)
     }

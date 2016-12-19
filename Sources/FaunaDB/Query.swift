@@ -3,7 +3,7 @@ import Foundation
 
 // MARK: Values
 
-/// Ref creates a new RefV value with the ID informed.
+/// Ref creates a new RefV value with the ID provided.
 ///
 /// [Reference](https://fauna.com/documentation/queries#values-special_types).
 public struct Ref: Fn {

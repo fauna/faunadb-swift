@@ -42,6 +42,7 @@ internal struct Errors {
 }
 
 /// Represents an error while executing a FaunaDB query.
+/// [Reference](https://fauna.com/documentation#errors)
 public class FaunaError: Error {
 
     /// The error message.

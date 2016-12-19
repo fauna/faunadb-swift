@@ -26,7 +26,7 @@ internal let rootField = Field<Value>()
 
     ## Rules for field extraction and data conversion:
 
-    - If the field is not present, it returns nil;
+    - If the field is not present, it returns `nil`;
     - If the field can't be converted to the expected type, it throws an
         exception.  E.g.: `Field<String>("data", "name")` expects the "name"
         field to be a `String`. If the end result is not a `String`, it will fail;

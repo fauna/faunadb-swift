@@ -117,12 +117,12 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
         return wrapped.description
     }
 
-    /// Converts an native dictionary to a `Obj` instance.
+    /// Converts a native dictionary to an `Obj` instance.
     public init(wrap: [String: Expr?]) {
         self.wrapped = wrap
     }
 
-    /// Initializes a new `Obj` instance with the key value tuples informed.
+    /// Initializes a new `Obj` instance with the key value tuples provided.
     /// You can use the operator `=>` as a syntax sugar while building new objects.
     public init(_ pairs: (String, Expr?)...) {
         self.wrapped = Dictionary(pairs: pairs)
@@ -147,7 +147,7 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
         // Using a primitive value
         Arr(1, "Two", 3)
 
-        // Using a call to `Time` function
+        // Using a call to the `Time` function
         Arr(Time("now"))
 */
 public struct Arr: Expr, AsJson, CustomStringConvertible {
@@ -158,12 +158,12 @@ public struct Arr: Expr, AsJson, CustomStringConvertible {
         return wrapped.description
     }
 
-    /// Initializes a new `Arr` instance with the elements informed.
+    /// Initializes a new `Arr` instance with the elements provided.
     public init(_ elements: Expr?...) {
         self.wrapped = elements
     }
 
-    /// Converts a primitive array to a `Arr` instance.
+    /// Converts a primitive array to an `Arr` instance.
     public init(wrap: [Expr?]) {
         self.wrapped = wrap
     }
