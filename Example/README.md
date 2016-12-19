@@ -17,10 +17,10 @@ in an iOS project.
 
 ## Implementation
 
-This demo is a simple blog post manager. It has a basic model called `Post`
+This demo is a simple blog post manager. It has a basic model called `Post`,
 instances of which must have a title and may optionally have a body.
 
-Most of the interaction with FaunaDB is located at
+Most of the interaction with FaunaDB is located in the
 [Posts.swift](https://github.com/faunadb/faunadb-swift/blob/master/Example/Example/Post.swift)
 file. It contains the base model `Post` as well as the code needed to store,
 update, delete, and show posts saved at FaunaDB.
