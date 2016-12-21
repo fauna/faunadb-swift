@@ -16,6 +16,13 @@ A Swift driver for [FaunaDB](https://fauna.com)
 * Xcode 8
 * Swift 3
 
+## Documentation
+
+Check out the Swift-specific [reference documentation](http://faunadb.github.io/faunadb-swift/).
+
+You can find more information in the FaunaDB [documentation](https://fauna.com/documentation)
+and in our [example project](https://github.com/faunadb/faunadb-swift/tree/master/Example).
+
 ## Using the Driver
 
 ### Installing
