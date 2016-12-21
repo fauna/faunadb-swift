@@ -121,32 +121,32 @@ extension Field {
 */
 public struct Fields {
 
-    // Creates a field extractor with the provided segments.
+    /// Creates a field extractor with the provided segments.
     public static func at(_ segments: Segment...) -> Field<Value> {
         return at(path: segments)
     }
 
-    // Creates a field extractor with the provided path.
+    /// Creates a field extractor with the provided path.
     public static func at(path segments: [Segment]) -> Field<Value> {
         return Field(path: segments)
     }
 
-    // Uses the field extractor provided to create new array field.
+    /// Uses the field extractor provided to create new array field.
     public static func get<A>(asArrayOf field: Field<A>) -> Field<[A]> {
         return Field(path: Path.root, codec: CollectFields<A>(subpath: field.path, codec: field.codec))
     }
 
-    // Uses the field extractor provided to create new object field.
+    /// Uses the field extractor provided to create new object field.
     public static func get<A>(asDictionaryOf field: Field<A>) -> Field<[String: A]> {
         return Field(path: Path.root, codec: DictionaryFieds<A>(subpath: field.path, codec: field.codec))
     }
 
-    // Creates a field extractor by mapping its result to the function provided.
+    /// Creates a field extractor by mapping its result to the function provided.
     public static func map<A>(_ transform: @escaping (Value) throws -> A) -> Field<A> {
         return Field(path: Path.root, codec: MapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }
 
-    // Creates a field extractor by flat mapping its result to the function provided.
+    /// Creates a field extractor by flat mapping its result to the function provided.
     public static func flatMap<A>(_ transform: @escaping (Value) throws -> A?) -> Field<A> {
         return Field<A>(path: Path.root, codec: FlatMapFunction<Value, A>(codec: defaultCodec, fn: transform))
     }

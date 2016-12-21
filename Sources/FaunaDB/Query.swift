@@ -83,16 +83,16 @@ public struct Let: Fn {
         self.init(bindings: bindings, in: `in`())
     }
 
-    // - Parameter e1:  1st value.
-    // - Parameter in: Lambda expression as a Swift closure.
+    /// - Parameter e1:  1st value.
+    /// - Parameter in: Lambda expression as a Swift closure.
     public init(_ e1: Expr, in: (Expr) -> Expr) {
         let v1 = Var()
         self.init(bindings: [v1.name => e1], in: `in`(v1))
     }
 
-    // - Parameter e1: 1st value.
-    // - Parameter e2: 2nd value.
-    // - Parameter in: Lambda expression as a swift closure.
+    /// - Parameter e1: 1st value.
+    /// - Parameter e2: 2nd value.
+    /// - Parameter in: Lambda expression as a swift closure.
     public init(_ e1: Expr, _ e2: Expr, in: (Expr, Expr) -> Expr) {
         let v1 = Var()
         let v2 = Var()
