@@ -36,4 +36,4 @@ create, update, delete, and show the blog posts.
 
 ## Demo
 
-![](https://github.com/faunadb/faunadb-swift/blob/readme-example/Example/demo.gif)
+![](https://github.com/faunadb/faunadb-swift/blob/master/Example/demo.gif)
