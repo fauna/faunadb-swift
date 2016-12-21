@@ -1,14 +1,30 @@
 import Foundation
 
+/**
+    `Client` represents a HTTP client for a FaunaDB server. It provides
+    methods, such as `query` and `query(batch:)` that you can use to execute
+    queries in your server.
+
+    - Note: This class is meant to be reused as much as possible. If you
+    need to connect to the same server but using a different key's secret, use
+    `newSessionClient` method instead of creating a new `Client` instance.
+*/
 public final class Client {
 
-    private static let defaultEndpoint: URL! = URL(string: "https://cloud.faunadb.com")
+    private static let defaultEndpoint: URL! = URL(string: "https://db.fauna.com")
     private static let resourcesField = Field<Value>("resource")
 
     private let session: URLSession
     private let endpoint: URL
     private let auth: String
 
+    /**
+        - Parameters:
+            - secret:   The key's secret to be used to authenticate requests.
+            - endpoint: The URL address of your FaunaDB server. Default: https://db.fauna.com.
+            - session:  The `URLSession` object to be used while performing HTTP requests to FaunaDB.
+                        Default: `URLSession(configuration: URLSessionConfiguration.default)`.
+    */
     public init(secret: String, endpoint: URL = defaultEndpoint, session: URLSession? = nil) {
         self.auth = "Basic \((secret.data(using: .ascii) ?? Data()).base64EncodedString()):"
         self.endpoint = endpoint
@@ -20,6 +36,13 @@ public final class Client {
         }
     }
 
+    /**
+        Returns a new `Client` instance for the same FaunaDB server but using a
+        different key's secret to authenticate HTTP requests. The new client shares its
+        parent's resources, such as its URLSession.
+
+        - Parameter secret: The key's secret to be used to authenticate HTTP requests.
+    */
     public func newSessionClient(secret: String) -> Client {
         return Client(
             secret: secret,
@@ -28,6 +51,12 @@ public final class Client {
         )
     }
 
+    /**
+        Sends a query to the FaunaDB server. All queries are executed asynchronously.
+        `QueryResult` will be fulfilled once the query finishes to run, or fail.
+
+        - Parameter expr: The query expression to be sent. Check `FaunaDB.Expr` for more information.
+    */
     public func query(_ expr: Expr) -> QueryResult<Value> {
         let res = QueryResult<Value>()
 
@@ -44,6 +73,13 @@ public final class Client {
         return res
     }
 
+    /**
+        Sends a batch of queries to the FaunaDB server. All queries are executed asynchronously.
+        `QueryResult` will be fulfilled once all queries finishes to run, or fail. The result array
+        will be in the same order as the request array.
+
+        - Parameter batch: A sequence of query expressions to be sent to FaunaDB.
+    */
     public func query(batch: [Expr]) -> QueryResult<[Value]> {
         return query(Arr(wrap: batch)).map { value in
             try value.get()
@@ -86,7 +122,7 @@ public final class Client {
         if let urlError = error as? URLError, urlError.code == .timedOut {
             callback(TimeoutError(message: "Request timed out."))
         } else {
-            callback(UnknowError(cause: error))
+            callback(UnknownError(cause: error))
         }
 
         return true
@@ -97,7 +133,7 @@ public final class Client {
                         ifFailure failureCallback: @escaping (Error) -> Void) {
 
         guard let response = response as? HTTPURLResponse, let data = data else {
-            failureCallback(UnknowError(message: "Invalid server response."))
+            failureCallback(UnknownError(message: "Invalid server response."))
             return
         }
 
@@ -110,7 +146,7 @@ public final class Client {
             let parsed = try JSON.parse(data: data)
 
             guard let resources = try parsed.get(field: Client.resourcesField) else {
-                failureCallback(UnknowError(message: "Invalid server response: \"resource\" key not found."))
+                failureCallback(UnknownError(message: "Invalid server response: \"resource\" key not found."))
                 return
             }
 

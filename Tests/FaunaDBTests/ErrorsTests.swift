@@ -28,8 +28,8 @@ class ErrorsTests: XCTestCase {
         assertFail(httpCode: 503, error: Unavailable())
     }
 
-    func testUnknowError() {
-        assertFail(httpCode: 1001, error: UnknowError(status: 1001, errors: []))
+    func testUnknownError() {
+        assertFail(httpCode: 1001, error: UnknownError(status: 1001, errors: []))
     }
 
     func testParseErrorResponse() {
@@ -68,7 +68,7 @@ class ErrorsTests: XCTestCase {
     }
 
     func testUnparseableResponse() {
-        let json = "Can't parse this as a error response".data(using: .utf8)!
+        let json = "Can't parse this as an error response".data(using: .utf8)!
         assertFail(httpCode: 401, json: json, error: Unauthorized(message: "Unparseable server response"))
     }
 

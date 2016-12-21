@@ -643,10 +643,10 @@ class SerializationTests: XCTestCase {
 
     func testEpoch() {
         assert(expr: Epoch(10, "second"), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
-        assert(expr: Epoch(offset: 10, unit: .second), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
-        assert(expr: Epoch(offset: 10, unit: .millisecond), toBecome: "{\"unit\":\"millisecond\",\"epoch\":10}")
-        assert(expr: Epoch(offset: 10, unit: .microsecond), toBecome: "{\"unit\":\"microsecond\",\"epoch\":10}")
-        assert(expr: Epoch(offset: 10, unit: .nanosecond), toBecome: "{\"unit\":\"nanosecond\",\"epoch\":10}")
+        assert(expr: Epoch(10, unit: .second), toBecome: "{\"unit\":\"second\",\"epoch\":10}")
+        assert(expr: Epoch(10, unit: .millisecond), toBecome: "{\"unit\":\"millisecond\",\"epoch\":10}")
+        assert(expr: Epoch(10, unit: .microsecond), toBecome: "{\"unit\":\"microsecond\",\"epoch\":10}")
+        assert(expr: Epoch(10, unit: .nanosecond), toBecome: "{\"unit\":\"nanosecond\",\"epoch\":10}")
     }
 
     func testDate() {

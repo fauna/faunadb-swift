@@ -1,5 +1,31 @@
 import Foundation
 
+/**
+    `Encodable` protocol is used to specify how a Swift data structure
+    is converted to a valid FaunaDB value when sending data to the server.
+
+    For example:
+
+        struct Point { let x, y: Int }
+
+        extension Point: Encodable {
+            func encode() -> Expr {
+                return Obj(
+                    "x" => x,
+                    "y" => y
+                )
+            }
+        }
+
+        //...
+
+        client.query(
+            Create(
+                at: Class("points"),
+                Obj("data" => Point(x: 10, y: 15))
+            )
+        )
+*/
 public protocol Encodable: Expr {
     func encode() -> Expr
 }
@@ -169,6 +195,14 @@ fileprivate extension JsonType {
 
 }
 
+/**
+    Represents all possible errors when decoding or encoding JSON.
+
+    - unsupportedType: When the data being decoded has a type that is not supported by the driver.
+    - invalidObjectKeyType: When a JSON object has a non-string key.
+    - invalidLiteral: When the driver can't convert a literal type to a valid JSON type.
+    - invalidDate: When the driver can't convert a date to or from JSON.
+*/
 public enum JsonError: Error {
     case unsupportedType(Any)
     case invalidObjectKeyType(Any)
