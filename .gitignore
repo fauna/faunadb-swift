@@ -1,0 +1,8 @@
+.DS_Store
+/.build
+build
+/Packages
+**/xcuserdata
+Pods/
+*.lock
+docs/

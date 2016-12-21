@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Client Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Client" class="dashAnchor"></a>
+    <a title="Client Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">FaunaDB Docs</a> (85% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">FaunaDB Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Client Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BadRequest.html">BadRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FaunaError.html">FaunaError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InternalError.html">InternalError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NotFound.html">NotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PermissionDenied.html">PermissionDenied</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/QueryResult.html">QueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TimeoutError.html">TimeoutError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Unauthorized.html">Unauthorized</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Unavailable.html">Unavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UnknownError.html">UnknownError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/Action.html">Action</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/JsonError.html">JsonError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TimeUnit.html">TimeUnit</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/CustomStringConvertible.html">CustomStringConvertible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Fn.html">Fn</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F7FaunaDBoi2eeuRxS_11ScalarValuewx7Wrappeds9EquatablerFTxx_Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F7FaunaDBoi2egFTSSGSqPS_4Expr___TSSGSqPS0____">=&gt;(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Decodable.html">Decodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Encodable.html">Encodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P7FaunaDB4Expr">Expr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ScalarValue.html">ScalarValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P7FaunaDB7Segment">Segment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Value.html">Value</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Add.html">Add</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/And.html">And</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Append.html">Append</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Arr.html">Arr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ArrayV.html">ArrayV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BooleanV.html">BooleanV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Casefold.html">Casefold</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Class.html">Class</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Concat.html">Concat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Contains.html">Contains</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Create.html">Create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateClass.html">CreateClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateDatabase.html">CreateDatabase</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateIndex.html">CreateIndex</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateKey.html">CreateKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Database.html">Database</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DateFn.html">DateFn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DateV.html">DateV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Delete.html">Delete</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Difference.html">Difference</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Distinct.html">Distinct</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Divide.html">Divide</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Do.html">Do</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DoubleV.html">DoubleV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Drop.html">Drop</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Epoch.html">Epoch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Equals.html">Equals</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Exists.html">Exists</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Field.html">Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Fields.html">Fields</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Filter.html">Filter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Foreach.html">Foreach</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GT.html">GT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GTE.html">GTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Get.html">Get</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HighPrecisionTime.html">HighPrecisionTime</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Identify.html">Identify</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/If.html">If</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Index.html">Index</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Insert.html">Insert</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Intersection.html">Intersection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Join.html">Join</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LT.html">LT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LTE.html">LTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Lambda.html">Lambda</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Let.html">Let</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Login.html">Login</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Logout.html">Logout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LongV.html">LongV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Map.html">Map</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Match.html">Match</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Modulo.html">Modulo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Multiply.html">Multiply</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NextId.html">NextId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Not.html">Not</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NullV.html">NullV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Obj.html">Obj</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ObjectV.html">ObjectV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Or.html">Or</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Paginate.html">Paginate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Prepend.html">Prepend</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryError.html">QueryError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Ref.html">Ref</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RefV.html">RefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Remove.html">Remove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Replace.html">Replace</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Select.html">Select</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SetRefV.html">SetRefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StringV.html">StringV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Subtract.html">Subtract</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Take.html">Take</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Time.html">Time</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TimeV.html">TimeV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Union.html">Union</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Update.html">Update</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ValidationFailure.html">ValidationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Var.html">Var</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Client</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span></code></pre>
+
+                </div>
+              </div>
+            <p><code>Client</code> represents a HTTP client for a FaunaDB server. It provides
+methods, such as <code>query</code> and <code>query(batch:)</code> that you can use to execute
+queries in your server.</p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This class is meant to be reused as much as possible. If you
+need to connect to the same server but using a different key&rsquo;s secret, use
+<code>newSessionClient</code> method instead of creating a new <code>Client</code> instance.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7FaunaDB6ClientcFT6secretSS8endpointV10Foundation3URL7sessionGSqCSo10URLSession__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(secret:endpoint:session:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7FaunaDB6ClientcFT6secretSS8endpointV10Foundation3URL7sessionGSqCSo10URLSession__S0_">init(secret:endpoint:session:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <ul>
+<li>Parameters:
+
+<ul>
+<li>secret:   The key&rsquo;s secret to be used to authenticate requests.</li>
+<li>endpoint: The URL address of your FaunaDB server. Default: <a href="https://db.fauna.com">https://db.fauna.com</a>.</li>
+<li>session:  The <code>URLSession</code> object to be used while performing HTTP requests to FaunaDB.
+        Default: <code>URLSession(configuration: URLSessionConfiguration.default)</code>.</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">secret</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">endpoint</span><span class="p">:</span> <span class="kt">URL</span> <span class="o">=</span> <span class="n">defaultEndpoint</span><span class="p">,</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">URLSession</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>secret</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key’s secret to be used to authenticate requests.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>endpoint</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL address of your FaunaDB server. Default: <a href="https://db.fauna.com">https://db.fauna.com</a>.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>session</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>URLSession</code> object to be used while performing HTTP requests to FaunaDB. Default: <code>URLSession(configuration: URLSessionConfiguration.default)</code>.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7FaunaDB6Client16newSessionClientFT6secretSS_S0_"></a>
+                    <a name="//apple_ref/swift/Method/newSessionClient(secret:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7FaunaDB6Client16newSessionClientFT6secretSS_S0_">newSessionClient(secret:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a new <code>Client</code> instance for the same FaunaDB server but using a
+different key&rsquo;s secret to authenticate HTTP requests. The new client shares its
+parent&rsquo;s resources, such as its URLSession.</p>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter secret: The key&rsquo;s secret to be used to authenticate HTTP requests.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">newSessionClient</span><span class="p">(</span><span class="nv">secret</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Client</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>secret</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key’s secret to be used to authenticate HTTP requests.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7FaunaDB6Client5queryFPS_4Expr_GCS_11QueryResultPS_5Value__"></a>
+                    <a name="//apple_ref/swift/Method/query(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7FaunaDB6Client5queryFPS_4Expr_GCS_11QueryResultPS_5Value__">query(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends a query to the FaunaDB server. All queries are executed asynchronously.
+<code><a href="../Classes/QueryResult.html">QueryResult</a></code> will be fulfilled once the query finishes to run, or fail.</p>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter expr: The query expression to be sent. Check <code>FaunaDB.Expr</code> for more information.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="n">_</span> <span class="nv">expr</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:P7FaunaDB4Expr">Expr</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/QueryResult.html">QueryResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Value.html">Value</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expr</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The query expression to be sent. Check <code>FaunaDB.Expr</code> for more information.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7FaunaDB6Client5queryFT5batchGSaPS_4Expr___GCS_11QueryResultGSaPS_5Value___"></a>
+                    <a name="//apple_ref/swift/Method/query(batch:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7FaunaDB6Client5queryFT5batchGSaPS_4Expr___GCS_11QueryResultGSaPS_5Value___">query(batch:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends a batch of queries to the FaunaDB server. All queries are executed asynchronously.
+<code><a href="../Classes/QueryResult.html">QueryResult</a></code> will be fulfilled once all queries finishes to run, or fail. The result array
+will be in the same order as the request array.</p>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter batch: A sequence of query expressions to be sent to FaunaDB.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="nv">batch</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols.html#/s:P7FaunaDB4Expr">Expr</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/QueryResult.html">QueryResult</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Value.html">Value</a></span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>batch</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of query expressions to be sent to FaunaDB.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/faunadb/faunadb-swift" target="_blank" rel="external">Fauna, Inc</a>. All rights reserved. (Last updated: 2016-12-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

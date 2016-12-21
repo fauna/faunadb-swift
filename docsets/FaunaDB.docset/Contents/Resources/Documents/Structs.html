@@ -1,0 +1,2984 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Structs  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="Structs  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">FaunaDB Docs</a> (85% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">FaunaDB Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Structs  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/BadRequest.html">BadRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/FaunaError.html">FaunaError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/InternalError.html">InternalError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/NotFound.html">NotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/PermissionDenied.html">PermissionDenied</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/QueryResult.html">QueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/TimeoutError.html">TimeoutError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Unauthorized.html">Unauthorized</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Unavailable.html">Unavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/UnknownError.html">UnknownError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/Action.html">Action</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/JsonError.html">JsonError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/TimeUnit.html">TimeUnit</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/CustomStringConvertible.html">CustomStringConvertible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Fn.html">Fn</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:F7FaunaDBoi2eeuRxS_11ScalarValuewx7Wrappeds9EquatablerFTxx_Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:F7FaunaDBoi2egFTSSGSqPS_4Expr___TSSGSqPS0____">=&gt;(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/Decodable.html">Decodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Encodable.html">Encodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols.html#/s:P7FaunaDB4Expr">Expr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/ScalarValue.html">ScalarValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols.html#/s:P7FaunaDB7Segment">Segment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Value.html">Value</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Add.html">Add</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/And.html">And</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Append.html">Append</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Arr.html">Arr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ArrayV.html">ArrayV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/BooleanV.html">BooleanV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Casefold.html">Casefold</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Class.html">Class</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Concat.html">Concat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Contains.html">Contains</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Create.html">Create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CreateClass.html">CreateClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CreateDatabase.html">CreateDatabase</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CreateIndex.html">CreateIndex</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CreateKey.html">CreateKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Database.html">Database</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DateFn.html">DateFn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DateV.html">DateV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Delete.html">Delete</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Difference.html">Difference</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Distinct.html">Distinct</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Divide.html">Divide</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Do.html">Do</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DoubleV.html">DoubleV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Drop.html">Drop</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Epoch.html">Epoch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Equals.html">Equals</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Exists.html">Exists</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Field.html">Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Fields.html">Fields</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Filter.html">Filter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Foreach.html">Foreach</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/GT.html">GT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/GTE.html">GTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Get.html">Get</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/HighPrecisionTime.html">HighPrecisionTime</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Identify.html">Identify</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/If.html">If</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Index.html">Index</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Insert.html">Insert</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Intersection.html">Intersection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Join.html">Join</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LT.html">LT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LTE.html">LTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Lambda.html">Lambda</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Let.html">Let</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Login.html">Login</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Logout.html">Logout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LongV.html">LongV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Map.html">Map</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Match.html">Match</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Modulo.html">Modulo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Multiply.html">Multiply</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NextId.html">NextId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Not.html">Not</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NullV.html">NullV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Obj.html">Obj</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ObjectV.html">ObjectV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Or.html">Or</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Paginate.html">Paginate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Prepend.html">Prepend</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/QueryError.html">QueryError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Ref.html">Ref</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/RefV.html">RefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Remove.html">Remove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Replace.html">Replace</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Select.html">Select</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SetRefV.html">SetRefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/StringV.html">StringV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Subtract.html">Subtract</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Take.html">Take</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Time.html">Time</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/TimeV.html">TimeV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Union.html">Union</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Update.html">Update</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ValidationFailure.html">ValidationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Var.html">Var</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Structs</h1>
+            <p>The following structs are available globally.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB10QueryError"></a>
+                    <a name="//apple_ref/swift/Struct/QueryError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB10QueryError">QueryError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an error found by FaunaDB while executing a query.</p>
+
+                        <a href="Structs/QueryError.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB17ValidationFailure"></a>
+                    <a name="//apple_ref/swift/Struct/ValidationFailure" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB17ValidationFailure">ValidationFailure</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a validation failure while executing a FaunaDB query.</p>
+
+                        <a href="Structs/ValidationFailure.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ValidationFailure</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Obj"></a>
+                    <a name="//apple_ref/swift/Struct/Obj" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Obj">Obj</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a hash map in FaunaDB where the key is always a <code>String</code>
+and the value can be a primitive value or an expression to be evaluated.</p>
+
+<p>You can use the operator <code>=&gt;</code> as a syntax sugar while building new objects.</p>
+
+<p><a href="https://fauna.com/documentation/queries#values">Reference</a></p>
+
+<p>For example:</p>
+
+<pre class="highlight plaintext"><code>// Using a primitive value
+Obj("name" =&gt; "John")
+
+// Using a call to `Time` function
+Obj("created_at" =&gt; Time("now"))
+</code></pre>
+
+                        <a href="Structs/Obj.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Obj</span><span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:P7FaunaDB4Expr">Expr</a></span><span class="p">,</span> <span class="kt">AsJson</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Arr"></a>
+                    <a name="//apple_ref/swift/Struct/Arr" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Arr">Arr</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an array in FaunaDB where its elements can be a primitive value
+or an expression to be evaluated.</p>
+
+<p><a href="https://fauna.com/documentation/queries#values">Reference</a></p>
+
+<p>For example:</p>
+
+<pre class="highlight plaintext"><code>// Using a primitive value
+Arr(1, "Two", 3)
+
+// Using a call to the `Time` function
+Arr(Time("now"))
+</code></pre>
+
+                        <a href="Structs/Arr.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Arr</span><span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:P7FaunaDB4Expr">Expr</a></span><span class="p">,</span> <span class="kt">AsJson</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Field"></a>
+                    <a name="//apple_ref/swift/Struct/Field" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Field">Field</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Field</code> represents a field extractor for database entries returned by the
+server.</p>
+
+<p>For example:</p>
+
+<pre class="highlight plaintext"><code>let nameField = Field&lt;String&gt;("data", "name")
+
+let user = try! client.query(
+    Get(
+        Ref("classes/user/42")
+    )
+).await(timeout: .now() + 5)
+
+let userName = user.get(field: nameField)
+</code></pre>
+
+<p>Every field has a path which is composed by a sequence of segments.
+A segment can be:</p>
+
+<ul>
+<li><code>String</code>: when the desired field is contained in an object in which the
+segment will be used as  the object key;</li>
+<li><code>Int</code>: when the desired field is contained in an array in which the
+segment will be used as the array index.</li>
+</ul>
+
+<p><a href='#rules-for-field-extraction-and-data-conversion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='rules-for-field-extraction-and-data-conversion'>Rules for field extraction and data conversion:</h2></p>
+
+<ul>
+<li>If the field is not present, it returns <code>nil</code>;</li>
+<li>If the field can&rsquo;t be converted to the expected type, it throws an
+exception.  E.g.: <code>Field&lt;String&gt;(&quot;data&quot;, &quot;name&quot;)</code> expects the <q>name</q>
+field to be a <code>String</code>. If the end result is not a <code>String</code>, it will fail;</li>
+<li>If the path assumes a type that is not correct, it throws an exception.
+E.g.: <code>Field&lt;String&gt;(&quot;data&quot;, &quot;name&quot;)</code> expects the target value to contain
+a nested object at the key <q>data</q> in which there should be a <code>String</code>
+field at the key <q>name</q>. If <q>data</q> field is not an object, it will fail.</li>
+</ul>
+
+                        <a href="Structs/Field.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Field</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Fields"></a>
+                    <a name="//apple_ref/swift/Struct/Fields" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Fields">Fields</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Fields</code> has static constructors for field extractors that can be used when
+the result value is still undefined. These constructors are useful for complex
+field compositions.</p>
+
+<p>For example:</p>
+
+<pre class="highlight plaintext"><code>Fields.at("data", "arrayOfArrays").get(
+    asArrayOf: Fields.get(asArrayOf: Field&lt;String&gt;())
+)
+
+// Resulting type: Field&lt;[[String]]&gt;
+</code></pre>
+
+                        <a href="Structs/Fields.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Fields</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB17HighPrecisionTime"></a>
+                    <a name="//apple_ref/swift/Struct/HighPrecisionTime" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB17HighPrecisionTime">HighPrecisionTime</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a high precision timestamp starting from UNIX epoch: <q>1970-01-01</q>.</p>
+
+                        <a href="Structs/HighPrecisionTime.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">HighPrecisionTime</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Values"></a>
+                <a name="//apple_ref/swift/Section/Values" class="dashAnchor"></a>
+                <a href="#/Values">
+                  <h3 class="section-name">Values</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Ref"></a>
+                    <a name="//apple_ref/swift/Struct/Ref" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Ref">Ref</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Ref creates a new RefV value with the ID provided.</p>
+
+<p><a href="https://fauna.com/documentation/queries#values-special_types">Reference</a>.</p>
+
+                        <a href="Structs/Ref.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Ref</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Basic%20Forms"></a>
+                <a name="//apple_ref/swift/Section/Basic Forms" class="dashAnchor"></a>
+                <a href="#/Basic%20Forms">
+                  <h3 class="section-name">Basic Forms</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Var"></a>
+                    <a name="//apple_ref/swift/Struct/Var" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Var">Var</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A <code>Var</code> expression refers to the value of a variable <code>varname</code> in the current
+lexical scope. Referring to a variable that is not in scope results in an
+“unbound variable” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/Var.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Var</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Let"></a>
+                    <a name="//apple_ref/swift/Struct/Let" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Let">Let</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Let</code> binds values to one or more variables. Variable values cannot refer to
+other variables defined in the same let expression. Variables are lexically
+scoped to the expression passed via <code>in</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/Let.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Let</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB2If"></a>
+                    <a name="//apple_ref/swift/Struct/If" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2If">If</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If evaluates and returns then expr or else expr depending on the value of
+pred. If pred evaluates to anything other than a boolean, if returns an
+“invalid argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/If.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">If</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB2Do"></a>
+                    <a name="//apple_ref/swift/Struct/Do" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2Do">Do</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Do sequentially evaluates its arguments, and returns the evaluation of the
+last expression. If no expressions are provided, do returns an error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/Do.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Do</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Lambda"></a>
+                    <a name="//apple_ref/swift/Struct/Lambda" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Lambda">Lambda</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Lambda</code> creates an anonymous function that binds one or more variables in the
+expression at <code>expr</code>. The lambda form is only permitted as a direct argument
+to a form which applies it. It cannot be bound to a variable.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/Lambda.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Lambda</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Collections"></a>
+                <a name="//apple_ref/swift/Section/Collections" class="dashAnchor"></a>
+                <a href="#/Collections">
+                  <h3 class="section-name">Collections</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Map"></a>
+                    <a name="//apple_ref/swift/Struct/Map" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Map">Map</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Map</code> applies <code>lambda</code> expression to each member of the Array or Page
+collection, and returns the results of each application in a new collection of
+the same type. If a Page is passed, its cursor is preserved in the result.</p>
+
+<p><code>Map</code> applies the <code>lambda</code> expression concurrently to each element of the
+ collection. Side-effects, such as writes, do not affect evaluation of other
+ lambda applications. The order of possible refs being generated within the
+ lambda are non-deterministic.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Map.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Map</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7Foreach"></a>
+                    <a name="//apple_ref/swift/Struct/Foreach" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7Foreach">Foreach</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Foreach</code> applies <code>lambda</code> expr to each member of the Array or Page coll. The
+original collection is returned.</p>
+
+<p><code>Foreach</code> applies the <code>lambda</code> expr concurrently to each element of the
+ collection. Side-effects, such as writes, do not affect evaluation of other
+ lambda applications. The order of possible refs being generated within the
+ lambda are non-deterministic.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Foreach.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Foreach</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Filter"></a>
+                    <a name="//apple_ref/swift/Struct/Filter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Filter">Filter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Filter</code> applies <code>lambda</code> expr to each member of the Array or Page collection,
+and returns a new collection of the same type containing only those elements
+for which <code>lambda</code> expr returned true. If a Page is passed, its cursor is
+preserved in the result.</p>
+
+<p>Providing a lambda which does not return a Boolean results in an “invalid
+argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Filter.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Filter</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB4Take"></a>
+                    <a name="//apple_ref/swift/Struct/Take" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB4Take">Take</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Take</code> returns a new Collection or Page that contains num elements from the
+head of the Collection or Page coll.  If <code>take</code> value is zero or negative, the
+resulting collection is empty.  When applied to a page, the returned page’s
+after cursor is adjusted to only cover the taken elements.</p>
+
+<p>As special cases:
+* If <code>take</code> value is negative, after will be set to the same value as the
+original page’s  before.
+* If all elements from the original page were taken, after does not change.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Take.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Take</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB4Drop"></a>
+                    <a name="//apple_ref/swift/Struct/Drop" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB4Drop">Drop</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Drop</code> returns a new Arr or Page that contains the remaining elements, after
+num have been removed from the head of the Arr or Page coll. If <code>drop</code> value is
+zero or negative, elements of coll are returned unmodified.</p>
+
+<p>When applied to a page, the returned page’s before cursor is adjusted to
+exclude the dropped elements. As special cases:
+* If <code>drop</code> value is negative, before does not change.
+* Otherwise if all elements from the original page were dropped (including
+the case where the page was already empty), before will be set to same value as
+the original page’s after.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Drop.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Drop</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7Prepend"></a>
+                    <a name="//apple_ref/swift/Struct/Prepend" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7Prepend">Prepend</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Prepend</code> returns a new Array that is the result of prepending <code>elements</code> onto
+the Array <code>toCollection</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Prepend.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Prepend</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Append"></a>
+                    <a name="//apple_ref/swift/Struct/Append" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Append">Append</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Append</code> returns a new Array that is the result of appending <code>elements</code> onto
+the <code>collection</code> array.</p>
+
+<p><a href="https://fauna.com/documentation/queries#collection_functions">Reference</a>.</p>
+
+                        <a href="Structs/Append.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Append</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Read%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Read Functions" class="dashAnchor"></a>
+                <a href="#/Read%20Functions">
+                  <h3 class="section-name">Read Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Get"></a>
+                    <a name="//apple_ref/swift/Struct/Get" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Get">Get</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the instance identified by ref. If the instance does not exist, an
+“instance not found” error will be returned. Use the exists predicate to avoid
+“instance not found” errors.
+<a href="https://fauna.com/documentation/queries#read_functions-get_ref">Reference</a>.</p>
+
+                        <a href="Structs/Get.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Get</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Paginate"></a>
+                    <a name="//apple_ref/swift/Struct/Paginate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Paginate">Paginate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Paginate</code> retrieves a page from the set identified by <code>resource</code>. A valid set
+is any set identifier or instance ref. Instance refs represent singleton sets
+of themselves.</p>
+
+<p><a href="https://fauna.com/documentation/queries#read_functions">Reference</a>.</p>
+
+                        <a href="Structs/Paginate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Paginate</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Exists"></a>
+                    <a name="//apple_ref/swift/Struct/Exists" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Exists">Exists</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Exists</code> returns boolean true if the provided ref exists (in the case of an
+ instance), or is non-empty (in the case of a set), and false otherwise.</p>
+
+<p><a href="https://fauna.com/documentation/queries#read_functions">Reference</a>.</p>
+
+                        <a href="Structs/Exists.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Exists</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Write%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Write Functions" class="dashAnchor"></a>
+                <a href="#/Write%20Functions">
+                  <h3 class="section-name">Write Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Create"></a>
+                    <a name="//apple_ref/swift/Struct/Create" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Create">Create</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an instance of the class referred to by <code>classRef</code>, using <code>params</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Create.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Create</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Update"></a>
+                    <a name="//apple_ref/swift/Struct/Update" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Update">Update</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Updates a resource ref. Updates are partial, and only modify values that are
+specified. Scalar values and arrays are replaced by newer versions, objects are
+merged, and null removes a value.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Update.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Update</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7Replace"></a>
+                    <a name="//apple_ref/swift/Struct/Replace" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7Replace">Replace</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replaces the resource ref using the provided params. Values not specified are
+removed.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Replace.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Replace</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Delete"></a>
+                    <a name="//apple_ref/swift/Struct/Delete" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Delete">Delete</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes a resource.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Delete.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Delete</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Insert"></a>
+                    <a name="//apple_ref/swift/Struct/Insert" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Insert">Insert</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds an event to an instance’s history. The ref must refer to an instance of a
+user-defined class or a key - all other refs result in an “invalid argument”
+error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Insert.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Insert</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Remove"></a>
+                    <a name="//apple_ref/swift/Struct/Remove" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Remove">Remove</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes an event from an instance’s history. The ref must refer to an instance
+of an user-defined class - all other refs result in an “invalid argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/Remove.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Remove</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB11CreateClass"></a>
+                    <a name="//apple_ref/swift/Struct/CreateClass" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB11CreateClass">CreateClass</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>CreateClass</code> creates a class object using <code>params</code>. It is a shortcut function
+that has the same effect as <code>Create(Ref(&quot;classes&quot;), params)</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/CreateClass.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CreateClass</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB14CreateDatabase"></a>
+                    <a name="//apple_ref/swift/Struct/CreateDatabase" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB14CreateDatabase">CreateDatabase</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>CreateDatabase</code> creates a new database using data from <code>params</code>. Since this
+function creates a database, it requires an admin key to be passed</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/CreateDatabase.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CreateDatabase</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB11CreateIndex"></a>
+                    <a name="//apple_ref/swift/Struct/CreateIndex" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB11CreateIndex">CreateIndex</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This function creates a new index when the name and source class are specified
+in <code>params</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/CreateIndex.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CreateIndex</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB9CreateKey"></a>
+                    <a name="//apple_ref/swift/Struct/CreateKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB9CreateKey">CreateKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This function creates a new key where the database and role are specified in
+<code>params</code>. It needs the admin key for authentication.</p>
+
+<p><a href="https://fauna.com/documentation/queries#write_functions">Reference</a>.</p>
+
+                        <a href="Structs/CreateKey.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CreateKey</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Set%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Set Functions" class="dashAnchor"></a>
+                <a href="#/Set%20Functions">
+                  <h3 class="section-name">Set Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Match"></a>
+                    <a name="//apple_ref/swift/Struct/Match" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Match">Match</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Match</code> returns the set of instances that match the terms, based on the
+configuration of the specified index. <code>terms</code> can be either a single value, or an
+array.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Match.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Match</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Union"></a>
+                    <a name="//apple_ref/swift/Struct/Union" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Union">Union</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Union</code> represents the set of resources that are present in at least one of the
+specified sets.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Union.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Union</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB12Intersection"></a>
+                    <a name="//apple_ref/swift/Struct/Intersection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB12Intersection">Intersection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Intersection</code> represents the set of resources that are present in all of the
+specified sets.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Intersection.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Intersection</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB10Difference"></a>
+                    <a name="//apple_ref/swift/Struct/Difference" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB10Difference">Difference</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Difference</code> represents the set of resources present in the source set and not
+in any of the other specified sets.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Difference.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Difference</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Distinct"></a>
+                    <a name="//apple_ref/swift/Struct/Distinct" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Distinct">Distinct</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Distinct function returns the set after removing duplicates.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Distinct.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Distinct</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB4Join"></a>
+                    <a name="//apple_ref/swift/Struct/Join" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB4Join">Join</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Join</code> derives a set of resources from target by applying each instance in
+<code>sourceSet</code> to <code>with</code> target. Target can be either an index reference or a
+lambda function.  The index form is useful when the instances in the
+<code>sourceSet</code> match the terms in an index. The join returns instances from index
+(specified by with) that match the terms from <code>sourceSet</code>.</p>
+
+<p><a href="https://fauna.com/documentation/queries#sets">Reference</a>.</p>
+
+                        <a href="Structs/Join.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Join</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Auth%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Auth Functions" class="dashAnchor"></a>
+                <a href="#/Auth%20Functions">
+                  <h3 class="section-name">Auth Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Login"></a>
+                    <a name="//apple_ref/swift/Struct/Login" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Login">Login</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Login</code> creates a token for the provided ref.</p>
+
+<p><a href="https://fauna.com/documentation/queries#auth_functions">Reference</a>.</p>
+
+                        <a href="Structs/Login.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Login</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Logout"></a>
+                    <a name="//apple_ref/swift/Struct/Logout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Logout">Logout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Logout</code> deletes all tokens associated with the current session if its
+parameter is <code>true</code>, or just the token used in this request otherwise.</p>
+
+<p><a href="https://fauna.com/documentation/queries#auth_functions">Reference</a>..</p>
+
+                        <a href="Structs/Logout.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Logout</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Identify"></a>
+                    <a name="//apple_ref/swift/Struct/Identify" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Identify">Identify</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Identify</code> checks the given password against the ref’s credentials, returning
+<code>true</code> if the credentials are valid, or <code>false</code> otherwise..</p>
+
+<p><a href="https://fauna.com/documentation/queries#auth_functions">Reference</a>..</p>
+
+                        <a href="Structs/Identify.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Identify</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/String%20Functions"></a>
+                <a name="//apple_ref/swift/Section/String Functions" class="dashAnchor"></a>
+                <a href="#/String%20Functions">
+                  <h3 class="section-name">String Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Concat"></a>
+                    <a name="//apple_ref/swift/Struct/Concat" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Concat">Concat</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Concat</code> joins a list of strings into a single string value.</p>
+
+<p><a href="https://fauna.com/documentation/queries#string_functions">Reference</a>.</p>
+
+                        <a href="Structs/Concat.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Concat</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Casefold"></a>
+                    <a name="//apple_ref/swift/Struct/Casefold" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Casefold">Casefold</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Casefold</code> normalizes strings according to the Unicode Standard section 5.18
+<q>Case Mappings</q>.</p>
+
+<p>To compare two strings for case-insensitive matching, transform each string
+and use a binary comparison, such as  equals.</p>
+
+<p><a href="https://fauna.com/documentation/queries#string_functions">Reference</a>.</p>
+
+                        <a href="Structs/Casefold.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Casefold</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Date%20and%20Time%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Date and Time Functions" class="dashAnchor"></a>
+                <a href="#/Date%20and%20Time%20Functions">
+                  <h3 class="section-name">Date and Time Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB4Time"></a>
+                    <a name="//apple_ref/swift/Struct/Time" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB4Time">Time</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Time</code> constructs a time special type from an ISO 8601 offset date/time string.
+The special string <q>now</q> may be used to construct a time from the current
+request’s transaction time. Multiple references to <q>now</q> within the same query
+will be equal.</p>
+
+<p><a href="https://fauna.com/documentation/queries#time_functions">Reference</a>.</p>
+
+                        <a href="Structs/Time.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Time</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Epoch"></a>
+                    <a name="//apple_ref/swift/Struct/Epoch" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Epoch">Epoch</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Epoch</code> constructs a time special type relative to the epoch
+(1970-01-01T00:00:00Z). <code>offset</code> must be an integer type. <code>unit</code> may be a
+valid time unit.</p>
+
+<p><a href="https://fauna.com/documentation/queries#time_functions">Reference</a>.</p>
+
+                        <a href="Structs/Epoch.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Epoch</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6DateFn"></a>
+                    <a name="//apple_ref/swift/Struct/DateFn" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6DateFn">DateFn</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>DateFn</code> constructs a date special type from an ISO 8601 date string.</p>
+
+<p><a href="https://fauna.com/documentation/queries#time_functions">Reference</a>.</p>
+
+                        <a href="Structs/DateFn.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DateFn</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Miscellaneous%20Functions"></a>
+                <a name="//apple_ref/swift/Section/Miscellaneous Functions" class="dashAnchor"></a>
+                <a href="#/Miscellaneous%20Functions">
+                  <h3 class="section-name">Miscellaneous Functions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6NextId"></a>
+                    <a name="//apple_ref/swift/Struct/NextId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6NextId">NextId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>NextId</code> produces a new identifier suitable for use when constructing refs.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a></p>
+
+                        <a href="Structs/NextId.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">NextId</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Database"></a>
+                    <a name="//apple_ref/swift/Struct/Database" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Database">Database</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Given the name of a database, this function returns a valid ref that points to
+it. The database function only looks up child databases so finding a database
+using this function requires you to provide an admin key from the parent
+database.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a></p>
+
+                        <a href="Structs/Database.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Database</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Index"></a>
+                    <a name="//apple_ref/swift/Struct/Index" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Index">Index</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The index function returns a valid ref for the given index name</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a></p>
+
+                        <a href="Structs/Index.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Index</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5Class"></a>
+                    <a name="//apple_ref/swift/Struct/Class" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5Class">Class</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The class function returns a valid ref for the given class name</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a></p>
+
+                        <a href="Structs/Class.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Class</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Equals"></a>
+                    <a name="//apple_ref/swift/Struct/Equals" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Equals">Equals</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Equals</code> tests equivalence between a list of values.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Equals.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Equals</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Contains"></a>
+                    <a name="//apple_ref/swift/Struct/Contains" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Contains">Contains</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Contains</code> returns true if the argument passed to <code>in</code> contains a value at
+the specified <code>path</code>, and false otherwise.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Contains.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Contains</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Select"></a>
+                    <a name="//apple_ref/swift/Struct/Select" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Select">Select</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Select</code> traverses into the argument passed to from and returns the resulting
+value. If the path does not exist, it results in an error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Select.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Select</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Add"></a>
+                    <a name="//apple_ref/swift/Struct/Add" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Add">Add</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Add</code> computes the sum of a list of numbers. Attempting to add fewer that two
+numbers will result in an “invalid argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Add.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Add</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Multiply"></a>
+                    <a name="//apple_ref/swift/Struct/Multiply" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Multiply">Multiply</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Multiply</code> computes the product of a list of numbers. Attempting to multiply
+fewer than two numbers will result in an “invalid argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Multiply.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Multiply</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8Subtract"></a>
+                    <a name="//apple_ref/swift/Struct/Subtract" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8Subtract">Subtract</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Subtract</code> computes the difference of a list of numbers. Attempting to subtract
+fewer than two numbers will result in an “invalid argument” error.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Subtract.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Subtract</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Divide"></a>
+                    <a name="//apple_ref/swift/Struct/Divide" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Divide">Divide</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Divide</code> computes the quotient of a list of numbers.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Divide.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Divide</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6Modulo"></a>
+                    <a name="//apple_ref/swift/Struct/Modulo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6Modulo">Modulo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Modulo</code> computes the remainder after division of a list of numbers.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Modulo.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Modulo</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB2LT"></a>
+                    <a name="//apple_ref/swift/Struct/LT" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2LT">LT</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>LT</code> returns true if each specified value compares as less than the ones
+following it, and false otherwise. The function takes one or more arguments; it
+always returns true if it has a single argument.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/LT.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LT</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3LTE"></a>
+                    <a name="//apple_ref/swift/Struct/LTE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3LTE">LTE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>LTE</code> returns true if each specified value compares as less than or equal to
+the ones following it, and false otherwise. The function takes one or more
+arguments; it always returns  true if it has a single argument.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/LTE.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LTE</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB2GT"></a>
+                    <a name="//apple_ref/swift/Struct/GT" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2GT">GT</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>GT</code> returns true if each specified value compares as greater than the ones
+following it, and false otherwise. The function takes one or more arguments; it
+always returns true if it has a single argument.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/GT.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GT</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3GTE"></a>
+                    <a name="//apple_ref/swift/Struct/GTE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3GTE">GTE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>GTE</code> returns true if each specified value compares as greater than or equal to
+the ones following it, and false otherwise. The function takes one or more
+arguments; it always returns true if it has a single argument.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/GTE.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GTE</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3And"></a>
+                    <a name="//apple_ref/swift/Struct/And" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3And">And</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>And</code> computes the conjunction of a list of boolean values, returning <code>true</code> if
+all elements are true, and <code>false</code> otherwise.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/And.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">And</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB2Or"></a>
+                    <a name="//apple_ref/swift/Struct/Or" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2Or">Or</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Or</code> computes the disjunction of a list of boolean values, returning <code>true</code> if
+any elements are true, and <code>false</code> otherwise.</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Or.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Or</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB3Not"></a>
+                    <a name="//apple_ref/swift/Struct/Not" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB3Not">Not</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Not</code> computes the negation of a boolean expression. Computes the negation of a
+boolean value, returning true if its argument is false, or false if its
+argument is true..</p>
+
+<p><a href="https://fauna.com/documentation/queries#misc_functions">Reference</a>.</p>
+
+                        <a href="Structs/Not.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Not</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7StringV"></a>
+                    <a name="//apple_ref/swift/Struct/StringV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7StringV">StringV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a string returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/StringV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">StringV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5LongV"></a>
+                    <a name="//apple_ref/swift/Struct/LongV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5LongV">LongV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a number returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/LongV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LongV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7DoubleV"></a>
+                    <a name="//apple_ref/swift/Struct/DoubleV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7DoubleV">DoubleV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a double returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/DoubleV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DoubleV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB8BooleanV"></a>
+                    <a name="//apple_ref/swift/Struct/BooleanV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB8BooleanV">BooleanV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a boolean returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/BooleanV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BooleanV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5TimeV"></a>
+                    <a name="//apple_ref/swift/Struct/TimeV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5TimeV">TimeV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a timestamp returned by the server.</p>
+
+<p><a href="https://fauna.com/documentation/queries#values-special_types">Reference</a></p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>You can convert a timestamp to two different types:</p>
+
+<ul>
+<li><code><a href="Structs/HighPrecisionTime.html">HighPrecisionTime</a></code>: A timestamp with nanoseconds precision.</li>
+<li><code>Date</code>: A timestamp with seconds precision only.</li>
+</ul>
+
+</div>
+
+                        <a href="Structs/TimeV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">TimeV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5DateV"></a>
+                    <a name="//apple_ref/swift/Struct/DateV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5DateV">DateV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a date returned by the server.
+<a href="https://fauna.com/documentation/queries#values-special_types">Reference</a>.</p>
+
+                        <a href="Structs/DateV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DateV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB4RefV"></a>
+                    <a name="//apple_ref/swift/Struct/RefV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB4RefV">RefV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a Ref returned by the server.
+<a href="https://fauna.com/documentation/queries#values-special_types">Reference</a>.</p>
+
+                        <a href="Structs/RefV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RefV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7SetRefV"></a>
+                    <a name="//apple_ref/swift/Struct/SetRefV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7SetRefV">SetRefV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a SetRef returned by the server.
+<a href="https://fauna.com/documentation/queries#values-special_types">Reference</a>.</p>
+
+                        <a href="Structs/SetRefV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SetRefV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB5NullV"></a>
+                    <a name="//apple_ref/swift/Struct/NullV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB5NullV">NullV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a null value returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/NullV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">NullV</span><span class="p">:</span> <span class="kt"><a href="Protocols/Value.html">Value</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6ArrayV"></a>
+                    <a name="//apple_ref/swift/Struct/ArrayV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6ArrayV">ArrayV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an array returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/ArrayV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ArrayV</span><span class="p">:</span> <span class="kt"><a href="Protocols/Value.html">Value</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB7ObjectV"></a>
+                    <a name="//apple_ref/swift/Struct/ObjectV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB7ObjectV">ObjectV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an object returned by the server.
+<a href="https://fauna.com/documentation/queries#values">Reference</a>.</p>
+
+                        <a href="Structs/ObjectV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ObjectV</span><span class="p">:</span> <span class="kt"><a href="Protocols/Value.html">Value</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/faunadb/faunadb-swift" target="_blank" rel="external">Fauna, Inc</a>. All rights reserved. (Last updated: 2016-12-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

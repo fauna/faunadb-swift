@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FaunaError Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/FaunaError" class="dashAnchor"></a>
+    <a title="FaunaError Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">FaunaDB Docs</a> (85% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">FaunaDB Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FaunaError Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BadRequest.html">BadRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FaunaError.html">FaunaError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InternalError.html">InternalError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NotFound.html">NotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PermissionDenied.html">PermissionDenied</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/QueryResult.html">QueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TimeoutError.html">TimeoutError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Unauthorized.html">Unauthorized</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Unavailable.html">Unavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UnknownError.html">UnknownError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/Action.html">Action</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/JsonError.html">JsonError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TimeUnit.html">TimeUnit</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/CustomStringConvertible.html">CustomStringConvertible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Fn.html">Fn</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F7FaunaDBoi2eeuRxS_11ScalarValuewx7Wrappeds9EquatablerFTxx_Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F7FaunaDBoi2egFTSSGSqPS_4Expr___TSSGSqPS0____">=&gt;(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Decodable.html">Decodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Encodable.html">Encodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P7FaunaDB4Expr">Expr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ScalarValue.html">ScalarValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P7FaunaDB7Segment">Segment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Value.html">Value</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Add.html">Add</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/And.html">And</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Append.html">Append</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Arr.html">Arr</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ArrayV.html">ArrayV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BooleanV.html">BooleanV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Casefold.html">Casefold</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Class.html">Class</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Concat.html">Concat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Contains.html">Contains</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Create.html">Create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateClass.html">CreateClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateDatabase.html">CreateDatabase</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateIndex.html">CreateIndex</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateKey.html">CreateKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Database.html">Database</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DateFn.html">DateFn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DateV.html">DateV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Delete.html">Delete</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Difference.html">Difference</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Distinct.html">Distinct</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Divide.html">Divide</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Do.html">Do</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DoubleV.html">DoubleV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Drop.html">Drop</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Epoch.html">Epoch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Equals.html">Equals</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Exists.html">Exists</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Field.html">Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Fields.html">Fields</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Filter.html">Filter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Foreach.html">Foreach</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GT.html">GT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GTE.html">GTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Get.html">Get</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HighPrecisionTime.html">HighPrecisionTime</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Identify.html">Identify</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/If.html">If</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Index.html">Index</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Insert.html">Insert</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Intersection.html">Intersection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Join.html">Join</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LT.html">LT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LTE.html">LTE</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Lambda.html">Lambda</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Let.html">Let</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Login.html">Login</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Logout.html">Logout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LongV.html">LongV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Map.html">Map</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Match.html">Match</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Modulo.html">Modulo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Multiply.html">Multiply</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NextId.html">NextId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Not.html">Not</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NullV.html">NullV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Obj.html">Obj</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ObjectV.html">ObjectV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Or.html">Or</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Paginate.html">Paginate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Prepend.html">Prepend</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryError.html">QueryError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Ref.html">Ref</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RefV.html">RefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Remove.html">Remove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Replace.html">Replace</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Select.html">Select</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SetRefV.html">SetRefV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StringV.html">StringV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Subtract.html">Subtract</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Take.html">Take</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Time.html">Time</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TimeV.html">TimeV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Union.html">Union</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Update.html">Update</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ValidationFailure.html">ValidationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Var.html">Var</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FaunaError</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">FaunaError</span><span class="p">:</span> <span class="kt">Error</span></code></pre>
+
+                </div>
+              </div>
+            <p>Represents an error while executing a FaunaDB query.
+<a href="https://fauna.com/documentation#errors">Reference</a></p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7FaunaDB10FaunaError7messageGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/message" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7FaunaDB10FaunaError7messageGSqSS_">message</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The error message.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7FaunaDB10FaunaError6statusGSqSi_"></a>
+                    <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7FaunaDB10FaunaError6statusGSqSi_">status</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The HTTP status code.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">status</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7FaunaDB10FaunaError6errorsGSaVS_10QueryError_"></a>
+                    <a name="//apple_ref/swift/Property/errors" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7FaunaDB10FaunaError6errorsGSaVS_10QueryError_">errors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The errors found by FaunDB while executing the query.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/QueryError.html">QueryError</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFPs9Equatableoi2eeFTxx_Sb"></a>
+                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFPs9Equatableoi2eeFTxx_Sb">==(_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The errors found by FaunDB while executing the query.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="kt">FaunaError</span><span class="p">,</span> <span class="nv">right</span><span class="p">:</span> <span class="kt">FaunaError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A value to compare.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Another value to compare.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vPs23CustomStringConvertible11descriptionSS"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vPs23CustomStringConvertible11descriptionSS">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The errors found by FaunDB while executing the query.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/faunadb/faunadb-swift" target="_blank" rel="external">Fauna, Inc</a>. All rights reserved. (Last updated: 2016-12-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
