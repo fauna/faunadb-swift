@@ -1,7 +1,3 @@
-# WIP
-
-***Please, note that this driver is being developed. Changes will happen until we have an official release.***
-
 # FaunaDB Swift Driver
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
