@@ -1,7 +1,3 @@
-# WIP
-
-***Please, note that this driver is being developed. Changes will happen until we have an official release.***
-
 # FaunaDB Swift Driver
 
 [![Build Status](https://travis-ci.org/faunadb/faunadb-swift.svg?branch=master)](https://travis-ci.org/faunadb/faunadb-swift)
