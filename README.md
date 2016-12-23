@@ -4,6 +4,7 @@
 
 # FaunaDB Swift Driver
 
+[![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
 [![Build Status](https://travis-ci.org/faunadb/faunadb-swift.svg?branch=master)](https://travis-ci.org/faunadb/faunadb-swift)
 [![Coverage Status](https://codecov.io/gh/faunadb/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/faunadb/faunadb-swift)
 [![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/faunadb/faunadb-swift/master/LICENSE)
@@ -30,7 +31,7 @@ and in our [example project](https://github.com/faunadb/faunadb-swift/tree/maste
 CocoaPods:
 
 ```
-pod 'FaunaDB', '~> 1.0'
+pod 'FaunaDB', '~> 0.1'
 ```
 
 Carthage:
@@ -44,8 +45,8 @@ SwiftPM:
 ```swift
 .Package(
     url: "https://github.com/faunadb/faunadb-swift.git",
-    majorVersion: 1,
-    minorVersion: 0
+    majorVersion: 0,
+    minorVersion: 1
 )
 ```
 
