@@ -1,9 +1,9 @@
 # FaunaDB Swift Driver
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
-[![Build Status](https://travis-ci.org/faunadb/faunadb-swift.svg?branch=master)](https://travis-ci.org/faunadb/faunadb-swift)
-[![Coverage Status](https://codecov.io/gh/faunadb/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/faunadb/faunadb-swift)
-[![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/faunadb/faunadb-swift/master/LICENSE)
+[![Build Status](https://travis-ci.org/fauna/faunadb-swift.svg?branch=master)](https://travis-ci.org/fauna/faunadb-swift)
+[![Coverage Status](https://codecov.io/gh/fauna/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/fauna/faunadb-swift)
+[![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/fauna/faunadb-swift/master/LICENSE)
 
 A Swift driver for [FaunaDB](https://fauna.com)
 
@@ -15,10 +15,10 @@ A Swift driver for [FaunaDB](https://fauna.com)
 
 ## Documentation
 
-Check out the Swift-specific [reference documentation](http://faunadb.github.io/faunadb-swift/).
+Check out the Swift-specific [reference documentation](http://fauna.github.io/faunadb-swift/).
 
 You can find more information in the FaunaDB [documentation](https://fauna.com/documentation)
-and in our [example project](https://github.com/faunadb/faunadb-swift/tree/master/Example).
+and in our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
 
 ## Using the Driver
 
@@ -33,14 +33,14 @@ pod 'FaunaDB', '~> 0.1'
 Carthage:
 
 ```
-github 'faunadb/faunadb-swift'
+github 'fauna/faunadb-swift'
 ```
 
 SwiftPM:
 
 ```swift
 .Package(
-    url: "https://github.com/faunadb/faunadb-swift.git",
+    url: "https://github.com/fauna/faunadb-swift.git",
     majorVersion: 0,
     minorVersion: 1
 )
@@ -91,7 +91,7 @@ let post: Post = try! getPost.map { dbEntry in dbEntry.get("data") }
 ```
 
 For more examples, check our online [documentation](https://fauna.com/documentation)
-and our [example project](https://github.com/faunadb/faunadb-swift/tree/master/Example).
+and our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
 
 ## Contributing
 

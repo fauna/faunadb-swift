@@ -2,10 +2,10 @@ Pod::Spec.new do |s|
   s.name             = "FaunaDB"
   s.version          = "0.2.0-SNAPSHOT"
   s.summary          = "Swift driver for FaunaDB."
-  s.homepage         = "https://github.com/faunadb/faunadb-swift"
+  s.homepage         = "https://github.com/fauna/faunadb-swift"
   s.author           = { "Fauna, Inc" => "priority@fauna.com" }
   s.license          = { type: 'Mozilla Public License 2.0', file: 'LICENSE' }
-  s.source           = { git: "https://github.com/faunadb/faunadb-swift.git", tag: s.version.to_s }
+  s.source           = { git: "https://github.com/fauna/faunadb-swift.git", tag: s.version.to_s }
   s.social_media_url = 'https://twitter.com/faunadb'
   s.source_files     = 'Sources/**/*.swift'
 
