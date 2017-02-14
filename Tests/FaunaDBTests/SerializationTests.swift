@@ -184,6 +184,18 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testAt() {
+        assert(
+            expr: At(timestamp: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1), Paginate(Ref("classes"))),
+            toBecome: "{\"at\":{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"},\"expr\":{\"paginate\":{\"@ref\":\"classes\"}}}"
+        )
+
+        assert(
+            expr: At(timestamp: 1, Paginate(Ref("classes"))),
+            toBecome: "{\"at\":1,\"expr\":{\"paginate\":{\"@ref\":\"classes\"}}}"
+        )
+    }
+
     func testIf() {
         assert(
             expr: If(true, then: "was true", else: "was false"),

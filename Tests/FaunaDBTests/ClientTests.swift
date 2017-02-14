@@ -282,6 +282,22 @@ class ClientTests: XCTestCase {
         assert(query: Exists(instance), toReturn: false)
     }
 
+    func testPaginateAt() {
+        assert(
+            query: Paginate(Match(index: Self.allSpells)),
+            toReturn: [Self.magicMissile, Self.fireball, Self.faerieFire],
+            atPath: "data"
+        )
+
+        let fireballTs: Int! = try! client.query(Get(Self.fireball)).await().get("ts")
+
+        assert(
+            query: At(timestamp: fireballTs, Paginate(Match(index: Self.allSpells))),
+            toReturn: [Self.magicMissile, Self.fireball],
+            atPath: "data"
+        )
+    }
+
     func testLet() {
         assert(
             query: Let(1, 2) { a, b in
