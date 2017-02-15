@@ -395,6 +395,13 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testKeyFromSecret() {
+        assert(
+            expr: KeyFromSecret("s3cr3t"),
+            toBecome: "{\"key_from_secret\":\"s3cr3t\"}"
+        )
+    }
+
     func testPaginate() {
         assert(
             expr: Paginate(Ref("indexes")),

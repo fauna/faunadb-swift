@@ -529,6 +529,19 @@ public struct Get: Fn {
 
 }
 
+/// `KeyFromSecret` retrieves a key object associated to the given secret.
+///
+///  [Reference](https://fauna.com/documentation/queries#read_functions).
+public struct KeyFromSecret: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter secret: The secret of the key to be retrieved.
+    public init(_ secret: Expr) {
+        self.call = fn("key_from_secret" => secret)
+    }
+}
+
 /// `Paginate` retrieves a page from the set identified by `resource`. A valid set
 /// is any set identifier or instance ref. Instance refs represent singleton sets
 /// of themselves.

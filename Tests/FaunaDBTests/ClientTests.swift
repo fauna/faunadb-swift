@@ -373,6 +373,25 @@ class ClientTests: XCTestCase {
         )
     }
 
+    func testKeyFromSecret() {
+        let keyCreated: Value! = try! adminClient.query(
+            CreateKey(Obj(
+                "database" => Database(dbName),
+                "role" => "server"
+            ))
+        )
+        .await()
+
+        let secret: String! = try! keyCreated.get("secret")
+
+        let keyQueried = try! adminClient.query(KeyFromSecret(secret)).await()
+
+        XCTAssertEqual(
+            try keyQueried.get("ref") as RefV!,
+            try keyCreated.get("ref") as RefV!
+        )
+    }
+
     func testPaginateOverAnIndex() {
         var page = try! client.query(
             Paginate(
