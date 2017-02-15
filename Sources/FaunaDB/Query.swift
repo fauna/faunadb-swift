@@ -55,6 +55,23 @@ public struct Var: Fn {
     }
 }
 
+/// `At` evaluates the expr at a given timestamp.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct At: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter timestamp: A timestamp in which the expr will be evaluated.
+    /// - Parameter expr:      The expression to be evaluated.
+    public init(timestamp: Expr, _ expr: Expr) {
+        self.call = fn(
+            "at" => timestamp,
+            "expr" => expr
+        )
+    }
+}
+
 /// `Let` binds values to one or more variables. Variable values cannot refer to
 /// other variables defined in the same let expression. Variables are lexically
 /// scoped to the expression passed via `in`.
