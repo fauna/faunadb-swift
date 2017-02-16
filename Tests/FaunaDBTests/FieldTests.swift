@@ -34,7 +34,8 @@ class FieldTests: XCTestCase {
                 "int": LongV(25)
             ])
         ]),
-        "nested": ObjectV(["key": StringV("value")])
+        "nested": ObjectV(["key": StringV("value")]),
+        "bytes": BytesV(fromArray: [1, 2, 3, 4])
     ])
 
     func testStringField() {
@@ -94,6 +95,11 @@ class FieldTests: XCTestCase {
     func testArrayField() {
         let zero = Field<Int>("arr", 0)
         XCTAssertEqual(try! data.get(field: zero), 42)
+    }
+
+    func testBytesField() {
+        let bytes = Field<Data>("bytes")
+        XCTAssertEqual(try! data.get(field: bytes), Data([1, 2, 3, 4]))
     }
 
     func testNestedFields() {
