@@ -1,5 +1,6 @@
 0.2.0-SNAPSHOT
 * Adds support for at() function
+* Adds support for @bytes type
 
 0.1.0
 * Initial driver release

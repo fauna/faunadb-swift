@@ -105,6 +105,11 @@ class DeserializationTests: XCTestCase {
         )
     }
 
+    func testBytesV() {
+        assert(parse: "{\"@bytes\":\"AQIDBA==\"}",
+               to: BytesV(fromArray: [1, 2, 3, 4]))
+    }
+
     private func assert<T: Value & Equatable>(parse json: String, to expected: T) {
         let parsed = try! JSON.parse(string: json)
 

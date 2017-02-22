@@ -300,6 +300,37 @@ fileprivate func escapeObject(with: String, object: [String: Value]) -> JsonType
     ])
 }
 
+/// Represents a binary blob returned by the server.
+/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+public struct BytesV: ScalarValue, AsJson {
+
+    public let value: Data
+
+    public var description: String {
+        return "\"\(value.base64EncodedString())\""
+    }
+
+    public init(_ value: Data) {
+        self.value = value
+    }
+
+    public init(fromArray bytes: [UInt8]) {
+        self.value = Data(bytes)
+    }
+
+    func escape() -> JsonType {
+        return .object([
+            "@bytes": .string(value.base64EncodedString())
+        ])
+    }
+}
+
+extension BytesV: Equatable {
+    public static func ==(lhs: BytesV, rhs: BytesV) -> Bool {
+        return lhs.value == rhs.value
+    }
+}
+
 // swiftlint:disable cyclomatic_complexity
 fileprivate func == (left: Value, right: Value) -> Bool {
     switch (left, right) {
@@ -312,6 +343,7 @@ fileprivate func == (left: Value, right: Value) -> Bool {
     case (let left, let right) as (RefV, RefV):         return left == right
     case (let left, let right) as (SetRefV, SetRefV):   return left == right
     case (let left, let right) as (DateV, TimeV):       return left == right
+    case (let left, let right) as (BytesV, BytesV):     return left == right
     case is (NullV, NullV):                             return true
     default:                                            return false
     }

@@ -81,6 +81,7 @@ fileprivate struct SupportedTypesCodec: Codec {
         case let bool as BooleanV: return try cast(bool.value)
         case let date as DateV:    return try cast(date.value)
         case let ts as TimeV:      return try castHighPrecisionTime(ts.value)
+        case let bytes as BytesV:  return try cast(bytes.value)
         default:                   return try cast(value)
         }
     }

@@ -171,13 +171,19 @@ fileprivate extension JsonType {
         }
 
         switch (key, value) {
-        case ("@ref", .string(let str)):  return RefV(str)
-        case ("@set", .object(let obj)):  return try convert(to: SetRefV.init, object: obj)
-        case ("@obj", .object(let obj)):  return try convert(to: ObjectV.init, object: obj)
-        case ("@ts", .string(let str)):   return try convert(to: TimeV.init, time: str)
-        case ("@date", .string(let str)): return try convert(to: DateV.init, time: str)
-        default:                          return try convert(to: ObjectV.init, object: special)
+        case ("@ref", .string(let str)):   return RefV(str)
+        case ("@set", .object(let obj)):   return try convert(to: SetRefV.init, object: obj)
+        case ("@obj", .object(let obj)):   return try convert(to: ObjectV.init, object: obj)
+        case ("@ts", .string(let str)):    return try convert(to: TimeV.init, time: str)
+        case ("@date", .string(let str)):  return try convert(to: DateV.init, time: str)
+        case ("@bytes", .string(let str)): return try convert(to: BytesV.init, base64: str)
+        default:                           return try convert(to: ObjectV.init, object: special)
         }
+    }
+
+    private func convert(to type: (Data) -> Value, base64: String) throws -> Value {
+        if let data = Data(base64Encoded: base64) { return type(data) }
+        throw JsonError.invalidBase64(base64)
     }
 
     private func convert(to type: ([String: Value]) -> Value, object: [String: JsonType]) throws -> Value {
@@ -208,6 +214,7 @@ public enum JsonError: Error {
     case invalidObjectKeyType(Any)
     case invalidLiteral(Any)
     case invalidDate(String)
+    case invalidBase64(String)
 }
 
 extension JsonError: CustomStringConvertible {
@@ -217,6 +224,7 @@ extension JsonError: CustomStringConvertible {
         case .invalidObjectKeyType(let key): return "Invalid JSON object key \"\(key)\""
         case .invalidLiteral(let literal):   return "Invalid JSON literal \"\(literal)\""
         case .invalidDate(let string):       return "Invalid date \"\(string)\""
+        case .invalidBase64(let string):     return "Invalid base64 sequence \"\(string)\""
         }
     }
 }

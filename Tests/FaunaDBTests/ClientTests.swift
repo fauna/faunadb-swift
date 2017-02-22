@@ -683,6 +683,10 @@ class ClientTests: XCTestCase {
         assert(query: Obj("key" => "value"), toReturn: ["key": "value"])
     }
 
+    func testEchoBytesBack() {
+        assert(query: BytesV(fromArray: [1, 2, 3, 4]), toReturn: BytesV(fromArray: [1, 2, 3, 4]))
+    }
+
     private static func queryForRef(_ expr: Expr) -> RefV {
         return try! client.query(expr).await().get("ref")!
     }
