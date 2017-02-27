@@ -27,7 +27,7 @@ and in our [example project](https://github.com/fauna/faunadb-swift/tree/master/
 CocoaPods:
 
 ```
-pod 'FaunaDB', '~> 0.1'
+pod 'FaunaDB', '~> 0.1.1'
 ```
 
 Carthage:
@@ -39,11 +39,7 @@ github 'fauna/faunadb-swift'
 SwiftPM:
 
 ```swift
-.Package(
-    url: "https://github.com/fauna/faunadb-swift.git",
-    majorVersion: 0,
-    minorVersion: 1
-)
+.Package(url: "https://github.com/fauna/faunadb-swift.git", Version(0, 1, 1))
 ```
 
 ### Basic Usage
