@@ -1,5 +1,8 @@
-0.2.0-SNAPSHOT
-* Adds support for at() function
+0.3.0-SNAPSHOT
+
+0.2.0
+* Adds support for KeyFromSecret() function
+* Adds support for At() function
 * Adds support for @bytes type
 
 0.1.0
