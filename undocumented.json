@@ -107,77 +107,84 @@
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 207,
+      "line": 213,
       "symbol": "JsonError.unsupportedType",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 208,
+      "line": 214,
       "symbol": "JsonError.invalidObjectKeyType",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 209,
+      "line": 215,
       "symbol": "JsonError.invalidLiteral",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 210,
+      "line": 216,
       "symbol": "JsonError.invalidDate",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
+      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 217,
+      "symbol": "JsonError.invalidBase64",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 636,
+      "line": 666,
       "symbol": "Action.create",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 637,
+      "line": 667,
       "symbol": "Action.delete",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 991,
+      "line": 1021,
       "symbol": "TimeUnit.second",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 992,
+      "line": 1022,
       "symbol": "TimeUnit.millisecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 993,
+      "line": 1023,
       "symbol": "TimeUnit.microsecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 994,
+      "line": 1024,
       "symbol": "TimeUnit.nanosecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1047,
+      "line": 1077,
       "symbol": "NextId.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -347,6 +354,27 @@
       "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
       "line": 282,
       "symbol": "ObjectV.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 307,
+      "symbol": "BytesV.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 313,
+      "symbol": "BytesV.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 317,
+      "symbol": "BytesV.init(fromArray:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }

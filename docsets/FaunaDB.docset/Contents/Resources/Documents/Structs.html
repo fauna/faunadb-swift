@@ -13,7 +13,7 @@
     <a title="Structs  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">FaunaDB Docs</a> (85% documented)</p>
+        <p><a href="index.html">FaunaDB Docs</a> (84% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -142,7 +142,13 @@
                 <a href="Structs/ArrayV.html">ArrayV</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/At.html">At</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/BooleanV.html">BooleanV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/BytesV.html">BytesV</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Casefold.html">Casefold</a>
@@ -251,6 +257,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Join.html">Join</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/KeyFromSecret.html">KeyFromSecret</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/LT.html">LT</a>
@@ -740,6 +749,36 @@ lexical scope. Referring to a variable that is not in scope results in an
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:V7FaunaDB2At"></a>
+                    <a name="//apple_ref/swift/Struct/At" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB2At">At</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>At</code> evaluates the expr at a given timestamp.</p>
+
+<p><a href="https://fauna.com/documentation/queries#basic_forms">Reference</a>.</p>
+
+                        <a href="Structs/At.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">At</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:V7FaunaDB3Let"></a>
                     <a name="//apple_ref/swift/Struct/Let" class="dashAnchor"></a>
                     <a class="token" href="#/s:V7FaunaDB3Let">Let</a>
@@ -1159,6 +1198,36 @@ the <code>collection</code> array.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Get</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB13KeyFromSecret"></a>
+                    <a name="//apple_ref/swift/Struct/KeyFromSecret" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB13KeyFromSecret">KeyFromSecret</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>KeyFromSecret</code> retrieves a key object associated to the given secret.</p>
+
+<p><a href="https://fauna.com/documentation/queries#read_functions">Reference</a>.</p>
+
+                        <a href="Structs/KeyFromSecret.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">KeyFromSecret</span><span class="p">:</span> <span class="kt">Fn</span></code></pre>
 
                         </div>
                       </div>
@@ -2969,13 +3038,42 @@ argument is true..</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V7FaunaDB6BytesV"></a>
+                    <a name="//apple_ref/swift/Struct/BytesV" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V7FaunaDB6BytesV">BytesV</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a binary blob returned by the server.
+<a href="https://fauna.com/documentation/queries#values-special_types">Reference</a>.</p>
+
+                        <a href="Structs/BytesV.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BytesV</span><span class="p">:</span> <span class="kt"><a href="Protocols/ScalarValue.html">ScalarValue</a></span><span class="p">,</span> <span class="kt">AsJson</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://github.com/faunadb/faunadb-swift" target="_blank" rel="external">Fauna, Inc</a>. All rights reserved. (Last updated: 2016-12-21)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/fauna/faunadb-swift" target="_blank" rel="external">Fauna, Inc</a>. All rights reserved. (Last updated: 2017-02-28)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
