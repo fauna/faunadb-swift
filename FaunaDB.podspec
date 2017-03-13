@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FaunaDB"
-  s.version          = "0.1.2-SNAPSHOT"
+  s.version          = "1.0.0"
   s.summary          = "Swift driver for FaunaDB."
   s.homepage         = "https://github.com/fauna/faunadb-swift"
   s.author           = { "Fauna, Inc" => "priority@fauna.com" }
