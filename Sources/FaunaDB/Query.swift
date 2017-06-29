@@ -1,4 +1,4 @@
-// swiftlint:disable file_length
+// swiftlint:disable file_length large_tuple
 import Foundation
 
 // MARK: Values
@@ -663,8 +663,8 @@ public struct Delete: Fn {
 ///
 /// [Reference](https://fauna.com/documentation/queries#write_functions)
 public enum Action: String {
-    case create = "create"
-    case delete = "delete"
+    case create
+    case delete
 }
 
 extension Action: Expr, AsJson {
@@ -1018,10 +1018,10 @@ public struct Time: Fn {
 
 /// Represents a time unit to be used for `Epoch` function
 public enum TimeUnit: String {
-    case second = "second"
-    case millisecond = "millisecond"
-    case microsecond = "microsecond"
-    case nanosecond = "nanosecond"
+    case second
+    case millisecond
+    case microsecond
+    case nanosecond
 }
 
 extension TimeUnit: Expr, AsJson {

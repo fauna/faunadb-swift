@@ -326,7 +326,7 @@ public struct BytesV: ScalarValue, AsJson {
 }
 
 extension BytesV: Equatable {
-    public static func ==(lhs: BytesV, rhs: BytesV) -> Bool {
+    public static func == (lhs: BytesV, rhs: BytesV) -> Bool {
         return lhs.value == rhs.value
     }
 }

@@ -32,7 +32,7 @@ extension Latch {
 
     static func await(timeout: DispatchTime, _ fn: (@escaping (Try<T>) -> Void) -> Void) throws -> T {
         let latch = Latch<T>()
-        fn() { value in latch.value = value }
+        fn { value in latch.value = value }
         return try latch.await(timeout: timeout)
     }
 
