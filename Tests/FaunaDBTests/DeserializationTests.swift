@@ -110,6 +110,11 @@ class DeserializationTests: XCTestCase {
                to: BytesV(fromArray: [1, 2, 3, 4]))
     }
 
+    func testQueryV() {
+        assert(parse: "{\"@query\":{\"lambda\":\"x\",\"expr\":{\"var\":\"x\"}}}",
+               to: QueryV(.object(["lambda":.string("x"), "expr":.object(["var":.string("x")])])))
+    }
+
     private func assert<T: Value & Equatable>(parse json: String, to expected: T) {
         let parsed = try! JSON.parse(string: json)
 

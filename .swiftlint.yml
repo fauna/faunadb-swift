@@ -1,8 +1,18 @@
 disabled_rules:
     - line_length
-    - variable_name
+    - identifier_name
     - type_name
     - function_parameter_count
 
 included:
   - Sources
+
+warning_threshold: 1
+
+private_over_fileprivate:
+  validate_extensions: true
+
+file_length:
+  warning: 450
+  error: 500
+

@@ -34,7 +34,7 @@ public protocol Segment {}
 extension String: Segment {}
 extension Int: Segment {}
 
-fileprivate extension Segment {
+private extension Segment {
 
     func extract(value: Value) throws -> Value? {
         switch self {
@@ -60,7 +60,7 @@ fileprivate extension Segment {
 
 }
 
-fileprivate enum InvalidSegment: Error {
+private enum InvalidSegment: Error {
     case key(String, Value)
     case index(Int, Value)
 }

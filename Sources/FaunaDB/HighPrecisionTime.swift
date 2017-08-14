@@ -1,12 +1,12 @@
 import Foundation
 
-fileprivate let timeFormatter = ISO8601Formatter(with: "yyyy-MM-dd'T'HH:mm:ss")
+private let timeFormatter = ISO8601Formatter(with: "yyyy-MM-dd'T'HH:mm:ss")
 
-fileprivate let millisInASecond = 1_000
-fileprivate let microsInASecond = 1_000_000
-fileprivate let nanosInASecond  = 1_000_000_000
-fileprivate let nanosInAMicro   = 1_000
-fileprivate let nanosInAMilli   = 1_000_000
+private let millisInASecond = 1_000
+private let microsInASecond = 1_000_000
+private let nanosInASecond  = 1_000_000_000
+private let nanosInAMicro   = 1_000
+private let nanosInAMilli   = 1_000_000
 
 /// Represents a high precision timestamp starting from UNIX epoch: "1970-01-01".
 public struct HighPrecisionTime {

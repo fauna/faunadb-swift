@@ -153,7 +153,7 @@ public struct Fields {
 
 }
 
-fileprivate protocol Collect: Codec {
+private protocol Collect: Codec {
     associatedtype SegmentType: Segment
     associatedtype Element
     associatedtype Result
@@ -196,7 +196,7 @@ extension Collect {
     }
 }
 
-fileprivate struct CollectFields<E>: Collect {
+private struct CollectFields<E>: Collect {
     typealias SegmentType = Int
     typealias Element = E
     typealias Result = [Element]
@@ -217,7 +217,7 @@ fileprivate struct CollectFields<E>: Collect {
     }
 }
 
-fileprivate struct DictionaryFieds<E>: Collect {
+private struct DictionaryFieds<E>: Collect {
     typealias SegmentType = String
     typealias Element = E
     typealias Result = [String: E]
@@ -238,7 +238,7 @@ fileprivate struct DictionaryFieds<E>: Collect {
     }
 }
 
-fileprivate struct MapFunction<IN, OUT>: Codec {
+private struct MapFunction<IN, OUT>: Codec {
     let codec: Codec
     let fn: (IN) throws -> OUT
 
@@ -248,7 +248,7 @@ fileprivate struct MapFunction<IN, OUT>: Codec {
     }
 }
 
-fileprivate struct FlatMapFunction<IN, OUT>: Codec {
+private struct FlatMapFunction<IN, OUT>: Codec {
     let codec: Codec
     let fn: (IN) throws -> OUT?
 
@@ -262,7 +262,7 @@ fileprivate struct FlatMapFunction<IN, OUT>: Codec {
     }
 }
 
-fileprivate struct FieldError: Error {
+private struct FieldError: Error {
     let path: Path
     let error: Error
 }
@@ -273,7 +273,7 @@ extension FieldError: CustomStringConvertible {
     }
 }
 
-fileprivate enum CollectError: Error {
+private enum CollectError: Error {
     case notCollectable(String, Value)
     case failToCollect(Path, Error)
 }

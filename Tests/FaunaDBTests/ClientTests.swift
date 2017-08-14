@@ -687,6 +687,33 @@ class ClientTests: XCTestCase {
         assert(query: BytesV(fromArray: [1, 2, 3, 4]), toReturn: BytesV(fromArray: [1, 2, 3, 4]))
     }
 
+    func testCreateFunction() {
+        let body = Query{ Add($0, $1) }
+
+        try! client.query(
+            CreateFunction(Obj("name" => "a_function", "body" => body))
+        ).await()
+
+        assert(query: Exists(Ref("functions/a_function")), toReturn: true)
+    }
+
+    func testEchoQuery() {
+        let bodyCreated = try! client.query(Query{ Add($0, $1) }).await() as! QueryV
+        let bodyEchoed = try! client.query(bodyCreated).await() as! QueryV
+
+        XCTAssertEqual(bodyEchoed, bodyCreated)
+    }
+
+    func testCallFunction() {
+        let body = Query{ Concat($0, $1, separator: "/") }
+
+        try! client.query(
+            CreateFunction(Obj("name" => "concat_with_slash", "body" => body))
+        ).await()
+
+        assert(query: Call(Ref("functions/concat_with_slash"), arguments: "a", "b"), toReturn: "a/b")
+    }
+
     private static func queryForRef(_ expr: Expr) -> RefV {
         return try! client.query(expr).await().get("ref")!
     }

@@ -58,10 +58,6 @@ public protocol ScalarValue: Value, Equatable {
     var value: Wrapped { get }
 }
 
-public func ==<S: ScalarValue>(left: S, right: S) -> Bool where S.Wrapped: Equatable {
-    return left.value == right.value
-}
-
 extension CustomStringConvertible where Self: ScalarValue, Self.Wrapped: CustomStringConvertible {
     public var description: String {
         return value.description
@@ -83,6 +79,12 @@ public struct StringV: ScalarValue, AsJson {
     }
 }
 
+extension StringV: Equatable {
+    public static func == (left: StringV, right: StringV) -> Bool {
+        return left.value == right.value
+    }
+}
+
 /// Represents a number returned by the server.
 /// [Reference](https://fauna.com/documentation/queries#values).
 public struct LongV: ScalarValue, AsJson {
@@ -95,6 +97,12 @@ public struct LongV: ScalarValue, AsJson {
 
     func escape() -> JsonType {
         return .number(value)
+    }
+}
+
+extension LongV: Equatable {
+    public static func == (left: LongV, right: LongV) -> Bool {
+        return left.value == right.value
     }
 }
 
@@ -113,6 +121,12 @@ public struct DoubleV: ScalarValue, AsJson {
     }
 }
 
+extension DoubleV: Equatable {
+    public static func == (left: DoubleV, right: DoubleV) -> Bool {
+        return left.value == right.value
+    }
+}
+
 /// Represents a boolean returned by the server.
 /// [Reference](https://fauna.com/documentation/queries#values).
 public struct BooleanV: ScalarValue, AsJson {
@@ -125,6 +139,12 @@ public struct BooleanV: ScalarValue, AsJson {
 
     func escape() -> JsonType {
         return .boolean(value)
+    }
+}
+
+extension BooleanV: Equatable {
+    public static func == (left: BooleanV, right: BooleanV) -> Bool {
+        return left.value == right.value
     }
 }
 
@@ -165,6 +185,12 @@ public struct TimeV: ScalarValue, AsJson {
     }
 }
 
+extension TimeV: Equatable {
+    public static func == (left: TimeV, right: TimeV) -> Bool {
+        return left.value == right.value
+    }
+}
+
 /// Represents a date returned by the server.
 /// [Reference](https://fauna.com/documentation/queries#values-special_types).
 public struct DateV: ScalarValue, AsJson {
@@ -189,6 +215,12 @@ public struct DateV: ScalarValue, AsJson {
     }
 }
 
+extension DateV: Equatable {
+    public static func == (left: DateV, right: DateV) -> Bool {
+        return left.value == right.value
+    }
+}
+
 /// Represents a Ref returned by the server.
 /// [Reference](https://fauna.com/documentation/queries#values-special_types).
 public struct RefV: ScalarValue, AsJson {
@@ -201,6 +233,12 @@ public struct RefV: ScalarValue, AsJson {
 
     func escape() -> JsonType {
         return .object(["@ref": .string(value)])
+    }
+}
+
+extension RefV: Equatable {
+    public static func == (left: RefV, right: RefV) -> Bool {
+        return left.value == right.value
     }
 }
 
@@ -294,7 +332,7 @@ extension ObjectV: Equatable {
     }
 }
 
-fileprivate func escapeObject(with: String, object: [String: Value]) -> JsonType {
+private func escapeObject(with: String, object: [String: Value]) -> JsonType {
     return .object([
         with: .object(object.mapValuesT(JSON.escape))
     ])
@@ -331,45 +369,56 @@ extension BytesV: Equatable {
     }
 }
 
+/// Represents a query value in the FaunaDB query language.
+/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+public struct QueryV: Value, AsJson {
+
+    fileprivate let lambda: JsonType
+
+    public var description: String {
+        return "QueryV(\(lambda))"
+    }
+
+    internal init(_ lambda: JsonType) {
+        self.lambda = lambda
+    }
+
+    func escape() -> JsonType {
+        return .object(["@query": lambda])
+    }
+}
+
+extension QueryV: Equatable {
+    public static func == (lhs: QueryV, rhs: QueryV) -> Bool {
+        return lhs.lambda == rhs.lambda
+    }
+}
+
 // swiftlint:disable cyclomatic_complexity
-fileprivate func == (left: Value, right: Value) -> Bool {
+private func == (left: Value, right: Value) -> Bool {
     switch (left, right) {
-    case (let left, let right) as (ObjectV, ObjectV):   return left == right
-    case (let left, let right) as (ArrayV, ArrayV):     return left == right
-    case (let left, let right) as (StringV, StringV):   return left == right
-    case (let left, let right) as (LongV, LongV):       return left == right
-    case (let left, let right) as (DoubleV, DoubleV):   return left == right
-    case (let left, let right) as (BooleanV, BooleanV): return left == right
-    case (let left, let right) as (RefV, RefV):         return left == right
-    case (let left, let right) as (SetRefV, SetRefV):   return left == right
-    case (let left, let right) as (DateV, TimeV):       return left == right
-    case (let left, let right) as (BytesV, BytesV):     return left == right
+    case (let left as ObjectV, let right as ObjectV):   return left == right
+    case (let left as ArrayV, let right as ArrayV):     return left == right
+    case (let left as StringV, let right as StringV):   return left == right
+    case (let left as LongV, let right as LongV):       return left == right
+    case (let left as DoubleV, let right as DoubleV):   return left == right
+    case (let left as BooleanV, let right as BooleanV): return left == right
+    case (let left as RefV, let right as RefV):         return left == right
+    case (let left as SetRefV, let right as SetRefV):   return left == right
+    case (let left as DateV, let right as DateV):       return left == right
+    case (let left as BytesV, let right as BytesV):     return left == right
+    case (let left as QueryV, let right as QueryV):     return left == right
     case is (NullV, NullV):                             return true
     default:                                            return false
     }
 }
 
-fileprivate func != (left: Value, right: Value) -> Bool {
-    return !(left == right)
-}
-
-fileprivate func == (left: [String: Value], right: [String: Value]) -> Bool {
-    guard left.count == right.count else { return false }
-    if left.count == 0 { return true }
-
-    return left.contains(where: { leftKey, leftValue in
-        guard let rightValue = right[leftKey] else { return true }
-        return leftValue != rightValue
+private func == (left: [String: Value], right: [String: Value]) -> Bool {
+    return left.elementsEqual(right, by: { pair0, pair1 in
+        return pair0.key == pair1.key && pair0.value == pair1.value
     })
 }
 
-fileprivate func == (left: [Value], right: [Value]) -> Bool {
-    guard left.count == right.count else { return false }
-    if left.count == 0 { return true }
-
-    return left.contains(where: { leftElement in
-        right.contains(where: { rightElement in
-            leftElement != rightElement
-        })
-    })
+private func == (left: [Value], right: [Value]) -> Bool {
+    return left.elementsEqual(right, by: ==)
 }
