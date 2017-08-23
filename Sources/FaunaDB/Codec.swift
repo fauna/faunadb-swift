@@ -43,7 +43,7 @@ extension Codec {
     }
 }
 
-fileprivate struct DecodeError<Expected, Actual>: Error {
+private struct DecodeError<Expected, Actual>: Error {
     let expected: Expected.Type
     let actual: Actual.Type
 }
@@ -56,7 +56,7 @@ extension DecodeError: CustomStringConvertible {
     }
 }
 
-fileprivate struct SupportedTypesCodec: Codec {
+private struct SupportedTypesCodec: Codec {
 
     func decode<T>(value: Value) throws -> T? {
         guard !(value is NullV) else { return nil }

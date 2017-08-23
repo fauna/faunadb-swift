@@ -1,4 +1,5 @@
 1.0.1-SNAPSHOT
+* Adds suport for @query type (user defined functions)
 
 1.0.0
 * Official release

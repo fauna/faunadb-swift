@@ -1,6 +1,6 @@
 import Foundation
 
-fileprivate let ISOCalendar: Calendar = {
+private let ISOCalendar: Calendar = {
     var calendar = Calendar(identifier: .iso8601)
     calendar.locale = Locale(identifier: "en_US_POSIX")
     calendar.timeZone = TimeZone(identifier: "UTC")!

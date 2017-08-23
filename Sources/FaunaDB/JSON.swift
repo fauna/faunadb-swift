@@ -44,6 +44,21 @@ internal enum JsonType {
     case null
 }
 
+extension JsonType: Equatable {
+    public static func == (lhs: JsonType, rhs: JsonType) -> Bool {
+        switch (lhs, rhs) {
+        case let (.object(a), .object(b)):   return a == b
+        case let (.array(a), .array(b)):     return a == b
+        case let (.string(a), .string(b)):   return a == b
+        case let (.number(a), .number(b)):   return a == b
+        case let (.double(a), .double(b)):   return a == b
+        case let (.boolean(a), .boolean(b)): return a == b
+        case (.null, .null):                 return true
+        default:                             return false
+        }
+    }
+}
+
 internal struct JSON {
 
     static func data(value: Any) throws -> Data {
@@ -73,7 +88,7 @@ internal struct JSON {
 
 }
 
-fileprivate extension JsonType {
+private extension JsonType {
 
     static func parse(json: Any) throws -> JsonType {
         switch json {
@@ -105,7 +120,7 @@ fileprivate extension JsonType {
 
 }
 
-fileprivate extension JsonType {
+private extension JsonType {
 
     func toData() throws -> Data {
         switch self {
@@ -148,7 +163,7 @@ fileprivate extension JsonType {
 
 }
 
-fileprivate extension JsonType {
+private extension JsonType {
 
     func toValue() throws -> Value {
         switch self {
@@ -172,6 +187,7 @@ fileprivate extension JsonType {
 
         switch (key, value) {
         case ("@ref", .string(let str)):   return RefV(str)
+        case ("@query", let obj):          return QueryV(obj)
         case ("@set", .object(let obj)):   return try convert(to: SetRefV.init, object: obj)
         case ("@obj", .object(let obj)):   return try convert(to: ObjectV.init, object: obj)
         case ("@ts", .string(let str)):    return try convert(to: TimeV.init, time: str)

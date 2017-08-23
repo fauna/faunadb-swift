@@ -279,6 +279,59 @@ public struct Lambda: Fn {
 
 }
 
+/// `Call` invoke the specified function reference.
+/// The function must be created using `CreateFunction` before it can be invoked.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Call: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter ref:       Reference to a function.
+    /// - Parameter arguments: Variable list of arguments to be passed in to the function.
+    public init(_ ref: Expr, arguments args: Expr...) {
+        self.call = fn("call" => ref, "arguments" => varargs(args))
+    }
+}
+
+/// `Query` constructs an instance of `@query` type with the specified lambda.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Query: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter lambda: Lambda expression.
+    public init(_ lambda: Expr) {
+        self.call = fn("query" => lambda)
+    }
+
+    /// - Parameter lambda: Lambda expression represented by a Swift closure.
+    public init(_ lambda: (Expr) -> Expr) {
+        self.init(Lambda(lambda))
+    }
+
+    /// - Parameter lambda: Lambda expression represented by a swift closure.
+    public init(_ lambda: ((Expr, Expr)) -> Expr) {
+        self.init(Lambda(lambda))
+    }
+
+    /// - Parameter lambda: Lambda expression represented by a Swift closure.
+    public init(_ lambda: ((Expr, Expr, Expr)) -> Expr) {
+        self.init(Lambda(lambda))
+    }
+
+    /// - Parameter lambda: Lambda expression represented by a Swift closure.
+    public init(_ lambda: ((Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(Lambda(lambda))
+    }
+
+    /// - Parameter lambda: Lambda expression represented by a Swift closure.
+    public init(_ lambda: ((Expr, Expr, Expr, Expr, Expr)) -> Expr) {
+        self.init(Lambda(lambda))
+    }
+}
+
 // MARK: Collections
 
 /// `Map` applies `lambda` expression to each member of the Array or Page
@@ -754,7 +807,7 @@ public struct CreateDatabase: Fn {
 
 }
 
-/// This function creates a new index when the name and source class are specified
+/// This function creates a new index where the name and source class are specified
 /// in `params`.
 ///
 /// [Reference](https://fauna.com/documentation/queries#write_functions).
@@ -782,6 +835,20 @@ public struct CreateKey: Fn {
         self.call = fn("create_key" => params)
     }
 
+}
+
+/// This function creates a new stored function where the name and body lambda
+/// are specified in `params`.
+///
+/// [Reference](https://fauna.com/documentation/queries#write_functions).
+public struct CreateFunction: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter params: Function configuration.
+    public init(_ params: Expr) {
+        self.call = fn("create_function" => params)
+    }
 }
 
 // MARK: Set Functions

@@ -89,6 +89,11 @@ class SerializationTests: XCTestCase {
         assert(expr: BytesV(fromArray: [1, 2, 3, 4]), toBecome: "{\"@bytes\":\"AQIDBA==\"}")
     }
 
+    func testQueryV() {
+        assert(expr: QueryV(.object(["lambda":.string("x"), "expr":.object(["var":.string("x")])])),
+               toBecome: "{\"@query\":{\"lambda\":\"x\",\"expr\":{\"var\":\"x\"}}}")
+    }
+
     func testEncodable() {
         assert(expr: Point(x: 10, y: 4), toBecome: "{\"object\":{\"y\":4,\"x\":10}}")
     }
