@@ -186,7 +186,7 @@ private extension JsonType {
         }
 
         switch (key, value) {
-        case ("@ref", .string(let str)):   return RefV(str)
+        case ("@ref", .object(let obj)):   return try toRefV(object: obj)
         case ("@query", let obj):          return QueryV(obj)
         case ("@set", .object(let obj)):   return try convert(to: SetRefV.init, object: obj)
         case ("@obj", .object(let obj)):   return try convert(to: ObjectV.init, object: obj)
@@ -195,6 +195,26 @@ private extension JsonType {
         case ("@bytes", .string(let str)): return try convert(to: BytesV.init, base64: str)
         default:                           return try convert(to: ObjectV.init, object: special)
         }
+    }
+
+    private func toRefV(object: [String: JsonType]) throws -> Value {
+        guard case let .string(id)? = object["id"] else { throw JsonError.invalidReference }
+
+        if object["class"] == nil && object["database"] == nil {
+            return Native.fromName(id)
+        }
+
+        var clazz: RefV? = nil
+        if case let .object(cls)? = object["class"] {
+            clazz = try toValue(special: cls) as? RefV
+        }
+
+        var database: RefV? = nil
+        if case let .object(db)? = object["database"] {
+            database = try toValue(special: db) as? RefV
+        }
+
+        return RefV(id, class: clazz, database: database)
     }
 
     private func convert(to type: (Data) -> Value, base64: String) throws -> Value {
@@ -224,6 +244,8 @@ private extension JsonType {
     - invalidObjectKeyType: When a JSON object has a non-string key.
     - invalidLiteral: When the driver can't convert a literal type to a valid JSON type.
     - invalidDate: When the driver can't convert a date to or from JSON.
+    - invalidBase64: When the driver cannot parse a base64 string.
+    - invalidReference: When the driver try to parse an invalid @ref type.
 */
 public enum JsonError: Error {
     case unsupportedType(Any)
@@ -231,6 +253,7 @@ public enum JsonError: Error {
     case invalidLiteral(Any)
     case invalidDate(String)
     case invalidBase64(String)
+    case invalidReference
 }
 
 extension JsonError: CustomStringConvertible {
@@ -241,6 +264,7 @@ extension JsonError: CustomStringConvertible {
         case .invalidLiteral(let literal):   return "Invalid JSON literal \"\(literal)\""
         case .invalidDate(let string):       return "Invalid date \"\(string)\""
         case .invalidBase64(let string):     return "Invalid base64 sequence \"\(string)\""
+        case .invalidReference:              return "Invalid @ref representation"
         }
     }
 }

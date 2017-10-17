@@ -26,6 +26,104 @@ public struct Ref: Fn {
 
 // MARK: Basic Forms
 
+/// Returns a native reference to classes. This allows for example,
+/// paginate over all classes in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Classes: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("classes" => scope)
+    }
+}
+
+/// Returns a native reference to indexes. This allows for example,
+/// paginate over all indexes in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Indexes: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("indexes" => scope)
+    }
+}
+
+/// Returns a native reference to databases. This allows for example,
+/// paginate over all databases in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Databases: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("databases" => scope)
+    }
+}
+
+/// Returns a native reference to functions. This allows for example,
+/// paginate over all functions in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Functions: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("functions" => scope)
+    }
+}
+
+/// Returns a native reference to keys. This allows for example,
+/// paginate over all keys in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Keys: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("keys" => scope)
+    }
+}
+
+/// Returns a native reference to tokens. This allows for example,
+/// paginate over all tokens in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Tokens: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("tokens" => scope)
+    }
+}
+
+/// Returns a native reference to credentials. This allows for example,
+/// paginate over all credentials in a database.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Credentials: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database or nothing for the current database.
+    public init(_ scope: Expr = NullV()) {
+        self.call = fn("credentials" => scope)
+    }
+}
+
 /// A `Var` expression refers to the value of a variable `varname` in the current
 /// lexical scope. Referring to a variable that is not in scope results in an
 /// “unbound variable” error.
@@ -1159,6 +1257,12 @@ public struct Database: Fn {
         self.call = fn("database" => name)
     }
 
+    /// - Parameter name: The database name.
+    /// - Parameter scope: The scope database.
+    public init(_ name: String, scope: Expr) {
+        self.call = fn("database" => name, "scope" => scope)
+    }
+
 }
 
 /// The index function returns a valid ref for the given index name
@@ -1173,6 +1277,12 @@ public struct Index: Fn {
         self.call = fn("index" => name)
     }
 
+    /// - Parameter name: The index name.
+    /// - Parameter scope: The scope database.
+    public init(_ name: String, scope: Expr) {
+        self.call = fn("index" => name, "scope" => scope)
+    }
+
 }
 
 /// The class function returns a valid ref for the given class name
@@ -1185,6 +1295,32 @@ public struct Class: Fn {
     /// - Parameter name: The class name.
     public init(_ name: String) {
         self.call = fn("class" => name)
+    }
+
+    /// - Parameter name: The class name.
+    /// - Parameter scope: The scope database.
+    public init(_ name: String, scope: Expr) {
+        self.call = fn("class" => name, "scope" => scope)
+    }
+
+}
+
+/// The function function returns a valid ref for the given function name
+///
+/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+public struct Function: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter name: The function name.
+    public init(_ name: String) {
+        self.call = fn("function" => name)
+    }
+
+    /// - Parameter name: The function name.
+    /// - Parameter scope: The scope database.
+    public init(_ name: String, scope: Expr) {
+        self.call = fn("function" => name, "scope" => scope)
     }
 
 }

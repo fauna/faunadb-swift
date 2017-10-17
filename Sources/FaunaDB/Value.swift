@@ -221,24 +221,81 @@ extension DateV: Equatable {
     }
 }
 
+public class RefID: AsJson {
+    public let id: String
+    public let `class`: RefV?
+    public let database: RefV?
+
+    public init(id: String, class: RefV?, database: RefV?) {
+        self.id = id
+        self.`class` = `class`
+        self.database = database
+    }
+
+    func escape() -> JsonType {
+        var dic: [String: JsonType] = ["id": .string(id)]
+
+        if `class` != nil {
+            dic["class"] = `class`.escape()
+        }
+
+        if database != nil {
+            dic["database"] = database.escape()
+        }
+
+        return .object(dic)
+    }
+}
+
 /// Represents a Ref returned by the server.
 /// [Reference](https://fauna.com/documentation/queries#values-special_types).
 public struct RefV: ScalarValue, AsJson {
 
-    public var value: String
+    public var value: RefID
 
-    public init(_ value: String) {
-        self.value = value
+    public init(_ id: String, class: RefV? = nil, database: RefV? = nil) {
+        self.value = RefID(id: id, class: `class`, database: database)
+    }
+
+    public var description: String {
+        let cls = value.class.map { ", class=\($0)" } ?? ""
+        let db = value.database.map { ", database=\($0)" } ?? ""
+        return "RefV(id=\(value.id)\(cls)\(db))"
     }
 
     func escape() -> JsonType {
-        return .object(["@ref": .string(value)])
+        return .object(["@ref": value.escape()])
     }
 }
 
 extension RefV: Equatable {
     public static func == (left: RefV, right: RefV) -> Bool {
-        return left.value == right.value
+        return left.value.id == right.value.id &&
+            left.value.`class` == right.value.`class` &&
+            left.value.database == right.value.database
+    }
+}
+
+public struct Native {
+    public static let CLASSES: RefV = RefV("classes")
+    public static let INDEXES: RefV = RefV("indexes")
+    public static let DATABASES: RefV = RefV("databases")
+    public static let KEYS: RefV = RefV("keys")
+    public static let FUNCTIONS: RefV = RefV("functions")
+    public static let TOKENS: RefV = RefV("tokens")
+    public static let CREDENTIALS: RefV = RefV("credentials")
+
+    public static func fromName(_ id: String) -> RefV {
+        switch id {
+        case "classes": return CLASSES
+        case "indexes": return INDEXES
+        case "databases": return DATABASES
+        case "keys": return KEYS
+        case "functions": return FUNCTIONS
+        case "tokens": return TOKENS
+        case "credentials": return CREDENTIALS
+        default: return RefV(id)
+        }
     }
 }
 

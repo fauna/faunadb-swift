@@ -13,6 +13,6 @@ private_over_fileprivate:
   validate_extensions: true
 
 file_length:
-  warning: 450
+  warning: 485
   error: 500
 
