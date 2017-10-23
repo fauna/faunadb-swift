@@ -745,7 +745,7 @@ class ClientTests: XCTestCase {
                toReturn: true)
 
         assert(
-            query: Paginate(Classes(Database(childDatabase, scope: Database(parentDatabase)))),
+            query: Paginate(Classes(scope: Database(childDatabase, scope: Database(parentDatabase)))),
             toReturn: [RefV(aClass, class: Native.CLASSES, database: RefV(childDatabase, class: Native.DATABASES, database: RefV(parentDatabase, class: Native.DATABASES)))],
             atPath: "data"
         )
@@ -767,7 +767,7 @@ class ClientTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            try! adminClient.query(Paginate(Keys(Database(parentDatabase)))).await().get("data"),
+            try! adminClient.query(Paginate(Keys(scope: Database(parentDatabase)))).await().get("data"),
             [serverKey, adminKey]
         )
     }

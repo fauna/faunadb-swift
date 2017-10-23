@@ -198,20 +198,26 @@ private extension JsonType {
     }
 
     private func toRefV(object: [String: JsonType]) throws -> Value {
-        guard case let .string(id)? = object["id"] else { throw JsonError.invalidReference }
+        guard case let .string(id)? = object["id"] else { throw JsonError.invalidRefValue }
 
         if object["class"] == nil && object["database"] == nil {
             return Native.fromName(id)
         }
 
         var clazz: RefV? = nil
-        if case let .object(cls)? = object["class"] {
-            clazz = try toValue(special: cls) as? RefV
+        if let cls = try object["class"]?.toValue() {
+            clazz = cls as? RefV
+            if clazz == nil {
+                throw JsonError.invalidRefValue
+            }
         }
 
         var database: RefV? = nil
-        if case let .object(db)? = object["database"] {
-            database = try toValue(special: db) as? RefV
+        if let db = try object["database"]?.toValue() {
+            database = db as? RefV
+            if database == nil {
+                throw JsonError.invalidRefValue
+            }
         }
 
         return RefV(id, class: clazz, database: database)
@@ -253,7 +259,7 @@ public enum JsonError: Error {
     case invalidLiteral(Any)
     case invalidDate(String)
     case invalidBase64(String)
-    case invalidReference
+    case invalidRefValue
 }
 
 extension JsonError: CustomStringConvertible {
@@ -264,7 +270,7 @@ extension JsonError: CustomStringConvertible {
         case .invalidLiteral(let literal):   return "Invalid JSON literal \"\(literal)\""
         case .invalidDate(let string):       return "Invalid date \"\(string)\""
         case .invalidBase64(let string):     return "Invalid base64 sequence \"\(string)\""
-        case .invalidReference:              return "Invalid @ref representation"
+        case .invalidRefValue:               return "Invalid @ref representation"
         }
     }
 }

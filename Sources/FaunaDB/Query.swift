@@ -34,8 +34,12 @@ public struct Classes: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("classes" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("classes" => scope)
     }
 }
@@ -48,8 +52,12 @@ public struct Indexes: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("indexes" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("indexes" => scope)
     }
 }
@@ -62,8 +70,12 @@ public struct Databases: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("databases" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("databases" => scope)
     }
 }
@@ -76,8 +88,12 @@ public struct Functions: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("functions" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("functions" => scope)
     }
 }
@@ -90,8 +106,12 @@ public struct Keys: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("keys" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("keys" => scope)
     }
 }
@@ -104,8 +124,12 @@ public struct Tokens: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("tokens" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("tokens" => scope)
     }
 }
@@ -118,8 +142,12 @@ public struct Credentials: Fn {
 
     var call: Fn.Call
 
-    /// - Parameter scope: the scope database or nothing for the current database.
-    public init(_ scope: Expr = NullV()) {
+    public init() {
+        self.call = fn("credentials" => NullV())
+    }
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr) {
         self.call = fn("credentials" => scope)
     }
 }

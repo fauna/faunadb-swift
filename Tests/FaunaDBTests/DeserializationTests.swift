@@ -90,6 +90,20 @@ class DeserializationTests: XCTestCase {
         }
     }
 
+    func testInvalidRef() {
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"missing-id\":\"a-class\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"id\":\"a-class\",\"class\":\"no a valid ref\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"id\":\"a-class\",\"database\":\"no a valid ref\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+    }
+
     func testRefV() {
         assert(parse: "{\"@ref\":{\"id\":\"42\",\"class\":{\"@ref\":{\"id\":\"spells\",\"class\":{\"@ref\":{\"id\":\"classes\"}}}}}}",
                to: RefV("42", class: RefV("spells", class: Native.CLASSES)))
