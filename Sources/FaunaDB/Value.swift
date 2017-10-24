@@ -289,14 +289,14 @@ public struct Native {
 
     public static func fromName(_ id: String) -> RefV {
         switch id {
-        case "classes": return CLASSES
-        case "indexes": return INDEXES
-        case "databases": return DATABASES
-        case "keys": return KEYS
-        case "functions": return FUNCTIONS
-        case "tokens": return TOKENS
+        case "classes":     return CLASSES
+        case "indexes":     return INDEXES
+        case "databases":   return DATABASES
+        case "keys":        return KEYS
+        case "functions":   return FUNCTIONS
+        case "tokens":      return TOKENS
         case "credentials": return CREDENTIALS
-        default: return RefV(id)
+        default:            return RefV(id)
         }
     }
 }

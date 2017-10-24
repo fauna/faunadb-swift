@@ -200,12 +200,12 @@ private extension JsonType {
     private func toRefV(object: [String: JsonType]) throws -> Value {
         guard case let .string(id)? = object["id"] else { throw JsonError.invalidRefValue }
 
-        if object["class"] == nil && object["database"] == nil {
-            return Native.fromName(id)
-        }
-
         let clazz = try object["class"].map(forceRefV)
         let database = try object["database"].map(forceRefV)
+
+        if clazz == nil && database == nil {
+            return Native.fromName(id)
+        }
 
         return RefV(id, class: clazz, database: database)
     }

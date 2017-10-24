@@ -34,13 +34,9 @@ public struct Classes: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("classes" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("classes" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("classes" => (scope ?? NullV()))
     }
 }
 
@@ -52,13 +48,9 @@ public struct Indexes: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("indexes" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("indexes" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("indexes" => (scope ?? NullV()))
     }
 }
 
@@ -70,13 +62,9 @@ public struct Databases: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("databases" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("databases" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("databases" => (scope ?? NullV()))
     }
 }
 
@@ -88,13 +76,9 @@ public struct Functions: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("functions" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("functions" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("functions" => (scope ?? NullV()))
     }
 }
 
@@ -106,13 +90,9 @@ public struct Keys: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("keys" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("keys" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("keys" => (scope ?? NullV()))
     }
 }
 
@@ -124,13 +104,9 @@ public struct Tokens: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("tokens" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("tokens" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("tokens" => (scope ?? NullV()))
     }
 }
 
@@ -142,13 +118,9 @@ public struct Credentials: Fn {
 
     var call: Fn.Call
 
-    public init() {
-        self.call = fn("credentials" => NullV())
-    }
-
     /// - Parameter scope: the scope database.
-    public init(scope: Expr) {
-        self.call = fn("credentials" => scope)
+    public init(scope: Expr? = nil) {
+        self.call = fn("credentials" => (scope ?? NullV()))
     }
 }
 
@@ -1281,13 +1253,8 @@ public struct Database: Fn {
     var call: Fn.Call
 
     /// - Parameter name: The database name.
-    public init(_ name: String) {
-        self.call = fn("database" => name)
-    }
-
-    /// - Parameter name: The database name.
     /// - Parameter scope: The scope database.
-    public init(_ name: String, scope: Expr) {
+    public init(_ name: String, scope: Expr? = nil) {
         self.call = fn("database" => name, "scope" => scope)
     }
 
@@ -1301,13 +1268,8 @@ public struct Index: Fn {
     var call: Fn.Call
 
     /// - Parameter name: The index name.
-    public init(_ name: String) {
-        self.call = fn("index" => name)
-    }
-
-    /// - Parameter name: The index name.
     /// - Parameter scope: The scope database.
-    public init(_ name: String, scope: Expr) {
+    public init(_ name: String, scope: Expr? = nil) {
         self.call = fn("index" => name, "scope" => scope)
     }
 
@@ -1321,13 +1283,8 @@ public struct Class: Fn {
     var call: Fn.Call
 
     /// - Parameter name: The class name.
-    public init(_ name: String) {
-        self.call = fn("class" => name)
-    }
-
-    /// - Parameter name: The class name.
     /// - Parameter scope: The scope database.
-    public init(_ name: String, scope: Expr) {
+    public init(_ name: String, scope: Expr? = nil) {
         self.call = fn("class" => name, "scope" => scope)
     }
 
@@ -1341,13 +1298,8 @@ public struct Function: Fn {
     var call: Fn.Call
 
     /// - Parameter name: The function name.
-    public init(_ name: String) {
-        self.call = fn("function" => name)
-    }
-
-    /// - Parameter name: The function name.
     /// - Parameter scope: The scope database.
-    public init(_ name: String, scope: Expr) {
+    public init(_ name: String, scope: Expr? = nil) {
         self.call = fn("function" => name, "scope" => scope)
     }
 
