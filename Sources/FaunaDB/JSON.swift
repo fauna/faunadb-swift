@@ -204,23 +204,17 @@ private extension JsonType {
             return Native.fromName(id)
         }
 
-        var clazz: RefV? = nil
-        if let cls = try object["class"]?.toValue() {
-            clazz = cls as? RefV
-            if clazz == nil {
-                throw JsonError.invalidRefValue
-            }
-        }
-
-        var database: RefV? = nil
-        if let db = try object["database"]?.toValue() {
-            database = db as? RefV
-            if database == nil {
-                throw JsonError.invalidRefValue
-            }
-        }
+        let clazz = try object["class"].map(forceRefV)
+        let database = try object["database"].map(forceRefV)
 
         return RefV(id, class: clazz, database: database)
+    }
+
+    private func forceRefV(_ json: JsonType) throws -> RefV {
+        guard let ref = try json.toValue() as? RefV else {
+            throw JsonError.invalidRefValue
+        }
+        return ref
     }
 
     private func convert(to type: (Data) -> Value, base64: String) throws -> Value {

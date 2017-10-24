@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import Foundation
 
 /**
@@ -235,15 +236,18 @@ public class RefID: AsJson {
     func escape() -> JsonType {
         var dic: [String: JsonType] = ["id": .string(id)]
 
-        if `class` != nil {
-            dic["class"] = `class`.escape()
-        }
-
-        if database != nil {
-            dic["database"] = database.escape()
-        }
+        `class`.map { dic["class"] = $0.escape() }
+        database.map { dic["database"] = $0.escape() }
 
         return .object(dic)
+    }
+}
+
+extension RefID: Equatable {
+    public static func == (left: RefID, right: RefID) -> Bool {
+        return left.id == right.id &&
+            left.`class` == right.`class` &&
+            left.database == right.database
     }
 }
 
@@ -270,9 +274,7 @@ public struct RefV: ScalarValue, AsJson {
 
 extension RefV: Equatable {
     public static func == (left: RefV, right: RefV) -> Bool {
-        return left.value.id == right.value.id &&
-            left.value.`class` == right.value.`class` &&
-            left.value.database == right.value.database
+        return left.value == right.value
     }
 }
 
