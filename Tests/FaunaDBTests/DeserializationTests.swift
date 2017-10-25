@@ -90,16 +90,30 @@ class DeserializationTests: XCTestCase {
         }
     }
 
+    func testInvalidRef() {
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"missing-id\":\"a-class\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"id\":\"a-class\",\"class\":\"no a valid ref\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+
+        XCTAssertThrowsError(try JSON.parse(string: "{\"@ref\":{\"id\":\"a-class\",\"database\":\"no a valid ref\"}}")) { error in
+            XCTAssertEqual("\(error)", "Invalid @ref representation")
+        }
+    }
+
     func testRefV() {
-        assert(parse: "{\"@ref\":\"classes\\/spells\\/42\"}",
-                to: RefV("classes/spells/42"))
+        assert(parse: "{\"@ref\":{\"id\":\"42\",\"class\":{\"@ref\":{\"id\":\"spells\",\"class\":{\"@ref\":{\"id\":\"classes\"}}}}}}",
+               to: RefV("42", class: RefV("spells", class: Native.CLASSES)))
     }
 
     func testSetRefV() {
         assert(
-            parse: "{\"@set\":{\"terms\":\"fire\",\"match\":{\"@ref\":\"indexes\\/spells_by_element\"}}}",
+            parse: "{\"@set\":{\"terms\":\"fire\",\"match\":{\"@ref\":{\"id\":\"spells_by_element\",\"class\":{\"@ref\":{\"id\":\"indexes\"}}}}}}",
             to: SetRefV([
-                "match": RefV("indexes/spells_by_element"),
+                "match": RefV("spells_by_element", class: Native.INDEXES),
                 "terms": StringV("fire")
             ])
         )

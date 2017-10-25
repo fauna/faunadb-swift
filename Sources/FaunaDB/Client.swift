@@ -93,6 +93,7 @@ public final class Client {
         request.httpBody = try JSON.data(value: expr)
         request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.addValue(auth, forHTTPHeaderField: "Authorization")
+        request.addValue("2.1", forHTTPHeaderField: "X-FaunaDB-API-Version")
 
         return request as URLRequest
     }

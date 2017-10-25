@@ -6,7 +6,7 @@ fileprivate struct Point {
     let x, y: Int
 }
 
-extension Point: Encodable {
+extension Point: FaunaDB.Encodable {
     func encode() -> Expr {
         return Obj("x" => x, "y" => y)
     }
@@ -41,13 +41,16 @@ class SerializationTests: XCTestCase {
     }
 
     func testRefV() {
-        assert(expr: RefV("classes/spells/42"), toBecome: "{\"@ref\":\"classes\\/spells\\/42\"}")
+        assert(expr: RefV("spells", class: Native.CLASSES),
+               toBecome: "{\"@ref\":{\"id\":\"spells\",\"class\":{\"@ref\":{\"id\":\"classes\"}}}}")
+        assert(expr: RefV("42", class: RefV("spells", class: Native.CLASSES)),
+               toBecome: "{\"@ref\":{\"id\":\"42\",\"class\":{\"@ref\":{\"id\":\"spells\",\"class\":{\"@ref\":{\"id\":\"classes\"}}}}}}")
     }
 
     func testSetRefV() {
         assert(
-            expr: SetRefV(["match": RefV("indexes/all_spells")]),
-            toBecome: "{\"@set\":{\"match\":{\"@ref\":\"indexes\\/all_spells\"}}}"
+            expr: SetRefV(["match": RefV("all_spells", class: Native.INDEXES)]),
+            toBecome: "{\"@set\":{\"match\":{\"@ref\":{\"id\":\"all_spells\",\"class\":{\"@ref\":{\"id\":\"indexes\"}}}}}}"
         )
     }
 
@@ -129,13 +132,13 @@ class SerializationTests: XCTestCase {
 
     func testArr() {
         assert(
-            expr: Arr(wrap: ["a string", 1, 10.2, false, nil]),
-            toBecome: "[\"a string\",1,10.2,false,null]"
+            expr: Arr(wrap: ["a string", 1, 10.19, false, nil]),
+            toBecome: "[\"a string\",1,10.19,false,null]"
         )
 
         assert(
-            expr: Arr("a string", 1, 10.2, false, nil),
-            toBecome: "[\"a string\",1,10.2,false,null]"
+            expr: Arr("a string", 1, 10.19, false, nil),
+            toBecome: "[\"a string\",1,10.19,false,null]"
         )
     }
 
@@ -195,13 +198,13 @@ class SerializationTests: XCTestCase {
 
     func testAt() {
         assert(
-            expr: At(timestamp: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1), Paginate(Ref("classes"))),
-            toBecome: "{\"at\":{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"},\"expr\":{\"paginate\":{\"@ref\":\"classes\"}}}"
+            expr: At(timestamp: HighPrecisionTime(secondsSince1970: 0, nanosecondsOffset: 1), Paginate(Classes())),
+            toBecome: "{\"at\":{\"@ts\":\"1970-01-01T00:00:00.000000001Z\"},\"expr\":{\"paginate\":{\"classes\":null}}}"
         )
 
         assert(
-            expr: At(timestamp: 1, Paginate(Ref("classes"))),
-            toBecome: "{\"at\":1,\"expr\":{\"paginate\":{\"@ref\":\"classes\"}}}"
+            expr: At(timestamp: 1, Paginate(Classes())),
+            toBecome: "{\"at\":1,\"expr\":{\"paginate\":{\"classes\":null}}}"
         )
     }
 
@@ -687,14 +690,40 @@ class SerializationTests: XCTestCase {
 
     func testDatabase() {
         assert(expr: Database("db-test"), toBecome: "{\"database\":\"db-test\"}")
+        assert(expr: Database("db-test", scope: Database("parent")), toBecome: "{\"scope\":{\"database\":\"parent\"},\"database\":\"db-test\"}")
     }
 
     func testIndex() {
         assert(expr: Index("all_spells"), toBecome: "{\"index\":\"all_spells\"}")
+        assert(expr: Index("all_spells", scope: Database("parent")), toBecome: "{\"scope\":{\"database\":\"parent\"},\"index\":\"all_spells\"}")
     }
 
     func testClass() {
         assert(expr: Class("spells"), toBecome: "{\"class\":\"spells\"}")
+        assert(expr: Class("spells", scope: Database("parent")), toBecome: "{\"scope\":{\"database\":\"parent\"},\"class\":\"spells\"}")
+    }
+
+    func testFunction() {
+        assert(expr: Function("func"), toBecome: "{\"function\":\"func\"}")
+        assert(expr: Function("func", scope: Database("parent")), toBecome: "{\"scope\":{\"database\":\"parent\"},\"function\":\"func\"}")
+    }
+
+    func testNativeRefs() {
+        assert(expr: Classes(), toBecome: "{\"classes\":null}")
+        assert(expr: Databases(), toBecome: "{\"databases\":null}")
+        assert(expr: Indexes(), toBecome: "{\"indexes\":null}")
+        assert(expr: Functions(), toBecome: "{\"functions\":null}")
+        assert(expr: Keys(), toBecome: "{\"keys\":null}")
+        assert(expr: Tokens(), toBecome: "{\"tokens\":null}")
+        assert(expr: Credentials(), toBecome: "{\"credentials\":null}")
+
+        assert(expr: Classes(scope: Database("scope")), toBecome: "{\"classes\":{\"database\":\"scope\"}}")
+        assert(expr: Databases(scope: Database("scope")), toBecome: "{\"databases\":{\"database\":\"scope\"}}")
+        assert(expr: Indexes(scope: Database("scope")), toBecome: "{\"indexes\":{\"database\":\"scope\"}}")
+        assert(expr: Functions(scope: Database("scope")), toBecome: "{\"functions\":{\"database\":\"scope\"}}")
+        assert(expr: Keys(scope: Database("scope")), toBecome: "{\"keys\":{\"database\":\"scope\"}}")
+        assert(expr: Tokens(scope: Database("scope")), toBecome: "{\"tokens\":{\"database\":\"scope\"}}")
+        assert(expr: Credentials(scope: Database("scope")), toBecome: "{\"credentials\":{\"database\":\"scope\"}}")
     }
 
     func testEquals() {

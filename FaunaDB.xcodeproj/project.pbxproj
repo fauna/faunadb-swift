@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C2E56F71F98211D00B66442 /* DescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E56F61F98211D00B66442 /* DescriptionTests.swift */; };
 		450077621DF08D7B0064C81B /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450077611DF08D7B0064C81B /* TestUtils.swift */; };
 		45F357401E02CD6C002A45B2 /* AtomicIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F3573F1E02CD6C002A45B2 /* AtomicIntTests.swift */; };
 		OBJ_44 /* AtomicInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AtomicInt.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C2E56F61F98211D00B66442 /* DescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTests.swift; sourceTree = "<group>"; };
 		450077611DF08D7B0064C81B /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		45F3573F1E02CD6C002A45B2 /* AtomicIntTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicIntTests.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				OBJ_33 /* QueryResultTests.swift */,
 				OBJ_34 /* SerializationTests.swift */,
 				450077611DF08D7B0064C81B /* TestUtils.swift */,
+				3C2E56F61F98211D00B66442 /* DescriptionTests.swift */,
 			);
 			name = FaunaDBTests;
 			path = Tests/FaunaDBTests;
@@ -214,7 +217,7 @@
 		OBJ_1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "FaunaDB" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -285,6 +288,7 @@
 				OBJ_69 /* ErrorsTests.swift in Sources */,
 				OBJ_71 /* FieldTests.swift in Sources */,
 				450077621DF08D7B0064C81B /* TestUtils.swift in Sources */,
+				3C2E56F71F98211D00B66442 /* DescriptionTests.swift in Sources */,
 				OBJ_72 /* QueryResultTests.swift in Sources */,
 				OBJ_73 /* SerializationTests.swift in Sources */,
 			);
@@ -304,12 +308,18 @@
 		OBJ_3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -347,12 +357,18 @@
 		OBJ_4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

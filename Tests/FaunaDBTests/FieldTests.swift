@@ -7,7 +7,7 @@ fileprivate struct Pet {
     let age: Int?
 }
 
-extension Pet: Decodable {
+extension Pet: FaunaDB.Decodable {
     init?(value: Value) throws {
         guard
             let name: String = try value.get("name")

@@ -20,31 +20,34 @@ fileprivate let secret: String = {
     return key
 }()
 
-fileprivate let adminClient: Client = {
+fileprivate let rootClient: Client = {
     guard let endpoint = endpoint else { return Client(secret: secret) }
     return Client(secret: secret, endpoint: endpoint)
 }()
 
-fileprivate let client: Client = {
+fileprivate func createClient(role: String) -> Client {
     return try!
-        adminClient.query(
-            CreateDatabase(Obj("name" => dbName))
+        rootClient.query(
+            If(Exists(Database(dbName)), then: Get(Database(dbName)), else: CreateDatabase(Obj("name" => dbName)))
         )
         .flatMap {
-            adminClient.query(
+            rootClient.query(
                 CreateKey(Obj(
                     "database" => try $0.get("ref"),
-                    "role" => "server"
+                    "role" => role
                 ))
             )
         }
         .map {
-            adminClient.newSessionClient(
+            rootClient.newSessionClient(
                 secret: try $0.get("secret")!
             )
         }
         .await()
-}()
+}
+
+fileprivate let client: Client = createClient(role: "server")
+fileprivate let adminClient: Client = createClient(role: "admin")
 
 class ClientTests: XCTestCase {
 
@@ -149,7 +152,7 @@ class ClientTests: XCTestCase {
 
     override class func tearDown() {
         super.tearDown()
-        try! adminClient
+        try! rootClient
             .query(Delete(ref: Database(dbName)))
             .await()
     }
@@ -174,15 +177,15 @@ class ClientTests: XCTestCase {
     }
 
     func testPermissionDeniedWhenAccessingRestrictedResource() {
-        let key = try! adminClient.query(
+        let key = try! rootClient.query(
             CreateKey(Obj(
                 "database" => Database(dbName),
                 "role" => "client"
             ))
         ).await()
 
-        let client = adminClient.newSessionClient(secret: try! key.get("secret")!)
-        let restrictedQuery = client.query(Paginate(Ref("databases")))
+        let client = rootClient.newSessionClient(secret: try! key.get("secret")!)
+        let restrictedQuery = client.query(Paginate(Databases()))
 
         XCTAssertThrowsError(try restrictedQuery.await()) { error in
             XCTAssert(error is PermissionDenied)
@@ -308,14 +311,15 @@ class ClientTests: XCTestCase {
     }
 
     func testDo() {
-        let refToCreate = RefV(String.random(startingWith: Self.randomClass.value + "/"))
+        let id = String.random()
+        let refToCreate = Ref(class: Self.randomClass, id: id)
 
         assert(
             query: Do(
                 Create(at: refToCreate, Obj("data" => Obj())),
                 Get(refToCreate)
             ),
-            toReturn: refToCreate,
+            toReturn: RefV(id, class: Self.randomClass),
             atPath: "ref"
         )
     }
@@ -374,7 +378,7 @@ class ClientTests: XCTestCase {
     }
 
     func testKeyFromSecret() {
-        let keyCreated: Value! = try! adminClient.query(
+        let keyCreated: Value! = try! rootClient.query(
             CreateKey(Obj(
                 "database" => Database(dbName),
                 "role" => "server"
@@ -384,7 +388,7 @@ class ClientTests: XCTestCase {
 
         let secret: String! = try! keyCreated.get("secret")
 
-        let keyQueried = try! adminClient.query(KeyFromSecret(secret)).await()
+        let keyQueried = try! rootClient.query(KeyFromSecret(secret)).await()
 
         XCTAssertEqual(
             try keyQueried.get("ref") as RefV!,
@@ -694,7 +698,7 @@ class ClientTests: XCTestCase {
             CreateFunction(Obj("name" => "a_function", "body" => body))
         ).await()
 
-        assert(query: Exists(Ref("functions/a_function")), toReturn: true)
+        assert(query: Exists(Function("a_function")), toReturn: true)
     }
 
     func testEchoQuery() {
@@ -711,7 +715,67 @@ class ClientTests: XCTestCase {
             CreateFunction(Obj("name" => "concat_with_slash", "body" => body))
         ).await()
 
-        assert(query: Call(Ref("functions/concat_with_slash"), arguments: "a", "b"), toReturn: "a/b")
+        assert(query: Call(Function("concat_with_slash"), arguments: "a", "b"), toReturn: "a/b")
+    }
+
+    func testRefConstructors() {
+        assert(query: Ref(class: Class("cls"), id: "123"), toReturn: RefV("123", class: RefV("cls", class: Native.CLASSES)))
+        assert(query: Ref("classes/cls/123"), toReturn: RefV("123", class: RefV("cls", class: Native.CLASSES)))
+
+        assert(query: Database("db"), toReturn: RefV("db", class: Native.DATABASES))
+        assert(query: Class("cls"), toReturn: RefV("cls", class: Native.CLASSES))
+        assert(query: Index("idx"), toReturn: RefV("idx", class: Native.INDEXES))
+        assert(query: Function("fn"), toReturn: RefV("fn", class: Native.FUNCTIONS))
+    }
+
+    func testNestedClass() {
+        let parentDatabase = String.random(startingWith: "parent_")
+        let childDatabase = String.random(startingWith: "child_")
+        let aClass = String.random(startingWith: "class_")
+
+        let client1 = createNewDatabase(adminClient, parentDatabase)
+        _ = createNewDatabase(client1, childDatabase)
+
+        let key = try! client1.query(CreateKey(Obj("database" => Database(childDatabase), "role" => "server"))).await()
+        let client2 = client1.newSessionClient(secret: try! key.get("secret")!)
+
+        try! client2.query(CreateClass(Obj("name" => aClass))).await()
+
+        assert(query: Exists(Class(aClass, scope: Database(childDatabase, scope: Database(parentDatabase)))),
+               toReturn: true)
+
+        assert(
+            query: Paginate(Classes(scope: Database(childDatabase, scope: Database(parentDatabase)))),
+            toReturn: [RefV(aClass, class: Native.CLASSES, database: RefV(childDatabase, class: Native.DATABASES, database: RefV(parentDatabase, class: Native.DATABASES)))],
+            atPath: "data"
+        )
+    }
+
+    func testNestedKey() {
+        let parentDatabase = String.random(startingWith: "parent_")
+        let childDatabase = String.random(startingWith: "child_")
+
+        let client = createNewDatabase(adminClient, parentDatabase)
+        try! client.query(CreateDatabase(Obj("name" => childDatabase))).await()
+
+        let serverKey: RefV = try! client.query(CreateKey(Obj("database" => Database(childDatabase), "role" => "server"))).await().get("ref")!
+        let adminKey: RefV = try! client.query(CreateKey(Obj("database" => Database(childDatabase), "role" => "admin"))).await().get("ref")!
+
+        XCTAssertEqual(
+            try! client.query(Paginate(Keys())).await().get("data"),
+            [serverKey, adminKey]
+        )
+
+        XCTAssertEqual(
+            try! adminClient.query(Paginate(Keys(scope: Database(parentDatabase)))).await().get("data"),
+            [serverKey, adminKey]
+        )
+    }
+
+    private func createNewDatabase(_ client: Client, _ name: String) -> Client {
+        try! client.query(CreateDatabase(Obj("name" => name))).await()
+        let key = try! client.query(CreateKey(Obj("database" => Database(name), "role" => "admin"))).await()
+        return client.newSessionClient(secret: try! key.get("secret")!)
     }
 
     private static func queryForRef(_ expr: Expr) -> RefV {

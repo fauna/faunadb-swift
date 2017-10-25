@@ -1,5 +1,6 @@
-1.0.1-SNAPSHOT
-* Adds suport for @query type (user defined functions)
+2.0.0-SNAPSHOT
+* Adds support for @query type (user defined functions)
+* Adds support for recursive references
 
 1.0.0
 * Official release
