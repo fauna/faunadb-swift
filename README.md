@@ -1,7 +1,6 @@
 # FaunaDB Swift Driver
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
-[![Build Status](https://travis-ci.org/fauna/faunadb-swift.svg?branch=master)](https://travis-ci.org/fauna/faunadb-swift)
 [![Coverage Status](https://codecov.io/gh/fauna/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/fauna/faunadb-swift)
 [![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/fauna/faunadb-swift/master/LICENSE)
 
