@@ -142,6 +142,13 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testAbort() {
+        assert(
+            expr: Abort("abort message"),
+            toBecome: "{\"abort\":\"abort message\"}"
+        )
+    }
+
     func testRef() {
         assert(
             expr: Ref("classes/spells/42"),

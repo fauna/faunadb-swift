@@ -26,6 +26,19 @@ public struct Ref: Fn {
 
 // MARK: Basic Forms
 
+/// Aborts the current query execution.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Abort: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter message: the abort message.
+    public init(_ message: Expr) {
+        self.call = fn("abort" => message)
+    }
+}
+
 /// Returns a native reference to classes. This allows for example,
 /// paginate over all classes in a database.
 ///

@@ -157,6 +157,16 @@ class ClientTests: XCTestCase {
             .await()
     }
 
+    func testAbort() {
+        let query = client.query(
+            Abort("abort message")
+        )
+
+        XCTAssertThrowsError(try query.await()) { error in
+            XCTAssert(error is BadRequest)
+        }
+    }
+
     func testReturnUnauthorizedOnInvalidSecret() {
         let invalidClient = client.newSessionClient(secret: "invalid-secret")
         let query = invalidClient.query(Get(Ref("classes/spells/42")))
