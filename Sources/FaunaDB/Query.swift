@@ -1140,6 +1140,32 @@ public struct Identify: Fn {
 
 }
 
+/// `Identity` returns the instance reference associated with the current key token.
+///
+/// For example, the current key token created using:
+///   `Create(at: Tokens(), Obj("instance" => someRef))`
+/// or via:
+///   `Login(for: someRef, Obj("password" => "sekrit"))`
+/// will return `someRef` as the result of this function.
+///
+/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+public struct Identity: Fn {
+
+    var call: Fn.Call = fn("identity" => NullV())
+
+    public init() {}
+}
+
+/// `HasIdentity` checks if the current key token has an identity associated to it.
+///
+/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+public struct HasIdentity: Fn {
+
+    var call: Fn.Call = fn("has_identity" => NullV())
+
+    public init() {}
+}
+
 // MARK: String Functions
 
 /// `Concat` joins a list of strings into a single string value.

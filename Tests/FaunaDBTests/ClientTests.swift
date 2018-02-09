@@ -586,6 +586,39 @@ class ClientTests: XCTestCase {
         )
     }
 
+    func testIdentityAndHasIdentity() {
+        let user: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "credentials" => Obj(
+                    "password" => "abcd"
+                )
+            ))
+        ).await().get("ref")
+
+        let auth = try! client.query(
+            Login(for: user, Obj(
+                "password" => "abcd"
+            ))
+        ).await()
+
+        let sessionClient = try! client.newSessionClient(secret: auth.get("secret")!)
+
+        // HasIdentity
+        XCTAssertTrue(
+            try! sessionClient.query(
+                HasIdentity()
+            ).await().get()!
+        )
+
+        // Identity
+        XCTAssertEqual(
+            user,
+            try! sessionClient.query(
+                Identity()
+            ).await().get()!
+        )
+    }
+
     func testNewId() {
         let id: String! = try! client.query(NewId()).await().get()
         XCTAssertNotNil(id)

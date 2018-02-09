@@ -658,11 +658,19 @@ class SerializationTests: XCTestCase {
         assert(expr: Logout(all: true), toBecome: "{\"logout\":true}")
     }
 
-    func testIdentity() {
+    func testIdentify() {
         assert(
             expr: Identify(ref: Ref("classes/users/1"), password: "abracadabra"),
             toBecome: "{\"password\":\"abracadabra\",\"identify\":{\"@ref\":\"classes\\/users\\/1\"}}"
         )
+    }
+
+    func testIdentity() {
+        assert(expr: Identity(), toBecome: "{\"identity\":null}")
+    }
+
+    func testHasIdentity() {
+        assert(expr: HasIdentity(), toBecome: "{\"has_identity\":null}")
     }
 
     func testConcat() {
