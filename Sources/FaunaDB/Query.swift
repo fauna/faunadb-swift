@@ -964,6 +964,32 @@ public struct CreateFunction: Fn {
 
 // MARK: Set Functions
 
+/// `Singleton` returns the history of the instance's presence of the provided ref.
+///
+/// [Reference](https://fauna.com/documentation/queries#sets).
+public struct Singleton: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter ref: a reference to get presence history.
+    public init(_ ref: Expr) {
+        self.call = fn("singleton" => ref)
+    }
+}
+
+/// `Events` returns the history of instance's data of the provided ref.
+///
+/// [Reference](https://fauna.com/documentation/queries#sets).
+public struct Events: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter refSet: a ref or a set to get data history.
+    public init(_ refSet: Expr) {
+        self.call = fn("events" => refSet)
+    }
+}
+
 /// `Match` returns the set of instances that match the terms, based on the
 /// configuration of the specified index. `terms` can be either a single value, or an
 /// array.

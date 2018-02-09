@@ -437,6 +437,61 @@ class ClientTests: XCTestCase {
         XCTAssertEqual(try page.get("data"), [Self.magicMissile])
     }
 
+    func testEvents() {
+        let ref: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("x" => 1)
+            ))
+        ).await().get("ref")
+
+        try! client.query(Update(ref: ref, to: Obj(
+            "data" => Obj("x" => 2)
+        ))).await()
+
+        try! client.query(Delete(ref: ref)).await()
+
+        let events: [ObjectV] = try! client.query(
+            Paginate(Events(ref))
+        ).await().get("data")
+
+        XCTAssert(events.count == 3)
+
+        XCTAssertEqual(try! events[0].at("action").get()!, "create")
+        XCTAssertEqual(try! events[0].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[1].at("action").get()!, "update")
+        XCTAssertEqual(try! events[1].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[2].at("action").get()!, "delete")
+        XCTAssertEqual(try! events[2].at("instance").get()!, ref)
+    }
+
+    func testSingleton() {
+        let ref: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("x" => 1)
+            ))
+        ).await().get("ref")
+
+        try! client.query(Update(ref: ref, to: Obj(
+            "data" => Obj("x" => 2)
+        ))).await()
+
+        try! client.query(Delete(ref: ref)).await()
+
+        let events: [ObjectV] = try! client.query(
+            Paginate(Events(Singleton(ref)))
+        ).await().get("data")
+
+        XCTAssert(events.count == 2)
+
+        XCTAssertEqual(try! events[0].at("action").get()!, "add")
+        XCTAssertEqual(try! events[0].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[1].at("action").get()!, "remove")
+        XCTAssertEqual(try! events[1].at("instance").get()!, ref)
+    }
+
     func testFindSingleInstanceOnAnIndex() {
         assert(query:
             Paginate(

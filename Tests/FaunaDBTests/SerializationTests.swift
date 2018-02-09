@@ -548,6 +548,20 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testSingleton() {
+        assert(
+            expr: Singleton(Ref("classes/spells/123456789")),
+            toBecome: "{\"singleton\":{\"@ref\":\"classes\\/spells\\/123456789\"}}"
+        )
+    }
+
+    func testEvents() {
+        assert(
+            expr: Events(Ref("classes/spells/123456789")),
+            toBecome: "{\"events\":{\"@ref\":\"classes\\/spells\\/123456789\"}}"
+        )
+    }
+
     func testMatch() {
         assert(
             expr: Match(index: Ref("indexes/all_spells")),
