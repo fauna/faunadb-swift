@@ -1272,8 +1272,17 @@ public struct DateFn: Fn {
 /// `NextId` produces a new identifier suitable for use when constructing refs.
 ///
 /// [Reference](https://fauna.com/documentation/queries#misc_functions)
+@available(*, deprecated, message: "use NewId() instead")
 public struct NextId: Fn {
     var call: Fn.Call = fn("next_id" => NullV())
+    public init() {}
+}
+
+/// `NewId` produces a new identifier suitable for use when constructing refs.
+///
+/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+public struct NewId: Fn {
+    var call: Fn.Call = fn("new_id" => NullV())
     public init() {}
 }
 

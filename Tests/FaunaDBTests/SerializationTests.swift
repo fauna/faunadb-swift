@@ -694,8 +694,8 @@ class SerializationTests: XCTestCase {
         assert(expr: DateFn(string: "1970-01-01"), toBecome: "{\"date\":\"1970-01-01\"}")
     }
 
-    func testNextId() {
-        assert(expr: NextId(), toBecome: "{\"next_id\":null}")
+    func testNewId() {
+        assert(expr: NewId(), toBecome: "{\"new_id\":null}")
     }
 
     func testDatabase() {

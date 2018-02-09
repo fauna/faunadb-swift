@@ -586,8 +586,8 @@ class ClientTests: XCTestCase {
         )
     }
 
-    func testNextId() {
-        let id: String! = try! client.query(NextId()).await().get()
+    func testNewId() {
+        let id: String! = try! client.query(NewId()).await().get()
         XCTAssertNotNil(id)
     }
 
