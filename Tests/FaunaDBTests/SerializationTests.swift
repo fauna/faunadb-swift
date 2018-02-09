@@ -673,6 +673,9 @@ class SerializationTests: XCTestCase {
 
     func testCasefold() {
         assert(expr: Casefold("HELLOW"), toBecome: "{\"casefold\":\"HELLOW\"}")
+
+        assert(expr: Casefold("HELLOW", "NFC"), toBecome: "{\"normalizer\":\"NFC\",\"casefold\":\"HELLOW\"}")
+        assert(expr: Casefold("HELLOW", normalizer: .NFC), toBecome: "{\"normalizer\":\"NFC\",\"casefold\":\"HELLOW\"}")
     }
 
     func testTime() {

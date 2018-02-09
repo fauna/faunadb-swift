@@ -1156,6 +1156,21 @@ public struct Concat: Fn {
     }
 }
 
+/// Represents the normalization operation to be used for `Casefold` function.
+public enum Normalizer: String {
+    case NFD
+    case NFC
+    case NFKD
+    case NFKC
+    case NFKCCaseFold
+}
+
+extension Normalizer: Expr, AsJson {
+    func escape() -> JsonType {
+        return .string(self.rawValue)
+    }
+}
+
 /// `Casefold` normalizes strings according to the Unicode Standard section 5.18
 /// "Case Mappings".
 ///
@@ -1168,8 +1183,15 @@ public struct Casefold: Fn {
     var call: Fn.Call
 
     /// - Parameter str: String to be normalized.
-    public init(_ str: Expr) {
-        self.call = fn("casefold" => str)
+    /// - Parameter normalizer: The normalization operation.
+    public init(_ str: Expr, _ normalizer: Expr? = nil) {
+        self.call = fn("casefold" => str, "normalizer" => normalizer)
+    }
+
+    /// - Parameter str: String to be normalized.
+    /// - Parameter normalizer: The normalization operation.
+    public init(_ str: Expr, normalizer: Normalizer? = nil) {
+        self.call = fn("casefold" => str, "normalizer" => normalizer)
     }
 
 }

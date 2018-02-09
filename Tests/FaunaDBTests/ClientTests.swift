@@ -520,6 +520,13 @@ class ClientTests: XCTestCase {
 
     func testCasefold() {
         assert(query: Casefold("GET DOWN"), toReturn: "get down")
+
+        // https://unicode.org/reports/tr15/
+        assert(query: Casefold("\u{212B}", normalizer: .NFD), toReturn: "A\u{030A}")
+        assert(query: Casefold("\u{212B}", normalizer: .NFC), toReturn: "\u{00C5}")
+        assert(query: Casefold("\u{1E9B}\u{0323}", normalizer: .NFKD), toReturn: "\u{0073}\u{0323}\u{0307}")
+        assert(query: Casefold("\u{1E9B}\u{0323}", normalizer: .NFKC), toReturn: "\u{1E69}")
+        assert(query: Casefold("\u{212B}", normalizer: .NFKCCaseFold), toReturn: "\u{00E5}")
     }
 
     func testTime() {
