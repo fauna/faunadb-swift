@@ -26,6 +26,19 @@ public struct Ref: Fn {
 
 // MARK: Basic Forms
 
+/// Aborts the current query execution.
+///
+/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+public struct Abort: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter message: the abort message.
+    public init(_ message: Expr) {
+        self.call = fn("abort" => message)
+    }
+}
+
 /// Returns a native reference to classes. This allows for example,
 /// paginate over all classes in a database.
 ///
@@ -951,6 +964,32 @@ public struct CreateFunction: Fn {
 
 // MARK: Set Functions
 
+/// `Singleton` returns the history of the instance's presence of the provided ref.
+///
+/// [Reference](https://fauna.com/documentation/queries#sets).
+public struct Singleton: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter ref: a reference to get presence history.
+    public init(_ ref: Expr) {
+        self.call = fn("singleton" => ref)
+    }
+}
+
+/// `Events` returns the history of instance's data of the provided ref.
+///
+/// [Reference](https://fauna.com/documentation/queries#sets).
+public struct Events: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter refSet: a ref or a set to get data history.
+    public init(_ refSet: Expr) {
+        self.call = fn("events" => refSet)
+    }
+}
+
 /// `Match` returns the set of instances that match the terms, based on the
 /// configuration of the specified index. `terms` can be either a single value, or an
 /// array.
@@ -1127,6 +1166,32 @@ public struct Identify: Fn {
 
 }
 
+/// `Identity` returns the instance reference associated with the current key token.
+///
+/// For example, the current key token created using:
+///   `Create(at: Tokens(), Obj("instance" => someRef))`
+/// or via:
+///   `Login(for: someRef, Obj("password" => "sekrit"))`
+/// will return `someRef` as the result of this function.
+///
+/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+public struct Identity: Fn {
+
+    var call: Fn.Call = fn("identity" => NullV())
+
+    public init() {}
+}
+
+/// `HasIdentity` checks if the current key token has an identity associated to it.
+///
+/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+public struct HasIdentity: Fn {
+
+    var call: Fn.Call = fn("has_identity" => NullV())
+
+    public init() {}
+}
+
 // MARK: String Functions
 
 /// `Concat` joins a list of strings into a single string value.
@@ -1143,6 +1208,21 @@ public struct Concat: Fn {
     }
 }
 
+/// Represents the normalization operation to be used for `Casefold` function.
+public enum Normalizer: String {
+    case NFD
+    case NFC
+    case NFKD
+    case NFKC
+    case NFKCCaseFold
+}
+
+extension Normalizer: Expr, AsJson {
+    func escape() -> JsonType {
+        return .string(self.rawValue)
+    }
+}
+
 /// `Casefold` normalizes strings according to the Unicode Standard section 5.18
 /// "Case Mappings".
 ///
@@ -1155,8 +1235,15 @@ public struct Casefold: Fn {
     var call: Fn.Call
 
     /// - Parameter str: String to be normalized.
-    public init(_ str: Expr) {
-        self.call = fn("casefold" => str)
+    /// - Parameter normalizer: The normalization operation.
+    public init(_ str: Expr, _ normalizer: Expr? = nil) {
+        self.call = fn("casefold" => str, "normalizer" => normalizer)
+    }
+
+    /// - Parameter str: String to be normalized.
+    /// - Parameter normalizer: The normalization operation.
+    public init(_ str: Expr, normalizer: Normalizer? = nil) {
+        self.call = fn("casefold" => str, "normalizer" => normalizer)
     }
 
 }
@@ -1237,8 +1324,17 @@ public struct DateFn: Fn {
 /// `NextId` produces a new identifier suitable for use when constructing refs.
 ///
 /// [Reference](https://fauna.com/documentation/queries#misc_functions)
+@available(*, deprecated, message: "use NewId() instead")
 public struct NextId: Fn {
     var call: Fn.Call = fn("next_id" => NullV())
+    public init() {}
+}
+
+/// `NewId` produces a new identifier suitable for use when constructing refs.
+///
+/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+public struct NewId: Fn {
+    var call: Fn.Call = fn("new_id" => NullV())
     public init() {}
 }
 

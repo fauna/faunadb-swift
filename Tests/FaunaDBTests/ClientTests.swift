@@ -157,6 +157,16 @@ class ClientTests: XCTestCase {
             .await()
     }
 
+    func testAbort() {
+        let query = client.query(
+            Abort("abort message")
+        )
+
+        XCTAssertThrowsError(try query.await()) { error in
+            XCTAssert(error is BadRequest)
+        }
+    }
+
     func testReturnUnauthorizedOnInvalidSecret() {
         let invalidClient = client.newSessionClient(secret: "invalid-secret")
         let query = invalidClient.query(Get(Ref("classes/spells/42")))
@@ -427,6 +437,61 @@ class ClientTests: XCTestCase {
         XCTAssertEqual(try page.get("data"), [Self.magicMissile])
     }
 
+    func testEvents() {
+        let ref: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("x" => 1)
+            ))
+        ).await().get("ref")
+
+        try! client.query(Update(ref: ref, to: Obj(
+            "data" => Obj("x" => 2)
+        ))).await()
+
+        try! client.query(Delete(ref: ref)).await()
+
+        let events: [ObjectV] = try! client.query(
+            Paginate(Events(ref))
+        ).await().get("data")
+
+        XCTAssert(events.count == 3)
+
+        XCTAssertEqual(try! events[0].at("action").get()!, "create")
+        XCTAssertEqual(try! events[0].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[1].at("action").get()!, "update")
+        XCTAssertEqual(try! events[1].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[2].at("action").get()!, "delete")
+        XCTAssertEqual(try! events[2].at("instance").get()!, ref)
+    }
+
+    func testSingleton() {
+        let ref: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "data" => Obj("x" => 1)
+            ))
+        ).await().get("ref")
+
+        try! client.query(Update(ref: ref, to: Obj(
+            "data" => Obj("x" => 2)
+        ))).await()
+
+        try! client.query(Delete(ref: ref)).await()
+
+        let events: [ObjectV] = try! client.query(
+            Paginate(Events(Singleton(ref)))
+        ).await().get("data")
+
+        XCTAssert(events.count == 2)
+
+        XCTAssertEqual(try! events[0].at("action").get()!, "add")
+        XCTAssertEqual(try! events[0].at("instance").get()!, ref)
+
+        XCTAssertEqual(try! events[1].at("action").get()!, "remove")
+        XCTAssertEqual(try! events[1].at("instance").get()!, ref)
+    }
+
     func testFindSingleInstanceOnAnIndex() {
         assert(query:
             Paginate(
@@ -510,6 +575,13 @@ class ClientTests: XCTestCase {
 
     func testCasefold() {
         assert(query: Casefold("GET DOWN"), toReturn: "get down")
+
+        // https://unicode.org/reports/tr15/
+        assert(query: Casefold("\u{212B}", normalizer: .NFD), toReturn: "A\u{030A}")
+        assert(query: Casefold("\u{212B}", normalizer: .NFC), toReturn: "\u{00C5}")
+        assert(query: Casefold("\u{1E9B}\u{0323}", normalizer: .NFKD), toReturn: "\u{0073}\u{0323}\u{0307}")
+        assert(query: Casefold("\u{1E9B}\u{0323}", normalizer: .NFKC), toReturn: "\u{1E69}")
+        assert(query: Casefold("\u{212B}", normalizer: .NFKCCaseFold), toReturn: "\u{00E5}")
     }
 
     func testTime() {
@@ -569,8 +641,41 @@ class ClientTests: XCTestCase {
         )
     }
 
-    func testNextId() {
-        let id: String! = try! client.query(NextId()).await().get()
+    func testIdentityAndHasIdentity() {
+        let user: RefV! = try! client.query(
+            Create(at: Self.randomClass, Obj(
+                "credentials" => Obj(
+                    "password" => "abcd"
+                )
+            ))
+        ).await().get("ref")
+
+        let auth = try! client.query(
+            Login(for: user, Obj(
+                "password" => "abcd"
+            ))
+        ).await()
+
+        let sessionClient = try! client.newSessionClient(secret: auth.get("secret")!)
+
+        // HasIdentity
+        XCTAssertTrue(
+            try! sessionClient.query(
+                HasIdentity()
+            ).await().get()!
+        )
+
+        // Identity
+        XCTAssertEqual(
+            user,
+            try! sessionClient.query(
+                Identity()
+            ).await().get()!
+        )
+    }
+
+    func testNewId() {
+        let id: String! = try! client.query(NewId()).await().get()
         XCTAssertNotNil(id)
     }
 

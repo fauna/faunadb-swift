@@ -142,6 +142,13 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testAbort() {
+        assert(
+            expr: Abort("abort message"),
+            toBecome: "{\"abort\":\"abort message\"}"
+        )
+    }
+
     func testRef() {
         assert(
             expr: Ref("classes/spells/42"),
@@ -541,6 +548,20 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testSingleton() {
+        assert(
+            expr: Singleton(Ref("classes/spells/123456789")),
+            toBecome: "{\"singleton\":{\"@ref\":\"classes\\/spells\\/123456789\"}}"
+        )
+    }
+
+    func testEvents() {
+        assert(
+            expr: Events(Ref("classes/spells/123456789")),
+            toBecome: "{\"events\":{\"@ref\":\"classes\\/spells\\/123456789\"}}"
+        )
+    }
+
     func testMatch() {
         assert(
             expr: Match(index: Ref("indexes/all_spells")),
@@ -651,11 +672,19 @@ class SerializationTests: XCTestCase {
         assert(expr: Logout(all: true), toBecome: "{\"logout\":true}")
     }
 
-    func testIdentity() {
+    func testIdentify() {
         assert(
             expr: Identify(ref: Ref("classes/users/1"), password: "abracadabra"),
             toBecome: "{\"password\":\"abracadabra\",\"identify\":{\"@ref\":\"classes\\/users\\/1\"}}"
         )
+    }
+
+    func testIdentity() {
+        assert(expr: Identity(), toBecome: "{\"identity\":null}")
+    }
+
+    func testHasIdentity() {
+        assert(expr: HasIdentity(), toBecome: "{\"has_identity\":null}")
     }
 
     func testConcat() {
@@ -666,6 +695,9 @@ class SerializationTests: XCTestCase {
 
     func testCasefold() {
         assert(expr: Casefold("HELLOW"), toBecome: "{\"casefold\":\"HELLOW\"}")
+
+        assert(expr: Casefold("HELLOW", "NFC"), toBecome: "{\"normalizer\":\"NFC\",\"casefold\":\"HELLOW\"}")
+        assert(expr: Casefold("HELLOW", normalizer: .NFC), toBecome: "{\"normalizer\":\"NFC\",\"casefold\":\"HELLOW\"}")
     }
 
     func testTime() {
@@ -684,8 +716,8 @@ class SerializationTests: XCTestCase {
         assert(expr: DateFn(string: "1970-01-01"), toBecome: "{\"date\":\"1970-01-01\"}")
     }
 
-    func testNextId() {
-        assert(expr: NextId(), toBecome: "{\"next_id\":null}")
+    func testNewId() {
+        assert(expr: NewId(), toBecome: "{\"new_id\":null}")
     }
 
     func testDatabase() {
