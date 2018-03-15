@@ -728,6 +728,18 @@ class ClientTests: XCTestCase {
         )
     }
 
+    func testSelectAll() {
+        assert(
+            query: SelectAll(path: "foo", from: Arr(Obj("foo" => "bar"), Obj("foo" => "baz"))),
+            toReturn: ["bar", "baz"]
+        )
+
+        assert(
+            query: SelectAll(path: "foo", 0, from: Arr(Obj("foo" => Arr(0, 1)), Obj("foo" => Arr(2, 3)))),
+            toReturn: [0, 2]
+        )
+    }
+
     func testAdd() {
         assert(query: Add(1, 2), toReturn: 3)
     }

@@ -1446,6 +1446,20 @@ public struct Select: Fn {
     }
 }
 
+/// `SelectAll` traverses into the argument passed to from flattening all values into an array.
+///
+/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+public struct SelectAll: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter path:    Determines a location within `object`.
+    /// - Parameter object:  Value in which `path` should be selected.
+    public init(path: Expr..., from object: Expr) {
+        self.call = fn("select_all" => varargs(path), "from" => object)
+    }
+}
+
 /// `Add` computes the sum of a list of numbers. Attempting to add fewer that two
 /// numbers will result in an “invalid argument” error.
 ///
