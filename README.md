@@ -26,7 +26,7 @@ and in our [example project](https://github.com/fauna/faunadb-swift/tree/master/
 CocoaPods:
 
 ```
-pod 'FaunaDB', '~> 1.0.0'
+pod 'FaunaDB', '~> 2.0.0'
 ```
 
 Carthage:
@@ -38,7 +38,7 @@ github 'fauna/faunadb-swift'
 SwiftPM:
 
 ```swift
-.Package(url: "https://github.com/fauna/faunadb-swift.git", Version(1, 0, 0))
+.Package(url: "https://github.com/fauna/faunadb-swift.git", Version(2, 0, 0))
 ```
 
 ### Basic Usage
@@ -102,7 +102,7 @@ FAUNA_ROOT_KEY=your-keys-secret-here swift test
 
 ## LICENSE
 
-Copyright 2017 [Fauna, Inc.](https://fauna.com/)
+Copyright 2018 [Fauna, Inc.](https://fauna.com/)
 
 Licensed under the Mozilla Public License, Version 2.0 (the
 "License"); you may not use this software except in compliance with

@@ -1,4 +1,4 @@
-2.0.0-SNAPSHOT
+2.0.0
 * Adds support for @query type (user defined functions)
 * Adds support for recursive references
 * Adds abort function
