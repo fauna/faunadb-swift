@@ -793,6 +793,13 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testSelectAll() {
+        assert(
+            expr: SelectAll(path: "foo", from: Obj("foo" => "bar")),
+            toBecome: "{\"from\":{\"object\":{\"foo\":\"bar\"}},\"select_all\":\"foo\"}"
+        )
+    }
+
     func testAdd() {
         assert(expr: Add(Arr(1, 1)), toBecome: "{\"add\":[1,1]}")
         assert(expr: Add(1, 1), toBecome: "{\"add\":[1,1]}")
