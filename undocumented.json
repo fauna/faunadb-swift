@@ -1,383 +1,551 @@
 {
   "warnings": [
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Codec.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Codec.swift",
       "line": 27,
       "symbol": "Decodable.init(value:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 101,
       "symbol": "BadRequest.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 108,
       "symbol": "Unauthorized.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 115,
       "symbol": "PermissionDenied.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 122,
       "symbol": "NotFound.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 129,
       "symbol": "InternalError.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 136,
       "symbol": "Unavailable.init(errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 143,
       "symbol": "UnknownError.init(status:errors:message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 147,
       "symbol": "UnknownError.init(cause:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 154,
       "symbol": "TimeoutError.init(message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 174,
       "symbol": "QueryError.init(position:code:description:failures:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Errors.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Errors.swift",
       "line": 226,
       "symbol": "ValidationFailure.init(field:code:description:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Expr.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Expr.swift",
       "line": null,
       "symbol": "Fn",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Expr.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Expr.swift",
       "line": 74,
       "symbol": "Fn.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": null,
+      "symbol": "JsonType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
       "line": 30,
       "symbol": "Encodable.encode()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 213,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 251,
       "symbol": "JsonError.unsupportedType",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 214,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 252,
       "symbol": "JsonError.invalidObjectKeyType",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 215,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 253,
       "symbol": "JsonError.invalidLiteral",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 216,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 254,
       "symbol": "JsonError.invalidDate",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/JSON.swift",
-      "line": 217,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 255,
       "symbol": "JsonError.invalidBase64",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 666,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/JSON.swift",
+      "line": 256,
+      "symbol": "JsonError.invalidRefValue",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 830,
       "symbol": "Action.create",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 667,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 831,
       "symbol": "Action.delete",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1021,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1182,
+      "symbol": "Identity.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1192,
+      "symbol": "HasIdentity.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1213,
+      "symbol": "Normalizer.NFD",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1214,
+      "symbol": "Normalizer.NFC",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1215,
+      "symbol": "Normalizer.NFKD",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1216,
+      "symbol": "Normalizer.NFKC",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1217,
+      "symbol": "Normalizer.NFKCCaseFold",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1273,
       "symbol": "TimeUnit.second",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1022,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1274,
       "symbol": "TimeUnit.millisecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1023,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1275,
       "symbol": "TimeUnit.microsecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1024,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1276,
       "symbol": "TimeUnit.nanosecond",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Query.swift",
-      "line": 1077,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1330,
       "symbol": "NextId.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 58,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Query.swift",
+      "line": 1338,
+      "symbol": "NewId.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": null,
+      "symbol": "RefID",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 59,
       "symbol": "ScalarValue.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 61,
-      "symbol": "==(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 66,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 63,
       "symbol": "CustomStringConvertible.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 75,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 72,
       "symbol": "StringV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 77,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 74,
       "symbol": "StringV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 90,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 93,
       "symbol": "LongV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 92,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 95,
       "symbol": "LongV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 105,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 114,
       "symbol": "DoubleV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 107,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 116,
       "symbol": "DoubleV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 120,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 135,
       "symbol": "BooleanV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 122,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 137,
       "symbol": "BooleanV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 143,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 164,
       "symbol": "TimeV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 145,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 166,
       "symbol": "TimeV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 174,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 201,
       "symbol": "DateV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 176,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 203,
       "symbol": "DateV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 196,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 225,
+      "symbol": "RefID",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 226,
+      "symbol": "RefID.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 227,
+      "symbol": "RefID.class",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 228,
+      "symbol": "RefID.database",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 230,
+      "symbol": "RefID.init(id:class:database:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 258,
       "symbol": "RefV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 198,
-      "symbol": "RefV.init(_:)",
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 260,
+      "symbol": "RefV.init(_:class:database:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 211,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 281,
+      "symbol": "Native",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 282,
+      "symbol": "Native.CLASSES",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 283,
+      "symbol": "Native.INDEXES",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 284,
+      "symbol": "Native.DATABASES",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 285,
+      "symbol": "Native.KEYS",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 286,
+      "symbol": "Native.FUNCTIONS",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 287,
+      "symbol": "Native.TOKENS",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 288,
+      "symbol": "Native.CREDENTIALS",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 290,
+      "symbol": "Native.fromName(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 308,
       "symbol": "SetRefV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 213,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 310,
       "symbol": "SetRefV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 234,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 331,
       "symbol": "NullV.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 251,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 348,
       "symbol": "ArrayV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 257,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 354,
       "symbol": "ArrayV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 276,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 373,
       "symbol": "ObjectV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 282,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 379,
       "symbol": "ObjectV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 307,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 404,
       "symbol": "BytesV.value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 313,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 410,
       "symbol": "BytesV.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erickpintor/Projects/faunadb/faunadb-swift/Sources/FaunaDB/Value.swift",
-      "line": 317,
+      "file": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift/Sources/FaunaDB/Value.swift",
+      "line": 414,
       "symbol": "BytesV.init(fromArray:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/erickpintor/Projects/faunadb/faunadb-swift"
+  "source_directory": "/Users/jenkins/build/workspace/drivers/swift/release/faunadb-swift"
 }
