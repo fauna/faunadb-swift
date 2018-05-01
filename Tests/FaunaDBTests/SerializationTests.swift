@@ -693,6 +693,16 @@ class SerializationTests: XCTestCase {
         assert(expr: Concat("Hellow", "World", separator: ","), toBecome: "{\"concat\":[\"Hellow\",\"World\"],\"separator\":\",\"}")
     }
 
+    func testNGram() {
+        assert(expr: NGram("str"), toBecome: "{\"ngram\":\"str\"}")
+        assert(expr: NGram("str0", "str1"), toBecome: "{\"ngram\":[\"str0\",\"str1\"]}")
+
+        assert(expr: NGram("str", min: 1), toBecome: "{\"ngram\":\"str\",\"min\":1}")
+        assert(expr: NGram("str", max: 1), toBecome: "{\"ngram\":\"str\",\"max\":1}")
+
+        assert(expr: NGram("str", min: 1, max: 2), toBecome: "{\"ngram\":\"str\",\"min\":1,\"max\":2}")
+    }
+
     func testCasefold() {
         assert(expr: Casefold("HELLOW"), toBecome: "{\"casefold\":\"HELLOW\"}")
 

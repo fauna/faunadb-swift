@@ -573,6 +573,14 @@ class ClientTests: XCTestCase {
         assert(query: Concat("Hellow", "World", separator: " " ), toReturn: "Hellow World")
     }
 
+    func testNGram() {
+        assert(query: NGram("what"), toReturn: ["w", "wh", "h", "ha", "a", "at", "t"])
+        assert(query: NGram("what", min: 2, max: 3), toReturn: ["wh", "wha", "ha", "hat", "at"])
+
+        assert(query: NGram("john", "doe"), toReturn: ["j", "jo", "o", "oh", "h", "hn", "n", "d", "do", "o", "oe", "e"])
+        assert(query: NGram("john", "doe", min: 3, max: 4), toReturn: ["joh", "john", "ohn", "doe"])
+    }
+
     func testCasefold() {
         assert(query: Casefold("GET DOWN"), toReturn: "get down")
 

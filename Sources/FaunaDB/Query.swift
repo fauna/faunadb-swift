@@ -1248,6 +1248,21 @@ public struct Casefold: Fn {
 
 }
 
+/// `NGram` breaks down the terms and computes a sequence of elements with size starting with min and ending with size max.
+///
+/// [Reference](https://fauna.com/documentation/queries#string_functions).
+public struct NGram: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter terms: Strings to compute grams.
+    /// - Parameter min: minimum ngram size.
+    /// - Parameter max: maximum ngram size.
+    public init(_ terms: Expr..., min: Expr? = nil, max: Expr? = nil) {
+        self.call = fn("ngram" => varargs(terms), "min" => min, "max" => max)
+    }
+}
+
 // MARK: Date and Time Functions
 
 /// `Time` constructs a time special type from an ISO 8601 offset date/time string.
