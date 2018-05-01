@@ -402,6 +402,20 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testIsEmpty() {
+        assert(
+            expr: IsEmpty(Arr(1, 2, 3)),
+            toBecome: "{\"is_empty\":[1,2,3]}"
+        )
+    }
+
+    func testIsNonEmpty() {
+        assert(
+            expr: IsNonEmpty(Arr(1, 2, 3)),
+            toBecome: "{\"is_nonempty\":[1,2,3]}"
+        )
+    }
+
     func testGet() {
         assert(
             expr: Get(Ref("classes/spells/42")),

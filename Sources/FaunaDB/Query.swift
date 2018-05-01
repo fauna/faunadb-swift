@@ -674,6 +674,32 @@ public struct Append: Fn {
 
 }
 
+/// `IsEmpty` returns true if the collection is empty, false otherwise.
+///
+///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+public struct IsEmpty: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter collection: Collection to check.
+    public init(_ collection: Expr) {
+        self.call = fn("is_empty" => collection)
+    }
+}
+
+/// `IsNonEmpty` returns true if the collection is non-empty, false otherwise.
+///
+///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+public struct IsNonEmpty: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter collection: Collection to check.
+    public init(_ collection: Expr) {
+        self.call = fn("is_nonempty" => collection)
+    }
+}
+
 // MARK: Read Functions
 
 /// Retrieves the instance identified by ref. If the instance does not exist, an

@@ -387,6 +387,36 @@ class ClientTests: XCTestCase {
         )
     }
 
+    func testIsEmpty() {
+        assert(query: IsEmpty(Arr(1, 2, 3)), toReturn: false)
+        assert(query: IsEmpty(Arr()), toReturn: true)
+
+        assert(
+            query: IsEmpty(Paginate(Match(index: Index("spells_by_element"), terms: "water"))),
+            toReturn: true
+        )
+
+        assert(
+            query: IsEmpty(Paginate(Match(index: Index("spells_by_element"), terms: "fire"))),
+            toReturn: false
+        )
+    }
+
+    func testIsNonEmpty() {
+        assert(query: IsNonEmpty(Arr(1, 2, 3)), toReturn: true)
+        assert(query: IsNonEmpty(Arr()), toReturn: false)
+
+        assert(
+            query: IsNonEmpty(Paginate(Match(index: Index("spells_by_element"), terms: "water"))),
+            toReturn: false
+        )
+
+        assert(
+            query: IsNonEmpty(Paginate(Match(index: Index("spells_by_element"), terms: "fire"))),
+            toReturn: true
+        )
+    }
+
     func testKeyFromSecret() {
         let keyCreated: Value! = try! rootClient.query(
             CreateKey(Obj(
