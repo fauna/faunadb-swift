@@ -3,5 +3,6 @@
 build
 /Packages
 **/xcuserdata
+*.xcodeproj/
 Pods/
 *.lock

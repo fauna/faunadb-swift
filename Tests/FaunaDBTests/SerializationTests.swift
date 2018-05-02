@@ -884,7 +884,18 @@ class SerializationTests: XCTestCase {
     }
 
     private func assert(expr: Expr?, toBecome jsonString: String) {
-        XCTAssertEqual(JSON.stringify(expr: expr as Any), jsonString)
+        let actual = try? parse(json: JSON.stringify(expr: expr as Any))
+        let expected = try? parse(json: jsonString)
+
+        if let a = actual as? NSObject, let b = expected as? NSObject {
+            XCTAssertEqual(a, b)
+        } else {
+            XCTFail("Cannot compare \(actual ?? "none") with \(expected ?? "none")")
+        }
+    }
+
+    private func parse(json: String) throws -> Any {
+        return try JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
     }
 
 }
