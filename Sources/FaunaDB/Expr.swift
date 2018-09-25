@@ -6,7 +6,7 @@ import Foundation
     For convenience, some native types are considered valid expressions:
     `String`, `Int`, `Double`, `Bool`, `Optional`, and `Date`.
 
-    [Reference](https://fauna.com/documentation/queries#values)
+    [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type)
 
     ## Motivation
 
@@ -99,7 +99,7 @@ internal func varargs(_ args: [Expr]) -> Expr {
 
     You can use the operator `=>` as a syntax sugar while building new objects.
 
-    [Reference](https://fauna.com/documentation/queries#values)
+    [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type)
 
     For example:
 
@@ -140,7 +140,7 @@ public struct Obj: Expr, AsJson, CustomStringConvertible {
     Represents an array in FaunaDB where its elements can be a primitive value
     or an expression to be evaluated.
 
-    [Reference](https://fauna.com/documentation/queries#values)
+    [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type)
 
     For example:
 

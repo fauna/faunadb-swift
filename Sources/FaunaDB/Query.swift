@@ -5,7 +5,7 @@ import Foundation
 
 /// Ref creates a new RefV value with the ID provided.
 ///
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct Ref: Fn {
 
     var call: Fn.Call
@@ -28,7 +28,7 @@ public struct Ref: Fn {
 
 /// Aborts the current query execution.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Abort: Fn {
 
     var call: Fn.Call
@@ -42,7 +42,7 @@ public struct Abort: Fn {
 /// Returns a native reference to classes. This allows for example,
 /// paginate over all classes in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Classes: Fn {
 
     var call: Fn.Call
@@ -56,7 +56,7 @@ public struct Classes: Fn {
 /// Returns a native reference to indexes. This allows for example,
 /// paginate over all indexes in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Indexes: Fn {
 
     var call: Fn.Call
@@ -70,7 +70,7 @@ public struct Indexes: Fn {
 /// Returns a native reference to databases. This allows for example,
 /// paginate over all databases in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Databases: Fn {
 
     var call: Fn.Call
@@ -84,7 +84,7 @@ public struct Databases: Fn {
 /// Returns a native reference to functions. This allows for example,
 /// paginate over all functions in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Functions: Fn {
 
     var call: Fn.Call
@@ -98,7 +98,7 @@ public struct Functions: Fn {
 /// Returns a native reference to keys. This allows for example,
 /// paginate over all keys in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Keys: Fn {
 
     var call: Fn.Call
@@ -112,7 +112,7 @@ public struct Keys: Fn {
 /// Returns a native reference to tokens. This allows for example,
 /// paginate over all tokens in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Tokens: Fn {
 
     var call: Fn.Call
@@ -126,7 +126,7 @@ public struct Tokens: Fn {
 /// Returns a native reference to credentials. This allows for example,
 /// paginate over all credentials in a database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Credentials: Fn {
 
     var call: Fn.Call
@@ -141,7 +141,7 @@ public struct Credentials: Fn {
 /// lexical scope. Referring to a variable that is not in scope results in an
 /// “unbound variable” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Var: Fn {
 
     fileprivate let name: String
@@ -168,7 +168,7 @@ public struct Var: Fn {
 
 /// `At` evaluates the expr at a given timestamp.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct At: Fn {
 
     var call: Fn.Call
@@ -187,7 +187,7 @@ public struct At: Fn {
 /// other variables defined in the same let expression. Variables are lexically
 /// scoped to the expression passed via `in`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Let: Fn {
 
     private struct Bindings: Fn {
@@ -305,7 +305,7 @@ public struct Let: Fn {
 /// pred. If pred evaluates to anything other than a boolean, if returns an
 /// “invalid argument” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct If: Fn {
 
     var call: Fn.Call
@@ -321,7 +321,7 @@ public struct If: Fn {
 /// Do sequentially evaluates its arguments, and returns the evaluation of the
 /// last expression. If no expressions are provided, do returns an error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Do: Fn {
 
     var call: Fn.Call
@@ -337,7 +337,7 @@ public struct Do: Fn {
 /// expression at `expr`. The lambda form is only permitted as a direct argument
 /// to a form which applies it. It cannot be bound to a variable.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Lambda: Fn {
 
     var call: Fn.Call
@@ -393,7 +393,7 @@ public struct Lambda: Fn {
 /// `Call` invoke the specified function reference.
 /// The function must be created using `CreateFunction` before it can be invoked.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Call: Fn {
 
     var call: Fn.Call
@@ -407,7 +407,7 @@ public struct Call: Fn {
 
 /// `Query` constructs an instance of `@query` type with the specified lambda.
 ///
-/// [Reference](https://fauna.com/documentation/queries#basic_forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
 public struct Query: Fn {
 
     var call: Fn.Call
@@ -454,7 +454,7 @@ public struct Query: Fn {
 ///  lambda applications. The order of possible refs being generated within the
 ///  lambda are non-deterministic.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Map: Fn {
 
     var call: Fn.Call
@@ -504,7 +504,7 @@ public struct Map: Fn {
 ///  lambda applications. The order of possible refs being generated within the
 ///  lambda are non-deterministic.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Foreach: Fn {
 
     var call: Fn.Call
@@ -554,7 +554,7 @@ public struct Foreach: Fn {
 /// Providing a lambda which does not return a Boolean results in an “invalid
 /// argument” error.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Filter: Fn {
 
     var call: Fn.Call
@@ -607,7 +607,7 @@ public struct Filter: Fn {
 /// original page’s  before.
 /// * If all elements from the original page were taken, after does not change.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Take: Fn {
 
     var call: Fn.Call
@@ -630,7 +630,7 @@ public struct Take: Fn {
 /// the case where the page was already empty), before will be set to same value as
 /// the original page’s after.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Drop: Fn {
 
     var call: Fn.Call
@@ -646,7 +646,7 @@ public struct Drop: Fn {
 /// `Prepend` returns a new Array that is the result of prepending `elements` onto
 /// the Array `toCollection`.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Prepend: Fn {
 
     var call: Fn.Call
@@ -661,7 +661,7 @@ public struct Prepend: Fn {
 /// `Append` returns a new Array that is the result of appending `elements` onto
 /// the `collection` array.
 ///
-///  [Reference](https://fauna.com/documentation/queries#collection_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#collections).
 public struct Append: Fn {
 
     var call: Fn.Call
@@ -679,7 +679,7 @@ public struct Append: Fn {
 /// Retrieves the instance identified by ref. If the instance does not exist, an
 /// “instance not found” error will be returned. Use the exists predicate to avoid
 /// “instance not found” errors.
-/// [Reference](https://fauna.com/documentation/queries#read_functions-get_ref).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#read-functions-get_ref).
 public struct Get: Fn {
 
     var call: Fn.Call
@@ -695,7 +695,7 @@ public struct Get: Fn {
 
 /// `KeyFromSecret` retrieves a key object associated to the given secret.
 ///
-///  [Reference](https://fauna.com/documentation/queries#read_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#read-functions).
 public struct KeyFromSecret: Fn {
 
     var call: Fn.Call
@@ -710,7 +710,7 @@ public struct KeyFromSecret: Fn {
 /// is any set identifier or instance ref. Instance refs represent singleton sets
 /// of themselves.
 ///
-///  [Reference](https://fauna.com/documentation/queries#read_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#read-functions).
 public struct Paginate: Fn {
 
     var call: Fn.Call
@@ -747,7 +747,7 @@ public struct Paginate: Fn {
 /// `Exists` returns boolean true if the provided ref exists (in the case of an
 ///  instance), or is non-empty (in the case of a set), and false otherwise.
 ///
-///  [Reference](https://fauna.com/documentation/queries#read_functions).
+///  [Reference](https://app.fauna.com/documentation/reference/queryapi#read-functions).
 public struct Exists: Fn {
 
     var call: Fn.Call
@@ -764,7 +764,7 @@ public struct Exists: Fn {
 
 /// Creates an instance of the class referred to by `classRef`, using `params`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Create: Fn {
 
     var call: Fn.Call
@@ -781,7 +781,7 @@ public struct Create: Fn {
 /// specified. Scalar values and arrays are replaced by newer versions, objects are
 /// merged, and null removes a value.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Update: Fn {
 
     var call: Fn.Call
@@ -796,7 +796,7 @@ public struct Update: Fn {
 /// Replaces the resource ref using the provided params. Values not specified are
 /// removed.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Replace: Fn {
 
     var call: Fn.Call
@@ -811,7 +811,7 @@ public struct Replace: Fn {
 
 /// Removes a resource.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Delete: Fn {
 
     var call: Fn.Call
@@ -825,7 +825,7 @@ public struct Delete: Fn {
 
 /// Enumeration for event action types.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions)
 public enum Action: String {
     case create
     case delete
@@ -841,7 +841,7 @@ extension Action: Expr, AsJson {
 /// user-defined class or a key - all other refs result in an “invalid argument”
 /// error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Insert: Fn {
 
     var call: Fn.Call
@@ -867,7 +867,7 @@ public struct Insert: Fn {
 /// Deletes an event from an instance’s history. The ref must refer to an instance
 /// of an user-defined class - all other refs result in an “invalid argument” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct Remove: Fn {
 
     var call: Fn.Call
@@ -891,7 +891,7 @@ public struct Remove: Fn {
 /// `CreateClass` creates a class object using `params`. It is a shortcut function
 /// that has the same effect as `Create(Ref("classes"), params)`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct CreateClass: Fn {
 
     var call: Fn.Call
@@ -906,7 +906,7 @@ public struct CreateClass: Fn {
 /// `CreateDatabase` creates a new database using data from `params`. Since this
 /// function creates a database, it requires an admin key to be passed
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct CreateDatabase: Fn {
 
     var call: Fn.Call
@@ -921,7 +921,7 @@ public struct CreateDatabase: Fn {
 /// This function creates a new index where the name and source class are specified
 /// in `params`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct CreateIndex: Fn {
 
     var call: Fn.Call
@@ -936,7 +936,7 @@ public struct CreateIndex: Fn {
 /// This function creates a new key where the database and role are specified in
 /// `params`. It needs the admin key for authentication.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct CreateKey: Fn {
 
     var call: Fn.Call
@@ -951,7 +951,7 @@ public struct CreateKey: Fn {
 /// This function creates a new stored function where the name and body lambda
 /// are specified in `params`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#write_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
 public struct CreateFunction: Fn {
 
     var call: Fn.Call
@@ -966,7 +966,7 @@ public struct CreateFunction: Fn {
 
 /// `Singleton` returns the history of the instance's presence of the provided ref.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Singleton: Fn {
 
     var call: Fn.Call
@@ -979,7 +979,7 @@ public struct Singleton: Fn {
 
 /// `Events` returns the history of instance's data of the provided ref.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Events: Fn {
 
     var call: Fn.Call
@@ -994,7 +994,7 @@ public struct Events: Fn {
 /// configuration of the specified index. `terms` can be either a single value, or an
 /// array.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Match: Fn {
 
     var call: Fn.Call
@@ -1012,7 +1012,7 @@ public struct Match: Fn {
 /// `Union` represents the set of resources that are present in at least one of the
 /// specified sets.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Union: Fn {
 
     var call: Fn.Call
@@ -1027,7 +1027,7 @@ public struct Union: Fn {
 /// `Intersection` represents the set of resources that are present in all of the
 /// specified sets.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Intersection: Fn {
 
     var call: Fn.Call
@@ -1042,7 +1042,7 @@ public struct Intersection: Fn {
 /// `Difference` represents the set of resources present in the source set and not
 /// in any of the other specified sets.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Difference: Fn {
 
     var call: Fn.Call
@@ -1056,7 +1056,7 @@ public struct Difference: Fn {
 
 /// Distinct function returns the set after removing duplicates.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Distinct: Fn {
 
     var call: Fn.Call
@@ -1074,7 +1074,7 @@ public struct Distinct: Fn {
 /// `sourceSet` match the terms in an index. The join returns instances from index
 /// (specified by with) that match the terms from `sourceSet`.
 ///
-/// [Reference](https://fauna.com/documentation/queries#sets).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#sets).
 public struct Join: Fn {
 
     var call: Fn.Call
@@ -1121,7 +1121,7 @@ public struct Join: Fn {
 
 /// `Login` creates a token for the provided ref.
 ///
-/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#authentication).
 public struct Login: Fn {
 
     var call: Fn.Call
@@ -1137,7 +1137,7 @@ public struct Login: Fn {
 /// `Logout` deletes all tokens associated with the current session if its
 /// parameter is `true`, or just the token used in this request otherwise.
 ///
-/// [Reference](https://fauna.com/documentation/queries#auth_functions)..
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#authentication)..
 public struct Logout: Fn {
 
     var call: Fn.Call
@@ -1153,7 +1153,7 @@ public struct Logout: Fn {
 /// `Identify` checks the given password against the ref’s credentials, returning
 /// `true` if the credentials are valid, or `false` otherwise..
 ///
-/// [Reference](https://fauna.com/documentation/queries#auth_functions)..
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#authentication)..
 public struct Identify: Fn {
 
     var call: Fn.Call
@@ -1174,7 +1174,7 @@ public struct Identify: Fn {
 ///   `Login(for: someRef, Obj("password" => "sekrit"))`
 /// will return `someRef` as the result of this function.
 ///
-/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#authentication).
 public struct Identity: Fn {
 
     var call: Fn.Call = fn("identity" => NullV())
@@ -1184,7 +1184,7 @@ public struct Identity: Fn {
 
 /// `HasIdentity` checks if the current key token has an identity associated to it.
 ///
-/// [Reference](https://fauna.com/documentation/queries#auth_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#authentication).
 public struct HasIdentity: Fn {
 
     var call: Fn.Call = fn("has_identity" => NullV())
@@ -1196,7 +1196,7 @@ public struct HasIdentity: Fn {
 
 /// `Concat` joins a list of strings into a single string value.
 ///
-/// [Reference](https://fauna.com/documentation/queries#string_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#string-functions).
 public struct Concat: Fn {
 
     var call: Fn.Call
@@ -1229,7 +1229,7 @@ extension Normalizer: Expr, AsJson {
 /// To compare two strings for case-insensitive matching, transform each string
 /// and use a binary comparison, such as  equals.
 ///
-/// [Reference](https://fauna.com/documentation/queries#string_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#string-functions).
 public struct Casefold: Fn {
 
     var call: Fn.Call
@@ -1255,7 +1255,7 @@ public struct Casefold: Fn {
 /// request’s transaction time. Multiple references to "now" within the same query
 /// will be equal.
 ///
-/// [Reference](https://fauna.com/documentation/queries#time_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#time-and-date).
 public struct Time: Fn {
 
     var call: Fn.Call
@@ -1286,7 +1286,7 @@ extension TimeUnit: Expr, AsJson {
 /// (1970-01-01T00:00:00Z). `offset` must be an integer type. `unit` may be a
 /// valid time unit.
 ///
-/// [Reference](https://fauna.com/documentation/queries#time_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#time-and-date).
 public struct Epoch: Fn {
 
     var call: Fn.Call
@@ -1307,7 +1307,7 @@ public struct Epoch: Fn {
 
 /// `DateFn` constructs a date special type from an ISO 8601 date string.
 ///
-/// [Reference](https://fauna.com/documentation/queries#time_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#time-and-date).
 public struct DateFn: Fn {
 
     var call: Fn.Call
@@ -1323,7 +1323,7 @@ public struct DateFn: Fn {
 
 /// `NextId` produces a new identifier suitable for use when constructing refs.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 @available(*, deprecated, message: "use NewId() instead")
 public struct NextId: Fn {
     var call: Fn.Call = fn("next_id" => NullV())
@@ -1332,7 +1332,7 @@ public struct NextId: Fn {
 
 /// `NewId` produces a new identifier suitable for use when constructing refs.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct NewId: Fn {
     var call: Fn.Call = fn("new_id" => NullV())
     public init() {}
@@ -1343,7 +1343,7 @@ public struct NewId: Fn {
 /// using this function requires you to provide an admin key from the parent
 /// database.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct Database: Fn {
 
     var call: Fn.Call
@@ -1358,7 +1358,7 @@ public struct Database: Fn {
 
 /// The index function returns a valid ref for the given index name
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct Index: Fn {
 
     var call: Fn.Call
@@ -1373,7 +1373,7 @@ public struct Index: Fn {
 
 /// The class function returns a valid ref for the given class name
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct Class: Fn {
 
     var call: Fn.Call
@@ -1388,7 +1388,7 @@ public struct Class: Fn {
 
 /// The function function returns a valid ref for the given function name
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions)
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct Function: Fn {
 
     var call: Fn.Call
@@ -1403,7 +1403,7 @@ public struct Function: Fn {
 
 /// `Equals` tests equivalence between a list of values.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Equals: Fn {
 
     var call: Fn.Call
@@ -1418,7 +1418,7 @@ public struct Equals: Fn {
 /// `Contains` returns true if the argument passed to `in` contains a value at
 /// the specified `path`, and false otherwise.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Contains: Fn {
 
     var call: Fn.Call
@@ -1433,7 +1433,7 @@ public struct Contains: Fn {
 /// `Select` traverses into the argument passed to from and returns the resulting
 /// value. If the path does not exist, it results in an error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Select: Fn {
 
     var call: Fn.Call
@@ -1448,7 +1448,7 @@ public struct Select: Fn {
 
 /// `SelectAll` traverses into the argument passed to from flattening all values into an array.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct SelectAll: Fn {
 
     var call: Fn.Call
@@ -1463,7 +1463,7 @@ public struct SelectAll: Fn {
 /// `Add` computes the sum of a list of numbers. Attempting to add fewer that two
 /// numbers will result in an “invalid argument” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Add: Fn {
 
     var call: Fn.Call
@@ -1477,7 +1477,7 @@ public struct Add: Fn {
 /// `Multiply` computes the product of a list of numbers. Attempting to multiply
 /// fewer than two numbers will result in an “invalid argument” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Multiply: Fn {
 
     var call: Fn.Call
@@ -1491,7 +1491,7 @@ public struct Multiply: Fn {
 /// `Subtract` computes the difference of a list of numbers. Attempting to subtract
 /// fewer than two numbers will result in an “invalid argument” error.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Subtract: Fn {
 
     var call: Fn.Call
@@ -1504,7 +1504,7 @@ public struct Subtract: Fn {
 
 /// `Divide` computes the quotient of a list of numbers.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Divide: Fn {
 
     var call: Fn.Call
@@ -1517,7 +1517,7 @@ public struct Divide: Fn {
 
 /// `Modulo` computes the remainder after division of a list of numbers.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Modulo: Fn {
 
     var call: Fn.Call
@@ -1532,7 +1532,7 @@ public struct Modulo: Fn {
 /// following it, and false otherwise. The function takes one or more arguments; it
 /// always returns true if it has a single argument.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct LT: Fn {
 
     var call: Fn.Call
@@ -1547,7 +1547,7 @@ public struct LT: Fn {
 /// the ones following it, and false otherwise. The function takes one or more
 /// arguments; it always returns  true if it has a single argument.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct LTE: Fn {
 
     var call: Fn.Call
@@ -1562,7 +1562,7 @@ public struct LTE: Fn {
 /// following it, and false otherwise. The function takes one or more arguments; it
 /// always returns true if it has a single argument.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct GT: Fn {
 
     var call: Fn.Call
@@ -1577,7 +1577,7 @@ public struct GT: Fn {
 /// the ones following it, and false otherwise. The function takes one or more
 /// arguments; it always returns true if it has a single argument.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct GTE: Fn {
 
     var call: Fn.Call
@@ -1591,7 +1591,7 @@ public struct GTE: Fn {
 /// `And` computes the conjunction of a list of boolean values, returning `true` if
 /// all elements are true, and `false` otherwise.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct And: Fn {
 
     var call: Fn.Call
@@ -1605,7 +1605,7 @@ public struct And: Fn {
 /// `Or` computes the disjunction of a list of boolean values, returning `true` if
 /// any elements are true, and `false` otherwise.
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Or: Fn {
 
     var call: Fn.Call
@@ -1620,7 +1620,7 @@ public struct Or: Fn {
 /// boolean value, returning true if its argument is false, or false if its
 /// argument is true..
 ///
-/// [Reference](https://fauna.com/documentation/queries#misc_functions).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Not: Fn {
 
     var call: Fn.Call

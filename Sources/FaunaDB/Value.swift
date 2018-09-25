@@ -5,7 +5,7 @@ import Foundation
     `Value` is the top level of the value tree hierarchy. It represents a valid
     FaunaDB entry returned by the server.
 
-    [Reference](https://fauna.com/documentation/queries#values)
+    [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type)
 
     ## Traversal API
 
@@ -53,7 +53,7 @@ import Foundation
 public protocol Value: Expr, CustomStringConvertible {}
 
 /// Represents scalar values returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public protocol ScalarValue: Value, Equatable {
     associatedtype Wrapped
     var value: Wrapped { get }
@@ -66,7 +66,7 @@ extension CustomStringConvertible where Self: ScalarValue, Self.Wrapped: CustomS
 }
 
 /// Represents a string returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct StringV: ScalarValue, AsJson {
 
     public var value: String
@@ -87,7 +87,7 @@ extension StringV: Equatable {
 }
 
 /// Represents a number returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct LongV: ScalarValue, AsJson {
 
     public var value: Int
@@ -108,7 +108,7 @@ extension LongV: Equatable {
 }
 
 /// Represents a double returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct DoubleV: ScalarValue, AsJson {
 
     public var value: Double
@@ -129,7 +129,7 @@ extension DoubleV: Equatable {
 }
 
 /// Represents a boolean returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct BooleanV: ScalarValue, AsJson {
 
     public var value: Bool
@@ -152,7 +152,7 @@ extension BooleanV: Equatable {
 /**
     Represents a timestamp returned by the server.
 
-    [Reference](https://fauna.com/documentation/queries#values-special_types)
+    [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type)
 
     - Note: You can convert a timestamp to two different types:
 
@@ -193,7 +193,7 @@ extension TimeV: Equatable {
 }
 
 /// Represents a date returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct DateV: ScalarValue, AsJson {
 
     private static let formatter = ISO8601Formatter(with: "yyyy-MM-dd")
@@ -252,7 +252,7 @@ extension RefID: Equatable {
 }
 
 /// Represents a Ref returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct RefV: ScalarValue, AsJson {
 
     public var value: RefID
@@ -302,7 +302,7 @@ public struct Native {
 }
 
 /// Represents a SetRef returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct SetRefV: ScalarValue, AsJson {
 
     public var value: [String: Value]
@@ -323,7 +323,7 @@ extension SetRefV: Equatable {
 }
 
 /// Represents a null value returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct NullV: Value, AsJson {
 
     public let description: String = "null"
@@ -342,7 +342,7 @@ extension NullV: Equatable {
 }
 
 /// Represents an array returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct ArrayV: Value, AsJson {
 
     public let value: [Value]
@@ -367,7 +367,7 @@ extension ArrayV: Equatable {
 }
 
 /// Represents an object returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#simple-type).
 public struct ObjectV: Value, AsJson {
 
     public let value: [String: Value]
@@ -398,7 +398,7 @@ private func escapeObject(with: String, object: [String: Value]) -> JsonType {
 }
 
 /// Represents a binary blob returned by the server.
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct BytesV: ScalarValue, AsJson {
 
     public let value: Data
@@ -429,7 +429,7 @@ extension BytesV: Equatable {
 }
 
 /// Represents a query value in the FaunaDB query language.
-/// [Reference](https://fauna.com/documentation/queries#values-special_types).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#special-type).
 public struct QueryV: Value, AsJson {
 
     fileprivate let lambda: JsonType
