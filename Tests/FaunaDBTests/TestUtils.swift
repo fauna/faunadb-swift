@@ -43,12 +43,12 @@ internal extension QueryResult {
 
 internal extension JSON {
 
-    static func stringify(expr: Any) -> String {
-        return String(data: try! data(value: expr), encoding: .utf8)!
-    }
-
     static func parse(string: String) throws -> Value {
         return try parse(data: string.data(using: .utf8)!)
+    }
+
+    static func decode(string: String) throws -> JsonType {
+        return try decode(data: string.data(using: .utf8)!)
     }
 
 }

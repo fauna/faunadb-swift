@@ -82,8 +82,12 @@ internal struct JSON {
     }
 
     static func parse(data: Data) throws -> Value {
+        return try decode(data: data).toValue()
+    }
+
+    static func decode(data: Data) throws -> JsonType {
         let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-        return try JsonType.parse(json: json).toValue()
+        return try JsonType.parse(json: json)
     }
 
 }

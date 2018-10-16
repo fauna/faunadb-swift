@@ -860,7 +860,7 @@ class SerializationTests: XCTestCase {
     }
 
     private func assert(expr: Expr?, toBecome jsonString: String) {
-        XCTAssertEqual(JSON.stringify(expr: expr as Any), jsonString)
+        XCTAssertEqual(JSON.escape(value: expr as Any), try! JSON.decode(string: jsonString))
     }
 
 }
