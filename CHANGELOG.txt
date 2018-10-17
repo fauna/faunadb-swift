@@ -1,4 +1,5 @@
 2.0.1-SNAPSHHOT
+* Adds CreateRole, and Role functions
 
 2.0.0
 * Adds support for @query type (user defined functions)

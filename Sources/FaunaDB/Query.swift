@@ -962,6 +962,19 @@ public struct CreateFunction: Fn {
     }
 }
 
+/// This function creates a new role with the provided configuration.
+///
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#write-functions).
+public struct CreateRole: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter params: Function configuration.
+    public init(_ params: Expr) {
+        self.call = fn("create_role" => params)
+    }
+}
+
 // MARK: Set Functions
 
 /// `Singleton` returns the history of the instance's presence of the provided ref.
@@ -1386,7 +1399,7 @@ public struct Class: Fn {
 
 }
 
-/// The function function returns a valid ref for the given function name
+/// The `Function` function returns a valid ref for the given function name
 ///
 /// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
 public struct Function: Fn {
@@ -1397,6 +1410,21 @@ public struct Function: Fn {
     /// - Parameter scope: The scope database.
     public init(_ name: String, scope: Expr? = nil) {
         self.call = fn("function" => name, "scope" => scope)
+    }
+
+}
+
+/// The `Role` function returns a valid ref for the given role name
+///
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions)
+public struct Role: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter name: The role name.
+    /// - Parameter scope: The scope database.
+    public init(_ name: String, scope: Expr? = nil) {
+        self.call = fn("role" => name, "scope" => scope)
     }
 
 }

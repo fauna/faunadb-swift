@@ -548,6 +548,54 @@ class SerializationTests: XCTestCase {
         )
     }
 
+    func testCreateRole() {
+        assert(
+            expr: CreateRole(Obj(
+                "name" => "a_role",
+                "privileges" => Arr(Obj(
+                    "resource" => Databases(),
+                    "actions" => Obj("read" => true)
+                ))
+            )),
+            toBecome: """
+                      {"create_role":
+                        {"object":{
+                            "name": "a_role",
+                            "privileges": [{ "object": {
+                                "resource": { "databases": null },
+                                "actions": { "object": {
+                                    "read": true
+                                }}
+                            }}]
+                        }}
+                      }
+                      """
+        )
+
+        assert(
+            expr: CreateRole(Obj(
+                "name" => "a_role",
+                "privileges" => Obj(
+                    "resource" => Databases(),
+                    "actions" => Obj("read" => true)
+                )
+            )),
+            toBecome: """
+                      {"create_role":
+                        {"object":{
+                            "name": "a_role",
+                            "privileges": { "object": {
+                                "resource": { "databases": null },
+                                "actions": { "object": {
+                                    "read": true
+                                }}
+                            }}
+                        }}
+                      }
+                      """
+        )
+    }
+
     func testSingleton() {
         assert(
             expr: Singleton(Ref("classes/spells/123456789")),
@@ -738,6 +786,11 @@ class SerializationTests: XCTestCase {
     func testFunction() {
         assert(expr: Function("func"), toBecome: "{\"function\":\"func\"}")
         assert(expr: Function("func", scope: Database("parent")), toBecome: "{\"scope\":{\"database\":\"parent\"},\"function\":\"func\"}")
+    }
+
+    func testRole() {
+        assert(expr: Role("a_role"), toBecome: "{\"role\":\"a_role\"}")
+        assert(expr: Role("a_role", scope: Database("parent")), toBecome: "{\"role\":\"a_role\",\"scope\":{\"database\":\"parent\"}}")
     }
 
     func testNativeRefs() {

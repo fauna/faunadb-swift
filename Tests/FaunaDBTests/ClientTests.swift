@@ -835,6 +835,23 @@ class ClientTests: XCTestCase {
         assert(query: Call(Function("concat_with_slash"), arguments: "a", "b"), toReturn: "a/b")
     }
 
+    func testCreateRole() {
+        try! adminClient.query(CreateRole(Obj(
+            "name" => "a_role",
+            "privileges" => Arr(Obj(
+                "resource" => Databases(),
+                "actions" => Obj("read" => true)
+            ))
+        ))).await()
+
+        XCTAssert(
+            try! adminClient
+                .query(Exists(Role("a_role")))
+                .await()
+                .get()!
+        )
+    }
+
     func testRefConstructors() {
         assert(query: Ref(class: Class("cls"), id: "123"), toReturn: RefV("123", class: RefV("cls", class: Native.CLASSES)))
         assert(query: Ref("classes/cls/123"), toReturn: RefV("123", class: RefV("cls", class: Native.CLASSES)))
