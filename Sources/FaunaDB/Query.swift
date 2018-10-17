@@ -42,7 +42,7 @@ public struct Abort: Fn {
 /// Returns a native reference to classes. This allows for example,
 /// paginate over all classes in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Classes: Fn {
 
     var call: Fn.Call
@@ -56,7 +56,7 @@ public struct Classes: Fn {
 /// Returns a native reference to indexes. This allows for example,
 /// paginate over all indexes in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Indexes: Fn {
 
     var call: Fn.Call
@@ -70,7 +70,7 @@ public struct Indexes: Fn {
 /// Returns a native reference to databases. This allows for example,
 /// paginate over all databases in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Databases: Fn {
 
     var call: Fn.Call
@@ -84,7 +84,7 @@ public struct Databases: Fn {
 /// Returns a native reference to functions. This allows for example,
 /// paginate over all functions in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Functions: Fn {
 
     var call: Fn.Call
@@ -98,7 +98,7 @@ public struct Functions: Fn {
 /// Returns a native reference to roles. This allows for example,
 /// paginate over all roles in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Roles: Fn {
 
     var call: Fn.Call
@@ -112,7 +112,7 @@ public struct Roles: Fn {
 /// Returns a native reference to keys. This allows for example,
 /// paginate over all keys in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Keys: Fn {
 
     var call: Fn.Call
@@ -126,7 +126,7 @@ public struct Keys: Fn {
 /// Returns a native reference to tokens. This allows for example,
 /// paginate over all tokens in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Tokens: Fn {
 
     var call: Fn.Call
@@ -140,7 +140,7 @@ public struct Tokens: Fn {
 /// Returns a native reference to credentials. This allows for example,
 /// paginate over all credentials in a database.
 ///
-/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#miscellaneous-functions).
 public struct Credentials: Fn {
 
     var call: Fn.Call
