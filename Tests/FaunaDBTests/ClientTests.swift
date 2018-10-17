@@ -860,6 +860,7 @@ class ClientTests: XCTestCase {
         assert(query: Class("cls"), toReturn: RefV("cls", class: Native.CLASSES))
         assert(query: Index("idx"), toReturn: RefV("idx", class: Native.INDEXES))
         assert(query: Function("fn"), toReturn: RefV("fn", class: Native.FUNCTIONS))
+        assert(query: Role("rl"), toReturn: RefV("rl", class: Native.ROLES))
     }
 
     func testNestedClass() {

@@ -284,6 +284,7 @@ public struct Native {
     public static let DATABASES: RefV = RefV("databases")
     public static let KEYS: RefV = RefV("keys")
     public static let FUNCTIONS: RefV = RefV("functions")
+    public static let ROLES: RefV = RefV("roles")
     public static let TOKENS: RefV = RefV("tokens")
     public static let CREDENTIALS: RefV = RefV("credentials")
 
@@ -294,6 +295,7 @@ public struct Native {
         case "databases":   return DATABASES
         case "keys":        return KEYS
         case "functions":   return FUNCTIONS
+        case "roles":       return ROLES
         case "tokens":      return TOKENS
         case "credentials": return CREDENTIALS
         default:            return RefV(id)

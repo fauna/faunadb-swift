@@ -95,6 +95,20 @@ public struct Functions: Fn {
     }
 }
 
+/// Returns a native reference to roles. This allows for example,
+/// paginate over all roles in a database.
+///
+/// [Reference](https://app.fauna.com/documentation/reference/queryapi#basic-forms).
+public struct Roles: Fn {
+
+    var call: Fn.Call
+
+    /// - Parameter scope: the scope database.
+    public init(scope: Expr? = nil) {
+        self.call = fn("roles" => (scope ?? NullV()))
+    }
+}
+
 /// Returns a native reference to keys. This allows for example,
 /// paginate over all keys in a database.
 ///
