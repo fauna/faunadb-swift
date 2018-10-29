@@ -17,7 +17,8 @@ public final class Client {
     private let session: URLSession
     private let endpoint: URL
     private let auth: String
-
+    private let lastSeenTxn: AtomicInt
+    
     /**
         - Parameters:
             - secret:   The key's secret to be used to authenticate requests.
@@ -25,15 +26,28 @@ public final class Client {
             - session:  The `URLSession` object to be used while performing HTTP requests to FaunaDB.
                         Default: `URLSession(configuration: URLSessionConfiguration.default)`.
     */
-    public init(secret: String, endpoint: URL = defaultEndpoint, session: URLSession? = nil) {
+    public convenience init(secret: String, endpoint: URL = defaultEndpoint, session: URLSession? = nil) {
+        self.init(secret: secret,
+                  endpoint: endpoint,
+                  session: session,
+                  lastSeenTxn: Client.newLastSeenTxn())
+    }
+    
+    private init(secret: String, endpoint: URL = defaultEndpoint, session: URLSession? = nil, lastSeenTxn: AtomicInt) {
         self.auth = "Basic \((secret.data(using: .ascii) ?? Data()).base64EncodedString()):"
         self.endpoint = endpoint
+        self.lastSeenTxn = lastSeenTxn
 
         if let session = session {
             self.session = session
         } else {
             self.session = URLSession(configuration: URLSessionConfiguration.default)
         }
+    }
+    
+    private static func newLastSeenTxn() -> AtomicInt {
+        let name = "FaunaDB.LastSeenTxn-" + UUID().uuidString
+        return AtomicInt(label: name, initial: 0)
     }
 
     /**
@@ -47,7 +61,8 @@ public final class Client {
         return Client(
             secret: secret,
             endpoint: endpoint,
-            session: session
+            session: session,
+            lastSeenTxn: lastSeenTxn
         )
     }
 
@@ -85,6 +100,27 @@ public final class Client {
             try value.get()
         }
     }
+    
+    /**
+        Get the freshest timestamp reported to this client.
+    */
+    public func getLastTxnTime() -> Int {
+        return lastSeenTxn.get()
+    }
+    
+    /**
+        Sync the freshest timestamp seen by this client.
+     
+        This has no effect if staler than currently stored timestamp.
+        WARNING: This should be used only when coordinating timestamps across
+                multiple clients. Moving the timestamp arbitrarily forward into
+                the future will cause transactions to stall.
+
+        - Parameter newTxn: the new seen transaction time
+    */
+    public func syncLastTxnTime(_ newTxn: Int) {
+        lastSeenTxn.update(maxTo: newTxn)
+    }
 
     private func httpRequestFor(_ expr: Expr) throws -> URLRequest {
         let request = NSMutableURLRequest(url: endpoint)
@@ -94,6 +130,11 @@ public final class Client {
         request.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.addValue(auth, forHTTPHeaderField: "Authorization")
         request.addValue("2.1", forHTTPHeaderField: "X-FaunaDB-API-Version")
+        
+        let txnTime = lastSeenTxn.get()
+        if txnTime > 0 {
+            request.addValue("\(txnTime)", forHTTPHeaderField: "X-Last-Txn-Time")
+        }
 
         return request as URLRequest
     }
@@ -138,6 +179,10 @@ public final class Client {
             return
         }
 
+        if let txnHeaderValue = response.allHeaderFields["X-Txn-Time"] as? String, let txnTime = Int(txnHeaderValue) {
+            syncLastTxnTime(txnTime)
+        }
+        
         if let error = Errors.errorFor(response: response, json: data) {
             failureCallback(error)
             return
