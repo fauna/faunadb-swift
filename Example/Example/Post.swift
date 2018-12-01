@@ -15,7 +15,7 @@ struct Post {
 }
 
 // Tell the driver how to decode a Post from a value stored at FaunaDB
-extension Post: Decodable {
+extension Post: FaunaDB.Decodable {
     init?(value: Value) throws {
         try self.init(
             // `get` receives the path for the value you're looking for.
@@ -29,7 +29,7 @@ extension Post: Decodable {
 }
 
 // Tell the driver how we want to store a Post at FaunaDB
-extension Post: Encodable {
+extension Post: FaunaDB.Encodable {
     func encode() -> Expr {
         return Obj(
             "title" => title,
@@ -119,7 +119,7 @@ extension Post {
     }
 }
 
-extension Post.Page: Decodable {
+extension Post.Page: FaunaDB.Decodable {
     init?(value: Value) throws {
         try self.init(
             // `get` also works woth arrays and objects. In this case,
@@ -130,7 +130,7 @@ extension Post.Page: Decodable {
     }
 }
 
-extension Post.RefAndTitle: Decodable {
+extension Post.RefAndTitle: FaunaDB.Decodable {
     init?(value: Value) throws {
         try self.init(
             // You can also use numbers when the value you want is
