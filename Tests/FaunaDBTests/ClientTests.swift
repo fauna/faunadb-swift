@@ -79,29 +79,34 @@ class ClientTests: XCTestCase {
 
         allSpells = queryForRef(CreateIndex(Obj(
             "name" => "all_spells",
+            "active" => true,
             "source" => spells
         )))
 
         spellsByElement = queryForRef(CreateIndex(Obj(
             "name" => "spells_by_element",
+            "active" => true,
             "source" => spells,
             "terms" => Arr(Obj("field" => Arr("data", "elements")))
         )))
 
         elementsOfSpells = queryForRef(CreateIndex(Obj(
             "name" => "elements_of_spells",
+            "active" => true,
             "source" => spells,
             "values" => Arr(Obj("field" => Arr("data", "elements")))
         )))
 
         spellbookByOwner = queryForRef(CreateIndex(Obj(
             "name" => "spellbook_by_owner",
+            "active" => true,
             "source" => spellbook,
             "terms" => Arr(Obj("field" => Arr("data", "owner")))
         )))
 
         spellsBySpellbook = queryForRef(CreateIndex(Obj(
             "name" => "spells_by_spellbook",
+            "active" => true,
             "source" => spells,
             "terms" => Arr(Obj("field" => Arr("data", "book")))
         )))
@@ -249,7 +254,7 @@ class ClientTests: XCTestCase {
 
     func testUpdateAnInstance() {
         let firstSeenTxn = client.getLastTxnTime()
-        
+
         let instance = try! client.query(
             Create(at: Self.randomClass, Obj(
                 "data" => Obj("name" => "bob", "age" => 21)
@@ -264,20 +269,20 @@ class ClientTests: XCTestCase {
 
         XCTAssertEqual(try! updated.get("data", "name"), "jhon")
         XCTAssertEqual(try! updated.get("data", "age"), 21)
-        
+
         let lastSeenTxn = client.getLastTxnTime()
         XCTAssertGreaterThan(lastSeenTxn, firstSeenTxn)
     }
-    
+
     func testUpdateLastSeenTxn() {
         let newClient = client.newSessionClient(secret: "secret")
         let firstSeenTxn = client.getLastTxnTime()
-        
+
         let aFewMomentsAgo = firstSeenTxn - 12000
         client.syncLastTxnTime(aFewMomentsAgo)
         XCTAssertEqual(client.getLastTxnTime(), firstSeenTxn)
         XCTAssertEqual(newClient.getLastTxnTime(), firstSeenTxn)
-        
+
         let withinAfewMoments = firstSeenTxn + 12000
         newClient.syncLastTxnTime(withinAfewMoments)
         XCTAssertEqual(client.getLastTxnTime(), withinAfewMoments)
@@ -333,14 +338,14 @@ class ClientTests: XCTestCase {
 
     func testLet() {
         let firstSeenTxn = client.getLastTxnTime()
-        
+
         assert(
             query: Let(1, 2) { a, b in
                 Arr(b, a)
             },
             toReturn: [2, 1]
         )
-        
+
         let lastSeenTxn = client.getLastTxnTime()
         XCTAssertGreaterThanOrEqual(lastSeenTxn, firstSeenTxn)
     }

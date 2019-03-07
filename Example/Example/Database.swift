@@ -51,6 +51,7 @@ fileprivate func createDatabase(with adminClient: FaunaDB.Client) -> QueryResult
                 // The index will be a sequence of tuples like (RefV, String)
                 CreateIndex(Obj(
                     "name" => "all_posts_refs_and_titles",
+                    "active" => true,
                     "source" => Class("posts"),
                     "values" => Arr(
                         Obj("field" => Arr("ref"), "reverse" => true),
