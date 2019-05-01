@@ -25,13 +25,13 @@ internal final class AtomicInt {
 
         return res
     }
-    
+
     func update(maxTo newValue: Int) {
         lock.sync {
             current = max(newValue, current)
         }
     }
-    
+
     func get() -> Int {
         return current
     }

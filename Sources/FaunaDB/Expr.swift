@@ -78,7 +78,7 @@ extension Fn {
 
 internal func fn(_ pairs: (String, Expr?)...) -> Fn.Call {
     return Dictionary(pairs:
-        pairs.flatMap { (key, value) in
+        pairs.compactMap { (key, value) in
             guard let value = value else { return nil }
             return (key, value)
         }

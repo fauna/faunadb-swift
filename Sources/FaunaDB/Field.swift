@@ -173,7 +173,7 @@ extension Collect {
 
         return try cast(
             convert(collected:
-                try decompose(value: value).flatMap {
+                try decompose(value: value).compactMap {
                     try collectField(segment: $0.0, value: $0.1)
                 }
             )

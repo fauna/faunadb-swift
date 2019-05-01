@@ -431,8 +431,8 @@ class ClientTests: XCTestCase {
         let keyQueried = try! rootClient.query(KeyFromSecret(secret)).await()
 
         XCTAssertEqual(
-            try keyQueried.get("ref") as RefV!,
-            try keyCreated.get("ref") as RefV!
+            try keyQueried.get("ref") as RefV?,
+            try keyCreated.get("ref") as RefV?
         )
     }
 
