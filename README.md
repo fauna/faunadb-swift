@@ -16,7 +16,7 @@ A Swift driver for [FaunaDB](https://fauna.com)
 
 Check out the Swift-specific [reference documentation](http://fauna.github.io/faunadb-swift/).
 
-You can find more information in the FaunaDB [documentation](https://fauna.com/documentation)
+You can find more information in the FaunaDB [documentation](https://docs.fauna.com/)
 and in our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
 
 ## Using the Driver
@@ -85,7 +85,7 @@ let post: Post = try! getPost.map { dbEntry in dbEntry.get("data") }
     .await(timeout: .now() + 5)
 ```
 
-For more examples, check our online [documentation](https://fauna.com/documentation)
+For more examples, check our online [documentation](https://docs.fauna.com/)
 and our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
 
 ## Contributing
