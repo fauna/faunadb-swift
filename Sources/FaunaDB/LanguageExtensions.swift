@@ -17,6 +17,7 @@ internal extension Dictionary {
 
 }
 
+@nonobjc
 internal extension NSNumber {
 
     func isBoolNumber() -> Bool {
