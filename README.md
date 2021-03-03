@@ -1,4 +1,6 @@
-# FaunaDB Swift Driver
+# Commmunity-supported Swift Driver for [FaunaDB](https://fauna.com)
+
+FaunaDB's Swift driver is now "community-supported". New features won't be exposed in the driver unless the necessary changes are contributed by a community member. Please email product@fauna.com if you have any questions/concerns, or would like to take a more active role in the development of the driver (eg. partnering with us and operating as a "maintainer" for the driver).
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
 [![Coverage Status](https://codecov.io/gh/fauna/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/fauna/faunadb-swift)
