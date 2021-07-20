@@ -3,8 +3,8 @@
 FaunaDB's Swift driver is now "community-supported". New features won't be exposed in the driver unless the necessary changes are contributed by a community member. Please email product@fauna.com if you have any questions/concerns, or would like to take a more active role in the development of the driver (eg. partnering with us and operating as a "maintainer" for the driver).
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/FaunaDB.svg)](http://cocoapods.org/pods/FaunaDB)
-[![Coverage Status](https://codecov.io/gh/fauna/faunadb-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/fauna/faunadb-swift)
-[![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/fauna/faunadb-swift/master/LICENSE)
+[![Coverage Status](https://codecov.io/gh/fauna/faunadb-swift/branch/main/graph/badge.svg)](https://codecov.io/gh/fauna/faunadb-swift)
+[![License](https://img.shields.io/badge/license-MPL_2.0-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/fauna/faunadb-swift/main/LICENSE)
 
 A Swift driver for [FaunaDB](https://fauna.com)
 
@@ -19,7 +19,7 @@ A Swift driver for [FaunaDB](https://fauna.com)
 Check out the Swift-specific [reference documentation](http://fauna.github.io/faunadb-swift/).
 
 You can find more information in the FaunaDB [documentation](https://docs.fauna.com/)
-and in our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
+and in our [example project](https://github.com/fauna/faunadb-swift/tree/main/Example).
 
 ## Using the Driver
 
@@ -88,7 +88,7 @@ let post: Post = try! getPost.map { dbEntry in dbEntry.get("data") }
 ```
 
 For more examples, check our online [documentation](https://docs.fauna.com/)
-and our [example project](https://github.com/fauna/faunadb-swift/tree/master/Example).
+and our [example project](https://github.com/fauna/faunadb-swift/tree/main/Example).
 
 ## Contributing
 

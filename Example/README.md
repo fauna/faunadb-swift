@@ -21,11 +21,11 @@ This demo is a simple blog post manager. It has a basic model called `Post`,
 instances of which must have a title and may optionally have a body.
 
 Most of the interaction with FaunaDB is located in the
-[Posts.swift](https://github.com/fauna/faunadb-swift/blob/master/Example/Example/Post.swift)
+[Posts.swift](https://github.com/fauna/faunadb-swift/blob/main/Example/Example/Post.swift)
 file. It contains the base model `Post` as well as the code needed to store,
 update, delete, and show posts saved at FaunaDB.
 
-[Database.swift](https://github.com/fauna/faunadb-swift/blob/master/Example/Example/Database.swift)
+[Database.swift](https://github.com/fauna/faunadb-swift/blob/main/Example/Example/Database.swift)
 contains the database setup for this demo. In a real life application, that code
 would live somewhere else, such as a separated provisioning script. For the
 purpose of this example it is easier to let the application setup the database
@@ -36,4 +36,4 @@ create, update, delete, and show the blog posts.
 
 ## Demo
 
-![](https://github.com/fauna/faunadb-swift/blob/master/Example/demo.gif)
+![](https://github.com/fauna/faunadb-swift/blob/main/Example/demo.gif)
